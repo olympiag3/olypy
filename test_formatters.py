@@ -37,14 +37,14 @@ CH
 '''
 
 def test_formatters(capsys):
-    write_oly_file(example_data)
+    write_oly_file(example_data, [])
     out, err = capsys.readouterr()
     assert err == ''
     assert out == example_output
 
-    data = read_oly_file(example_output.split('\n'))
-    write_oly_file(example_data)
+    data, orig_order = read_oly_file(example_output.split('\n'))
+    write_oly_file(example_data, orig_order)
     out, err = capsys.readouterr()
     assert err == ''
     assert out == example_output
-    
+    assert orig_order == [ '6666' ]

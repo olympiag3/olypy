@@ -1,0 +1,41 @@
+50157 player pl_regular
+na Sun Corp.
+il	1 7625 \
+	77 50 \
+	78 100
+PL
+ fn Jon Libbon
+ em tom1864@yahoo.com
+ np 35
+ fs 100
+ ft 80
+ lt 81
+ kn 600 730 
+ un 76795 
+ uf 71881 62815 59947 65103 73932 
+CO
+ li press 1
+ ar 1 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+76795 char 0
+na Karl Franz
+LI
+ wh 58335
+CH
+ lo 50157
+ he 100
+ lk 2
+ lr 2
+ sl	600 1 7 0 0 \
+	730 1 7 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li Public
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+

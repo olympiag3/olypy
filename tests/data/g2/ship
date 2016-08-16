@@ -1,0 +1,2313 @@
+1008 ship roundship
+na Ogmios' Tongue
+LI
+ wh 57456
+SL
+ da 15
+ de 10
+ ca 25000
+
+1083 ship roundship
+na NF&E
+LI
+ wh 16828
+SL
+ da 8
+ de 10
+ ca 25000
+
+1127 ship galley
+na Hound of Ulster
+LI
+ wh 57081
+ hl 5615 78655 
+SL
+ de 20
+ ca 5000
+
+1136 ship roundship
+na Sea Wolf
+LI
+ wh 11371
+SL
+ da 8
+ de 9
+ ca 25000
+
+1160 ship roundship
+na Marskaja Sabaka
+LI
+ wh 57019
+ hl 6783 9333 
+SL
+ de 10
+ ca 25000
+
+1212 ship roundship
+na Kiga'rashu
+LI
+ wh 58335
+SL
+ da 13
+ de 4
+ ca 25000
+
+1223 ship roundship
+na Liberty of Aral
+LI
+ wh 17598
+SL
+ da 3
+ de 10
+ ca 25000
+
+1241 ship galley
+na Farseeker
+LI
+ wh 15790
+SL
+ da 12
+ de 20
+ ca 5000
+
+1320 ship roundship
+na Sea Star
+LI
+ wh 13359
+ hl 1687 
+SL
+ de 10
+ ca 25000
+
+1336 ship galley
+na S.S. Big Cheese
+LI
+ wh 13151
+SL
+ de 20
+ ca 5000
+
+1370 ship roundship
+na Reaper
+LI
+ wh 58325
+SL
+ da 7
+ de 10
+ ca 25000
+
+1381 ship roundship
+na F&EV
+LI
+ wh 58547
+SL
+ da 8
+ de 10
+ ca 25000
+
+1447 ship roundship
+na Whispering Dragon
+LI
+ wh 14122
+SL
+ da 14
+ de 10
+ ca 25000
+
+1486 ship roundship
+na Shima'onari
+LI
+ wh 58338
+SL
+ da 35
+ de 10
+ ca 25000
+MI
+ ds of the Freemen
+
+1572 ship roundship-in-progress
+na Sea Dragon
+LI
+ wh 57397
+SL
+ ca 25000
+ bm 1
+ er 50000
+ eg 19500
+
+1582 ship roundship
+na Drakkar Noir
+LI
+ wh 16969
+SL
+ da 18
+ de 10
+ ca 25000
+
+1620 ship roundship
+na The Tardis
+LI
+ wh 15809
+SL
+ da 13
+ de 10
+ ca 25000
+MI
+ ds Steal this Boat and you die
+
+1751 ship roundship
+na Rappahannock
+LI
+ wh 57572
+SL
+ da 13
+ de 10
+ ca 25000
+MI
+ ds Of the Confederation
+
+1754 ship galley
+na The Angelic
+LI
+ wh 16688
+SL
+ de 20
+ ca 5000
+
+1771 ship roundship
+na Dolphin Dudley
+LI
+ wh 16960
+SL
+ da 11
+ ca 25000
+
+1772 ship galley
+na Highbury I
+LI
+ wh 67037
+SL
+ de 20
+ ca 5000
+
+1864 ship roundship
+na Boca Junket
+LI
+ wh 57081
+ hl 62601 
+SL
+ de 10
+ ca 25000
+
+2014 ship roundship
+na Jovius
+LI
+ wh 18740
+SL
+ da 18
+ de 10
+ ca 25000
+
+2041 ship roundship
+na M/M III
+LI
+ wh 58033
+SL
+ de 10
+ ca 25000
+
+2097 ship roundship
+na Waverunner
+LI
+ wh 17746
+SL
+ da 16
+ de 10
+ ca 25000
+
+2194 ship roundship
+na The Styx
+LI
+ wh 11649
+SL
+ de 10
+ ca 25000
+
+2356 ship roundship
+na The Rat and Parrot
+LI
+ wh 17498
+SL
+ da 4
+ de 10
+ ca 25000
+
+2551 ship roundship
+na WaveRunner
+LI
+ wh 15078
+SL
+ de 9
+ ca 25000
+
+2556 ship roundship
+na Queen of the Night
+LI
+ wh 58547
+SL
+ da 6
+ de 10
+ ca 25000
+
+2647 ship roundship
+na Jabber
+LI
+ wh 11076
+SL
+ da 3
+ de 10
+ ca 25000
+
+2650 ship roundship
+na The Love Boat
+LI
+ wh 19330
+ hl 1828 
+SL
+ da 3
+ de 10
+ ca 25000
+ mo 7800
+
+2675 ship roundship
+na Wavecutter
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+2713 ship galley
+na Forlorn Hope
+LI
+ wh 11607
+SL
+ de 20
+ ca 5000
+
+2744 ship galley
+na SS Minnow
+LI
+ wh 16900
+SL
+ da 9
+ de 20
+ ca 5000
+
+2788 ship roundship
+na Vienna Calling
+LI
+ wh 12944
+ hl 74063 63528 
+SL
+ de 10
+ ca 25000
+
+2796 ship galley
+na IG Gyrfalcon
+LI
+ wh 58057
+SL
+ de 20
+ ca 5000
+
+2804 ship roundship
+na Barnacle Bob
+LI
+ wh 59744
+SL
+ da 23
+ de 10
+ ca 25000
+MI
+ ds Ship of the Confederation
+
+2806 ship roundship
+na Musketeer Navy BF101
+LI
+ wh 15377
+SL
+ da 16
+ ca 25000
+
+2858 ship roundship
+na Mary Rose
+LI
+ wh 57246
+SL
+ da 3
+ de 10
+ ca 25000
+
+2935 ship roundship
+na Lady Cuthbur
+LI
+ wh 13453
+ hl 60957 
+SL
+ de 10
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company,Merchants;
+
+2962 ship roundship
+na Silver Azor
+LI
+ wh 57570
+SL
+ da 8
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+3001 ship roundship
+na IRS TOLERANT
+LI
+ wh 58057
+SL
+ da 6
+ de 10
+ ca 25000
+
+3053 ship galley
+na Ayame
+LI
+ wh 58033
+SL
+ da 3
+ de 20
+ ca 5000
+
+3105 ship roundship
+na Devil Ray
+LI
+ wh 58325
+SL
+ de 10
+ ca 25000
+
+3137 ship roundship
+na C.S.S. Virginia
+LI
+ wh 10941
+ hl 5884 
+SL
+ da 4
+ de 10
+ ca 25000
+MI
+ ds Ship of the Confederation
+
+3172 ship roundship
+na Midnight Crescent
+LI
+ wh 11742
+SL
+ da 12
+ de 10
+ ca 25000
+
+3223 ship roundship
+na Seemoeve
+LI
+ wh 11748
+SL
+ da 7
+ de 10
+ ca 25000
+
+3225 ship roundship
+na Drakkar Jaune
+LI
+ wh 58736
+SL
+ de 10
+ ca 25000
+
+3372 ship roundship
+na ship 5
+LI
+ wh 17364
+SL
+ de 10
+ ca 25000
+
+3450 ship roundship
+na Sirius
+LI
+ wh 58547
+SL
+ da 21
+ de 10
+ ca 25000
+
+3598 ship roundship
+na WaveRider
+LI
+ wh 17422
+SL
+ de 10
+ ca 25000
+
+3772 ship roundship
+na Shenandoah
+LI
+ wh 57572
+SL
+ da 12
+ de 10
+ ca 25000
+MI
+ ds Of the Confederation
+
+3961 ship galley
+na CDS Iron Fist
+LI
+ wh 57061
+ hl 63291 
+SL
+ de 20
+ ca 5000
+MI
+ ds Don't Tread On Me
+
+3983 ship roundship
+na Wind Runner
+LI
+ wh 12206
+SL
+ de 10
+ ca 25000
+
+4072 ship galley
+na Hot Needle of Inquiry
+LI
+ wh 13506
+SL
+ da 9
+ de 20
+ ca 5000
+
+4087 ship roundship
+na Jerusalem
+LI
+ wh 57643
+ hl 3495 
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+4237 ship roundship
+na New roundship
+LI
+ wh 11762
+SL
+ de 10
+ ca 25000
+
+4268 ship roundship
+na LCFF1
+LI
+ wh 57133
+SL
+ da 8
+ de 10
+ ca 25000
+
+4284 ship roundship
+na The Louisa
+LI
+ wh 57133
+SL
+ de 5
+ ca 25000
+
+4320 ship roundship
+na Golden Dragon
+LI
+ wh 19752
+SL
+ da 9
+ de 10
+ ca 25000
+
+4330 ship galley-in-progress
+na Runtings warrior
+LI
+ wh 58423
+SL
+ ca 5000
+ bm 1
+ er 25000
+ eg 9600
+
+4352 ship roundship
+na Charger
+LI
+ wh 58325
+SL
+ de 10
+ ca 25000
+MI
+ ds Sunken Crescent
+
+4453 ship roundship
+na Sanheno
+LI
+ wh 11113
+SL
+ da 29
+ de 10
+ ca 25000
+
+4625 ship roundship
+na IRS Constant
+LI
+ wh 14515
+SL
+ da 4
+ de 10
+ ca 25000
+
+4644 ship roundship
+na The Learned
+LI
+ wh 74637
+SL
+ da 3
+ de 10
+ ca 25000
+
+4719 ship roundship
+na Hrungir
+LI
+ wh 13721
+SL
+ de 10
+ ca 25000
+
+4964 ship galley
+na The Get There Already
+LI
+ wh 57475
+SL
+ de 20
+ ca 5000
+
+4997 ship roundship
+na The Seagull
+LI
+ wh 58423
+SL
+ de 10
+ ca 25000
+
+5102 ship roundship
+na Glory Bound
+LI
+ wh 11465
+SL
+ da 17
+ de 10
+ ca 25000
+
+5154 ship roundship
+na IRS Dependable
+LI
+ wh 58057
+CH
+SL
+ de 10
+ ca 25000
+
+5161 ship roundship
+na Snowman
+LI
+ wh 14511
+LO
+ sh 20
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds A Jester painted on the bow
+
+5174 ship roundship
+na Very Sella
+LI
+ wh 17598
+SL
+ da 3
+ de 10
+ ca 25000
+
+5282 ship roundship
+na Holy Light
+LI
+ wh 16710
+SL
+ da 5
+ de 10
+ ca 25000
+
+5311 ship roundship
+na Seeker IV
+LI
+ wh 58325
+SL
+ de 10
+ ca 25000
+
+5512 ship roundship
+na Corinth
+LI
+ wh 58112
+ hl 6374 
+SL
+ da 36
+ de 10
+ ca 25000
+
+5520 ship roundship
+na Galway Lass
+LI
+ wh 58736
+SL
+ da 3
+ de 10
+ ca 25000
+
+5526 ship roundship
+na Intrepid
+LI
+ wh 57140
+SL
+ da 57
+ de 10
+ ca 25000
+
+5546 ship roundship
+na Emerald Pride
+LI
+ wh 57643
+SL
+ da 18
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+5550 ship galley
+na Vanadis
+LI
+ wh 58601
+CH
+SL
+ de 20
+ ca 5000
+
+5552 ship roundship
+na Sundered Seas
+LI
+ wh 58335
+SL
+ da 5
+ de 10
+ ca 25000
+
+5625 ship roundship
+na The Republic
+LI
+ wh 16956
+SL
+ da 3
+ de 10
+ ca 25000
+
+5630 ship roundship
+na Sea Sprite
+LI
+ wh 17803
+SL
+ de 10
+ ca 25000
+
+5674 ship roundship
+na Ghost
+LI
+ wh 57397
+SL
+ da 15
+ de 10
+ ca 25000
+MI
+ ds A jester painted on the bow
+
+5735 ship roundship
+na The Curse of Lono II
+LI
+ wh 18320
+ hl 4096 
+SL
+ da 7
+ de 10
+ ca 25000
+
+5783 ship roundship
+na C.S.S. Roanoke
+LI
+ wh 57019
+ hl 89213 
+SL
+ de 10
+ ca 25000
+MI
+ ds Ship of The Confederation
+
+5828 ship roundship
+na M/M I
+LI
+ wh 17434
+ hl 62839 
+SL
+ da 10
+ de 10
+ ca 25000
+
+6045 ship galley
+na Dark Mistress
+LI
+ wh 58547
+SL
+ da 14
+ de 20
+ ca 5000
+
+6102 ship roundship-in-progress
+na Glory Hunter
+LI
+ wh 58423
+SL
+ ca 25000
+ bm 1
+ er 50000
+ eg 19000
+
+6152 ship roundship
+na TTC Fargo
+LI
+ wh 57140
+SL
+ da 10
+ de 10
+ ca 25000
+
+6211 ship roundship
+na Acheron
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+6313 ship roundship
+na Kon Tiki
+LI
+ wh 16208
+SL
+ da 55
+ ca 25000
+
+6390 ship roundship
+na The Rednose
+LI
+ wh 16955
+SL
+ de 10
+ ca 25000
+MI
+ ds flying a scarlet flag 1/1/RR
+
+6461 ship roundship
+na Drakkar Orange
+LI
+ wh 12972
+SL
+ da 14
+ de 4
+ ca 25000
+
+6484 ship roundship
+na Confederacy Roundship
+LI
+ wh 57140
+SL
+ de 10
+ ca 25000
+MI
+ ds Independant Confederation questing ship
+
+6509 ship roundship
+na Patuxent
+LI
+ wh 74205
+SL
+ da 17
+ de 10
+ ca 25000
+MI
+ ds Of the Confederation
+
+6625 ship roundship
+na Vagabond I
+LI
+ wh 17336
+ hl 8639 
+SL
+ de 10
+ ca 25000
+MI
+ ds Eastern Cragstan Royal Navy
+
+6948 ship roundship
+na Drakkar Ambre
+LI
+ wh 58736
+SL
+ da 11
+ de 10
+ ca 25000
+
+6993 ship roundship
+na Flying Dutchman
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+7009 ship roundship
+na Siren
+LI
+ wh 16920
+SL
+ da 4
+ de 10
+ ca 25000
+
+7083 ship galley
+na The Cernennos
+LI
+ wh 16989
+SL
+ da 6
+ de 20
+ ca 5000
+
+7170 ship roundship
+na Ship
+LI
+ wh 58666
+SL
+ da 8
+ de 10
+ ca 25000
+
+7362 ship roundship
+na Stormrider I
+LI
+ wh 18396
+SL
+ de 10
+ ca 25000
+
+7564 ship galley
+na Amber Fog
+LI
+ wh 12803
+ hl 138274 
+SL
+ de 20
+ ca 5000
+ mo 7799
+MI
+ ds House of Lords
+
+7566 ship roundship
+na Whitebeard's Mortuary
+LI
+ wh 57540
+SL
+ da 12
+ de 10
+ ca 25000
+MI
+ ds See Whitebeard's corpse, only 10 gold!
+
+7599 ship roundship
+na New roundship
+LI
+ wh 57570
+SL
+ da 7
+ de 10
+ ca 25000
+
+7620 ship roundship-in-progress
+na Seeker V
+LI
+ wh 58325
+SL
+ ca 25000
+ bm 2
+ er 50000
+ eg 29920
+
+7756 ship roundship
+na Seasprite
+LI
+ wh 17306
+SL
+ da 8
+ de 10
+ ca 25000
+
+7851 ship galley
+na Sword of the Sea
+LI
+ wh 58423
+SL
+ de 20
+ ca 5000
+
+7866 ship galley
+na The Lady
+LI
+ wh 14183
+SL
+ da 34
+ de 20
+ ca 5000
+
+7908 ship roundship
+na Seeker III
+LI
+ wh 58736
+SL
+ da 3
+ de 10
+ ca 25000
+
+7910 ship roundship
+na IRS Steadfast
+LI
+ wh 12144
+SL
+ da 40
+ de 10
+ ca 25000
+
+7917 ship roundship
+na Wavesplitter
+LI
+ wh 13362
+SL
+ de 10
+ ca 25000
+
+8142 ship roundship
+na Lost Storm
+LI
+ wh 57456
+SL
+ da 5
+ de 10
+ ca 25000
+
+8169 ship roundship
+na Blue Flounder
+LI
+ wh 57540
+SL
+ de 10
+ ca 25000
+MI
+ ds Confederation Vessel
+
+8352 ship galley
+na Wayfarer
+LI
+ wh 58025
+SL
+ de 20
+ ca 5000
+
+8372 ship roundship
+na Lobster Pot
+LI
+ wh 56855
+SL
+ da 5
+ de 10
+ ca 25000
+
+8474 ship roundship
+na RR2 Lady Cyneburh
+LI
+ wh 16634
+SL
+ da 14
+ de 10
+ ca 25000
+MI
+ ds Scarlet Flag marked 1/1/RR in Gold
+
+8542 ship roundship
+na New roundship
+LI
+ wh 57133
+SL
+ de 10
+ ca 25000
+
+8589 ship roundship
+na Glantri
+LI
+ wh 58057
+SL
+ da 3
+ de 10
+ ca 25000
+ bs 99973 
+MI
+ ds Kingdom of Cragstan
+
+8629 ship galley
+na I.B.S. Traviata
+LI
+ wh 13721
+SL
+ da 7
+ de 20
+ ca 5000
+
+8655 ship roundship
+na Thunderhead
+LI
+ wh 14180
+SL
+ da 3
+ ca 25000
+
+8763 ship roundship
+na The Beverley
+LI
+ wh 16521
+SL
+ da 15
+ de 10
+ ca 25000
+
+8778 ship roundship
+na Cutty Shark
+LI
+ wh 15496
+SL
+ de 10
+ ca 25000
+
+8845 ship roundship
+na The Gallant Lady
+LI
+ wh 13484
+SL
+ da 27
+ de 10
+ ca 25000
+
+8880 ship roundship
+na IRS Loyal
+LI
+ wh 14318
+SL
+ da 15
+ de 10
+ ca 25000
+
+8931 ship roundship
+na Decichon Urbica
+LI
+ wh 13300
+ hl 77218 
+SL
+ da 16
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+9060 ship roundship
+na Scherazade
+LI
+ wh 11112
+SL
+ da 30
+ de 10
+ ca 25000
+
+9088 ship roundship
+na Grey Owl
+LI
+ wh 13253
+ hl 75277 
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds Royal Greyfell Navy
+
+9158 ship roundship
+na pacific swift
+LI
+ wh 58325
+SL
+ de 10
+ ca 25000
+
+9195 ship roundship
+na Lugger
+LI
+ wh 57475
+SL
+ de 10
+ ca 25000
+
+9198 ship galley
+na Trinity
+LI
+ wh 58423
+SL
+ de 20
+ ca 5000
+
+9427 ship roundship
+na Infidel
+LI
+ wh 58057
+SL
+ da 4
+ de 10
+ ca 25000
+MI
+ ds A jester painted on the bow
+
+9589 ship roundship
+na Sea Dog
+LI
+ wh 17598
+SL
+ da 27
+ de 10
+ ca 25000
+
+9603 ship roundship
+na M/M II
+LI
+ wh 16521
+SL
+ da 8
+ de 10
+ ca 25000
+
+9752 ship roundship
+na Filthy Whore
+LI
+ wh 16224
+SL
+ de 10
+ ca 25000
+
+9998 ship roundship
+na Lady Seaxburh
+LI
+ wh 13341
+SL
+ de 10
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company;Merchants
+
+59002 ship roundship
+na Ulsea
+LI
+ wh 11140
+ hl 103777 
+SL
+ da 10
+ de 10
+ ca 25000
+ mo 7800
+
+59025 ship roundship
+na Silversides
+LI
+ wh 10832
+SL
+ da 9
+ de 10
+ ca 25000
+
+59048 ship roundship
+na TIBS NAAF 3
+LI
+ wh 13818
+SL
+ de 10
+ ca 25000
+
+59309 ship roundship
+na Drakkar Orange
+LI
+ wh 16969
+SL
+ de 10
+ ca 25000
+
+59338 ship roundship
+na Bamboo Reed
+LI
+ wh 17156
+SL
+ da 51
+ ca 25000
+MI
+ ds Scarlet Flag Marched 2/2/RR in Gold
+
+60176 ship roundship
+na SeaHorse II
+LI
+ wh 58033
+SL
+ da 18
+ de 10
+ ca 25000
+
+60201 ship roundship
+na The Independent
+LI
+ wh 13535
+ hl 5600 
+SL
+ da 92
+ de 10
+ ca 25000
+
+60264 ship roundship
+na Drassan Trader
+LI
+ wh 11742
+SL
+ da 7
+ de 10
+ ca 25000
+
+60347 ship galley
+na Unicorn
+LI
+ wh 14399
+SL
+ da 5
+ de 20
+ ca 5000
+
+60465 ship roundship
+na Illyria
+LI
+ wh 58736
+ hl 64347 
+SL
+ da 32
+ ca 25000
+MI
+ ds Royal Musketeer Navy
+
+60886 ship roundship
+na ship 2
+LI
+ wh 17364
+SL
+ de 10
+ ca 25000
+
+60980 ship roundship
+na Lazy Days
+LI
+ wh 58666
+SL
+ da 5
+ de 10
+ ca 25000
+
+61201 ship roundship
+na Transporter II
+LI
+ wh 18372
+SL
+ da 13
+ de 10
+ ca 25000
+
+61323 ship roundship
+na People Mover
+LI
+ wh 13362
+SL
+ de 10
+ ca 25000
+
+61345 ship roundship
+na Dark Hand
+LI
+ wh 13624
+SL
+ da 5
+ de 10
+ ca 25000
+
+61485 ship roundship
+na Lady Ealswith
+LI
+ wh 13439
+SL
+ da 5
+ de 10
+ ca 25000
+
+62030 ship roundship
+na Caribou
+LI
+ wh 17099
+ hl 5965 
+LO
+ sh 60
+SL
+ da 4
+ de 10
+ ca 25000
+ mo 7800
+
+62241 ship roundship
+na F&EIV
+LI
+ wh 58547
+SL
+ da 10
+ de 10
+ ca 25000
+
+62391 ship roundship
+na Rye Barrel
+LI
+ wh 16956
+SL
+ de 10
+ ca 25000
+
+62573 ship roundship
+na Mages Rage
+LI
+ wh 14609
+SL
+ de 10
+ ca 25000
+MI
+ ds Dark Galley
+
+63103 ship roundship
+na CDS Black Prince
+LI
+ wh 17598
+CH
+LO
+ sh 24
+SL
+ de 10
+ ca 25000
+MI
+ ds Don't Tread On Me
+
+64100 ship galley
+na Aberdeen
+LI
+ wh 13533
+SL
+ da 10
+ de 20
+ ca 5000
+
+64268 ship galley
+na Hellean
+LI
+ wh 16813
+SL
+ de 20
+ ca 5000
+
+64352 ship roundship
+na Shisae'ron
+LI
+ wh 56949
+SL
+ da 17
+ de 10
+ ca 25000
+
+64596 ship roundship
+na Pau Brasil
+LI
+ wh 13457
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds Musketeer Vessel
+
+64684 ship roundship
+na East Wind
+LI
+ wh 13678
+SL
+ da 25
+ de 10
+ ca 25000
+
+65242 ship roundship
+na Grommit
+LI
+ wh 74936
+ hl 6041 
+SL
+ da 5
+ de 10
+ ca 25000
+
+65363 ship roundship
+na Stormrider
+LI
+ wh 17498
+SL
+ da 7
+ de 4
+ ca 25000
+
+65738 ship roundship
+na The Wanderer
+LI
+ wh 17153
+SL
+ da 6
+ ca 25000
+
+66157 ship roundship
+na flashgordon
+LI
+ wh 16229
+SL
+ da 4
+ de 10
+ ca 25000
+
+66287 ship roundship-in-progress
+na Majesty
+LI
+ wh 57140
+SL
+ ca 25000
+ er 50000
+ eg 9600
+
+69140 ship roundship
+na Lady Ethelburh
+LI
+ wh 58374
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company;Merchants
+
+69684 ship roundship
+na Lady Cwenburh
+LI
+ wh 13341
+SL
+ de 10
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company;Merchants
+
+70124 ship roundship
+na Kazimir's Palace
+LI
+ wh 14609
+SL
+ de 10
+ ca 25000
+MI
+ ds Explorer's Guild
+
+70613 ship roundship
+na Explorer
+LI
+ wh 18840
+SL
+ da 9
+ de 10
+ ca 25000
+
+70683 ship galley
+na Lord of the High Seas
+LI
+ wh 57262
+ hl 70401 
+SL
+ da 12
+ de 20
+ ca 5000
+
+72142 ship roundship
+na Island Hopper
+LI
+ wh 19875
+ hl 64116 
+SL
+ da 8
+ de 10
+ ca 25000
+ bs 100820 
+
+72423 ship roundship
+na Indefagable
+LI
+ wh 12998
+ hl 78775 
+SL
+ de 10
+ ca 25000
+
+72465 ship galley
+na Aviemore
+LI
+ wh 11776
+SL
+ da 13
+ de 20
+ ca 5000
+
+72504 ship roundship
+na Sweet Vengeance
+LI
+ wh 17847
+SL
+ da 13
+ de 8
+ ca 25000
+MI
+ ds Greyfell Dragon Fleet
+
+72800 ship roundship
+na CDS Crimson Glory
+LI
+ wh 17847
+SL
+ da 6
+ de 10
+ ca 25000
+MI
+ ds Greyfell Dragon Fleet
+
+73137 ship roundship
+na Ice Queen
+LI
+ wh 58112
+SL
+ da 33
+ de 10
+ ca 25000
+
+73703 ship roundship
+na Gnitseuq Drib
+LI
+ wh 14903
+SL
+ da 16
+ ca 25000
+
+73890 ship roundship
+na White Elephant
+LI
+ wh 13721
+SL
+ de 10
+ ca 25000
+MI
+ ds A tall ship...
+
+73896 ship roundship
+na Plonk
+LI
+ wh 57531
+SL
+ de 10
+ ca 25000
+MI
+ ds Sunken Crescent
+
+74578 ship roundship
+na TGOMS Stormrider
+LI
+ wh 13380
+SL
+ da 7
+ de 10
+ ca 25000
+
+74606 ship roundship
+na Dragon's Breath
+LI
+ wh 17598
+SL
+ da 6
+ de 10
+ ca 25000
+MI
+ ds Don't Tread On Me
+
+74655 ship roundship
+na Curiag
+LI
+ wh 57626
+SL
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+75177 ship roundship
+na Lady Redburh
+LI
+ wh 13251
+SL
+ da 9
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company;Merchants
+
+75422 ship roundship
+na Himawari
+LI
+ wh 16229
+SL
+ da 4
+ de 10
+ ca 25000
+
+75607 ship roundship
+na Seeker II
+LI
+ wh 13145
+ hl 141808 
+SL
+ da 19
+ de 10
+ ca 25000
+MI
+ ds Sunken Crescent Navy
+
+75979 ship galley-in-progress
+na The scared cat
+LI
+ wh 58335
+SL
+ ca 5000
+ bm 2
+ er 25000
+ eg 14400
+
+76141 ship galley
+na Whisper
+LI
+ wh 58112
+ hl 61335 62413 
+SL
+ de 20
+ ca 5000
+
+76327 ship roundship
+na Kuznetsov
+LI
+ wh 68858
+SL
+ da 3
+ de 10
+ ca 25000
+MI
+ ds House of Lords
+
+76425 ship roundship
+na Arc of Light
+LI
+ wh 15180
+SL
+ da 22
+ ca 25000
+
+76948 ship roundship
+na The Mermaid
+LI
+ wh 17564
+SL
+ da 5
+ de 10
+ ca 25000
+MI
+ ds Armada Coronae
+
+76983 ship galley
+na Distant Drummer
+LI
+ wh 57397
+SL
+ da 21
+ de 20
+ ca 5000
+ bs 99721 
+MI
+ ds A jester painted on the bow
+
+77323 ship roundship
+na Quar Ter Deck
+LI
+ wh 13004
+SL
+ da 5
+ de 10
+ ca 25000
+
+77895 ship roundship
+na TGOMS Braveheart
+LI
+ wh 10250
+ hl 6510 
+SL
+ da 13
+ de 10
+ ca 25000
+
+77990 ship roundship
+na Defiant
+LI
+ wh 17274
+SL
+ de 10
+ ca 25000
+
+78303 ship roundship
+na Moglenoce
+LI
+ wh 14697
+SL
+ da 5
+ de 10
+ ca 25000
+
+78341 ship roundship
+na Seeker I
+LI
+ wh 57531
+SL
+ de 10
+ ca 25000
+MI
+ ds Sunken Crescent Navy
+
+78647 ship roundship
+na The Light of Amaterasu
+LI
+ wh 11894
+SL
+ da 52
+ de 10
+ ca 25000
+
+78832 ship roundship
+na NR Republic
+LI
+ wh 58736
+ hl 7244 
+SL
+ de 10
+ ca 25000
+
+78916 ship roundship
+na Sable Tide
+LI
+ wh 19540
+SL
+ de 10
+ ca 25000
+
+78972 ship roundship
+na Tirpitz
+LI
+ wh 14108
+SL
+ da 9
+ de 10
+ ca 25000
+MI
+ ds Kingdom of Cragstan
+
+79008 ship roundship
+na Discovery
+LI
+ wh 10625
+SL
+ da 8
+ de 10
+ ca 25000
+MI
+ ds Neutral Ship
+
+81498 ship roundship-in-progress
+na Falcon I
+LI
+ wh 57081
+SL
+ ca 25000
+ bm 1
+ er 50000
+ eg 19800
+
+81612 ship roundship
+na Destroyer
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+82582 ship roundship
+na New roundship
+LI
+ wh 57570
+SL
+ de 10
+ ca 25000
+
+83838 ship roundship
+na H.M.S. Surprise
+LI
+ wh 58666
+SL
+ da 22
+ de 10
+ ca 25000
+
+84150 ship roundship
+na The Pawn Artist
+LI
+ wh 58615
+SL
+ de 10
+ ca 25000
+
+84530 ship roundship
+na Coral Sea
+LI
+ wh 57326
+SL
+ de 10
+ ca 25000
+
+85172 ship roundship
+na Lady Osburh
+LI
+ wh 13341
+SL
+ da 4
+ de 10
+ ca 25000
+MI
+ ds flying the standard of di Bicci&Company,Merchants
+
+87790 ship galley
+na Cal Sea
+LI
+ wh 19001
+ hl 109522 
+SL
+ de 20
+ ca 5000
+ mo 7799
+
+87913 ship roundship
+na Pride of Calais
+LI
+ wh 15403
+ hl 61490 
+SL
+ da 7
+ de 10
+ ca 25000
+MI
+ ds Kingdom of Cragstan
+
+89010 ship roundship
+na Darkness
+LI
+ wh 57397
+SL
+ da 12
+ de 10
+ ca 25000
+MI
+ ds A jester painted on the bow
+
+91935 ship roundship
+na Herndon
+LI
+ wh 57140
+SL
+ da 10
+ de 10
+ ca 25000
+
+92515 ship roundship
+na Stormrider II
+LI
+ wh 18396
+SL
+ da 15
+ de 10
+ ca 25000
+
+93272 ship roundship
+na Sivron's Pride
+LI
+ wh 13346
+SL
+ da 3
+ de 10
+ ca 25000
+
+99534 ship roundship
+na The Louise II
+LI
+ wh 19826
+ hl 8079 
+SL
+ da 31
+ de 10
+ ca 25000
+
+103113 ship roundship
+na Square Peg
+LI
+ wh 15991
+SL
+ de 10
+ ca 25000
+
+105085 ship roundship
+na Windrider
+LI
+ wh 17761
+ hl 78903 
+SL
+ da 7
+ de 10
+ ca 25000
+
+105202 ship roundship
+na Bear
+LI
+ wh 18383
+SL
+ da 10
+ de 2
+ ca 25000
+
+107056 ship galley
+na Foul's Defender
+LI
+ wh 15478
+SL
+ de 20
+ ca 5000
+
+107233 ship roundship
+na Neptune's Fury
+LI
+ wh 17854
+SL
+ da 5
+ de 10
+ ca 25000
+ bs 107142 
+
+108893 ship roundship
+na Icharus
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+109974 ship roundship-in-progress
+na Albatross
+LI
+ wh 57326
+SL
+ ca 25000
+ bm 2
+ er 50000
+ eg 28290
+
+110811 ship roundship-in-progress
+na Ceres
+LI
+ wh 57140
+SL
+ ca 25000
+ er 50000
+ eg 9000
+
+113565 ship roundship
+na Dark Sail
+LI
+ wh 11742
+SL
+ da 18
+ de 10
+ ca 25000
+
+113743 ship galley
+na Freedom
+LI
+ wh 16331
+SL
+ de 20
+ ca 5000
+MI
+ ds Flying a banner of midnight blue
+
+114222 ship roundship
+na Tiger
+LI
+ wh 18380
+SL
+ da 11
+ ca 25000
+
+115933 ship roundship
+na Dardanus
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+116468 ship roundship-in-progress
+na Foul's Folly
+LI
+ wh 57060
+SL
+ ca 25000
+ bm 2
+ er 50000
+ eg 29400
+
+120152 ship roundship
+na The Wyrm
+LI
+ wh 57397
+SL
+ de 10
+ ca 25000
+
+120985 ship roundship
+na IRS Steady
+LI
+ wh 58057
+SL
+ de 10
+ ca 25000
+
+125132 ship roundship
+na Swift Wind
+LI
+ wh 18371
+ hl 75173 
+SL
+ da 5
+ de 10
+ ca 25000
+
+127417 ship roundship
+na Voyager
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+128568 ship roundship
+na Nenais'u
+LI
+ wh 16949
+SL
+ de 10
+ ca 25000
+
+129125 ship roundship
+na Atreides
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+130350 ship roundship
+na Delectable
+LI
+ wh 13279
+ hl 61491 
+SL
+ da 22
+ de 10
+ ca 25000
+MI
+ ds Sunken Crescent
+
+131360 ship roundship
+na Dardanus
+LI
+ wh 16777
+ hl 74934 
+SL
+ da 11
+ de 10
+ ca 25000
+ mo 7800
+MI
+ ds Ra Consortium
+
+133092 ship roundship
+na Tollus Shuttle
+LI
+ wh 13433
+ hl 9569 
+SL
+ da 12
+ de 10
+ ca 25000
+ mo 7800
+
+134554 ship roundship
+na USS Canibus
+LI
+ wh 16954
+SL
+ da 9
+ de 6
+ ca 25000
+
+138667 ship roundship
+na Bird of Prey
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+143262 ship roundship
+na Stormrider III
+LI
+ wh 18396
+SL
+ da 5
+ de 10
+ ca 25000
+
+145454 ship roundship
+na Wave Runner
+LI
+ wh 16841
+SL
+ da 18
+ de 10
+ ca 25000
+MI
+ ds Neutral Ship
+
+145522 ship roundship
+na Lag Put
+LI
+ wh 57475
+SL
+ de 10
+ ca 25000
+
+146209 ship roundship
+na Lightning
+LI
+ wh 57133
+ hl 4141 
+SL
+ da 9
+ de 10
+ ca 25000
+
+147010 ship roundship
+na White Star
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+148222 ship roundship
+na Prometheus
+LI
+ wh 57957
+SL
+ de 10
+ ca 25000
+
+149217 ship roundship
+na Drakkar Brun Fonce
+LI
+ wh 17746
+SL
+ da 27
+ ca 25000
+

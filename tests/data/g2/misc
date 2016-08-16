@@ -1,0 +1,25206 @@
+1863 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 17 7787
+MI
+ ca g
+
+2717 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 19 7789
+MI
+ ca g
+ gc 6160
+
+2998 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 5 7775
+MI
+ ca g
+
+3351 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 4 7774
+MI
+ ca g
+
+3418 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 4 7774
+MI
+ ca g
+
+4044 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 6 7776
+MI
+ ca g
+
+4937 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+MI
+ ca g
+
+5051 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+MI
+ ca g
+
+8610 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 27 7797
+MI
+ ca g
+
+9001 lore 0
+
+9002 lore 0
+
+9003 lore 0
+
+9004 lore 0
+
+9005 lore 0
+
+9006 lore 0
+
+9007 lore 0
+
+9171 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 19 7789
+MI
+ ca g
+
+59406 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 12 7782
+MI
+ ca g
+
+66737 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 24 7794
+MI
+ ca g
+
+68427 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 20 7790
+MI
+ ca g
+ gc 70009
+
+73933 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 11 7781
+MI
+ ca g
+
+79012 storm rain
+LI
+ wh 11226
+MI
+ ss 1
+
+79047 storm rain
+LI
+ wh 10544
+MI
+ ss 1
+
+79048 storm rain
+LI
+ wh 13997
+MI
+ ss 1
+
+79087 storm rain
+LI
+ wh 12043
+MI
+ ss 1
+
+79101 storm rain
+LI
+ wh 15160
+MI
+ ss 2
+
+79104 storm rain
+LI
+ wh 14652
+MI
+ ss 1
+
+79105 storm rain
+LI
+ wh 13073
+MI
+ ss 2
+
+79111 storm rain
+LI
+ wh 12251
+MI
+ ss 2
+
+79127 storm rain
+LI
+ wh 15267
+MI
+ ss 1
+
+79170 storm rain
+LI
+ wh 19124
+MI
+ ss 1
+
+79196 storm rain
+LI
+ wh 14908
+MI
+ ss 2
+
+79197 storm rain
+LI
+ wh 15854
+MI
+ ss 1
+
+79208 storm rain
+LI
+ wh 10385
+MI
+ ss 2
+
+79218 storm rain
+LI
+ wh 10068
+MI
+ ss 2
+
+79220 storm rain
+LI
+ wh 15324
+MI
+ ss 1
+
+79221 storm rain
+LI
+ wh 16508
+MI
+ ss 2
+
+79222 storm rain
+LI
+ wh 17417
+MI
+ ss 2
+
+79226 storm rain
+LI
+ wh 12551
+MI
+ ss 1
+
+79260 storm rain
+LI
+ wh 16644
+MI
+ ss 1
+
+79304 storm rain
+LI
+ wh 12149
+MI
+ ss 1
+
+79320 storm rain
+LI
+ wh 19789
+MI
+ ss 2
+
+79324 storm rain
+LI
+ wh 18703
+MI
+ ss 2
+
+79328 storm rain
+LI
+ wh 13733
+MI
+ ss 2
+
+79368 storm rain
+LI
+ wh 15593
+MI
+ ss 2
+
+79374 storm rain
+LI
+ wh 11838
+MI
+ ss 1
+
+79381 storm rain
+LI
+ wh 17463
+MI
+ ss 2
+
+79391 storm rain
+LI
+ wh 16785
+MI
+ ss 1
+
+79405 storm rain
+LI
+ wh 11124
+MI
+ ss 1
+
+79406 storm rain
+LI
+ wh 10015
+MI
+ ss 1
+
+79417 storm rain
+LI
+ wh 10383
+MI
+ ss 1
+
+79435 storm rain
+LI
+ wh 16139
+MI
+ ss 1
+
+79436 storm rain
+LI
+ wh 18036
+MI
+ ss 2
+
+79445 storm rain
+LI
+ wh 14943
+MI
+ ss 2
+
+79454 storm rain
+LI
+ wh 12439
+MI
+ ss 2
+
+79456 storm rain
+LI
+ wh 14528
+MI
+ ss 1
+
+79474 storm rain
+LI
+ wh 13430
+MI
+ ss 1
+
+79503 storm rain
+LI
+ wh 15822
+MI
+ ss 2
+
+79511 storm rain
+LI
+ wh 15240
+MI
+ ss 2
+
+79515 storm rain
+LI
+ wh 16845
+MI
+ ss 2
+
+79535 storm rain
+LI
+ wh 15753
+MI
+ ss 2
+
+79541 storm rain
+LI
+ wh 12320
+MI
+ ss 1
+
+79575 storm rain
+LI
+ wh 12944
+MI
+ ss 2
+
+79613 storm rain
+LI
+ wh 18711
+MI
+ ss 1
+
+79627 storm rain
+LI
+ wh 17527
+MI
+ ss 1
+
+79632 storm rain
+LI
+ wh 16859
+MI
+ ss 2
+
+79636 storm rain
+LI
+ wh 18791
+MI
+ ss 2
+
+79637 storm rain
+LI
+ wh 16429
+MI
+ ss 2
+
+79642 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li attack g129
+ ar 64129 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+79654 storm rain
+LI
+ wh 19829
+MI
+ ss 2
+
+79675 storm rain
+LI
+ wh 15805
+MI
+ ss 1
+
+79714 storm rain
+LI
+ wh 10014
+MI
+ ss 1
+
+79726 storm rain
+LI
+ wh 13587
+MI
+ ss 1
+
+79795 storm rain
+LI
+ wh 11045
+MI
+ ss 2
+
+79816 storm rain
+LI
+ wh 11742
+MI
+ ss 2
+
+79830 storm rain
+LI
+ wh 19410
+MI
+ ss 1
+
+79867 storm rain
+LI
+ wh 17028
+MI
+ ss 2
+
+79872 storm rain
+LI
+ wh 14160
+MI
+ ss 1
+
+79899 storm rain
+LI
+ wh 11962
+MI
+ ss 1
+
+79905 storm rain
+LI
+ wh 13366
+MI
+ ss 1
+
+79950 storm rain
+LI
+ wh 15361
+MI
+ ss 1
+
+79956 storm rain
+LI
+ wh 12706
+MI
+ ss 2
+
+79970 storm rain
+LI
+ wh 16811
+MI
+ ss 2
+
+79975 storm rain
+LI
+ wh 18635
+MI
+ ss 1
+
+79978 storm rain
+LI
+ wh 17392
+MI
+ ss 1
+
+79989 storm rain
+LI
+ wh 18153
+MI
+ ss 1
+
+79993 storm rain
+LI
+ wh 18005
+MI
+ ss 2
+
+79997 storm rain
+LI
+ wh 13876
+MI
+ ss 2
+
+80027 storm rain
+LI
+ wh 11401
+MI
+ ss 1
+
+80041 storm rain
+LI
+ wh 18203
+MI
+ ss 2
+
+80066 storm rain
+LI
+ wh 10309
+MI
+ ss 1
+
+80098 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+80106 storm rain
+LI
+ wh 17695
+MI
+ ss 2
+
+80110 storm rain
+LI
+ wh 18334
+MI
+ ss 1
+
+80168 storm rain
+LI
+ wh 12751
+MI
+ ss 2
+
+80174 storm rain
+LI
+ wh 12054
+MI
+ ss 1
+
+80214 storm rain
+LI
+ wh 14554
+MI
+ ss 1
+
+80244 storm rain
+LI
+ wh 14975
+MI
+ ss 1
+
+80281 storm rain
+LI
+ wh 17387
+MI
+ ss 2
+
+80312 storm rain
+LI
+ wh 12918
+MI
+ ss 1
+
+80353 storm rain
+LI
+ wh 18645
+MI
+ ss 2
+
+80394 storm rain
+LI
+ wh 19937
+MI
+ ss 2
+
+80408 storm rain
+LI
+ wh 12085
+MI
+ ss 1
+
+80439 storm rain
+LI
+ wh 19535
+MI
+ ss 1
+
+80440 storm rain
+LI
+ wh 11324
+MI
+ ss 2
+
+80466 storm rain
+LI
+ wh 18511
+MI
+ ss 1
+
+80478 storm rain
+LI
+ wh 13685
+MI
+ ss 1
+
+80480 storm rain
+LI
+ wh 19395
+MI
+ ss 1
+
+80482 storm rain
+LI
+ wh 15082
+MI
+ ss 1
+
+80489 storm rain
+LI
+ wh 11700
+MI
+ ss 2
+
+80507 storm rain
+LI
+ wh 15503
+MI
+ ss 2
+
+80514 storm rain
+LI
+ wh 13404
+MI
+ ss 1
+
+80519 storm rain
+LI
+ wh 15455
+MI
+ ss 1
+
+80545 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 28 7798
+CO
+ li attack h842
+ ar 65842 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+80548 storm rain
+LI
+ wh 16147
+MI
+ ss 1
+
+80564 storm rain
+LI
+ wh 17141
+MI
+ ss 2
+
+80590 storm rain
+LI
+ wh 19055
+MI
+ ss 2
+
+80597 storm rain
+LI
+ wh 10067
+MI
+ ss 2
+
+80598 storm rain
+LI
+ wh 14793
+MI
+ ss 1
+
+80719 storm rain
+LI
+ wh 13087
+MI
+ ss 2
+
+80763 storm rain
+LI
+ wh 19105
+MI
+ ss 1
+
+80789 storm rain
+LI
+ wh 19681
+MI
+ ss 1
+
+80834 storm rain
+LI
+ wh 15839
+MI
+ ss 2
+
+80869 storm rain
+LI
+ wh 10825
+MI
+ ss 1
+
+80909 storm rain
+LI
+ wh 15270
+MI
+ ss 2
+
+80939 storm rain
+LI
+ wh 10083
+MI
+ ss 1
+
+80955 storm rain
+LI
+ wh 11122
+MI
+ ss 2
+
+80976 storm rain
+LI
+ wh 13822
+MI
+ ss 1
+
+80982 storm rain
+LI
+ wh 13546
+MI
+ ss 2
+
+80988 storm rain
+LI
+ wh 11990
+MI
+ ss 2
+
+81013 storm rain
+LI
+ wh 13518
+MI
+ ss 2
+
+81020 storm rain
+LI
+ wh 15670
+MI
+ ss 1
+
+81061 storm rain
+LI
+ wh 19238
+MI
+ ss 1
+
+81077 storm rain
+LI
+ wh 18975
+MI
+ ss 1
+
+81109 storm rain
+LI
+ wh 16060
+MI
+ ss 1
+
+81146 storm rain
+LI
+ wh 10649
+MI
+ ss 2
+
+81150 storm rain
+LI
+ wh 16682
+MI
+ ss 2
+
+81151 storm rain
+LI
+ wh 12253
+MI
+ ss 1
+
+81155 storm rain
+LI
+ wh 18043
+MI
+ ss 1
+
+81214 storm rain
+LI
+ wh 18575
+MI
+ ss 1
+
+81234 storm rain
+LI
+ wh 16784
+MI
+ ss 2
+
+81237 storm rain
+LI
+ wh 18532
+MI
+ ss 2
+
+81250 storm rain
+LI
+ wh 10325
+MI
+ ss 1
+
+81256 storm rain
+LI
+ wh 11426
+MI
+ ss 2
+
+81312 storm rain
+LI
+ wh 12075
+MI
+ ss 1
+
+81321 storm rain
+LI
+ wh 13016
+MI
+ ss 1
+
+81325 storm rain
+LI
+ wh 11383
+MI
+ ss 2
+
+81326 storm rain
+LI
+ wh 15117
+MI
+ ss 1
+
+81372 storm rain
+LI
+ wh 15764
+MI
+ ss 2
+
+81410 storm rain
+LI
+ wh 11790
+MI
+ ss 2
+
+81462 storm rain
+LI
+ wh 10577
+MI
+ ss 1
+
+81485 storm rain
+LI
+ wh 13035
+MI
+ ss 2
+
+81487 storm rain
+LI
+ wh 15767
+MI
+ ss 2
+
+81490 storm rain
+LI
+ wh 14721
+MI
+ ss 2
+
+81495 storm rain
+LI
+ wh 18704
+MI
+ ss 1
+
+81507 storm rain
+LI
+ wh 19294
+MI
+ ss 2
+
+81541 storm rain
+LI
+ wh 19919
+MI
+ ss 1
+
+81580 storm rain
+LI
+ wh 10215
+MI
+ ss 1
+
+81593 storm rain
+LI
+ wh 18922
+MI
+ ss 2
+
+81621 storm rain
+LI
+ wh 14703
+MI
+ ss 2
+
+81642 storm rain
+LI
+ wh 12450
+MI
+ ss 2
+
+81651 storm rain
+LI
+ wh 12239
+MI
+ ss 2
+
+81666 storm rain
+LI
+ wh 17958
+MI
+ ss 1
+
+81669 storm rain
+LI
+ wh 10141
+MI
+ ss 2
+
+81680 storm rain
+LI
+ wh 11008
+MI
+ ss 1
+
+81687 storm rain
+LI
+ wh 16410
+MI
+ ss 1
+
+81694 storm rain
+LI
+ wh 18441
+MI
+ ss 2
+
+81744 storm rain
+LI
+ wh 12301
+MI
+ ss 1
+
+81759 storm rain
+LI
+ wh 13149
+MI
+ ss 2
+
+81760 storm rain
+LI
+ wh 17346
+MI
+ ss 2
+
+81765 storm rain
+LI
+ wh 13536
+MI
+ ss 2
+
+81771 storm rain
+LI
+ wh 13620
+MI
+ ss 1
+
+81772 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+81784 storm rain
+LI
+ wh 13311
+MI
+ ss 2
+
+81791 storm rain
+LI
+ wh 14595
+MI
+ ss 1
+
+81825 storm rain
+LI
+ wh 19595
+MI
+ ss 1
+
+81848 storm rain
+LI
+ wh 10984
+MI
+ ss 1
+
+81869 storm rain
+LI
+ wh 19051
+MI
+ ss 2
+
+81871 storm rain
+LI
+ wh 19419
+MI
+ ss 1
+
+81881 storm rain
+LI
+ wh 15633
+MI
+ ss 1
+
+81927 storm rain
+LI
+ wh 18737
+MI
+ ss 2
+
+81933 storm rain
+LI
+ wh 17044
+MI
+ sb 60431
+ ss 13
+
+81996 storm rain
+LI
+ wh 16810
+MI
+ ss 1
+
+82106 storm rain
+LI
+ wh 17211
+MI
+ ss 1
+
+82124 storm rain
+LI
+ wh 11961
+MI
+ ss 1
+
+82148 storm rain
+LI
+ wh 18006
+MI
+ ss 2
+
+82159 storm rain
+LI
+ wh 12651
+MI
+ ss 2
+
+82186 storm rain
+LI
+ wh 10683
+MI
+ ss 1
+
+82238 storm rain
+LI
+ wh 16795
+MI
+ ss 2
+
+82245 storm rain
+LI
+ wh 12684
+MI
+ ss 2
+
+82266 storm fog
+LI
+ wh 16616
+MI
+ sb 5557
+ ss 25
+
+82282 storm rain
+LI
+ wh 17669
+MI
+ ss 1
+
+82285 storm rain
+LI
+ wh 14926
+MI
+ ss 2
+
+82296 storm rain
+LI
+ wh 14031
+MI
+ ss 1
+
+82302 storm rain
+LI
+ wh 10765
+MI
+ ss 1
+
+82311 storm rain
+LI
+ wh 10266
+MI
+ ss 1
+
+82322 storm rain
+LI
+ wh 10754
+MI
+ ss 1
+
+82331 storm rain
+LI
+ wh 17682
+MI
+ ss 2
+
+82344 storm rain
+LI
+ wh 18652
+MI
+ ss 1
+
+82360 storm rain
+LI
+ wh 12186
+MI
+ ss 1
+
+82374 storm rain
+LI
+ wh 11906
+MI
+ ss 1
+
+82399 storm rain
+LI
+ wh 10355
+MI
+ ss 1
+
+82400 storm rain
+LI
+ wh 11614
+MI
+ ss 1
+
+82422 storm rain
+LI
+ wh 12001
+MI
+ ss 2
+
+82433 storm rain
+LI
+ wh 10603
+MI
+ ss 2
+
+82440 storm rain
+LI
+ wh 15391
+MI
+ ss 2
+
+82452 storm rain
+LI
+ wh 10495
+MI
+ ss 2
+
+82497 storm rain
+LI
+ wh 11931
+MI
+ ss 1
+
+82500 storm rain
+LI
+ wh 18720
+MI
+ ss 1
+
+82506 storm rain
+LI
+ wh 13099
+MI
+ ss 1
+
+82510 storm rain
+LI
+ wh 14961
+MI
+ ss 2
+
+82529 storm rain
+LI
+ wh 18631
+MI
+ ss 1
+
+82530 storm rain
+LI
+ wh 19267
+MI
+ ss 2
+
+82545 storm rain
+LI
+ wh 15808
+MI
+ ss 2
+
+82552 storm rain
+LI
+ wh 16572
+MI
+ ss 1
+
+82569 storm rain
+LI
+ wh 15418
+MI
+ ss 2
+
+82605 storm rain
+LI
+ wh 14305
+MI
+ ss 1
+
+82621 storm rain
+LI
+ wh 11596
+MI
+ ss 2
+
+82656 storm rain
+LI
+ wh 17998
+MI
+ ss 1
+
+82665 storm rain
+LI
+ wh 14696
+MI
+ ss 1
+
+82690 storm rain
+LI
+ wh 10657
+MI
+ ss 2
+
+82694 storm rain
+LI
+ wh 17100
+MI
+ ss 2
+
+82697 storm rain
+LI
+ wh 11341
+MI
+ ss 1
+
+82699 storm rain
+LI
+ wh 12855
+MI
+ sb 67277
+ mc 192
+ ss 11
+ mh 13658
+ co 276
+
+82738 storm rain
+LI
+ wh 13967
+MI
+ ss 2
+
+82752 storm rain
+LI
+ wh 15352
+MI
+ ss 1
+
+82754 storm rain
+LI
+ wh 14073
+MI
+ ss 2
+
+82773 storm rain
+LI
+ wh 13138
+MI
+ ss 2
+
+82786 storm rain
+LI
+ wh 18517
+MI
+ ss 2
+
+82789 storm rain
+LI
+ wh 14787
+MI
+ ss 2
+
+82810 storm rain
+LI
+ wh 10770
+MI
+ ss 1
+
+82811 storm rain
+LI
+ wh 13544
+MI
+ ss 1
+
+82819 storm rain
+LI
+ wh 10023
+MI
+ ss 1
+
+82827 storm rain
+LI
+ wh 15254
+MI
+ ss 1
+
+82848 storm rain
+LI
+ wh 18778
+MI
+ ss 1
+
+82882 storm rain
+LI
+ wh 11668
+MI
+ ss 1
+
+82890 storm rain
+LI
+ wh 19297
+MI
+ ss 1
+
+82891 storm rain
+LI
+ wh 14108
+MI
+ ss 2
+
+82917 storm rain
+LI
+ wh 14546
+MI
+ ss 2
+
+82930 storm rain
+LI
+ wh 16037
+MI
+ ss 2
+
+82942 storm rain
+LI
+ wh 16051
+MI
+ ss 1
+
+82944 storm rain
+LI
+ wh 12270
+MI
+ ss 1
+
+82955 storm rain
+LI
+ wh 12443
+MI
+ ss 1
+
+82996 storm rain
+LI
+ wh 11519
+MI
+ ss 1
+
+83013 storm rain
+LI
+ wh 17560
+MI
+ ss 2
+
+83032 storm rain
+LI
+ wh 13275
+MI
+ ss 1
+
+83077 storm rain
+LI
+ wh 11089
+MI
+ ss 2
+
+83081 storm rain
+LI
+ wh 17127
+MI
+ ss 1
+
+83099 storm rain
+LI
+ wh 11304
+MI
+ ss 2
+
+83132 storm rain
+LI
+ wh 16301
+MI
+ ss 2
+
+83162 storm rain
+LI
+ wh 13929
+MI
+ ss 1
+
+83164 storm rain
+LI
+ wh 13503
+MI
+ ss 1
+
+83263 storm rain
+LI
+ wh 10595
+MI
+ ss 1
+
+83280 storm rain
+LI
+ wh 17605
+MI
+ ss 2
+
+83327 storm rain
+LI
+ wh 14058
+MI
+ ss 1
+
+83358 storm rain
+LI
+ wh 15785
+MI
+ ss 1
+
+83391 storm rain
+LI
+ wh 17875
+MI
+ ss 1
+
+83392 storm rain
+LI
+ wh 12883
+MI
+ ss 1
+
+83396 storm rain
+LI
+ wh 15562
+MI
+ ss 2
+
+83427 storm rain
+LI
+ wh 12238
+MI
+ ss 2
+
+83430 storm rain
+LI
+ wh 11064
+MI
+ ss 1
+
+83432 storm rain
+LI
+ wh 16165
+MI
+ ss 2
+
+83470 storm rain
+LI
+ wh 10571
+MI
+ ss 1
+
+83491 storm rain
+LI
+ wh 15428
+MI
+ ss 1
+
+83531 storm rain
+LI
+ wh 18845
+MI
+ ss 1
+
+83542 storm rain
+LI
+ wh 16492
+MI
+ ss 1
+
+83621 storm rain
+LI
+ wh 12943
+MI
+ ss 1
+
+83622 storm rain
+LI
+ wh 16284
+MI
+ ss 1
+
+83623 storm rain
+LI
+ wh 19029
+MI
+ ss 2
+
+83625 storm rain
+LI
+ wh 12174
+MI
+ ss 2
+
+83698 storm rain
+LI
+ wh 16763
+MI
+ ss 2
+
+83709 storm rain
+LI
+ wh 17763
+MI
+ ss 2
+
+83720 storm rain
+LI
+ wh 14123
+MI
+ ss 1
+
+83739 storm rain
+LI
+ wh 12695
+MI
+ ss 1
+
+83775 storm rain
+LI
+ wh 17191
+MI
+ ss 2
+
+83777 storm rain
+LI
+ wh 10690
+MI
+ ss 2
+
+83864 storm rain
+LI
+ wh 12387
+MI
+ sb 74943
+ ss 199
+
+83871 storm rain
+LI
+ wh 11266
+MI
+ ss 2
+
+83890 storm rain
+LI
+ wh 11243
+MI
+ ss 2
+
+83906 storm rain
+LI
+ wh 17825
+MI
+ ss 2
+
+83928 storm rain
+LI
+ wh 13330
+MI
+ ss 2
+
+83967 storm rain
+LI
+ wh 15752
+MI
+ ss 1
+
+83978 storm rain
+LI
+ wh 14479
+MI
+ ss 2
+
+84017 storm rain
+LI
+ wh 15549
+MI
+ ss 1
+
+84045 storm rain
+LI
+ wh 15090
+MI
+ ss 2
+
+84056 storm rain
+LI
+ wh 17344
+MI
+ ss 1
+
+84057 storm rain
+LI
+ wh 18868
+MI
+ ss 2
+
+84118 storm rain
+LI
+ wh 11203
+MI
+ ss 1
+
+84121 storm rain
+LI
+ wh 12969
+MI
+ ss 1
+
+84130 storm rain
+LI
+ wh 13890
+MI
+ ss 2
+
+84142 storm rain
+LI
+ wh 18498
+MI
+ ss 1
+
+84155 storm rain
+LI
+ wh 14806
+MI
+ ss 2
+
+84173 storm rain
+LI
+ wh 12241
+MI
+ ss 2
+
+84200 storm rain
+LI
+ wh 10203
+MI
+ ss 2
+
+84201 storm rain
+LI
+ wh 17202
+MI
+ ss 2
+
+84223 storm rain
+LI
+ wh 10855
+MI
+ ss 2
+
+84231 storm rain
+LI
+ wh 12672
+MI
+ ss 2
+
+84239 storm rain
+LI
+ wh 19661
+MI
+ ss 2
+
+84261 storm rain
+LI
+ wh 16269
+MI
+ ss 2
+
+84293 storm rain
+LI
+ wh 15104
+MI
+ ss 2
+
+84316 storm rain
+LI
+ wh 16932
+MI
+ ss 1
+
+84334 storm rain
+LI
+ wh 11685
+MI
+ ss 2
+
+84358 storm rain
+LI
+ wh 19856
+MI
+ ss 2
+
+84369 storm rain
+LI
+ wh 13477
+MI
+ ss 2
+
+84371 storm rain
+LI
+ wh 13198
+MI
+ ss 2
+
+84373 storm rain
+LI
+ wh 11353
+MI
+ ss 1
+
+84378 storm rain
+na Storm
+LI
+ wh 18585
+MI
+ sb 7761
+ mc 211
+ ss 58
+ mh 18485
+ co 276
+
+84380 storm rain
+LI
+ wh 13250
+MI
+ ss 2
+
+84424 storm rain
+LI
+ wh 16630
+MI
+ ss 1
+
+84427 storm rain
+LI
+ wh 12510
+MI
+ ss 2
+
+84435 storm rain
+LI
+ wh 12209
+MI
+ ss 2
+
+84465 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+MI
+ ca g
+
+84486 storm rain
+LI
+ wh 13596
+MI
+ ss 2
+
+84519 storm rain
+LI
+ wh 12357
+MI
+ ss 2
+
+84525 storm rain
+LI
+ wh 11645
+MI
+ ss 2
+
+84540 storm rain
+LI
+ wh 16723
+MI
+ ss 2
+
+84543 storm rain
+LI
+ wh 15303
+MI
+ ss 1
+
+84551 storm rain
+LI
+ wh 15336
+MI
+ ss 2
+
+84572 storm rain
+LI
+ wh 19956
+MI
+ ss 1
+
+84595 storm rain
+LI
+ wh 11445
+MI
+ ss 1
+
+84644 storm rain
+LI
+ wh 11288
+MI
+ ss 1
+
+84662 storm rain
+LI
+ wh 16197
+MI
+ ss 2
+
+84696 storm rain
+LI
+ wh 14597
+MI
+ ss 2
+
+84715 storm rain
+LI
+ wh 14418
+MI
+ ss 1
+
+84723 storm rain
+LI
+ wh 17729
+MI
+ ss 1
+
+84731 storm rain
+LI
+ wh 12285
+MI
+ ss 1
+
+84732 storm rain
+LI
+ wh 19639
+MI
+ ss 1
+
+84744 storm rain
+LI
+ wh 11030
+MI
+ ss 1
+
+84770 storm rain
+LI
+ wh 17149
+MI
+ ss 2
+
+84772 storm rain
+LI
+ wh 19324
+MI
+ ss 2
+
+84776 storm rain
+LI
+ wh 19523
+MI
+ ss 1
+
+84793 storm rain
+LI
+ wh 18365
+MI
+ ss 2
+
+84794 storm rain
+LI
+ wh 16015
+MI
+ ss 1
+
+84820 storm rain
+LI
+ wh 16485
+MI
+ ss 2
+
+84902 storm rain
+LI
+ wh 12107
+MI
+ ss 1
+
+84907 storm rain
+LI
+ wh 15580
+MI
+ ss 1
+
+84928 storm rain
+LI
+ wh 11858
+MI
+ ss 1
+
+84934 storm rain
+LI
+ wh 18452
+MI
+ ss 2
+
+84951 storm rain
+LI
+ wh 17861
+MI
+ ss 2
+
+84957 storm rain
+LI
+ wh 11665
+MI
+ ss 1
+
+84962 storm rain
+LI
+ wh 12352
+MI
+ ss 2
+
+85016 storm rain
+LI
+ wh 12742
+MI
+ ss 1
+
+85017 storm rain
+LI
+ wh 14233
+MI
+ ss 1
+
+85025 storm rain
+LI
+ wh 14919
+MI
+ ss 1
+
+85030 storm rain
+LI
+ wh 18501
+MI
+ ss 2
+
+85037 storm rain
+LI
+ wh 19855
+MI
+ ss 2
+
+85046 storm rain
+LI
+ wh 11384
+MI
+ ss 1
+
+85073 storm rain
+LI
+ wh 19477
+MI
+ ss 1
+
+85103 storm rain
+LI
+ wh 15735
+MI
+ ss 2
+
+85124 deadchar 0
+CH
+ ni 24
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 15 7785
+
+85129 storm rain
+LI
+ wh 19972
+MI
+ ss 2
+
+85131 storm rain
+LI
+ wh 15734
+MI
+ ss 1
+
+85134 storm rain
+LI
+ wh 15012
+MI
+ ss 1
+
+85135 storm rain
+LI
+ wh 18813
+MI
+ ss 1
+
+85139 storm rain
+LI
+ wh 17320
+MI
+ ss 1
+
+85145 storm rain
+LI
+ wh 11102
+MI
+ ss 2
+
+85199 storm rain
+LI
+ wh 15604
+MI
+ ss 1
+
+85243 storm rain
+LI
+ wh 12375
+MI
+ ss 1
+
+85276 storm rain
+LI
+ wh 17354
+MI
+ ss 1
+
+85299 storm rain
+LI
+ wh 10022
+MI
+ ss 1
+
+85303 storm rain
+LI
+ wh 10427
+MI
+ ss 1
+
+85334 storm rain
+LI
+ wh 12987
+MI
+ ss 2
+
+85419 storm rain
+LI
+ wh 16931
+MI
+ ss 2
+
+85424 storm rain
+LI
+ wh 13506
+MI
+ ss 2
+
+85426 storm rain
+LI
+ wh 17749
+MI
+ ss 1
+
+85439 storm rain
+LI
+ wh 12438
+MI
+ ss 2
+
+85458 storm rain
+LI
+ wh 15120
+MI
+ ss 2
+
+85462 storm rain
+LI
+ wh 10704
+MI
+ ss 2
+
+85469 storm rain
+LI
+ wh 11783
+MI
+ ss 1
+
+85487 storm rain
+LI
+ wh 11070
+MI
+ ss 1
+
+85496 storm rain
+LI
+ wh 14972
+MI
+ ss 1
+
+85511 storm rain
+LI
+ wh 12401
+MI
+ ss 1
+
+85553 storm rain
+LI
+ wh 13030
+MI
+ ss 1
+
+85559 storm rain
+LI
+ wh 13917
+MI
+ ss 1
+
+85572 storm rain
+LI
+ wh 15913
+MI
+ ss 1
+
+85614 storm rain
+LI
+ wh 17768
+MI
+ ss 1
+
+85615 storm rain
+LI
+ wh 19600
+MI
+ ss 2
+
+85624 storm rain
+LI
+ wh 16565
+MI
+ ss 1
+
+85635 storm rain
+LI
+ wh 16564
+MI
+ ss 2
+
+85655 storm rain
+LI
+ wh 19024
+MI
+ ss 2
+
+85697 storm rain
+LI
+ wh 18244
+MI
+ ss 2
+
+85709 storm rain
+LI
+ wh 14084
+MI
+ ss 1
+
+85729 storm rain
+LI
+ wh 19492
+MI
+ ss 2
+
+85736 storm rain
+LI
+ wh 18904
+MI
+ ss 2
+
+85761 storm rain
+LI
+ wh 12962
+MI
+ ss 1
+
+85797 storm rain
+LI
+ wh 12433
+MI
+ ss 2
+
+85836 storm rain
+LI
+ wh 16636
+MI
+ ss 1
+
+85838 storm rain
+LI
+ wh 12718
+MI
+ ss 1
+
+85858 storm rain
+LI
+ wh 16472
+MI
+ ss 1
+
+85879 storm rain
+LI
+ wh 10856
+MI
+ ss 2
+
+85880 storm rain
+LI
+ wh 14756
+MI
+ ss 2
+
+85890 storm rain
+LI
+ wh 16101
+MI
+ ss 2
+
+85926 storm rain
+LI
+ wh 12771
+MI
+ ss 2
+
+85949 storm rain
+LI
+ wh 17621
+MI
+ ss 1
+
+85953 storm rain
+LI
+ wh 16019
+MI
+ ss 2
+
+85968 storm rain
+LI
+ wh 19708
+MI
+ ss 1
+
+85971 storm rain
+LI
+ wh 18370
+MI
+ ss 2
+
+85978 storm rain
+LI
+ wh 10206
+MI
+ ss 2
+
+85979 storm rain
+LI
+ wh 16206
+MI
+ ss 2
+
+86029 storm rain
+LI
+ wh 14583
+MI
+ ss 1
+
+86040 storm rain
+LI
+ wh 19142
+MI
+ ss 2
+
+86070 storm rain
+LI
+ wh 11654
+MI
+ ss 2
+
+86071 storm rain
+LI
+ wh 16695
+MI
+ ss 1
+
+86078 storm rain
+LI
+ wh 10746
+MI
+ ss 1
+
+86081 storm rain
+LI
+ wh 13999
+MI
+ ss 2
+
+86082 storm rain
+LI
+ wh 19537
+MI
+ ss 1
+
+86093 storm rain
+LI
+ wh 18225
+MI
+ ss 1
+
+86097 storm rain
+LI
+ wh 12585
+MI
+ ss 2
+
+86100 storm rain
+LI
+ wh 14173
+MI
+ ss 2
+
+86106 storm rain
+LI
+ wh 19315
+MI
+ ss 2
+
+86108 storm rain
+LI
+ wh 14431
+MI
+ ss 1
+
+86146 storm rain
+LI
+ wh 14664
+MI
+ ss 1
+
+86176 storm rain
+LI
+ wh 18456
+MI
+ ss 1
+
+86203 storm rain
+LI
+ wh 18068
+MI
+ ss 2
+
+86225 storm rain
+LI
+ wh 15947
+MI
+ ss 1
+
+86230 storm rain
+LI
+ wh 10626
+MI
+ ss 1
+
+86251 storm rain
+LI
+ wh 16528
+MI
+ ss 2
+
+86270 storm rain
+LI
+ wh 18952
+MI
+ ss 2
+
+86291 storm rain
+LI
+ wh 12297
+MI
+ ss 1
+
+86316 storm rain
+LI
+ wh 14680
+MI
+ ss 1
+
+86343 storm rain
+LI
+ wh 14447
+MI
+ ss 2
+
+86346 storm rain
+LI
+ wh 11531
+MI
+ ss 2
+
+86348 storm rain
+LI
+ wh 18273
+MI
+ ss 2
+
+86362 storm rain
+LI
+ wh 17537
+MI
+ ss 1
+
+86381 storm rain
+LI
+ wh 13392
+MI
+ ss 1
+
+86383 storm rain
+LI
+ wh 11780
+MI
+ ss 2
+
+86388 storm rain
+LI
+ wh 10169
+MI
+ ss 2
+
+86417 storm rain
+LI
+ wh 18627
+MI
+ ss 1
+
+86420 storm rain
+LI
+ wh 17421
+MI
+ ss 1
+
+86459 storm rain
+LI
+ wh 17112
+MI
+ ss 2
+
+86490 storm rain
+LI
+ wh 13942
+MI
+ ss 1
+
+86495 storm rain
+LI
+ wh 17307
+MI
+ ss 1
+
+86514 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+86528 storm rain
+LI
+ wh 19511
+MI
+ ss 2
+
+86531 storm rain
+LI
+ wh 15112
+MI
+ ss 1
+
+86551 storm rain
+LI
+ wh 17787
+MI
+ ss 1
+
+86559 storm rain
+LI
+ wh 10687
+MI
+ ss 1
+
+86598 storm rain
+LI
+ wh 17641
+MI
+ ss 2
+
+86662 storm rain
+LI
+ wh 15035
+MI
+ ss 2
+
+86685 storm rain
+LI
+ wh 12564
+MI
+ ss 2
+
+86690 storm rain
+LI
+ wh 16286
+MI
+ ss 1
+
+86718 storm rain
+LI
+ wh 18916
+MI
+ ss 2
+
+86720 storm rain
+LI
+ wh 19653
+MI
+ ss 1
+
+86727 storm rain
+LI
+ wh 10395
+MI
+ ss 1
+
+86739 storm rain
+LI
+ wh 11554
+MI
+ ss 1
+
+86755 storm rain
+LI
+ wh 15373
+MI
+ ss 1
+
+86767 storm rain
+LI
+ wh 16043
+MI
+ ss 1
+
+86769 storm rain
+LI
+ wh 14624
+MI
+ ss 2
+
+86777 storm rain
+LI
+ wh 18638
+MI
+ ss 1
+
+86815 storm rain
+LI
+ wh 17494
+MI
+ ss 1
+
+86816 storm rain
+LI
+ wh 18614
+MI
+ ss 2
+
+86832 storm rain
+LI
+ wh 16953
+MI
+ ss 1
+
+86862 storm rain
+LI
+ wh 12078
+MI
+ ss 1
+
+86879 storm rain
+LI
+ wh 14185
+MI
+ ss 2
+
+86896 storm rain
+LI
+ wh 14724
+MI
+ ss 1
+
+86918 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 21 7791
+CO
+ li attack 9776
+ ar 9776 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+86944 storm rain
+LI
+ wh 10815
+MI
+ ss 2
+
+86950 storm rain
+LI
+ wh 10332
+MI
+ ss 1
+
+86973 storm rain
+LI
+ wh 19478
+MI
+ ss 1
+
+86974 storm rain
+LI
+ wh 10610
+MI
+ ss 2
+
+86982 storm rain
+LI
+ wh 16773
+MI
+ ss 1
+
+86991 storm rain
+LI
+ wh 18921
+MI
+ ss 2
+
+86998 storm rain
+LI
+ wh 14266
+MI
+ ss 2
+
+87041 storm rain
+LI
+ wh 16865
+MI
+ ss 1
+
+87063 storm rain
+LI
+ wh 13713
+MI
+ ss 2
+
+87079 storm rain
+LI
+ wh 13332
+MI
+ ss 1
+
+87089 storm rain
+LI
+ wh 18336
+MI
+ ss 2
+
+87106 storm rain
+LI
+ wh 13919
+MI
+ ss 2
+
+87174 storm rain
+LI
+ wh 11888
+MI
+ ss 2
+
+87182 storm rain
+LI
+ wh 16146
+MI
+ ss 1
+
+87184 storm rain
+LI
+ wh 10937
+MI
+ ss 1
+
+87199 storm rain
+LI
+ wh 11446
+MI
+ ss 1
+
+87237 storm rain
+LI
+ wh 19277
+MI
+ ss 1
+
+87263 storm rain
+LI
+ wh 19278
+MI
+ ss 2
+
+87271 storm rain
+LI
+ wh 15263
+MI
+ ss 2
+
+87282 storm rain
+LI
+ wh 15338
+MI
+ ss 1
+
+87325 deadchar 0
+CH
+ ni 32
+ he 99
+ lk 4
+ at 60
+ df 60
+ dt 260 15 7785
+CO
+ li attack 1699
+ ar 1699 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+87358 storm rain
+LI
+ wh 11161
+MI
+ ss 1
+
+87374 storm rain
+LI
+ wh 10345
+MI
+ ss 2
+
+87414 storm rain
+LI
+ wh 18802
+MI
+ ss 2
+
+87417 storm rain
+LI
+ wh 14716
+MI
+ ss 1
+
+87423 storm rain
+LI
+ wh 12108
+MI
+ ss 1
+
+87434 storm rain
+LI
+ wh 19379
+MI
+ ss 1
+
+87440 storm rain
+LI
+ wh 14897
+MI
+ ss 2
+
+87446 storm rain
+LI
+ wh 10696
+MI
+ ss 2
+
+87495 storm rain
+LI
+ wh 19520
+MI
+ ss 1
+
+87500 storm rain
+LI
+ wh 19344
+MI
+ ss 1
+
+87515 storm rain
+LI
+ wh 12222
+MI
+ ss 1
+
+87524 storm rain
+LI
+ wh 19306
+MI
+ ss 2
+
+87539 storm rain
+LI
+ wh 19868
+MI
+ ss 1
+
+87556 storm rain
+LI
+ wh 12500
+MI
+ ss 1
+
+87582 storm rain
+LI
+ wh 12127
+MI
+ ss 2
+
+87660 storm rain
+LI
+ wh 11462
+MI
+ ss 2
+
+87690 storm rain
+LI
+ wh 13762
+MI
+ ss 1
+
+87694 storm rain
+LI
+ wh 15216
+MI
+ ss 1
+
+87720 storm rain
+LI
+ wh 12851
+MI
+ ss 1
+
+87731 storm rain
+LI
+ wh 13721
+MI
+ ss 2
+
+87732 storm rain
+LI
+ wh 16088
+MI
+ ss 2
+
+87751 storm rain
+LI
+ wh 16921
+MI
+ ss 2
+
+87774 storm rain
+LI
+ wh 19300
+MI
+ ss 1
+
+87806 storm rain
+LI
+ wh 19408
+MI
+ ss 2
+
+87814 storm rain
+LI
+ wh 18721
+MI
+ ss 1
+
+87833 storm rain
+LI
+ wh 15232
+MI
+ ss 1
+
+87853 storm rain
+LI
+ wh 12118
+MI
+ ss 1
+
+87855 storm rain
+LI
+ wh 14599
+MI
+ ss 1
+
+87881 storm rain
+LI
+ wh 12919
+MI
+ ss 2
+
+87895 storm rain
+LI
+ wh 16438
+MI
+ ss 1
+
+87900 storm rain
+LI
+ wh 16531
+MI
+ ss 1
+
+87904 storm rain
+LI
+ wh 18383
+MI
+ ss 2
+
+87926 storm rain
+LI
+ wh 10915
+MI
+ ss 1
+
+87932 storm rain
+LI
+ wh 18917
+MI
+ ss 2
+
+87953 storm rain
+LI
+ wh 11639
+MI
+ ss 2
+
+87968 storm rain
+LI
+ wh 16887
+MI
+ ss 2
+
+87978 storm rain
+LI
+ wh 16832
+MI
+ ss 2
+
+87990 storm rain
+LI
+ wh 19813
+MI
+ ss 1
+
+87996 storm rain
+LI
+ wh 11141
+MI
+ ss 2
+
+88003 storm rain
+LI
+ wh 11294
+MI
+ ss 2
+
+88022 storm rain
+LI
+ wh 12992
+MI
+ ss 1
+
+88026 storm rain
+LI
+ wh 15894
+MI
+ ss 2
+
+88033 storm rain
+LI
+ wh 16170
+MI
+ ss 2
+
+88035 storm rain
+LI
+ wh 18379
+MI
+ ss 2
+
+88041 storm rain
+LI
+ wh 14102
+MI
+ ss 2
+
+88063 storm rain
+LI
+ wh 14129
+MI
+ ss 2
+
+88083 storm rain
+LI
+ wh 18693
+MI
+ ss 2
+
+88091 storm rain
+LI
+ wh 19423
+MI
+ ss 2
+
+88094 storm rain
+LI
+ wh 19684
+MI
+ ss 1
+
+88104 storm rain
+LI
+ wh 13745
+MI
+ ss 2
+
+88119 storm rain
+LI
+ wh 17464
+MI
+ ss 1
+
+88143 storm rain
+LI
+ wh 18860
+MI
+ ss 1
+
+88179 storm rain
+LI
+ wh 17595
+MI
+ ss 2
+
+88185 storm rain
+LI
+ wh 15374
+MI
+ ss 2
+
+88205 storm rain
+LI
+ wh 15512
+MI
+ ss 1
+
+88212 storm rain
+LI
+ wh 13255
+MI
+ ss 1
+
+88219 storm rain
+LI
+ wh 15521
+MI
+ ss 1
+
+88223 storm rain
+LI
+ wh 12063
+MI
+ ss 2
+
+88229 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li attack g129
+ ar 64129 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+88235 storm rain
+LI
+ wh 17187
+MI
+ ss 2
+
+88244 storm rain
+LI
+ wh 12327
+MI
+ ss 1
+
+88248 storm rain
+LI
+ wh 11432
+MI
+ ss 2
+
+88249 storm rain
+LI
+ wh 10423
+MI
+ ss 1
+
+88289 storm rain
+LI
+ wh 10651
+MI
+ ss 1
+
+88351 storm rain
+LI
+ wh 15079
+MI
+ ss 1
+
+88403 storm rain
+LI
+ wh 15842
+MI
+ ss 2
+
+88429 storm rain
+LI
+ wh 14017
+MI
+ ss 2
+
+88445 storm rain
+LI
+ wh 14270
+MI
+ ss 2
+
+88446 storm rain
+LI
+ wh 19327
+MI
+ ss 1
+
+88481 storm rain
+LI
+ wh 19891
+MI
+ ss 1
+
+88488 storm rain
+LI
+ wh 15115
+MI
+ ss 1
+
+88518 storm rain
+LI
+ wh 10267
+MI
+ ss 2
+
+88533 storm rain
+LI
+ wh 15010
+MI
+ ss 1
+
+88540 storm rain
+LI
+ wh 13708
+MI
+ ss 1
+
+88545 storm rain
+LI
+ wh 14090
+MI
+ ss 2
+
+88555 storm rain
+LI
+ wh 14902
+MI
+ ss 2
+
+88614 storm rain
+LI
+ wh 11376
+MI
+ ss 1
+
+88622 storm rain
+LI
+ wh 11098
+MI
+ ss 2
+
+88650 storm rain
+LI
+ wh 15832
+MI
+ ss 1
+
+88696 storm rain
+LI
+ wh 13223
+MI
+ ss 1
+
+88719 storm rain
+LI
+ wh 10483
+MI
+ ss 2
+
+88738 storm rain
+LI
+ wh 16719
+MI
+ ss 2
+
+88739 storm rain
+LI
+ wh 12673
+MI
+ ss 2
+
+88741 storm rain
+LI
+ wh 19386
+MI
+ ss 2
+
+88748 storm rain
+LI
+ wh 12048
+MI
+ ss 2
+
+88760 storm rain
+LI
+ wh 17096
+MI
+ ss 1
+
+88761 storm rain
+LI
+ wh 12850
+MI
+ ss 1
+
+88771 storm rain
+LI
+ wh 13540
+MI
+ ss 1
+
+88785 storm rain
+LI
+ wh 19109
+MI
+ ss 2
+
+88789 storm rain
+LI
+ wh 13819
+MI
+ ss 1
+
+88804 storm rain
+LI
+ wh 13976
+MI
+ ss 2
+
+88817 storm rain
+LI
+ wh 14415
+MI
+ ss 2
+
+88860 storm rain
+LI
+ wh 14289
+MI
+ ss 1
+
+88884 storm rain
+LI
+ wh 11863
+MI
+ ss 1
+
+88925 storm rain
+LI
+ wh 11564
+MI
+ ss 2
+
+88927 storm rain
+LI
+ wh 19760
+MI
+ ss 2
+
+88930 storm rain
+LI
+ wh 12902
+MI
+ ss 1
+
+88953 storm rain
+LI
+ wh 17838
+MI
+ ss 1
+
+88986 storm rain
+LI
+ wh 12211
+MI
+ ss 1
+
+89002 storm rain
+LI
+ wh 18699
+MI
+ ss 1
+
+89039 storm rain
+LI
+ wh 18930
+MI
+ ss 2
+
+89049 storm rain
+LI
+ wh 11425
+MI
+ ss 1
+
+89052 storm rain
+LI
+ wh 17826
+MI
+ ss 1
+
+89058 storm rain
+LI
+ wh 19585
+MI
+ ss 2
+
+89065 storm rain
+LI
+ wh 18188
+MI
+ ss 2
+
+89076 storm rain
+LI
+ wh 13630
+MI
+ ss 1
+
+89094 storm rain
+LI
+ wh 14690
+MI
+ ss 2
+
+89098 storm rain
+LI
+ wh 11184
+MI
+ ss 2
+
+89129 storm rain
+LI
+ wh 10150
+MI
+ ss 1
+
+89135 storm rain
+LI
+ wh 19090
+MI
+ ss 1
+
+89142 storm rain
+LI
+ wh 14629
+MI
+ ss 1
+
+89162 storm rain
+LI
+ wh 16697
+MI
+ ss 2
+
+89168 storm rain
+LI
+ wh 19719
+MI
+ ss 2
+
+89196 storm rain
+LI
+ wh 17736
+MI
+ ss 2
+
+89200 storm rain
+LI
+ wh 17271
+MI
+ ss 2
+
+89202 storm rain
+LI
+ wh 11463
+MI
+ ss 1
+
+89212 storm rain
+LI
+ wh 19056
+MI
+ ss 1
+
+89214 storm rain
+LI
+ wh 12298
+MI
+ ss 1
+
+89240 storm rain
+LI
+ wh 17608
+MI
+ ss 2
+
+89244 storm rain
+LI
+ wh 16699
+MI
+ ss 1
+
+89259 storm rain
+LI
+ wh 17498
+MI
+ ss 1
+
+89261 storm rain
+LI
+ wh 15997
+MI
+ ss 1
+
+89292 storm rain
+LI
+ wh 11275
+MI
+ ss 2
+
+89300 storm rain
+LI
+ wh 15235
+MI
+ ss 1
+
+89314 storm rain
+LI
+ wh 14741
+MI
+ ss 1
+
+89315 storm rain
+LI
+ wh 16727
+MI
+ ss 2
+
+89325 storm rain
+LI
+ wh 15600
+MI
+ ss 1
+
+89357 storm rain
+LI
+ wh 14978
+MI
+ ss 2
+
+89381 storm rain
+LI
+ wh 18774
+MI
+ ss 1
+
+89413 storm rain
+LI
+ wh 13221
+MI
+ ss 1
+
+89427 storm rain
+LI
+ wh 10642
+MI
+ ss 1
+
+89428 storm rain
+LI
+ wh 12622
+MI
+ ss 2
+
+89444 storm rain
+LI
+ wh 16225
+MI
+ ss 2
+
+89492 storm rain
+LI
+ wh 12145
+MI
+ ss 2
+
+89502 storm rain
+LI
+ wh 16252
+MI
+ ss 2
+
+89503 storm rain
+LI
+ wh 13220
+MI
+ ss 1
+
+89506 storm rain
+LI
+ wh 15416
+MI
+ ss 2
+
+89523 storm rain
+LI
+ wh 13640
+MI
+ ss 1
+
+89555 storm rain
+LI
+ wh 11216
+MI
+ ss 1
+
+89558 storm rain
+LI
+ wh 15100
+MI
+ ss 1
+
+89561 storm rain
+LI
+ wh 15861
+MI
+ ss 1
+
+89571 storm rain
+LI
+ wh 14392
+MI
+ ss 1
+
+89576 storm rain
+LI
+ wh 14107
+MI
+ ss 2
+
+89597 storm rain
+LI
+ wh 19547
+MI
+ ss 1
+
+89608 storm rain
+LI
+ wh 15659
+MI
+ ss 2
+
+89610 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 24 7794
+MI
+ ca g
+
+89613 storm rain
+LI
+ wh 11398
+MI
+ ss 1
+
+89624 storm rain
+LI
+ wh 17046
+MI
+ ss 1
+
+89638 storm rain
+LI
+ wh 13522
+MI
+ ss 2
+
+89651 storm rain
+LI
+ wh 16270
+MI
+ ss 2
+
+89666 storm rain
+LI
+ wh 17390
+MI
+ ss 1
+
+89679 storm rain
+LI
+ wh 17268
+MI
+ ss 1
+
+89724 deadchar 0
+CH
+ ni 32
+ he 53
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 2 7772
+CO
+ li attack 4866
+ ar 4866 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+89739 storm rain
+LI
+ wh 18176
+MI
+ ss 1
+
+89747 storm rain
+LI
+ wh 18873
+MI
+ ss 1
+
+89810 storm rain
+LI
+ wh 17248
+MI
+ ss 1
+
+89837 storm rain
+LI
+ wh 11662
+MI
+ ss 1
+
+89850 storm rain
+LI
+ wh 10895
+MI
+ ss 1
+
+89866 storm rain
+LI
+ wh 15222
+MI
+ ss 2
+
+89878 storm rain
+LI
+ wh 11794
+MI
+ ss 2
+
+89909 storm rain
+LI
+ wh 10507
+MI
+ ss 2
+
+89925 storm rain
+LI
+ wh 11849
+MI
+ ss 2
+
+89953 storm rain
+LI
+ wh 15296
+MI
+ ss 2
+
+89959 storm rain
+LI
+ wh 15038
+MI
+ ss 2
+
+89976 storm rain
+LI
+ wh 17167
+MI
+ ss 2
+
+89986 storm rain
+LI
+ wh 15966
+MI
+ ss 2
+
+89987 storm rain
+LI
+ wh 17640
+MI
+ ss 2
+
+90005 storm rain
+LI
+ wh 13502
+MI
+ ss 2
+
+90017 storm rain
+LI
+ wh 18093
+MI
+ ss 1
+
+90025 storm rain
+LI
+ wh 13173
+MI
+ ss 1
+
+90027 storm rain
+LI
+ wh 14845
+MI
+ ss 2
+
+90057 storm rain
+LI
+ wh 14451
+MI
+ ss 2
+
+90063 storm rain
+LI
+ wh 12147
+MI
+ ss 1
+
+90073 storm rain
+LI
+ wh 14260
+MI
+ ss 2
+
+90076 storm rain
+LI
+ wh 17084
+MI
+ ss 2
+
+90113 storm rain
+LI
+ wh 17857
+MI
+ ss 1
+
+90139 storm rain
+LI
+ wh 13516
+MI
+ ss 2
+
+90146 storm rain
+LI
+ wh 14192
+MI
+ ss 2
+
+90167 storm rain
+LI
+ wh 11522
+MI
+ ss 2
+
+90169 storm rain
+LI
+ wh 19775
+MI
+ ss 1
+
+90175 storm rain
+LI
+ wh 18272
+MI
+ ss 2
+
+90187 storm rain
+LI
+ wh 13251
+MI
+ ss 1
+
+90188 storm rain
+LI
+ wh 16776
+MI
+ ss 2
+
+90195 storm rain
+LI
+ wh 11214
+MI
+ ss 2
+
+90196 storm rain
+LI
+ wh 12366
+MI
+ ss 2
+
+90212 storm rain
+LI
+ wh 10094
+MI
+ ss 2
+
+90226 storm rain
+LI
+ wh 15875
+MI
+ ss 1
+
+90235 storm rain
+LI
+ wh 17938
+MI
+ ss 2
+
+90243 storm rain
+LI
+ wh 10628
+MI
+ ss 2
+
+90277 storm rain
+LI
+ wh 15910
+MI
+ ss 1
+
+90304 storm rain
+LI
+ wh 15957
+MI
+ ss 2
+
+90306 storm rain
+LI
+ wh 10643
+MI
+ ss 1
+
+90378 storm rain
+LI
+ wh 14250
+MI
+ ss 1
+
+90411 storm rain
+LI
+ wh 17445
+MI
+ ss 1
+
+90437 storm rain
+LI
+ wh 12901
+MI
+ ss 2
+
+90457 storm rain
+LI
+ wh 14884
+MI
+ ss 1
+
+90476 storm rain
+LI
+ wh 12606
+MI
+ ss 1
+
+90478 storm rain
+LI
+ wh 12003
+MI
+ ss 1
+
+90491 storm rain
+LI
+ wh 11377
+MI
+ ss 1
+
+90500 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+90502 storm rain
+LI
+ wh 14326
+MI
+ ss 1
+
+90506 storm rain
+LI
+ wh 19448
+MI
+ ss 2
+
+90524 storm rain
+LI
+ wh 14956
+MI
+ ss 1
+
+90526 storm rain
+LI
+ wh 15312
+MI
+ ss 2
+
+90532 storm rain
+LI
+ wh 17543
+MI
+ ss 1
+
+90536 storm rain
+LI
+ wh 19614
+MI
+ ss 2
+
+90538 storm rain
+LI
+ wh 16334
+MI
+ ss 1
+
+90541 storm rain
+LI
+ wh 18882
+MI
+ ss 2
+
+90548 storm rain
+LI
+ wh 12396
+MI
+ ss 2
+
+90572 storm rain
+LI
+ wh 14149
+MI
+ ss 2
+
+90574 storm rain
+LI
+ wh 15198
+MI
+ ss 2
+
+90581 storm rain
+LI
+ wh 13465
+MI
+ ss 2
+
+90585 storm rain
+LI
+ wh 19971
+MI
+ ss 2
+
+90593 storm rain
+LI
+ wh 12394
+MI
+ ss 1
+
+90624 storm rain
+LI
+ wh 14979
+MI
+ ss 1
+
+90630 storm rain
+LI
+ wh 12819
+MI
+ ss 2
+
+90643 storm rain
+LI
+ wh 18149
+MI
+ ss 2
+
+90648 storm rain
+LI
+ wh 18320
+MI
+ ss 2
+
+90653 storm rain
+LI
+ wh 18216
+MI
+ ss 2
+
+90655 storm rain
+LI
+ wh 11828
+MI
+ ss 1
+
+90662 storm rain
+LI
+ wh 14999
+MI
+ ss 2
+
+90663 storm rain
+LI
+ wh 12097
+MI
+ ss 1
+
+90666 storm rain
+LI
+ wh 17358
+MI
+ ss 1
+
+90676 storm rain
+LI
+ wh 10861
+MI
+ ss 1
+
+90703 storm rain
+LI
+ wh 16797
+MI
+ ss 2
+
+90707 storm rain
+LI
+ wh 14616
+MI
+ ss 1
+
+90715 storm rain
+LI
+ wh 14408
+MI
+ ss 2
+
+90751 storm rain
+LI
+ wh 18537
+MI
+ ss 1
+
+90752 storm rain
+LI
+ wh 11501
+MI
+ ss 1
+
+90768 storm rain
+LI
+ wh 14130
+MI
+ ss 1
+
+90775 storm rain
+LI
+ wh 12432
+MI
+ ss 1
+
+90788 storm rain
+LI
+ wh 18565
+MI
+ ss 1
+
+90797 storm rain
+LI
+ wh 14315
+MI
+ ss 2
+
+90852 storm rain
+LI
+ wh 13253
+MI
+ ss 1
+
+90857 storm rain
+LI
+ wh 14839
+MI
+ ss 1
+
+90862 storm rain
+LI
+ wh 15970
+MI
+ ss 1
+
+90900 storm rain
+LI
+ wh 18138
+MI
+ ss 2
+
+90919 storm rain
+LI
+ wh 19134
+MI
+ ss 1
+
+90927 storm rain
+LI
+ wh 18899
+MI
+ ss 1
+
+90932 storm rain
+LI
+ wh 15849
+MI
+ ss 1
+
+90956 storm rain
+LI
+ wh 19150
+MI
+ ss 1
+
+90958 storm rain
+LI
+ wh 13487
+MI
+ ss 1
+
+90999 storm rain
+LI
+ wh 11229
+MI
+ ss 1
+
+91023 storm rain
+LI
+ wh 17059
+MI
+ ss 2
+
+91024 storm rain
+LI
+ wh 17015
+MI
+ ss 2
+
+91047 storm rain
+LI
+ wh 12653
+MI
+ ss 1
+
+91054 storm rain
+LI
+ wh 16829
+MI
+ ss 2
+
+91060 storm rain
+LI
+ wh 13582
+MI
+ ss 1
+
+91090 storm rain
+LI
+ wh 11880
+MI
+ ss 1
+
+91114 storm rain
+LI
+ wh 16347
+MI
+ ss 1
+
+91158 storm rain
+LI
+ wh 13613
+MI
+ ss 1
+
+91193 storm rain
+LI
+ wh 19467
+MI
+ ss 1
+
+91217 storm rain
+LI
+ wh 11862
+MI
+ ss 2
+
+91224 storm rain
+LI
+ wh 14931
+MI
+ ss 1
+
+91233 storm rain
+LI
+ wh 17900
+MI
+ ss 2
+
+91243 storm rain
+LI
+ wh 11678
+MI
+ ss 2
+
+91277 storm rain
+LI
+ wh 17561
+MI
+ ss 2
+
+91287 storm rain
+LI
+ wh 10786
+MI
+ ss 2
+
+91317 storm rain
+LI
+ wh 13267
+MI
+ ss 1
+
+91369 storm rain
+LI
+ wh 16304
+MI
+ ss 1
+
+91395 storm rain
+LI
+ wh 19037
+MI
+ ss 1
+
+91426 storm rain
+LI
+ wh 16595
+MI
+ ss 1
+
+91439 storm rain
+LI
+ wh 16242
+MI
+ ss 2
+
+91443 storm rain
+LI
+ wh 11179
+MI
+ ss 1
+
+91446 storm rain
+LI
+ wh 13803
+MI
+ ss 1
+
+91453 storm rain
+LI
+ wh 17955
+MI
+ ss 1
+
+91466 storm rain
+LI
+ wh 10416
+MI
+ ss 2
+
+91467 storm rain
+LI
+ wh 16917
+MI
+ ss 2
+
+91489 storm rain
+LI
+ wh 13012
+MI
+ ss 1
+
+91542 storm rain
+LI
+ wh 16840
+MI
+ ss 1
+
+91558 storm rain
+LI
+ wh 12839
+MI
+ ss 2
+
+91578 storm rain
+LI
+ wh 14937
+MI
+ ss 2
+
+91590 storm rain
+LI
+ wh 10311
+MI
+ ss 2
+
+91615 storm rain
+LI
+ wh 13083
+MI
+ ss 1
+
+91631 storm rain
+LI
+ wh 16962
+MI
+ ss 2
+
+91640 storm rain
+LI
+ wh 11438
+MI
+ ss 1
+
+91648 storm rain
+LI
+ wh 13029
+MI
+ ss 1
+
+91690 storm rain
+LI
+ wh 10605
+MI
+ ss 2
+
+91696 storm rain
+LI
+ wh 11483
+MI
+ ss 2
+
+91729 storm rain
+LI
+ wh 19650
+MI
+ ss 1
+
+91748 storm rain
+LI
+ wh 14462
+MI
+ ss 2
+
+91752 storm rain
+LI
+ wh 14883
+MI
+ ss 1
+
+91784 storm rain
+LI
+ wh 19152
+MI
+ ss 2
+
+91797 storm rain
+LI
+ wh 16211
+MI
+ ss 1
+
+91800 storm rain
+LI
+ wh 11911
+MI
+ ss 1
+
+91801 storm rain
+LI
+ wh 10796
+MI
+ ss 1
+
+91809 storm rain
+LI
+ wh 14895
+MI
+ ss 1
+
+91810 storm rain
+LI
+ wh 18070
+MI
+ ss 2
+
+91835 storm rain
+LI
+ wh 11231
+MI
+ ss 1
+
+91844 storm rain
+LI
+ wh 11986
+MI
+ ss 2
+
+91850 storm rain
+LI
+ wh 13605
+MI
+ ss 1
+
+91864 storm rain
+LI
+ wh 17864
+MI
+ ss 2
+
+91865 storm rain
+LI
+ wh 14529
+MI
+ ss 2
+
+91898 storm rain
+LI
+ wh 11042
+MI
+ ss 1
+
+91903 storm rain
+LI
+ wh 18405
+MI
+ ss 2
+
+91928 storm rain
+LI
+ wh 14436
+MI
+ ss 2
+
+91940 storm rain
+LI
+ wh 14825
+MI
+ ss 1
+
+91958 storm rain
+LI
+ wh 19711
+MI
+ ss 1
+
+91978 storm rain
+LI
+ wh 18366
+MI
+ ss 2
+
+91979 storm rain
+LI
+ wh 12217
+MI
+ ss 1
+
+91988 storm rain
+LI
+ wh 16501
+MI
+ ss 1
+
+91992 storm rain
+LI
+ wh 15556
+MI
+ ss 2
+
+91998 storm rain
+LI
+ wh 19521
+MI
+ ss 2
+
+92012 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+92026 storm rain
+LI
+ wh 15442
+MI
+ ss 1
+
+92077 storm rain
+LI
+ wh 18087
+MI
+ ss 2
+
+92121 storm rain
+LI
+ wh 15829
+MI
+ ss 1
+
+92140 storm rain
+LI
+ wh 18543
+MI
+ ss 1
+
+92160 storm rain
+LI
+ wh 10718
+MI
+ ss 1
+
+92179 storm rain
+LI
+ wh 16988
+MI
+ ss 1
+
+92197 storm rain
+LI
+ wh 14853
+MI
+ ss 1
+
+92202 storm rain
+LI
+ wh 14531
+MI
+ sb 5170
+ ss 670
+
+92220 storm rain
+LI
+ wh 19001
+MI
+ ss 2
+
+92223 storm rain
+LI
+ wh 15057
+MI
+ ss 2
+
+92225 storm rain
+LI
+ wh 19675
+MI
+ ss 2
+
+92244 storm rain
+LI
+ wh 11037
+MI
+ ss 1
+
+92248 storm rain
+LI
+ wh 11934
+MI
+ ss 1
+
+92314 storm rain
+LI
+ wh 14784
+MI
+ ss 1
+
+92316 storm rain
+LI
+ wh 17223
+MI
+ ss 2
+
+92338 storm rain
+LI
+ wh 15919
+MI
+ ss 1
+
+92368 storm rain
+LI
+ wh 10973
+MI
+ ss 2
+
+92406 storm rain
+LI
+ wh 15017
+MI
+ ss 2
+
+92414 storm rain
+LI
+ wh 14679
+MI
+ ss 2
+
+92433 storm rain
+LI
+ wh 14925
+MI
+ ss 2
+
+92438 storm rain
+LI
+ wh 15128
+MI
+ ss 2
+
+92442 storm rain
+LI
+ wh 19714
+MI
+ ss 1
+
+92446 storm rain
+LI
+ wh 13915
+MI
+ ss 1
+
+92486 storm rain
+LI
+ wh 18359
+MI
+ ss 2
+
+92504 storm rain
+LI
+ wh 14281
+MI
+ ss 2
+
+92508 storm rain
+LI
+ wh 10230
+MI
+ ss 1
+
+92512 storm rain
+LI
+ wh 18127
+MI
+ ss 1
+
+92513 storm rain
+LI
+ wh 10288
+MI
+ ss 1
+
+92526 storm rain
+LI
+ wh 11364
+MI
+ ss 1
+
+92548 storm rain
+LI
+ wh 18165
+MI
+ ss 1
+
+92594 storm rain
+LI
+ wh 18367
+MI
+ ss 2
+
+92595 storm rain
+LI
+ wh 10633
+MI
+ ss 1
+
+92615 storm rain
+LI
+ wh 11978
+MI
+ ss 1
+
+92641 storm rain
+LI
+ wh 14735
+MI
+ ss 1
+
+92654 storm rain
+LI
+ wh 14720
+MI
+ ss 1
+
+92662 storm rain
+LI
+ wh 13403
+MI
+ ss 1
+
+92667 storm rain
+LI
+ wh 13603
+MI
+ ss 2
+
+92686 storm rain
+LI
+ wh 15151
+MI
+ ss 2
+
+92699 storm rain
+LI
+ wh 19656
+MI
+ ss 1
+
+92706 storm rain
+LI
+ wh 14516
+MI
+ ss 2
+
+92722 storm rain
+LI
+ wh 17145
+MI
+ ss 2
+
+92730 storm rain
+LI
+ wh 16325
+MI
+ ss 1
+
+92796 storm rain
+LI
+ wh 12580
+MI
+ ss 1
+
+92826 storm rain
+LI
+ wh 11165
+MI
+ ss 2
+
+92840 storm rain
+LI
+ wh 14617
+MI
+ ss 2
+
+92864 storm rain
+LI
+ wh 11301
+MI
+ ss 1
+
+92872 storm rain
+LI
+ wh 18042
+MI
+ ss 1
+
+92900 storm rain
+LI
+ wh 15886
+MI
+ ss 1
+
+92954 storm rain
+LI
+ wh 17395
+MI
+ ss 2
+
+92957 storm rain
+LI
+ wh 14907
+MI
+ ss 2
+
+92961 storm fog
+LI
+ wh 15928
+MI
+ sb 7284
+ ss 24
+
+92965 storm rain
+LI
+ wh 14651
+MI
+ ss 2
+
+92974 storm rain
+LI
+ wh 12464
+MI
+ ss 1
+
+92980 storm rain
+LI
+ wh 18242
+MI
+ ss 2
+
+93039 storm rain
+LI
+ wh 13177
+MI
+ ss 2
+
+93070 storm rain
+LI
+ wh 12884
+MI
+ ss 2
+
+93099 storm rain
+LI
+ wh 19216
+MI
+ ss 1
+
+93107 storm rain
+LI
+ wh 19746
+MI
+ ss 1
+
+93203 storm rain
+LI
+ wh 13141
+MI
+ ss 2
+
+93204 storm rain
+LI
+ wh 16574
+MI
+ ss 1
+
+93231 storm rain
+LI
+ wh 10237
+MI
+ ss 2
+
+93237 storm rain
+LI
+ wh 12099
+MI
+ ss 2
+
+93268 storm rain
+LI
+ wh 14495
+MI
+ ss 1
+
+93293 storm rain
+LI
+ wh 10363
+MI
+ ss 2
+
+93299 storm rain
+LI
+ wh 14002
+MI
+ ss 1
+
+93343 storm rain
+LI
+ wh 13451
+MI
+ ss 2
+
+93347 storm rain
+LI
+ wh 18159
+MI
+ ss 2
+
+93368 storm rain
+LI
+ wh 18726
+MI
+ ss 1
+
+93388 storm rain
+LI
+ wh 19356
+MI
+ ss 2
+
+93400 storm rain
+LI
+ wh 17401
+MI
+ ss 1
+
+93410 storm rain
+LI
+ wh 12926
+MI
+ ss 2
+
+93411 storm rain
+LI
+ wh 10549
+MI
+ ss 1
+
+93457 storm rain
+LI
+ wh 17816
+MI
+ ss 1
+
+93480 storm rain
+LI
+ wh 16656
+MI
+ ss 2
+
+93515 storm rain
+LI
+ wh 11299
+MI
+ ss 2
+
+93517 storm rain
+LI
+ wh 15116
+MI
+ ss 2
+
+93522 storm rain
+LI
+ wh 16075
+MI
+ ss 2
+
+93523 storm rain
+LI
+ wh 13682
+MI
+ ss 2
+
+93543 storm rain
+LI
+ wh 13683
+MI
+ ss 1
+
+93551 storm rain
+LI
+ wh 13391
+MI
+ ss 1
+
+93597 storm rain
+LI
+ wh 16069
+MI
+ ss 1
+
+93609 storm rain
+LI
+ wh 16349
+MI
+ ss 1
+
+93628 storm rain
+LI
+ wh 14409
+MI
+ ss 1
+
+93631 storm rain
+LI
+ wh 15065
+MI
+ ss 1
+
+93661 storm rain
+LI
+ wh 14440
+MI
+ ss 1
+
+93664 storm rain
+LI
+ wh 15999
+MI
+ ss 2
+
+93712 storm rain
+LI
+ wh 12733
+MI
+ ss 2
+
+93725 storm rain
+LI
+ wh 16000
+MI
+ ss 1
+
+93739 storm rain
+LI
+ wh 15924
+MI
+ ss 1
+
+93740 storm rain
+LI
+ wh 19568
+MI
+ ss 2
+
+93755 storm rain
+LI
+ wh 11660
+MI
+ ss 2
+
+93784 storm rain
+LI
+ wh 17620
+MI
+ ss 1
+
+93791 storm rain
+LI
+ wh 16220
+MI
+ sb 5557
+ ss 25
+
+93817 storm rain
+LI
+ wh 17054
+MI
+ ss 2
+
+93852 storm rain
+LI
+ wh 15134
+MI
+ ss 2
+
+93919 storm rain
+LI
+ wh 12033
+MI
+ ss 2
+
+93920 storm rain
+LI
+ wh 13045
+MI
+ ss 2
+
+93941 storm rain
+LI
+ wh 17681
+MI
+ ss 1
+
+93944 storm rain
+LI
+ wh 10421
+MI
+ ss 1
+
+93954 storm rain
+LI
+ wh 18088
+MI
+ ss 1
+
+93980 storm rain
+LI
+ wh 18109
+MI
+ ss 2
+
+93997 storm rain
+LI
+ wh 10431
+MI
+ ss 2
+
+94016 storm rain
+LI
+ wh 14541
+MI
+ ss 1
+
+94044 storm rain
+LI
+ wh 11984
+MI
+ ss 2
+
+94056 storm rain
+LI
+ wh 13772
+MI
+ ss 2
+
+94059 storm rain
+LI
+ wh 14041
+MI
+ ss 2
+
+94071 storm rain
+LI
+ wh 19048
+MI
+ ss 1
+
+94084 storm rain
+LI
+ wh 19164
+MI
+ ss 2
+
+94110 storm rain
+LI
+ wh 16280
+MI
+ ss 1
+
+94112 storm rain
+LI
+ wh 13346
+MI
+ ss 1
+
+94113 storm rain
+LI
+ wh 12827
+MI
+ ss 2
+
+94144 storm rain
+LI
+ wh 13759
+MI
+ ss 1
+
+94147 storm rain
+LI
+ wh 16696
+MI
+ ss 1
+
+94156 storm rain
+LI
+ wh 18749
+MI
+ ss 2
+
+94175 storm rain
+LI
+ wh 12110
+MI
+ ss 2
+
+94216 storm rain
+LI
+ wh 14163
+MI
+ ss 1
+
+94227 storm rain
+LI
+ wh 15759
+MI
+ ss 2
+
+94235 storm rain
+LI
+ wh 11663
+MI
+ ss 2
+
+94236 storm rain
+LI
+ wh 11351
+MI
+ ss 1
+
+94239 storm rain
+LI
+ wh 13002
+MI
+ ss 1
+
+94334 storm rain
+LI
+ wh 11223
+MI
+ ss 2
+
+94335 storm rain
+LI
+ wh 11022
+MI
+ ss 1
+
+94339 storm rain
+LI
+ wh 12731
+MI
+ ss 2
+
+94345 storm rain
+LI
+ wh 11899
+MI
+ ss 1
+
+94366 storm rain
+LI
+ wh 12905
+MI
+ ss 1
+
+94392 storm rain
+LI
+ wh 16287
+MI
+ ss 1
+
+94402 storm rain
+LI
+ wh 14452
+MI
+ ss 2
+
+94409 storm rain
+LI
+ wh 13023
+MI
+ ss 2
+
+94410 storm rain
+LI
+ wh 11149
+MI
+ ss 1
+
+94427 storm rain
+LI
+ wh 10741
+MI
+ ss 2
+
+94435 storm rain
+LI
+ wh 13147
+MI
+ ss 2
+
+94465 storm rain
+LI
+ wh 13186
+MI
+ ss 1
+
+94466 storm rain
+LI
+ wh 16468
+MI
+ ss 2
+
+94474 storm rain
+LI
+ wh 15412
+MI
+ ss 1
+
+94508 storm rain
+LI
+ wh 15196
+MI
+ ss 1
+
+94511 storm rain
+LI
+ wh 18852
+MI
+ ss 1
+
+94512 storm rain
+LI
+ wh 12879
+MI
+ ss 2
+
+94534 storm rain
+LI
+ wh 18918
+MI
+ ss 1
+
+94535 storm rain
+LI
+ wh 18887
+MI
+ ss 2
+
+94545 storm rain
+LI
+ wh 19414
+MI
+ ss 2
+
+94556 storm rain
+LI
+ wh 11315
+MI
+ ss 1
+
+94559 storm rain
+LI
+ wh 15419
+MI
+ ss 1
+
+94566 storm rain
+LI
+ wh 16756
+MI
+ ss 1
+
+94614 storm rain
+LI
+ wh 13243
+MI
+ ss 1
+
+94651 storm rain
+LI
+ wh 14361
+MI
+ ss 2
+
+94690 storm rain
+LI
+ wh 14578
+MI
+ ss 1
+
+94693 storm rain
+LI
+ wh 15241
+MI
+ ss 1
+
+94701 storm rain
+LI
+ wh 11568
+MI
+ ss 2
+
+94732 storm rain
+LI
+ wh 17932
+MI
+ ss 1
+
+94766 storm rain
+LI
+ wh 18883
+MI
+ ss 2
+
+94795 storm rain
+LI
+ wh 12504
+MI
+ ss 2
+
+94827 storm rain
+LI
+ wh 18960
+MI
+ ss 1
+
+94877 storm rain
+LI
+ wh 17300
+MI
+ ss 1
+
+94879 storm rain
+LI
+ wh 10593
+MI
+ ss 2
+
+94887 storm rain
+LI
+ wh 12448
+MI
+ ss 2
+
+94898 storm rain
+LI
+ wh 16093
+MI
+ ss 2
+
+94904 storm rain
+LI
+ wh 12836
+MI
+ ss 2
+
+94907 storm rain
+LI
+ wh 15183
+MI
+ ss 1
+
+94923 storm rain
+LI
+ wh 10829
+MI
+ ss 2
+
+94954 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+94979 storm rain
+LI
+ wh 11331
+MI
+ ss 2
+
+95045 storm rain
+LI
+ wh 17512
+MI
+ ss 1
+
+95053 storm rain
+LI
+ wh 14928
+MI
+ ss 1
+
+95077 storm rain
+LI
+ wh 16128
+MI
+ ss 1
+
+95103 storm rain
+LI
+ wh 19400
+MI
+ ss 1
+
+95121 storm rain
+LI
+ wh 17200
+MI
+ ss 2
+
+95125 storm rain
+LI
+ wh 11297
+MI
+ ss 1
+
+95127 storm rain
+LI
+ wh 17798
+MI
+ ss 2
+
+95149 storm rain
+LI
+ wh 18283
+MI
+ ss 2
+
+95163 storm rain
+LI
+ wh 12550
+MI
+ ss 1
+
+95168 storm rain
+LI
+ wh 19977
+MI
+ ss 2
+
+95177 storm rain
+LI
+ wh 11005
+MI
+ ss 2
+
+95181 storm rain
+LI
+ wh 16294
+MI
+ ss 1
+
+95216 storm rain
+LI
+ wh 16823
+MI
+ ss 1
+
+95223 storm rain
+LI
+ wh 12164
+MI
+ ss 1
+
+95246 storm rain
+LI
+ wh 15025
+MI
+ ss 2
+
+95250 storm rain
+LI
+ wh 10992
+MI
+ ss 1
+
+95255 storm rain
+LI
+ wh 14417
+MI
+ ss 1
+
+95266 storm rain
+LI
+ wh 18111
+MI
+ ss 1
+
+95277 storm rain
+LI
+ wh 17610
+MI
+ ss 2
+
+95278 storm rain
+LI
+ wh 11277
+MI
+ ss 2
+
+95302 storm rain
+LI
+ wh 16135
+MI
+ ss 1
+
+95310 storm rain
+LI
+ wh 10641
+MI
+ ss 1
+
+95318 storm rain
+LI
+ wh 17198
+MI
+ ss 2
+
+95334 storm rain
+LI
+ wh 14422
+MI
+ ss 2
+
+95370 storm rain
+LI
+ wh 12844
+MI
+ ss 2
+
+95371 storm rain
+LI
+ wh 10322
+MI
+ ss 2
+
+95395 storm rain
+LI
+ wh 18985
+MI
+ ss 2
+
+95406 storm rain
+LI
+ wh 11077
+MI
+ ss 1
+
+95449 storm rain
+LI
+ wh 14248
+MI
+ ss 2
+
+95450 storm rain
+LI
+ wh 17795
+MI
+ ss 1
+
+95453 storm rain
+LI
+ wh 10003
+MI
+ ss 1
+
+95502 storm rain
+LI
+ wh 18708
+MI
+ ss 1
+
+95528 storm rain
+LI
+ wh 14575
+MI
+ ss 1
+
+95540 storm rain
+LI
+ wh 15955
+MI
+ ss 2
+
+95541 storm rain
+LI
+ wh 13479
+MI
+ ss 1
+
+95547 storm rain
+LI
+ wh 15260
+MI
+ ss 1
+
+95549 deadchar 0
+CH
+ ni 33
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 10 7780
+
+95552 storm rain
+LI
+ wh 19549
+MI
+ ss 1
+
+95567 storm rain
+LI
+ wh 15603
+MI
+ ss 1
+
+95571 storm rain
+LI
+ wh 10647
+MI
+ ss 2
+
+95587 storm rain
+LI
+ wh 10541
+MI
+ ss 1
+
+95631 storm rain
+LI
+ wh 11689
+MI
+ ss 1
+
+95633 storm rain
+LI
+ wh 13617
+MI
+ ss 2
+
+95635 storm rain
+LI
+ wh 18303
+MI
+ ss 1
+
+95669 storm rain
+LI
+ wh 18083
+MI
+ ss 2
+
+95705 storm rain
+LI
+ wh 11664
+MI
+ ss 1
+
+95727 storm rain
+LI
+ wh 18469
+MI
+ ss 2
+
+95729 storm rain
+LI
+ wh 19993
+MI
+ ss 2
+
+95762 storm rain
+LI
+ wh 15691
+MI
+ ss 1
+
+95765 storm rain
+LI
+ wh 13694
+MI
+ ss 2
+
+95776 storm rain
+LI
+ wh 17042
+MI
+ ss 2
+
+95779 storm rain
+LI
+ wh 11810
+MI
+ ss 1
+
+95798 storm rain
+LI
+ wh 19131
+MI
+ ss 1
+
+95799 storm rain
+LI
+ wh 19063
+MI
+ ss 2
+
+95830 storm rain
+LI
+ wh 16432
+MI
+ ss 1
+
+95831 storm rain
+LI
+ wh 12171
+MI
+ ss 2
+
+95848 storm rain
+LI
+ wh 13358
+MI
+ ss 2
+
+95912 storm rain
+LI
+ wh 10151
+MI
+ ss 2
+
+95915 storm rain
+LI
+ wh 14952
+MI
+ ss 2
+
+95920 storm rain
+LI
+ wh 10866
+MI
+ sb 9814
+ ss 135
+
+95939 storm rain
+LI
+ wh 17666
+MI
+ ss 1
+
+95943 storm rain
+LI
+ wh 17083
+MI
+ ss 2
+
+95949 storm rain
+LI
+ wh 16691
+MI
+ ss 2
+
+95950 storm rain
+LI
+ wh 15346
+MI
+ ss 1
+
+95954 storm rain
+LI
+ wh 18158
+MI
+ ss 2
+
+95958 storm rain
+LI
+ wh 19271
+MI
+ ss 1
+
+95981 storm rain
+LI
+ wh 19773
+MI
+ ss 2
+
+95987 storm rain
+LI
+ wh 15228
+MI
+ ss 1
+
+96030 storm rain
+LI
+ wh 17262
+MI
+ ss 2
+
+96031 storm rain
+LI
+ wh 12910
+MI
+ ss 1
+
+96038 storm rain
+LI
+ wh 16144
+MI
+ ss 1
+
+96039 storm rain
+LI
+ wh 11670
+MI
+ ss 1
+
+96046 storm rain
+LI
+ wh 10086
+MI
+ ss 1
+
+96052 storm rain
+LI
+ wh 13786
+MI
+ ss 2
+
+96053 storm rain
+LI
+ wh 13034
+MI
+ ss 1
+
+96062 storm rain
+LI
+ wh 13252
+MI
+ ss 1
+
+96076 storm rain
+LI
+ wh 10965
+MI
+ ss 2
+
+96086 storm rain
+LI
+ wh 19262
+MI
+ ss 2
+
+96087 storm rain
+LI
+ wh 19100
+MI
+ ss 2
+
+96088 storm rain
+LI
+ wh 15044
+MI
+ ss 2
+
+96111 storm rain
+LI
+ wh 19679
+MI
+ ss 1
+
+96133 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+96148 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+96175 storm rain
+LI
+ wh 18514
+MI
+ ss 1
+
+96181 storm rain
+LI
+ wh 11309
+MI
+ ss 1
+
+96184 storm rain
+LI
+ wh 15811
+MI
+ ss 1
+
+96196 storm rain
+LI
+ wh 10324
+MI
+ ss 2
+
+96202 storm rain
+LI
+ wh 14128
+MI
+ ss 2
+
+96219 storm rain
+LI
+ wh 15527
+MI
+ ss 2
+
+96251 storm rain
+LI
+ wh 19763
+MI
+ ss 2
+
+96259 storm rain
+LI
+ wh 14763
+MI
+ ss 1
+
+96262 storm rain
+LI
+ wh 12056
+MI
+ ss 1
+
+96265 storm rain
+LI
+ wh 12774
+MI
+ ss 2
+
+96267 storm rain
+LI
+ wh 19479
+MI
+ ss 2
+
+96271 storm rain
+LI
+ wh 12518
+MI
+ ss 2
+
+96301 storm rain
+LI
+ wh 18577
+MI
+ ss 2
+
+96304 storm rain
+LI
+ wh 15174
+MI
+ ss 1
+
+96307 storm rain
+LI
+ wh 17303
+MI
+ ss 2
+
+96352 storm rain
+LI
+ wh 18901
+MI
+ ss 2
+
+96358 storm rain
+LI
+ wh 14114
+MI
+ ss 1
+
+96370 storm rain
+LI
+ wh 16698
+MI
+ ss 2
+
+96377 storm rain
+LI
+ wh 11138
+MI
+ ss 1
+
+96378 storm rain
+LI
+ wh 10955
+MI
+ ss 2
+
+96379 storm rain
+LI
+ wh 12755
+MI
+ ss 1
+
+96388 storm rain
+LI
+ wh 16162
+MI
+ ss 1
+
+96405 storm rain
+LI
+ wh 16645
+MI
+ ss 1
+
+96424 storm rain
+LI
+ wh 11295
+MI
+ ss 2
+
+96429 storm rain
+LI
+ wh 10456
+MI
+ ss 2
+
+96443 storm rain
+LI
+ wh 19235
+MI
+ ss 2
+
+96448 storm rain
+LI
+ wh 11536
+MI
+ ss 2
+
+96463 storm rain
+LI
+ wh 17853
+MI
+ ss 2
+
+96488 storm rain
+LI
+ wh 13098
+MI
+ ss 1
+
+96493 storm rain
+LI
+ wh 15974
+MI
+ ss 1
+
+96498 storm rain
+LI
+ wh 13988
+MI
+ ss 2
+
+96500 storm rain
+LI
+ wh 14872
+MI
+ ss 2
+
+96530 storm rain
+LI
+ wh 12738
+MI
+ ss 1
+
+96540 storm rain
+LI
+ wh 11079
+MI
+ ss 1
+
+96546 storm rain
+LI
+ wh 14626
+MI
+ ss 1
+
+96571 storm rain
+LI
+ wh 13242
+MI
+ ss 2
+
+96576 storm rain
+LI
+ wh 15836
+MI
+ ss 1
+
+96620 storm rain
+LI
+ wh 19503
+MI
+ ss 1
+
+96622 storm rain
+LI
+ wh 14521
+MI
+ ss 2
+
+96628 storm rain
+LI
+ wh 14208
+MI
+ ss 2
+
+96642 storm rain
+LI
+ wh 18052
+MI
+ ss 1
+
+96663 storm rain
+LI
+ wh 10147
+MI
+ ss 1
+
+96667 storm rain
+LI
+ wh 11938
+MI
+ ss 2
+
+96679 storm rain
+LI
+ wh 12005
+MI
+ ss 2
+
+96694 storm rain
+LI
+ wh 10372
+MI
+ ss 1
+
+96737 storm rain
+LI
+ wh 10276
+MI
+ ss 2
+
+96792 storm rain
+LI
+ wh 18195
+MI
+ ss 2
+
+96796 storm rain
+LI
+ wh 17060
+MI
+ ss 1
+
+96803 storm rain
+LI
+ wh 14799
+MI
+ ss 2
+
+96814 storm rain
+LI
+ wh 17712
+MI
+ ss 2
+
+96838 storm rain
+LI
+ wh 17658
+MI
+ ss 2
+
+96840 storm rain
+LI
+ wh 18880
+MI
+ ss 2
+
+96843 storm rain
+LI
+ wh 18399
+MI
+ ss 1
+
+96855 storm rain
+LI
+ wh 10052
+MI
+ ss 1
+
+96869 storm rain
+LI
+ wh 17854
+MI
+ ss 2
+
+96877 storm rain
+LI
+ wh 15265
+MI
+ ss 2
+
+96900 storm rain
+LI
+ wh 13119
+MI
+ ss 1
+
+96938 storm rain
+LI
+ wh 14717
+MI
+ ss 2
+
+96945 storm rain
+LI
+ wh 13162
+MI
+ ss 2
+
+96953 storm rain
+LI
+ wh 18249
+MI
+ ss 1
+
+96958 storm rain
+LI
+ wh 19741
+MI
+ ss 2
+
+96987 storm rain
+LI
+ wh 12325
+MI
+ ss 2
+
+96997 storm rain
+LI
+ wh 19079
+MI
+ ss 2
+
+97112 storm rain
+LI
+ wh 18539
+MI
+ ss 2
+
+97122 storm rain
+LI
+ wh 17667
+MI
+ ss 2
+
+97154 storm rain
+LI
+ wh 10100
+MI
+ ss 1
+
+97184 storm rain
+LI
+ wh 14374
+MI
+ ss 2
+
+97219 storm rain
+LI
+ wh 15460
+MI
+ ss 1
+
+97240 storm rain
+LI
+ wh 18553
+MI
+ ss 1
+
+97284 storm rain
+LI
+ wh 18808
+MI
+ ss 2
+
+97299 storm rain
+LI
+ wh 15387
+MI
+ ss 1
+
+97309 storm rain
+LI
+ wh 13723
+MI
+ ss 1
+
+97310 storm rain
+LI
+ wh 14953
+MI
+ ss 1
+
+97326 storm rain
+LI
+ wh 16330
+MI
+ ss 2
+
+97377 storm rain
+LI
+ wh 13842
+MI
+ ss 2
+
+97392 storm rain
+LI
+ wh 18411
+MI
+ ss 1
+
+97400 storm rain
+LI
+ wh 15299
+MI
+ ss 1
+
+97415 storm rain
+LI
+ wh 11410
+MI
+ ss 1
+
+97416 storm rain
+LI
+ wh 10369
+MI
+ ss 2
+
+97432 storm rain
+LI
+ wh 13294
+MI
+ ss 1
+
+97454 storm rain
+LI
+ wh 12193
+MI
+ ss 1
+
+97493 storm rain
+LI
+ wh 11093
+MI
+ ss 1
+
+97509 storm rain
+LI
+ wh 13932
+MI
+ ss 2
+
+97516 storm rain
+LI
+ wh 16402
+MI
+ ss 2
+
+97535 storm rain
+LI
+ wh 15616
+MI
+ ss 1
+
+97536 storm rain
+LI
+ wh 18214
+MI
+ ss 2
+
+97538 storm rain
+LI
+ wh 18757
+MI
+ ss 2
+
+97551 storm rain
+LI
+ wh 18057
+MI
+ ss 2
+
+97575 storm rain
+LI
+ wh 18255
+MI
+ ss 1
+
+97602 storm rain
+LI
+ wh 16040
+MI
+ ss 2
+
+97622 storm rain
+LI
+ wh 17510
+MI
+ ss 1
+
+97628 storm rain
+LI
+ wh 19612
+MI
+ ss 1
+
+97648 storm rain
+LI
+ wh 16138
+MI
+ ss 2
+
+97674 storm rain
+LI
+ wh 13304
+MI
+ ss 1
+
+97680 storm rain
+LI
+ wh 10842
+MI
+ ss 2
+
+97692 storm rain
+LI
+ wh 17012
+MI
+ ss 2
+
+97703 storm rain
+LI
+ wh 13005
+MI
+ ss 1
+
+97710 storm rain
+LI
+ wh 16129
+MI
+ ss 1
+
+97711 storm rain
+LI
+ wh 11080
+MI
+ ss 2
+
+97749 storm rain
+LI
+ wh 11667
+MI
+ ss 2
+
+97760 storm rain
+LI
+ wh 17928
+MI
+ ss 1
+
+97766 storm rain
+LI
+ wh 17194
+MI
+ ss 1
+
+97801 storm rain
+LI
+ wh 12984
+MI
+ ss 2
+
+97806 storm rain
+LI
+ wh 14139
+MI
+ ss 2
+
+97812 storm rain
+LI
+ wh 15545
+MI
+ ss 1
+
+97823 storm rain
+LI
+ wh 15327
+MI
+ ss 1
+
+97864 storm rain
+LI
+ wh 16358
+MI
+ ss 1
+
+97890 storm rain
+LI
+ wh 17280
+MI
+ ss 1
+
+97897 storm rain
+LI
+ wh 19645
+MI
+ ss 1
+
+97923 storm rain
+LI
+ wh 13088
+MI
+ ss 2
+
+97930 storm rain
+LI
+ wh 17808
+MI
+ sb 4238
+ mc 249
+ ss 30
+ mh 17808
+ co 276
+
+97964 storm rain
+LI
+ wh 11622
+MI
+ ss 2
+
+97967 storm rain
+LI
+ wh 10845
+MI
+ ss 2
+
+98004 storm rain
+LI
+ wh 16224
+MI
+ ss 1
+
+98042 storm rain
+LI
+ wh 14081
+MI
+ ss 2
+
+98046 storm rain
+LI
+ wh 16899
+MI
+ ss 2
+
+98080 storm rain
+LI
+ wh 13831
+MI
+ ss 2
+
+98081 storm rain
+LI
+ wh 16712
+MI
+ ss 1
+
+98087 storm rain
+LI
+ wh 15469
+MI
+ ss 2
+
+98103 storm rain
+LI
+ wh 19885
+MI
+ ss 2
+
+98105 storm rain
+LI
+ wh 16235
+MI
+ ss 1
+
+98136 storm rain
+LI
+ wh 13340
+MI
+ ss 1
+
+98153 storm rain
+LI
+ wh 19196
+MI
+ ss 2
+
+98193 storm rain
+LI
+ wh 15423
+MI
+ ss 2
+
+98249 storm rain
+LI
+ wh 18719
+MI
+ ss 2
+
+98265 storm rain
+LI
+ wh 15226
+MI
+ ss 2
+
+98275 storm rain
+LI
+ wh 10783
+MI
+ ss 2
+
+98291 storm rain
+LI
+ wh 12631
+MI
+ ss 1
+
+98298 storm rain
+LI
+ wh 15749
+MI
+ ss 1
+
+98301 storm rain
+LI
+ wh 18136
+MI
+ ss 2
+
+98318 storm rain
+LI
+ wh 13175
+MI
+ ss 2
+
+98321 storm rain
+LI
+ wh 11587
+MI
+ ss 2
+
+98345 storm rain
+LI
+ wh 12857
+MI
+ ss 2
+
+98357 storm rain
+LI
+ wh 16320
+MI
+ ss 2
+
+98358 storm rain
+LI
+ wh 19052
+MI
+ ss 1
+
+98380 storm rain
+LI
+ wh 13144
+MI
+ ss 1
+
+98394 storm rain
+LI
+ wh 12846
+MI
+ ss 1
+
+98405 storm rain
+LI
+ wh 14195
+MI
+ ss 2
+
+98418 storm rain
+LI
+ wh 12668
+MI
+ ss 2
+
+98487 storm rain
+LI
+ wh 17805
+MI
+ ss 1
+
+98501 deadchar 0
+CH
+ ni 32
+ he 75
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+CO
+ li attack 7341
+ ar 7341 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+98524 storm rain
+LI
+ wh 19258
+MI
+ ss 1
+
+98557 storm rain
+LI
+ wh 16214
+MI
+ ss 2
+
+98558 storm rain
+LI
+ wh 10682
+MI
+ ss 1
+
+98560 storm rain
+LI
+ wh 10515
+MI
+ ss 1
+
+98568 storm rain
+LI
+ wh 12619
+MI
+ ss 1
+
+98612 storm rain
+LI
+ wh 12324
+MI
+ ss 1
+
+98636 storm rain
+LI
+ wh 19429
+MI
+ ss 1
+
+98638 storm rain
+LI
+ wh 19960
+MI
+ ss 1
+
+98639 storm rain
+LI
+ wh 11590
+MI
+ ss 2
+
+98656 storm rain
+LI
+ wh 15509
+MI
+ ss 2
+
+98665 storm rain
+LI
+ wh 10710
+MI
+ ss 1
+
+98667 storm rain
+LI
+ wh 10611
+MI
+ ss 1
+
+98681 storm rain
+LI
+ wh 14088
+MI
+ ss 2
+
+98706 storm rain
+LI
+ wh 13245
+MI
+ ss 1
+
+98722 storm rain
+LI
+ wh 17397
+MI
+ ss 2
+
+98740 storm rain
+LI
+ wh 12045
+MI
+ ss 1
+
+98787 storm rain
+LI
+ wh 16614
+MI
+ ss 1
+
+98793 storm rain
+LI
+ wh 15143
+MI
+ ss 1
+
+98798 storm rain
+LI
+ wh 17711
+MI
+ ss 1
+
+98827 storm rain
+LI
+ wh 17893
+MI
+ ss 2
+
+98848 storm rain
+LI
+ wh 13990
+MI
+ ss 1
+
+98849 storm rain
+LI
+ wh 11396
+MI
+ ss 1
+
+98859 storm rain
+LI
+ wh 13305
+MI
+ ss 2
+
+98880 storm rain
+LI
+ wh 14535
+MI
+ ss 2
+
+98892 storm rain
+LI
+ wh 17466
+MI
+ ss 1
+
+98938 storm rain
+LI
+ wh 14938
+MI
+ ss 1
+
+98942 storm rain
+LI
+ wh 11046
+MI
+ ss 1
+
+98949 storm rain
+LI
+ wh 17473
+MI
+ ss 2
+
+98950 storm rain
+LI
+ wh 17162
+MI
+ ss 1
+
+98951 storm rain
+LI
+ wh 15945
+MI
+ ss 2
+
+98954 storm rain
+LI
+ wh 16782
+MI
+ ss 1
+
+98997 storm rain
+LI
+ wh 11900
+MI
+ ss 2
+
+99022 storm rain
+LI
+ wh 11679
+MI
+ ss 2
+
+99028 storm rain
+LI
+ wh 14461
+MI
+ ss 2
+
+99033 storm rain
+LI
+ wh 10089
+MI
+ ss 2
+
+99041 storm rain
+LI
+ wh 12763
+MI
+ ss 1
+
+99045 storm rain
+LI
+ wh 17493
+MI
+ ss 2
+
+99084 storm rain
+LI
+ wh 12189
+MI
+ ss 2
+
+99111 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+99178 storm rain
+LI
+ wh 18718
+MI
+ ss 2
+
+99180 storm rain
+LI
+ wh 16377
+MI
+ ss 1
+
+99216 storm rain
+LI
+ wh 15393
+MI
+ ss 2
+
+99246 storm rain
+LI
+ wh 16062
+MI
+ ss 2
+
+99275 storm rain
+LI
+ wh 15720
+MI
+ ss 2
+
+99287 storm rain
+LI
+ wh 18117
+MI
+ ss 2
+
+99330 storm rain
+LI
+ wh 19981
+MI
+ ss 1
+
+99378 storm rain
+LI
+ wh 15127
+MI
+ ss 1
+
+99390 storm rain
+LI
+ wh 18748
+MI
+ ss 2
+
+99406 storm rain
+LI
+ wh 15700
+MI
+ ss 1
+
+99452 storm rain
+LI
+ wh 12246
+MI
+ ss 2
+
+99458 storm rain
+LI
+ wh 10348
+MI
+ ss 2
+
+99527 storm rain
+LI
+ wh 19058
+MI
+ ss 2
+
+99544 storm rain
+LI
+ wh 16321
+MI
+ ss 2
+
+99565 storm rain
+LI
+ wh 14612
+MI
+ ss 2
+
+99596 storm rain
+LI
+ wh 18300
+MI
+ ss 2
+
+99644 storm rain
+LI
+ wh 17594
+MI
+ ss 1
+
+99656 storm rain
+LI
+ wh 16577
+MI
+ ss 1
+
+99677 storm rain
+LI
+ wh 16889
+MI
+ ss 1
+
+99680 storm rain
+LI
+ wh 11053
+MI
+ ss 2
+
+99699 storm rain
+LI
+ wh 12248
+MI
+ ss 2
+
+99721 storm rain
+na Shipwreck
+LI
+ wh 57397
+MI
+ sb 78279
+ mc 187
+ ss 41
+ mh 13346
+ co 276
+
+99745 storm rain
+LI
+ wh 15175
+MI
+ ss 2
+
+99757 storm rain
+LI
+ wh 13470
+MI
+ ss 1
+
+99771 storm rain
+LI
+ wh 14503
+MI
+ ss 1
+
+99775 storm rain
+LI
+ wh 15814
+MI
+ ss 2
+
+99780 storm rain
+LI
+ wh 12363
+MI
+ ss 2
+
+99783 storm rain
+LI
+ wh 18684
+MI
+ ss 1
+
+99798 storm rain
+LI
+ wh 10560
+MI
+ ss 1
+
+99800 storm rain
+LI
+ wh 14347
+MI
+ ss 2
+
+99807 storm rain
+LI
+ wh 12341
+MI
+ ss 1
+
+99831 storm rain
+LI
+ wh 15238
+MI
+ ss 2
+
+99858 storm rain
+LI
+ wh 11751
+MI
+ ss 2
+
+99902 storm rain
+LI
+ wh 12824
+MI
+ ss 1
+
+99905 storm rain
+LI
+ wh 18925
+MI
+ ss 2
+
+99911 storm rain
+LI
+ wh 18855
+MI
+ ss 2
+
+99935 storm rain
+LI
+ wh 11804
+MI
+ ss 2
+
+99973 storm wind
+na Shadow Wind
+LI
+ wh 58057
+MI
+ sb 5152
+ mc 57
+ ss 24
+ mh 14609
+ co 275
+ bs 99973
+
+100001 storm rain
+LI
+ wh 11443
+MI
+ ss 2
+
+100004 storm rain
+LI
+ wh 16245
+MI
+ ss 1
+
+100024 storm rain
+LI
+ wh 14371
+MI
+ ss 2
+
+100045 storm rain
+LI
+ wh 13651
+MI
+ ss 2
+
+100049 storm rain
+LI
+ wh 14915
+MI
+ ss 1
+
+100092 storm rain
+LI
+ wh 14115
+MI
+ ss 2
+
+100159 storm rain
+LI
+ wh 17557
+MI
+ ss 1
+
+100173 storm rain
+LI
+ wh 12772
+MI
+ ss 1
+
+100189 storm rain
+LI
+ wh 12006
+MI
+ ss 1
+
+100203 storm rain
+LI
+ wh 13909
+MI
+ ss 2
+
+100249 storm rain
+LI
+ wh 10485
+MI
+ ss 2
+
+100257 storm rain
+LI
+ wh 16608
+MI
+ ss 1
+
+100261 storm rain
+LI
+ wh 14789
+MI
+ ss 2
+
+100271 storm rain
+LI
+ wh 18920
+MI
+ ss 1
+
+100277 storm rain
+LI
+ wh 12391
+MI
+ ss 1
+
+100279 storm rain
+LI
+ wh 18981
+MI
+ ss 1
+
+100280 storm rain
+LI
+ wh 19247
+MI
+ ss 2
+
+100327 storm rain
+LI
+ wh 15434
+MI
+ ss 1
+
+100334 storm rain
+LI
+ wh 10299
+MI
+ ss 1
+
+100346 storm rain
+LI
+ wh 11919
+MI
+ ss 1
+
+100349 storm rain
+LI
+ wh 10530
+MI
+ ss 2
+
+100368 storm rain
+LI
+ wh 12441
+MI
+ ss 1
+
+100374 storm rain
+LI
+ wh 10223
+MI
+ ss 2
+
+100429 storm rain
+LI
+ wh 15742
+MI
+ ss 1
+
+100445 storm rain
+LI
+ wh 19807
+MI
+ ss 1
+
+100463 storm rain
+LI
+ wh 13033
+MI
+ ss 1
+
+100473 storm rain
+LI
+ wh 14734
+MI
+ ss 2
+
+100491 storm rain
+LI
+ wh 10248
+MI
+ ss 2
+
+100496 storm rain
+LI
+ wh 10103
+MI
+ ss 1
+
+100506 storm rain
+LI
+ wh 13645
+MI
+ ss 2
+
+100507 storm rain
+LI
+ wh 15342
+MI
+ ss 1
+
+100510 storm rain
+LI
+ wh 12498
+MI
+ ss 2
+
+100524 storm rain
+LI
+ wh 19607
+MI
+ ss 2
+
+100543 storm rain
+LI
+ wh 11789
+MI
+ ss 1
+
+100562 storm rain
+LI
+ wh 18488
+MI
+ ss 2
+
+100577 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+100610 storm rain
+LI
+ wh 11267
+MI
+ ss 1
+
+100630 storm rain
+LI
+ wh 13017
+MI
+ ss 2
+
+100641 storm rain
+LI
+ wh 16470
+MI
+ ss 2
+
+100662 storm rain
+LI
+ wh 12424
+MI
+ ss 1
+
+100697 storm rain
+LI
+ wh 16924
+MI
+ ss 2
+
+100706 storm rain
+LI
+ wh 15272
+MI
+ ss 2
+
+100717 storm rain
+LI
+ wh 13353
+MI
+ ss 1
+
+100758 storm rain
+LI
+ wh 10301
+MI
+ ss 1
+
+100769 storm rain
+LI
+ wh 16580
+MI
+ ss 2
+
+100786 storm rain
+LI
+ wh 15334
+MI
+ ss 1
+
+100820 storm wind
+na 30
+LI
+ wh 19875
+MI
+ sb 74023
+ mc 216
+ ss 15
+ mh 16967
+ co 275
+ bs 100820
+
+100908 storm rain
+LI
+ wh 12340
+MI
+ ss 2
+
+100918 storm rain
+LI
+ wh 13828
+MI
+ ss 1
+
+100929 storm rain
+LI
+ wh 17567
+MI
+ ss 1
+
+100937 storm rain
+LI
+ wh 13866
+MI
+ ss 1
+
+100956 storm rain
+LI
+ wh 11808
+MI
+ ss 1
+
+100963 storm rain
+LI
+ wh 11725
+MI
+ ss 2
+
+100964 storm rain
+LI
+ wh 15686
+MI
+ ss 2
+
+100989 storm rain
+LI
+ wh 18602
+MI
+ ss 1
+
+101016 storm rain
+LI
+ wh 17449
+MI
+ ss 1
+
+101023 storm rain
+LI
+ wh 10508
+MI
+ ss 1
+
+101047 storm rain
+LI
+ wh 17297
+MI
+ ss 2
+
+101054 storm rain
+LI
+ wh 19986
+MI
+ ss 2
+
+101083 storm rain
+LI
+ wh 11979
+MI
+ ss 2
+
+101085 storm rain
+LI
+ wh 11716
+MI
+ ss 1
+
+101088 storm rain
+LI
+ wh 16543
+MI
+ ss 1
+
+101110 storm rain
+LI
+ wh 13801
+MI
+ ss 1
+
+101146 storm rain
+LI
+ wh 14684
+MI
+ ss 2
+
+101168 storm rain
+LI
+ wh 17230
+MI
+ ss 1
+
+101180 storm rain
+LI
+ wh 14295
+MI
+ ss 1
+
+101203 storm rain
+LI
+ wh 14663
+MI
+ ss 1
+
+101216 storm rain
+LI
+ wh 12595
+MI
+ ss 2
+
+101219 storm rain
+LI
+ wh 19685
+MI
+ ss 1
+
+101279 storm rain
+LI
+ wh 14773
+MI
+ ss 1
+
+101285 storm rain
+LI
+ wh 12856
+MI
+ ss 2
+
+101329 storm rain
+LI
+ wh 18040
+MI
+ ss 1
+
+101363 storm rain
+LI
+ wh 13848
+MI
+ ss 1
+
+101364 storm rain
+LI
+ wh 19744
+MI
+ ss 2
+
+101384 storm rain
+LI
+ wh 19396
+MI
+ ss 2
+
+101396 storm rain
+LI
+ wh 18908
+MI
+ ss 2
+
+101408 storm rain
+LI
+ wh 12371
+MI
+ ss 1
+
+101423 storm rain
+LI
+ wh 13748
+MI
+ ss 2
+
+101447 storm rain
+LI
+ wh 18137
+MI
+ ss 2
+
+101457 storm rain
+LI
+ wh 11503
+MI
+ ss 1
+
+101458 storm rain
+LI
+ wh 15726
+MI
+ ss 2
+
+101462 storm rain
+LI
+ wh 18059
+MI
+ ss 2
+
+101483 storm rain
+LI
+ wh 12505
+MI
+ ss 1
+
+101527 storm rain
+LI
+ wh 16775
+MI
+ ss 1
+
+101534 storm rain
+LI
+ wh 15401
+MI
+ ss 1
+
+101577 storm rain
+LI
+ wh 15320
+MI
+ ss 1
+
+101582 storm rain
+LI
+ wh 13943
+MI
+ ss 1
+
+101612 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+101623 storm rain
+LI
+ wh 11456
+MI
+ ss 1
+
+101637 storm rain
+LI
+ wh 12812
+MI
+ ss 2
+
+101644 storm rain
+LI
+ wh 16890
+MI
+ ss 2
+
+101653 storm rain
+LI
+ wh 17125
+MI
+ ss 1
+
+101688 storm rain
+LI
+ wh 19088
+MI
+ ss 1
+
+101700 storm rain
+LI
+ wh 17922
+MI
+ ss 2
+
+101712 storm rain
+LI
+ wh 12482
+MI
+ ss 2
+
+101723 storm rain
+LI
+ wh 14202
+MI
+ ss 2
+
+101724 storm rain
+LI
+ wh 16326
+MI
+ ss 2
+
+101733 storm rain
+LI
+ wh 14485
+MI
+ ss 2
+
+101739 storm rain
+LI
+ wh 16195
+MI
+ ss 2
+
+101755 storm rain
+LI
+ wh 12528
+MI
+ ss 1
+
+101766 storm rain
+LI
+ wh 11244
+MI
+ ss 2
+
+101790 storm rain
+LI
+ wh 16510
+MI
+ ss 1
+
+101873 storm rain
+LI
+ wh 19678
+MI
+ ss 2
+
+101901 storm rain
+LI
+ wh 14255
+MI
+ ss 2
+
+101930 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+101931 storm rain
+LI
+ wh 17215
+MI
+ ss 2
+
+101960 storm rain
+LI
+ wh 15595
+MI
+ ss 1
+
+101976 storm rain
+LI
+ wh 11488
+MI
+ ss 2
+
+101986 storm rain
+LI
+ wh 14241
+MI
+ ss 1
+
+102021 storm rain
+LI
+ wh 10470
+MI
+ ss 2
+
+102046 storm rain
+LI
+ wh 15166
+MI
+ ss 1
+
+102060 storm rain
+LI
+ wh 11843
+MI
+ ss 1
+
+102084 storm rain
+LI
+ wh 14733
+MI
+ ss 2
+
+102101 storm rain
+LI
+ wh 13984
+MI
+ ss 2
+
+102114 storm rain
+LI
+ wh 10940
+MI
+ ss 1
+
+102123 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 3 7773
+CO
+ li attack 104783
+ ar 104783 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+102159 storm rain
+LI
+ wh 19275
+MI
+ ss 2
+
+102161 storm rain
+LI
+ wh 13238
+MI
+ ss 2
+
+102167 storm rain
+LI
+ wh 10958
+MI
+ ss 1
+
+102189 storm rain
+LI
+ wh 15758
+MI
+ ss 1
+
+102190 storm rain
+LI
+ wh 16339
+MI
+ ss 1
+
+102191 storm rain
+LI
+ wh 12612
+MI
+ ss 1
+
+102194 storm rain
+LI
+ wh 10490
+MI
+ ss 1
+
+102196 storm rain
+LI
+ wh 13508
+MI
+ ss 1
+
+102201 storm rain
+LI
+ wh 18150
+MI
+ ss 1
+
+102224 storm rain
+LI
+ wh 14871
+MI
+ ss 1
+
+102233 storm rain
+LI
+ wh 12068
+MI
+ ss 2
+
+102248 storm rain
+LI
+ wh 13649
+MI
+ ss 1
+
+102280 storm rain
+LI
+ wh 15447
+MI
+ ss 2
+
+102292 storm rain
+LI
+ wh 12106
+MI
+ ss 1
+
+102315 storm rain
+LI
+ wh 11775
+MI
+ ss 1
+
+102332 storm rain
+LI
+ wh 19260
+MI
+ ss 1
+
+102353 storm rain
+LI
+ wh 14232
+MI
+ ss 1
+
+102355 storm rain
+LI
+ wh 17874
+MI
+ ss 2
+
+102363 storm rain
+LI
+ wh 14223
+MI
+ ss 2
+
+102414 storm rain
+LI
+ wh 10026
+MI
+ ss 2
+
+102415 storm rain
+LI
+ wh 16457
+MI
+ ss 2
+
+102428 storm rain
+LI
+ wh 10729
+MI
+ ss 1
+
+102439 storm rain
+LI
+ wh 17122
+MI
+ ss 2
+
+102441 storm rain
+LI
+ wh 13610
+MI
+ ss 1
+
+102472 storm rain
+LI
+ wh 14852
+MI
+ ss 2
+
+102495 storm rain
+LI
+ wh 13293
+MI
+ ss 2
+
+102510 storm rain
+LI
+ wh 15476
+MI
+ ss 2
+
+102540 storm rain
+LI
+ wh 14380
+MI
+ ss 1
+
+102542 storm rain
+LI
+ wh 15602
+MI
+ ss 1
+
+102581 storm rain
+LI
+ wh 19416
+MI
+ ss 1
+
+102611 storm rain
+LI
+ wh 18871
+MI
+ ss 1
+
+102629 storm rain
+LI
+ wh 14736
+MI
+ ss 1
+
+102660 storm rain
+LI
+ wh 10401
+MI
+ ss 1
+
+102690 storm rain
+LI
+ wh 16041
+MI
+ ss 2
+
+102706 storm rain
+LI
+ wh 16989
+MI
+ ss 1
+
+102720 storm rain
+LI
+ wh 16392
+MI
+ ss 1
+
+102728 storm rain
+LI
+ wh 12114
+MI
+ ss 2
+
+102739 storm rain
+LI
+ wh 19264
+MI
+ ss 1
+
+102754 storm rain
+LI
+ wh 17504
+MI
+ ss 2
+
+102794 storm rain
+LI
+ wh 14302
+MI
+ sb 6599
+ ss 55
+
+102795 storm rain
+LI
+ wh 15609
+MI
+ ss 2
+
+102801 storm rain
+LI
+ wh 10252
+MI
+ ss 2
+
+102832 storm rain
+LI
+ wh 16941
+MI
+ ss 1
+
+102837 storm rain
+LI
+ wh 17735
+MI
+ ss 1
+
+102843 storm rain
+LI
+ wh 15243
+MI
+ ss 2
+
+102851 storm rain
+LI
+ wh 16239
+MI
+ ss 1
+
+102877 storm rain
+LI
+ wh 13032
+MI
+ ss 1
+
+102883 storm rain
+LI
+ wh 18982
+MI
+ ss 1
+
+102899 storm rain
+LI
+ wh 17227
+MI
+ ss 2
+
+102926 storm rain
+LI
+ wh 19552
+MI
+ ss 1
+
+102931 storm rain
+LI
+ wh 11771
+MI
+ ss 1
+
+102997 storm rain
+LI
+ wh 18419
+MI
+ ss 2
+
+103010 storm rain
+LI
+ wh 13688
+MI
+ ss 1
+
+103015 storm rain
+LI
+ wh 14327
+MI
+ ss 2
+
+103026 storm rain
+LI
+ wh 15881
+MI
+ ss 2
+
+103050 storm rain
+LI
+ wh 17665
+MI
+ ss 2
+
+103054 storm rain
+LI
+ wh 15178
+MI
+ ss 1
+
+103057 storm rain
+LI
+ wh 19095
+MI
+ ss 1
+
+103059 storm rain
+LI
+ wh 12823
+MI
+ ss 1
+
+103070 storm rain
+LI
+ wh 10618
+MI
+ ss 2
+
+103100 storm rain
+LI
+ wh 17760
+MI
+ ss 2
+
+103118 storm rain
+LI
+ wh 13670
+MI
+ ss 2
+
+103124 storm rain
+LI
+ wh 18156
+MI
+ ss 1
+
+103129 storm rain
+LI
+ wh 11595
+MI
+ ss 1
+
+103131 storm rain
+LI
+ wh 19740
+MI
+ ss 2
+
+103136 storm rain
+LI
+ wh 14237
+MI
+ ss 2
+
+103140 storm rain
+LI
+ wh 16305
+MI
+ ss 1
+
+103144 deadchar 0
+CH
+ ni 31
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 27 7797
+
+103174 storm rain
+LI
+ wh 19326
+MI
+ ss 2
+
+103198 storm rain
+LI
+ wh 11012
+MI
+ ss 2
+
+103201 storm rain
+LI
+ wh 15155
+MI
+ ss 2
+
+103219 storm rain
+LI
+ wh 13530
+MI
+ ss 1
+
+103221 storm rain
+LI
+ wh 10364
+MI
+ ss 2
+
+103227 storm rain
+LI
+ wh 11026
+MI
+ ss 2
+
+103245 storm rain
+LI
+ wh 16433
+MI
+ ss 2
+
+103265 storm rain
+LI
+ wh 14815
+MI
+ ss 2
+
+103298 storm rain
+LI
+ wh 10060
+MI
+ ss 1
+
+103301 storm rain
+LI
+ wh 11939
+MI
+ ss 1
+
+103303 storm rain
+LI
+ wh 15792
+MI
+ ss 2
+
+103308 storm rain
+LI
+ wh 16996
+MI
+ ss 1
+
+103318 storm rain
+LI
+ wh 10969
+MI
+ ss 1
+
+103324 storm rain
+LI
+ wh 16379
+MI
+ ss 2
+
+103371 storm rain
+LI
+ wh 14846
+MI
+ ss 1
+
+103381 storm rain
+LI
+ wh 13445
+MI
+ ss 2
+
+103388 storm rain
+LI
+ wh 18529
+MI
+ ss 1
+
+103395 storm rain
+LI
+ wh 11390
+MI
+ ss 1
+
+103458 storm rain
+LI
+ wh 13363
+MI
+ ss 1
+
+103471 storm rain
+LI
+ wh 10329
+MI
+ ss 1
+
+103491 storm rain
+LI
+ wh 18640
+MI
+ ss 2
+
+103517 storm rain
+LI
+ wh 16390
+MI
+ ss 1
+
+103525 storm rain
+LI
+ wh 10909
+MI
+ ss 1
+
+103536 storm rain
+LI
+ wh 13678
+MI
+ ss 2
+
+103543 storm rain
+LI
+ wh 13639
+MI
+ ss 1
+
+103545 storm rain
+LI
+ wh 13307
+MI
+ ss 1
+
+103552 storm rain
+LI
+ wh 14159
+MI
+ ss 1
+
+103589 storm rain
+LI
+ wh 14331
+MI
+ ss 1
+
+103591 storm rain
+LI
+ wh 10998
+MI
+ ss 1
+
+103594 storm rain
+LI
+ wh 17121
+MI
+ ss 1
+
+103620 storm rain
+LI
+ wh 19761
+MI
+ ss 2
+
+103644 storm rain
+LI
+ wh 12315
+MI
+ ss 1
+
+103656 storm rain
+LI
+ wh 14879
+MI
+ ss 1
+
+103659 storm rain
+LI
+ wh 10120
+MI
+ ss 1
+
+103664 storm rain
+LI
+ wh 13234
+MI
+ ss 2
+
+103675 storm rain
+LI
+ wh 16154
+MI
+ ss 1
+
+103687 storm rain
+LI
+ wh 12137
+MI
+ ss 1
+
+103696 storm wind
+na 10
+LI
+ wh 14708
+MI
+ sb 78279
+ mc 254
+ ss 13
+ mh 14708
+ co 275
+
+103727 storm rain
+LI
+ wh 16725
+MI
+ ss 2
+
+103739 storm rain
+LI
+ wh 19119
+MI
+ ss 2
+
+103754 storm rain
+LI
+ wh 11569
+MI
+ ss 2
+
+103780 storm rain
+LI
+ wh 18680
+MI
+ ss 2
+
+103792 storm rain
+LI
+ wh 14889
+MI
+ ss 1
+
+103827 storm rain
+LI
+ wh 15885
+MI
+ ss 1
+
+103866 storm rain
+LI
+ wh 19870
+MI
+ ss 2
+
+103876 storm rain
+LI
+ wh 13018
+MI
+ ss 2
+
+103881 storm rain
+LI
+ wh 16601
+MI
+ ss 1
+
+103908 storm rain
+LI
+ wh 15307
+MI
+ ss 1
+
+103935 storm rain
+LI
+ wh 10194
+MI
+ ss 2
+
+103937 storm rain
+LI
+ wh 16701
+MI
+ ss 1
+
+103939 storm rain
+LI
+ wh 19638
+MI
+ ss 2
+
+103952 storm rain
+LI
+ wh 12213
+MI
+ ss 1
+
+103970 storm rain
+LI
+ wh 17591
+MI
+ ss 1
+
+103973 storm rain
+LI
+ wh 13993
+MI
+ ss 1
+
+103992 storm rain
+LI
+ wh 12638
+MI
+ ss 2
+
+104004 storm rain
+LI
+ wh 10006
+MI
+ ss 2
+
+104065 storm rain
+LI
+ wh 19903
+MI
+ ss 2
+
+104093 storm rain
+LI
+ wh 15439
+MI
+ ss 1
+
+104098 storm rain
+LI
+ wh 18328
+MI
+ ss 2
+
+104126 storm rain
+LI
+ wh 13922
+MI
+ ss 1
+
+104137 storm rain
+LI
+ wh 14533
+MI
+ ss 1
+
+104144 storm rain
+LI
+ wh 18421
+MI
+ ss 2
+
+104158 storm rain
+LI
+ wh 16362
+MI
+ ss 2
+
+104167 storm rain
+LI
+ wh 16133
+MI
+ ss 2
+
+104168 storm rain
+LI
+ wh 11586
+MI
+ ss 1
+
+104176 storm rain
+LI
+ wh 14355
+MI
+ ss 2
+
+104178 storm rain
+LI
+ wh 17686
+MI
+ ss 1
+
+104227 storm rain
+LI
+ wh 15411
+MI
+ ss 2
+
+104261 storm rain
+LI
+ wh 12243
+MI
+ ss 1
+
+104271 storm rain
+LI
+ wh 19021
+MI
+ ss 2
+
+104300 storm rain
+LI
+ wh 15386
+MI
+ ss 2
+
+104348 storm rain
+LI
+ wh 11280
+MI
+ ss 2
+
+104358 storm rain
+LI
+ wh 18595
+MI
+ ss 1
+
+104371 storm rain
+LI
+ wh 14698
+MI
+ ss 2
+
+104384 storm rain
+LI
+ wh 16361
+MI
+ ss 1
+
+104386 storm rain
+LI
+ wh 19596
+MI
+ ss 2
+
+104395 storm rain
+LI
+ wh 13496
+MI
+ ss 1
+
+104407 storm rain
+LI
+ wh 11932
+MI
+ ss 2
+
+104412 storm rain
+LI
+ wh 12179
+MI
+ ss 1
+
+104446 storm rain
+LI
+ wh 14197
+MI
+ ss 2
+
+104480 storm rain
+LI
+ wh 14335
+MI
+ ss 2
+
+104493 storm rain
+LI
+ wh 13553
+MI
+ ss 1
+
+104505 storm rain
+LI
+ wh 17820
+MI
+ ss 2
+
+104554 storm rain
+LI
+ wh 17653
+MI
+ ss 1
+
+104567 storm rain
+LI
+ wh 15662
+MI
+ ss 1
+
+104573 storm rain
+LI
+ wh 14728
+MI
+ ss 1
+
+104613 storm rain
+LI
+ wh 14377
+MI
+ ss 1
+
+104626 storm rain
+LI
+ wh 17335
+MI
+ ss 1
+
+104643 storm rain
+LI
+ wh 16807
+MI
+ ss 2
+
+104666 storm rain
+LI
+ wh 11795
+MI
+ ss 1
+
+104668 storm rain
+LI
+ wh 19663
+MI
+ ss 2
+
+104675 storm rain
+LI
+ wh 14775
+MI
+ ss 1
+
+104676 storm rain
+LI
+ wh 13510
+MI
+ ss 1
+
+104694 storm rain
+LI
+ wh 10831
+MI
+ ss 2
+
+104710 storm rain
+LI
+ wh 17087
+MI
+ ss 1
+
+104718 storm rain
+LI
+ wh 15506
+MI
+ ss 1
+
+104720 storm rain
+LI
+ wh 18354
+MI
+ ss 2
+
+104723 storm rain
+LI
+ wh 15199
+MI
+ sb 5557
+ ss 63
+
+104742 storm rain
+LI
+ wh 16024
+MI
+ ss 1
+
+104750 storm rain
+LI
+ wh 12468
+MI
+ ss 2
+
+104752 storm rain
+LI
+ wh 13047
+MI
+ ss 1
+
+104827 storm rain
+LI
+ wh 19918
+MI
+ ss 2
+
+104833 storm rain
+LI
+ wh 12842
+MI
+ ss 2
+
+104841 storm wind
+LI
+ wh 15128
+MI
+ sb 5557
+ ss 26
+
+104844 storm rain
+LI
+ wh 10919
+MI
+ ss 1
+
+104863 storm rain
+LI
+ wh 11066
+MI
+ ss 1
+
+104873 storm rain
+LI
+ wh 17618
+MI
+ ss 1
+
+104908 storm rain
+LI
+ wh 18185
+MI
+ ss 2
+
+104937 storm rain
+LI
+ wh 18292
+MI
+ ss 1
+
+104988 storm rain
+LI
+ wh 10942
+MI
+ ss 2
+
+105015 storm rain
+LI
+ wh 11437
+MI
+ ss 2
+
+105058 storm rain
+LI
+ wh 10952
+MI
+ ss 2
+
+105062 storm rain
+LI
+ wh 11626
+MI
+ ss 1
+
+105068 storm rain
+LI
+ wh 13950
+MI
+ ss 2
+
+105077 storm rain
+LI
+ wh 11950
+MI
+ ss 1
+
+105094 storm rain
+LI
+ wh 10318
+MI
+ ss 2
+
+105098 storm rain
+LI
+ wh 12777
+MI
+ ss 2
+
+105117 storm rain
+LI
+ wh 16098
+MI
+ ss 2
+
+105145 storm rain
+LI
+ wh 17146
+MI
+ ss 2
+
+105150 storm rain
+LI
+ wh 11240
+MI
+ ss 1
+
+105155 storm rain
+LI
+ wh 15427
+MI
+ ss 1
+
+105173 storm rain
+LI
+ wh 15209
+MI
+ ss 2
+
+105201 storm rain
+LI
+ wh 16942
+MI
+ ss 1
+
+105224 storm rain
+LI
+ wh 11893
+MI
+ ss 2
+
+105227 storm rain
+LI
+ wh 18027
+MI
+ ss 2
+
+105242 storm rain
+LI
+ wh 13697
+MI
+ ss 2
+
+105246 storm rain
+LI
+ wh 16248
+MI
+ ss 1
+
+105248 storm rain
+LI
+ wh 14014
+MI
+ ss 1
+
+105269 storm rain
+LI
+ wh 19671
+MI
+ ss 2
+
+105272 storm rain
+LI
+ wh 16922
+MI
+ ss 2
+
+105301 storm rain
+LI
+ wh 17565
+MI
+ ss 2
+
+105303 storm rain
+LI
+ wh 14138
+MI
+ ss 1
+
+105332 storm rain
+LI
+ wh 16540
+MI
+ ss 1
+
+105343 storm rain
+LI
+ wh 17147
+MI
+ ss 1
+
+105351 storm rain
+LI
+ wh 17965
+MI
+ ss 2
+
+105363 storm rain
+LI
+ wh 15171
+MI
+ ss 1
+
+105383 storm rain
+LI
+ wh 17632
+MI
+ ss 1
+
+105406 storm rain
+LI
+ wh 16025
+MI
+ ss 2
+
+105428 storm rain
+LI
+ wh 17983
+MI
+ ss 1
+
+105477 storm rain
+LI
+ wh 19047
+MI
+ ss 1
+
+105478 storm rain
+LI
+ wh 13480
+MI
+ ss 1
+
+105493 storm rain
+LI
+ wh 11659
+MI
+ ss 2
+
+105508 storm rain
+LI
+ wh 13979
+MI
+ ss 2
+
+105545 storm rain
+LI
+ wh 13556
+MI
+ ss 2
+
+105556 storm rain
+LI
+ wh 14635
+MI
+ ss 1
+
+105569 storm rain
+LI
+ wh 16827
+MI
+ ss 1
+
+105585 storm rain
+LI
+ wh 13381
+MI
+ ss 1
+
+105590 storm rain
+LI
+ wh 17193
+MI
+ ss 1
+
+105603 storm rain
+LI
+ wh 19087
+MI
+ ss 1
+
+105618 storm rain
+LI
+ wh 19865
+MI
+ ss 1
+
+105702 storm rain
+LI
+ wh 10321
+MI
+ ss 1
+
+105724 storm rain
+LI
+ wh 15937
+MI
+ ss 1
+
+105759 storm rain
+LI
+ wh 14747
+MI
+ ss 1
+
+105813 storm rain
+LI
+ wh 10905
+MI
+ ss 1
+
+105825 storm rain
+LI
+ wh 12413
+MI
+ ss 2
+
+105857 storm rain
+LI
+ wh 12537
+MI
+ ss 1
+
+105882 storm rain
+LI
+ wh 18508
+MI
+ ss 1
+
+105883 storm rain
+LI
+ wh 10677
+MI
+ ss 2
+
+105890 storm rain
+LI
+ wh 14596
+MI
+ ss 1
+
+105895 storm rain
+LI
+ wh 14948
+MI
+ ss 2
+
+105923 storm rain
+LI
+ wh 10250
+MI
+ ss 2
+
+105939 storm rain
+LI
+ wh 17822
+MI
+ ss 1
+
+105954 storm rain
+LI
+ wh 11448
+MI
+ ss 1
+
+105965 storm rain
+LI
+ wh 10040
+MI
+ ss 1
+
+105975 storm rain
+LI
+ wh 11145
+MI
+ ss 2
+
+105985 storm rain
+LI
+ wh 16496
+MI
+ ss 1
+
+106003 storm rain
+LI
+ wh 10546
+MI
+ ss 2
+
+106005 storm rain
+LI
+ wh 10615
+MI
+ ss 2
+
+106013 storm rain
+LI
+ wh 10555
+MI
+ ss 1
+
+106030 storm rain
+LI
+ wh 10294
+MI
+ ss 1
+
+106031 storm rain
+LI
+ wh 18270
+MI
+ ss 1
+
+106039 storm rain
+LI
+ wh 18440
+MI
+ ss 2
+
+106040 storm rain
+LI
+ wh 18020
+MI
+ ss 2
+
+106064 storm rain
+LI
+ wh 13899
+MI
+ ss 1
+
+106076 storm rain
+LI
+ wh 13408
+MI
+ ss 1
+
+106104 storm rain
+LI
+ wh 17158
+MI
+ ss 2
+
+106152 storm rain
+LI
+ wh 12555
+MI
+ ss 1
+
+106181 storm rain
+LI
+ wh 12428
+MI
+ ss 1
+
+106193 storm rain
+LI
+ wh 12830
+MI
+ ss 1
+
+106204 storm rain
+LI
+ wh 19802
+MI
+ ss 1
+
+106212 storm rain
+LI
+ wh 19555
+MI
+ ss 2
+
+106215 storm rain
+LI
+ wh 15130
+MI
+ ss 2
+
+106224 storm rain
+LI
+ wh 18325
+MI
+ ss 1
+
+106228 storm rain
+LI
+ wh 19965
+MI
+ ss 1
+
+106229 storm rain
+LI
+ wh 13528
+MI
+ ss 2
+
+106250 storm rain
+LI
+ wh 15119
+MI
+ ss 2
+
+106257 storm rain
+LI
+ wh 12258
+MI
+ ss 1
+
+106285 storm rain
+LI
+ wh 16909
+MI
+ ss 2
+
+106290 storm rain
+LI
+ wh 11549
+MI
+ ss 1
+
+106291 storm rain
+LI
+ wh 10807
+MI
+ ss 1
+
+106327 storm rain
+LI
+ wh 14242
+MI
+ ss 1
+
+106344 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+106407 storm rain
+LI
+ wh 19459
+MI
+ ss 1
+
+106409 storm rain
+LI
+ wh 16233
+MI
+ ss 1
+
+106415 storm rain
+LI
+ wh 16539
+MI
+ ss 1
+
+106434 storm rain
+LI
+ wh 16624
+MI
+ ss 1
+
+106439 storm rain
+LI
+ wh 13778
+MI
+ ss 1
+
+106460 storm rain
+LI
+ wh 15259
+MI
+ ss 1
+
+106545 storm rain
+LI
+ wh 14627
+MI
+ ss 1
+
+106546 storm rain
+LI
+ wh 15438
+MI
+ ss 2
+
+106570 storm rain
+LI
+ wh 19198
+MI
+ ss 1
+
+106578 storm rain
+LI
+ wh 19412
+MI
+ ss 1
+
+106582 storm rain
+LI
+ wh 15980
+MI
+ ss 2
+
+106599 storm rain
+LI
+ wh 11034
+MI
+ ss 1
+
+106637 storm rain
+LI
+ wh 13625
+MI
+ ss 2
+
+106639 storm rain
+LI
+ wh 13142
+MI
+ ss 1
+
+106652 storm rain
+LI
+ wh 19230
+MI
+ ss 1
+
+106662 storm rain
+LI
+ wh 15397
+MI
+ ss 2
+
+106669 storm rain
+LI
+ wh 10502
+MI
+ ss 1
+
+106681 storm rain
+LI
+ wh 17067
+MI
+ ss 1
+
+106693 storm rain
+LI
+ wh 16900
+MI
+ ss 2
+
+106702 storm rain
+LI
+ wh 17926
+MI
+ ss 2
+
+106705 storm rain
+LI
+ wh 11853
+MI
+ ss 2
+
+106732 storm rain
+LI
+ wh 15676
+MI
+ ss 2
+
+106746 storm rain
+LI
+ wh 15638
+MI
+ ss 2
+
+106749 storm rain
+LI
+ wh 11369
+MI
+ ss 1
+
+106751 storm rain
+LI
+ wh 18034
+MI
+ ss 1
+
+106769 storm rain
+LI
+ wh 15399
+MI
+ ss 1
+
+106770 storm rain
+LI
+ wh 12979
+MI
+ ss 1
+
+106775 storm rain
+LI
+ wh 16226
+MI
+ ss 1
+
+106786 storm rain
+LI
+ wh 17441
+MI
+ ss 2
+
+106802 storm rain
+LI
+ wh 11109
+MI
+ ss 1
+
+106803 storm rain
+LI
+ wh 19281
+MI
+ ss 1
+
+106812 storm rain
+LI
+ wh 10673
+MI
+ ss 2
+
+106867 storm rain
+LI
+ wh 17079
+MI
+ ss 1
+
+106878 storm rain
+LI
+ wh 12269
+MI
+ ss 1
+
+106885 storm rain
+LI
+ wh 11067
+MI
+ ss 1
+
+106886 storm rain
+LI
+ wh 19171
+MI
+ ss 2
+
+106888 storm rain
+LI
+ wh 17697
+MI
+ ss 1
+
+106890 storm rain
+LI
+ wh 16047
+MI
+ ss 2
+
+106897 storm rain
+LI
+ wh 10538
+MI
+ ss 2
+
+106914 storm rain
+LI
+ wh 13806
+MI
+ ss 1
+
+106938 storm rain
+LI
+ wh 10458
+MI
+ ss 1
+
+106952 storm rain
+LI
+ wh 15799
+MI
+ ss 2
+
+106958 storm rain
+LI
+ wh 10122
+MI
+ ss 2
+
+106968 storm rain
+LI
+ wh 11101
+MI
+ ss 2
+
+107003 storm rain
+LI
+ wh 19587
+MI
+ ss 1
+
+107015 storm rain
+LI
+ wh 15656
+MI
+ ss 2
+
+107036 storm rain
+LI
+ wh 15280
+MI
+ ss 1
+
+107054 storm rain
+LI
+ wh 14903
+MI
+ ss 2
+
+107057 storm rain
+LI
+ wh 19153
+MI
+ ss 2
+
+107074 storm rain
+LI
+ wh 18481
+MI
+ ss 2
+
+107124 storm rain
+LI
+ wh 11792
+MI
+ ss 2
+
+107125 storm rain
+LI
+ wh 19253
+MI
+ ss 2
+
+107142 storm wind
+na 30
+LI
+ wh 17854
+MI
+ sb 74023
+ mc 217
+ ss 16
+ mh 17063
+ co 275
+ bs 107142
+
+107171 storm rain
+LI
+ wh 14752
+MI
+ ss 1
+
+107228 storm rain
+LI
+ wh 14473
+MI
+ ss 1
+
+107251 storm rain
+LI
+ wh 10027
+MI
+ ss 2
+
+107276 storm rain
+LI
+ wh 11819
+MI
+ ss 1
+
+107325 storm rain
+LI
+ wh 12161
+MI
+ ss 1
+
+107345 storm rain
+LI
+ wh 16405
+MI
+ ss 2
+
+107354 storm rain
+LI
+ wh 17563
+MI
+ ss 1
+
+107383 storm rain
+LI
+ wh 14478
+MI
+ ss 2
+
+107385 storm rain
+LI
+ wh 15022
+MI
+ ss 2
+
+107431 storm rain
+LI
+ wh 18071
+MI
+ ss 2
+
+107439 storm rain
+LI
+ wh 11803
+MI
+ ss 2
+
+107444 storm rain
+LI
+ wh 16700
+MI
+ ss 2
+
+107473 storm rain
+LI
+ wh 12083
+MI
+ ss 2
+
+107487 storm rain
+LI
+ wh 17976
+MI
+ ss 2
+
+107490 storm rain
+LI
+ wh 10205
+MI
+ ss 2
+
+107500 storm rain
+LI
+ wh 17231
+MI
+ ss 1
+
+107551 storm rain
+LI
+ wh 15429
+MI
+ ss 2
+
+107569 storm rain
+LI
+ wh 11323
+MI
+ ss 1
+
+107588 storm rain
+LI
+ wh 14668
+MI
+ ss 1
+
+107594 storm rain
+LI
+ wh 17952
+MI
+ ss 1
+
+107627 storm rain
+LI
+ wh 16001
+MI
+ ss 2
+
+107628 storm rain
+LI
+ wh 13201
+MI
+ ss 1
+
+107682 storm rain
+LI
+ wh 14710
+MI
+ ss 1
+
+107701 storm rain
+LI
+ wh 15936
+MI
+ ss 1
+
+107707 storm rain
+LI
+ wh 11205
+MI
+ ss 2
+
+107720 storm rain
+LI
+ wh 12880
+MI
+ ss 1
+
+107729 storm rain
+LI
+ wh 14514
+MI
+ ss 1
+
+107739 storm rain
+LI
+ wh 18202
+MI
+ ss 1
+
+107753 storm rain
+LI
+ wh 17723
+MI
+ ss 2
+
+107761 storm rain
+LI
+ wh 14243
+MI
+ ss 2
+
+107765 storm rain
+LI
+ wh 13188
+MI
+ ss 1
+
+107768 storm rain
+LI
+ wh 12582
+MI
+ ss 1
+
+107807 storm rain
+LI
+ wh 10709
+MI
+ ss 2
+
+107808 storm rain
+LI
+ wh 12845
+MI
+ ss 2
+
+107834 storm rain
+LI
+ wh 19046
+MI
+ ss 2
+
+107852 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+MI
+ ca g
+ gc 70009
+
+107863 storm rain
+LI
+ wh 19518
+MI
+ ss 1
+
+107866 storm rain
+LI
+ wh 14959
+MI
+ ss 2
+
+107903 storm rain
+LI
+ wh 18879
+MI
+ ss 1
+
+107919 storm rain
+LI
+ wh 10251
+MI
+ ss 2
+
+107920 storm rain
+LI
+ wh 11886
+MI
+ ss 1
+
+107955 storm rain
+LI
+ wh 17021
+MI
+ ss 2
+
+108020 storm rain
+LI
+ wh 16348
+MI
+ ss 1
+
+108026 storm rain
+LI
+ wh 18712
+MI
+ ss 1
+
+108028 storm rain
+LI
+ wh 10333
+MI
+ ss 1
+
+108029 storm rain
+LI
+ wh 14989
+MI
+ ss 2
+
+108070 storm rain
+LI
+ wh 11573
+MI
+ ss 1
+
+108090 storm rain
+LI
+ wh 19974
+MI
+ ss 2
+
+108128 storm rain
+LI
+ wh 17671
+MI
+ ss 2
+
+108130 storm rain
+LI
+ wh 17515
+MI
+ ss 2
+
+108158 storm rain
+LI
+ wh 17151
+MI
+ ss 1
+
+108179 storm rain
+LI
+ wh 14104
+MI
+ ss 1
+
+108182 storm rain
+LI
+ wh 11407
+MI
+ ss 2
+
+108195 storm rain
+LI
+ wh 14229
+MI
+ ss 1
+
+108226 storm rain
+LI
+ wh 13571
+MI
+ ss 1
+
+108232 storm rain
+LI
+ wh 13484
+MI
+ ss 2
+
+108235 storm rain
+LI
+ wh 14876
+MI
+ ss 2
+
+108262 storm rain
+LI
+ wh 14340
+MI
+ ss 2
+
+108271 storm rain
+LI
+ wh 10803
+MI
+ ss 2
+
+108272 storm rain
+LI
+ wh 11945
+MI
+ ss 2
+
+108277 storm rain
+LI
+ wh 14957
+MI
+ ss 2
+
+108309 storm rain
+LI
+ wh 13644
+MI
+ ss 1
+
+108379 storm rain
+LI
+ wh 15118
+MI
+ ss 1
+
+108384 storm rain
+LI
+ wh 10316
+MI
+ ss 2
+
+108385 storm rain
+LI
+ wh 10175
+MI
+ ss 2
+
+108386 storm rain
+LI
+ wh 19617
+MI
+ ss 2
+
+108422 storm rain
+LI
+ wh 17468
+MI
+ ss 2
+
+108428 storm rain
+LI
+ wh 18220
+MI
+ ss 2
+
+108429 storm rain
+LI
+ wh 13787
+MI
+ ss 2
+
+108432 storm rain
+LI
+ wh 17418
+MI
+ ss 1
+
+108456 storm rain
+LI
+ wh 19598
+MI
+ ss 1
+
+108465 storm rain
+LI
+ wh 16643
+MI
+ ss 1
+
+108469 storm rain
+LI
+ wh 16609
+MI
+ ss 2
+
+108504 storm rain
+LI
+ wh 12080
+MI
+ ss 1
+
+108532 storm rain
+LI
+ wh 18393
+MI
+ ss 1
+
+108568 storm rain
+LI
+ wh 13468
+MI
+ ss 2
+
+108571 storm rain
+LI
+ wh 13945
+MI
+ ss 1
+
+108585 storm rain
+LI
+ wh 11002
+MI
+ ss 1
+
+108627 storm rain
+LI
+ wh 18018
+MI
+ ss 2
+
+108640 storm rain
+LI
+ wh 13386
+MI
+ ss 1
+
+108670 storm rain
+LI
+ wh 12066
+MI
+ ss 2
+
+108680 storm rain
+LI
+ wh 14133
+MI
+ ss 2
+
+108724 storm rain
+LI
+ wh 11455
+MI
+ ss 2
+
+108726 storm rain
+LI
+ wh 12556
+MI
+ ss 2
+
+108846 storm rain
+LI
+ wh 14939
+MI
+ ss 2
+
+108850 storm rain
+LI
+ wh 11328
+MI
+ ss 1
+
+108873 storm rain
+LI
+ wh 16844
+MI
+ ss 1
+
+108892 storm rain
+LI
+ wh 14881
+MI
+ ss 2
+
+108899 storm rain
+LI
+ wh 10085
+MI
+ ss 2
+
+108904 storm rain
+LI
+ wh 14949
+MI
+ ss 2
+
+108907 storm rain
+LI
+ wh 13585
+MI
+ ss 1
+
+108923 storm rain
+LI
+ wh 18732
+MI
+ ss 1
+
+108924 storm rain
+LI
+ wh 12693
+MI
+ ss 1
+
+108930 storm rain
+LI
+ wh 18931
+MI
+ ss 2
+
+108946 storm rain
+LI
+ wh 19426
+MI
+ ss 1
+
+108948 storm rain
+LI
+ wh 19129
+MI
+ ss 2
+
+108950 storm rain
+LI
+ wh 17163
+MI
+ ss 2
+
+108965 storm rain
+LI
+ wh 11471
+MI
+ ss 2
+
+108983 storm rain
+LI
+ wh 15532
+MI
+ ss 2
+
+109009 storm rain
+LI
+ wh 15612
+MI
+ ss 1
+
+109075 storm rain
+LI
+ wh 19563
+MI
+ ss 2
+
+109077 storm rain
+LI
+ wh 18997
+MI
+ ss 1
+
+109095 storm rain
+LI
+ wh 11793
+MI
+ ss 1
+
+109105 storm rain
+LI
+ wh 17668
+MI
+ ss 1
+
+109117 storm rain
+LI
+ wh 10261
+MI
+ ss 1
+
+109124 storm rain
+LI
+ wh 16013
+MI
+ ss 1
+
+109135 storm rain
+LI
+ wh 11874
+MI
+ ss 1
+
+109147 storm rain
+LI
+ wh 19432
+MI
+ ss 1
+
+109151 storm rain
+LI
+ wh 16355
+MI
+ ss 1
+
+109160 storm rain
+LI
+ wh 16046
+MI
+ ss 1
+
+109191 storm rain
+LI
+ wh 10627
+MI
+ ss 2
+
+109195 storm rain
+LI
+ wh 15383
+MI
+ ss 1
+
+109196 storm rain
+LI
+ wh 15895
+MI
+ ss 2
+
+109225 storm rain
+LI
+ wh 16835
+MI
+ ss 1
+
+109267 storm rain
+LI
+ wh 15266
+MI
+ ss 1
+
+109281 storm rain
+LI
+ wh 19078
+MI
+ ss 2
+
+109325 storm rain
+LI
+ wh 19704
+MI
+ ss 1
+
+109346 storm rain
+LI
+ wh 14369
+MI
+ ss 2
+
+109351 storm rain
+LI
+ wh 11559
+MI
+ ss 2
+
+109462 storm rain
+LI
+ wh 10031
+MI
+ ss 1
+
+109473 storm rain
+LI
+ wh 13982
+MI
+ ss 1
+
+109483 storm rain
+LI
+ wh 15096
+MI
+ ss 1
+
+109502 storm rain
+LI
+ wh 19377
+MI
+ ss 1
+
+109505 storm rain
+LI
+ wh 12567
+MI
+ ss 2
+
+109562 storm rain
+LI
+ wh 11096
+MI
+ ss 1
+
+109583 storm rain
+LI
+ wh 10562
+MI
+ ss 2
+
+109619 storm rain
+LI
+ wh 13912
+MI
+ ss 1
+
+109699 storm rain
+LI
+ wh 14593
+MI
+ ss 1
+
+109707 storm rain
+LI
+ wh 16534
+MI
+ ss 1
+
+109794 storm rain
+LI
+ wh 15589
+MI
+ ss 2
+
+109809 storm rain
+LI
+ wh 18636
+MI
+ ss 2
+
+109847 storm rain
+LI
+ wh 16926
+MI
+ ss 1
+
+109852 storm rain
+LI
+ wh 19772
+MI
+ ss 1
+
+109858 storm rain
+LI
+ wh 15236
+MI
+ ss 1
+
+109864 storm rain
+LI
+ wh 15754
+MI
+ ss 2
+
+109923 storm rain
+LI
+ wh 19246
+MI
+ ss 1
+
+109938 storm rain
+LI
+ wh 17156
+MI
+ ss 1
+
+109939 storm rain
+LI
+ wh 18124
+MI
+ ss 2
+
+109945 storm rain
+LI
+ wh 18282
+MI
+ ss 1
+
+109946 storm rain
+LI
+ wh 19621
+MI
+ ss 2
+
+109967 storm rain
+LI
+ wh 16655
+MI
+ ss 2
+
+109975 storm rain
+LI
+ wh 16351
+MI
+ ss 2
+
+109984 storm rain
+LI
+ wh 13991
+MI
+ ss 2
+
+109999 storm rain
+LI
+ wh 17018
+MI
+ ss 2
+
+110000 storm rain
+LI
+ wh 18142
+MI
+ ss 2
+
+110026 storm rain
+LI
+ wh 16007
+MI
+ ss 1
+
+110042 storm rain
+LI
+ wh 17873
+MI
+ ss 1
+
+110096 storm rain
+LI
+ wh 14555
+MI
+ ss 1
+
+110114 storm rain
+LI
+ wh 14749
+MI
+ ss 1
+
+110115 storm rain
+LI
+ wh 11946
+MI
+ ss 1
+
+110116 storm rain
+LI
+ wh 16848
+MI
+ ss 2
+
+110150 storm rain
+LI
+ wh 16893
+MI
+ ss 1
+
+110160 storm rain
+LI
+ wh 12412
+MI
+ ss 1
+
+110181 storm rain
+LI
+ wh 18707
+MI
+ ss 2
+
+110197 storm rain
+LI
+ wh 13722
+MI
+ ss 2
+
+110207 storm rain
+LI
+ wh 12617
+MI
+ ss 1
+
+110209 storm rain
+LI
+ wh 17840
+MI
+ ss 2
+
+110212 storm rain
+LI
+ wh 14226
+MI
+ ss 2
+
+110221 storm rain
+LI
+ wh 10886
+MI
+ ss 2
+
+110228 storm rain
+LI
+ wh 19504
+MI
+ ss 1
+
+110234 storm rain
+LI
+ wh 11638
+MI
+ ss 2
+
+110297 storm rain
+LI
+ wh 14428
+MI
+ ss 1
+
+110318 storm rain
+LI
+ wh 15277
+MI
+ ss 2
+
+110346 storm rain
+LI
+ wh 13783
+MI
+ ss 2
+
+110397 storm rain
+LI
+ wh 12815
+MI
+ ss 2
+
+110402 storm rain
+LI
+ wh 10093
+MI
+ ss 1
+
+110428 storm rain
+LI
+ wh 13269
+MI
+ ss 1
+
+110431 storm rain
+LI
+ wh 18339
+MI
+ ss 2
+
+110438 storm rain
+LI
+ wh 19085
+MI
+ ss 2
+
+110441 storm rain
+LI
+ wh 14407
+MI
+ ss 1
+
+110449 storm rain
+LI
+ wh 10860
+MI
+ ss 1
+
+110494 storm rain
+LI
+ wh 18612
+MI
+ ss 2
+
+110525 storm rain
+LI
+ wh 18983
+MI
+ ss 1
+
+110599 storm rain
+LI
+ wh 18229
+MI
+ ss 1
+
+110613 storm rain
+LI
+ wh 18259
+MI
+ ss 1
+
+110633 storm rain
+LI
+ wh 16641
+MI
+ ss 2
+
+110646 storm rain
+LI
+ wh 18371
+MI
+ ss 1
+
+110679 storm rain
+LI
+ wh 17334
+MI
+ ss 1
+
+110738 storm rain
+LI
+ wh 14308
+MI
+ ss 2
+
+110771 storm rain
+LI
+ wh 16258
+MI
+ ss 2
+
+110774 storm rain
+LI
+ wh 13862
+MI
+ ss 1
+
+110776 storm rain
+LI
+ wh 12023
+MI
+ ss 1
+
+110782 storm rain
+LI
+ wh 12545
+MI
+ ss 1
+
+110840 storm rain
+LI
+ wh 18101
+MI
+ ss 2
+
+110841 storm rain
+LI
+ wh 13122
+MI
+ ss 1
+
+110868 storm rain
+LI
+ wh 19570
+MI
+ ss 2
+
+110937 storm rain
+LI
+ wh 12828
+MI
+ ss 1
+
+110948 storm rain
+LI
+ wh 18950
+MI
+ ss 2
+
+110963 storm rain
+LI
+ wh 18943
+MI
+ ss 1
+
+110968 storm rain
+LI
+ wh 17573
+MI
+ ss 1
+
+110969 storm rain
+LI
+ wh 17061
+MI
+ ss 2
+
+110972 storm rain
+LI
+ wh 17165
+MI
+ ss 1
+
+110992 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 26 7796
+MI
+ ca g
+ gc 5498
+
+111000 storm rain
+LI
+ wh 19376
+MI
+ ss 1
+
+111011 storm rain
+LI
+ wh 16804
+MI
+ ss 1
+
+111031 storm rain
+LI
+ wh 13578
+MI
+ ss 2
+
+111036 storm rain
+LI
+ wh 18829
+MI
+ ss 2
+
+111047 storm rain
+LI
+ wh 11545
+MI
+ ss 2
+
+111055 storm rain
+LI
+ wh 17943
+MI
+ ss 1
+
+111088 storm rain
+LI
+ wh 17479
+MI
+ ss 2
+
+111089 storm rain
+LI
+ wh 15794
+MI
+ ss 1
+
+111173 storm rain
+LI
+ wh 17625
+MI
+ ss 1
+
+111180 storm rain
+LI
+ wh 10474
+MI
+ ss 1
+
+111218 storm rain
+LI
+ wh 18949
+MI
+ ss 2
+
+111224 storm rain
+LI
+ wh 13598
+MI
+ ss 2
+
+111241 storm rain
+LI
+ wh 17909
+MI
+ ss 1
+
+111260 storm rain
+LI
+ wh 17078
+MI
+ ss 2
+
+111264 storm rain
+LI
+ wh 19838
+MI
+ ss 1
+
+111282 storm rain
+LI
+ wh 17352
+MI
+ ss 1
+
+111340 storm rain
+LI
+ wh 15294
+MI
+ ss 1
+
+111347 storm rain
+LI
+ wh 15983
+MI
+ ss 2
+
+111355 storm rain
+LI
+ wh 10579
+MI
+ ss 2
+
+111396 storm rain
+LI
+ wh 14841
+MI
+ ss 1
+
+111400 storm rain
+LI
+ wh 15757
+MI
+ ss 2
+
+111416 storm rain
+LI
+ wh 19218
+MI
+ ss 1
+
+111426 storm rain
+LI
+ wh 11650
+MI
+ ss 1
+
+111439 storm rain
+LI
+ wh 15020
+MI
+ ss 1
+
+111440 storm rain
+LI
+ wh 18126
+MI
+ ss 1
+
+111443 storm rain
+LI
+ wh 14257
+MI
+ ss 2
+
+111455 storm rain
+LI
+ wh 13994
+MI
+ ss 2
+
+111501 storm rain
+LI
+ wh 17555
+MI
+ ss 1
+
+111528 storm rain
+LI
+ wh 17391
+MI
+ ss 2
+
+111537 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+111538 storm rain
+LI
+ wh 10944
+MI
+ ss 1
+
+111569 storm rain
+LI
+ wh 13486
+MI
+ ss 2
+
+111597 storm rain
+LI
+ wh 17027
+MI
+ ss 1
+
+111603 storm rain
+LI
+ wh 12726
+MI
+ ss 1
+
+111611 storm rain
+LI
+ wh 10043
+MI
+ ss 2
+
+111642 storm rain
+LI
+ wh 18108
+MI
+ ss 2
+
+111712 storm rain
+LI
+ wh 12723
+MI
+ ss 1
+
+111717 storm rain
+LI
+ wh 11548
+MI
+ ss 1
+
+111737 storm rain
+LI
+ wh 19894
+MI
+ ss 2
+
+111740 storm rain
+LI
+ wh 19513
+MI
+ ss 2
+
+111769 storm rain
+LI
+ wh 12452
+MI
+ ss 2
+
+111770 storm rain
+LI
+ wh 19295
+MI
+ ss 2
+
+111787 storm rain
+LI
+ wh 14870
+MI
+ ss 1
+
+111794 storm rain
+LI
+ wh 17832
+MI
+ ss 1
+
+111809 storm rain
+LI
+ wh 14435
+MI
+ ss 1
+
+111818 storm rain
+LI
+ wh 17622
+MI
+ ss 2
+
+111822 storm rain
+LI
+ wh 12646
+MI
+ ss 2
+
+111830 storm rain
+LI
+ wh 11459
+MI
+ ss 2
+
+111858 storm rain
+LI
+ wh 12370
+MI
+ ss 1
+
+111878 storm rain
+LI
+ wh 14262
+MI
+ ss 1
+
+111884 storm rain
+LI
+ wh 18777
+MI
+ ss 1
+
+111889 storm rain
+LI
+ wh 11796
+MI
+ ss 1
+
+111890 storm rain
+LI
+ wh 11193
+MI
+ ss 2
+
+111896 storm rain
+LI
+ wh 14515
+MI
+ ss 1
+
+111927 storm rain
+LI
+ wh 13333
+MI
+ ss 1
+
+111928 storm rain
+LI
+ wh 13434
+MI
+ ss 1
+
+111948 storm rain
+LI
+ wh 11470
+MI
+ ss 2
+
+111994 storm rain
+LI
+ wh 17520
+MI
+ ss 1
+
+112004 storm rain
+LI
+ wh 11533
+MI
+ ss 2
+
+112016 storm rain
+LI
+ wh 16705
+MI
+ ss 1
+
+112018 storm rain
+LI
+ wh 14566
+MI
+ ss 1
+
+112021 storm rain
+LI
+ wh 16385
+MI
+ ss 1
+
+112027 storm rain
+LI
+ wh 19481
+MI
+ ss 2
+
+112046 storm rain
+LI
+ wh 18596
+MI
+ ss 2
+
+112047 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+112053 storm rain
+LI
+ wh 16296
+MI
+ ss 1
+
+112076 storm rain
+LI
+ wh 16779
+MI
+ ss 1
+
+112080 storm rain
+LI
+ wh 16406
+MI
+ ss 2
+
+112086 storm rain
+LI
+ wh 12497
+MI
+ ss 1
+
+112103 storm rain
+LI
+ wh 13696
+MI
+ ss 1
+
+112106 storm rain
+LI
+ wh 14475
+MI
+ ss 2
+
+112111 storm rain
+LI
+ wh 18525
+MI
+ ss 2
+
+112144 storm rain
+LI
+ wh 11232
+MI
+ ss 1
+
+112244 storm rain
+LI
+ wh 15515
+MI
+ ss 2
+
+112288 storm rain
+LI
+ wh 16854
+MI
+ ss 1
+
+112316 storm rain
+LI
+ wh 12478
+MI
+ ss 1
+
+112321 storm rain
+LI
+ wh 16236
+MI
+ ss 1
+
+112323 storm rain
+LI
+ wh 15101
+MI
+ ss 1
+
+112351 storm rain
+LI
+ wh 17270
+MI
+ ss 1
+
+112366 storm rain
+LI
+ wh 14890
+MI
+ ss 1
+
+112368 storm rain
+LI
+ wh 10887
+MI
+ ss 1
+
+112369 storm rain
+LI
+ wh 10597
+MI
+ ss 1
+
+112370 storm rain
+LI
+ wh 10376
+MI
+ ss 1
+
+112394 storm rain
+LI
+ wh 16990
+MI
+ ss 2
+
+112395 storm rain
+LI
+ wh 17340
+MI
+ ss 2
+
+112400 storm rain
+LI
+ wh 17186
+MI
+ ss 1
+
+112420 storm rain
+LI
+ wh 15981
+MI
+ ss 2
+
+112423 storm rain
+LI
+ wh 16708
+MI
+ ss 2
+
+112429 storm rain
+LI
+ wh 11724
+MI
+ ss 1
+
+112430 storm rain
+LI
+ wh 11134
+MI
+ ss 2
+
+112458 storm rain
+LI
+ wh 12192
+MI
+ ss 2
+
+112517 storm rain
+LI
+ wh 12264
+MI
+ ss 1
+
+112533 storm rain
+LI
+ wh 15470
+MI
+ ss 2
+
+112577 storm rain
+LI
+ wh 13637
+MI
+ ss 1
+
+112583 storm rain
+LI
+ wh 18535
+MI
+ ss 1
+
+112606 storm rain
+LI
+ wh 14151
+MI
+ ss 2
+
+112631 storm rain
+LI
+ wh 12783
+MI
+ ss 1
+
+112734 storm rain
+LI
+ wh 16591
+MI
+ ss 2
+
+112772 storm rain
+LI
+ wh 17133
+MI
+ ss 2
+
+112779 storm rain
+LI
+ wh 11322
+MI
+ ss 1
+
+112787 storm rain
+LI
+ wh 14715
+MI
+ ss 2
+
+112860 storm rain
+LI
+ wh 12459
+MI
+ ss 1
+
+112877 storm rain
+LI
+ wh 11515
+MI
+ ss 1
+
+112898 storm rain
+LI
+ wh 14293
+MI
+ ss 2
+
+112901 storm rain
+LI
+ wh 18004
+MI
+ ss 2
+
+112951 storm rain
+LI
+ wh 13555
+MI
+ ss 2
+
+112958 storm rain
+LI
+ wh 17074
+MI
+ ss 2
+
+112986 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+CO
+ li wait time 50
+ ar 0 50 0 0 0 0 0 0
+ wa -1
+ st 1
+ de 7
+ po 1
+ pr 1
+
+112991 storm rain
+LI
+ wh 14986
+MI
+ ss 2
+
+113000 storm rain
+LI
+ wh 13202
+MI
+ ss 2
+
+113027 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+MI
+ di 3
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+113029 storm rain
+LI
+ wh 13057
+MI
+ ss 2
+
+113032 storm rain
+LI
+ wh 17513
+MI
+ ss 1
+
+113037 storm rain
+LI
+ wh 14218
+MI
+ ss 1
+
+113039 storm rain
+LI
+ wh 10075
+MI
+ ss 2
+
+113053 storm rain
+LI
+ wh 18483
+MI
+ ss 1
+
+113076 storm rain
+LI
+ wh 17011
+MI
+ ss 2
+
+113085 storm rain
+LI
+ wh 12705
+MI
+ ss 2
+
+113095 storm rain
+LI
+ wh 10255
+MI
+ ss 2
+
+113111 storm rain
+LI
+ wh 17635
+MI
+ ss 2
+
+113136 storm rain
+LI
+ wh 14807
+MI
+ ss 1
+
+113151 storm rain
+LI
+ wh 14291
+MI
+ ss 2
+
+113180 storm rain
+LI
+ wh 13266
+MI
+ ss 1
+
+113247 storm rain
+LI
+ wh 18275
+MI
+ ss 1
+
+113260 storm rain
+LI
+ wh 10061
+MI
+ ss 1
+
+113263 storm rain
+LI
+ wh 11890
+MI
+ ss 2
+
+113266 storm rain
+LI
+ wh 16107
+MI
+ ss 1
+
+113381 storm rain
+LI
+ wh 12577
+MI
+ ss 1
+
+113387 storm rain
+LI
+ wh 14606
+MI
+ ss 1
+
+113397 storm rain
+LI
+ wh 14379
+MI
+ ss 1
+
+113401 storm rain
+LI
+ wh 17201
+MI
+ ss 2
+
+113449 storm rain
+LI
+ wh 18048
+MI
+ ss 2
+
+113452 storm rain
+LI
+ wh 17319
+MI
+ ss 1
+
+113500 storm rain
+LI
+ wh 18564
+MI
+ ss 2
+
+113582 storm rain
+LI
+ wh 19028
+MI
+ ss 2
+
+113583 storm rain
+LI
+ wh 16185
+MI
+ ss 1
+
+113660 storm rain
+LI
+ wh 12863
+MI
+ ss 1
+
+113687 storm rain
+LI
+ wh 13127
+MI
+ ss 2
+
+113689 storm rain
+LI
+ wh 17361
+MI
+ ss 2
+
+113694 storm rain
+LI
+ wh 18881
+MI
+ ss 1
+
+113699 storm rain
+LI
+ wh 12216
+MI
+ ss 1
+
+113709 storm rain
+LI
+ wh 14430
+MI
+ ss 1
+
+113724 storm rain
+LI
+ wh 10601
+MI
+ ss 2
+
+113734 storm rain
+LI
+ wh 11040
+MI
+ ss 2
+
+113755 storm rain
+LI
+ wh 12773
+MI
+ ss 2
+
+113762 storm rain
+LI
+ wh 15144
+MI
+ ss 1
+
+113775 storm rain
+LI
+ wh 15608
+MI
+ ss 2
+
+113790 storm rain
+LI
+ wh 11198
+MI
+ ss 1
+
+113791 storm rain
+LI
+ wh 10548
+MI
+ ss 2
+
+113792 storm rain
+LI
+ wh 11588
+MI
+ ss 1
+
+113796 storm rain
+LI
+ wh 15677
+MI
+ ss 1
+
+113797 storm rain
+LI
+ wh 11822
+MI
+ ss 2
+
+113806 storm rain
+LI
+ wh 11528
+MI
+ ss 1
+
+113818 storm rain
+LI
+ wh 11465
+MI
+ ss 2
+
+113819 storm rain
+LI
+ wh 19564
+MI
+ ss 2
+
+113840 storm rain
+LI
+ wh 18831
+MI
+ ss 1
+
+113863 storm rain
+LI
+ wh 12775
+MI
+ ss 2
+
+113886 storm rain
+LI
+ wh 18209
+MI
+ ss 2
+
+113891 storm rain
+LI
+ wh 10302
+MI
+ ss 1
+
+113907 storm rain
+LI
+ wh 16769
+MI
+ ss 1
+
+113937 storm rain
+LI
+ wh 11420
+MI
+ ss 2
+
+114026 storm rain
+LI
+ wh 14476
+MI
+ ss 2
+
+114041 storm rain
+LI
+ wh 11876
+MI
+ ss 2
+
+114058 storm rain
+LI
+ wh 12456
+MI
+ ss 1
+
+114087 storm rain
+LI
+ wh 15355
+MI
+ ss 2
+
+114109 storm rain
+LI
+ wh 18120
+MI
+ ss 2
+
+114158 storm rain
+LI
+ wh 18885
+MI
+ ss 2
+
+114163 storm rain
+LI
+ wh 16054
+MI
+ ss 1
+
+114180 storm rain
+LI
+ wh 10467
+MI
+ ss 1
+
+114184 storm rain
+LI
+ wh 12878
+MI
+ ss 2
+
+114247 storm rain
+LI
+ wh 10189
+MI
+ ss 1
+
+114251 storm rain
+LI
+ wh 16042
+MI
+ ss 2
+
+114256 storm rain
+LI
+ wh 10967
+MI
+ ss 2
+
+114264 storm rain
+LI
+ wh 18208
+MI
+ ss 2
+
+114268 storm rain
+LI
+ wh 18358
+MI
+ ss 1
+
+114274 storm rain
+LI
+ wh 17299
+MI
+ ss 1
+
+114305 storm rain
+LI
+ wh 12276
+MI
+ ss 2
+
+114317 storm rain
+LI
+ wh 15951
+MI
+ ss 1
+
+114321 storm rain
+LI
+ wh 10568
+MI
+ ss 1
+
+114322 storm rain
+LI
+ wh 11778
+MI
+ ss 1
+
+114353 storm rain
+LI
+ wh 16867
+MI
+ ss 1
+
+114378 storm rain
+LI
+ wh 15330
+MI
+ ss 1
+
+114421 storm rain
+LI
+ wh 15958
+MI
+ ss 1
+
+114478 storm rain
+LI
+ wh 14801
+MI
+ ss 2
+
+114479 storm rain
+LI
+ wh 14762
+MI
+ ss 2
+
+114524 storm rain
+LI
+ wh 10604
+MI
+ ss 2
+
+114545 storm rain
+LI
+ wh 13426
+MI
+ ss 1
+
+114573 storm rain
+LI
+ wh 11756
+MI
+ ss 1
+
+114618 storm rain
+LI
+ wh 17489
+MI
+ ss 1
+
+114631 storm rain
+LI
+ wh 16991
+MI
+ ss 1
+
+114655 storm rain
+LI
+ wh 15630
+MI
+ ss 2
+
+114669 storm rain
+LI
+ wh 17075
+MI
+ ss 2
+
+114684 storm rain
+LI
+ wh 13776
+MI
+ ss 2
+
+114714 storm rain
+LI
+ wh 12749
+MI
+ ss 1
+
+114722 storm rain
+LI
+ wh 10392
+MI
+ ss 1
+
+114729 storm rain
+LI
+ wh 11966
+MI
+ ss 2
+
+114752 storm rain
+LI
+ wh 12811
+MI
+ ss 2
+
+114766 storm rain
+LI
+ wh 13868
+MI
+ ss 1
+
+114804 storm rain
+LI
+ wh 12886
+MI
+ ss 1
+
+114827 storm rain
+LI
+ wh 15297
+MI
+ ss 2
+
+114845 deadchar 0
+CH
+ ni 32
+ he 19
+ lk 4
+ at 60
+ df 60
+ dt 260 11 7781
+CO
+ li raze
+ ar 0 0 0 1 0 0 0 0
+ st 1
+ de 7
+ po 1
+ pr 3
+
+114860 storm rain
+LI
+ wh 19014
+MI
+ ss 2
+
+114867 storm rain
+LI
+ wh 14496
+MI
+ ss 2
+
+114869 storm rain
+LI
+ wh 16223
+MI
+ ss 2
+
+114878 storm rain
+LI
+ wh 10496
+MI
+ ss 1
+
+114887 storm rain
+LI
+ wh 13810
+MI
+ ss 1
+
+114889 storm rain
+LI
+ wh 17642
+MI
+ ss 1
+
+114891 storm rain
+LI
+ wh 18551
+MI
+ ss 2
+
+114897 storm rain
+LI
+ wh 12499
+MI
+ ss 1
+
+114900 storm rain
+LI
+ wh 17225
+MI
+ ss 2
+
+114951 storm rain
+LI
+ wh 18321
+MI
+ ss 1
+
+114952 storm rain
+LI
+ wh 18648
+MI
+ ss 2
+
+114979 storm rain
+LI
+ wh 17098
+MI
+ ss 1
+
+115036 storm rain
+LI
+ wh 17066
+MI
+ ss 1
+
+115038 storm rain
+LI
+ wh 17318
+MI
+ ss 1
+
+115067 storm rain
+LI
+ wh 18430
+MI
+ ss 2
+
+115068 storm rain
+LI
+ wh 19540
+MI
+ ss 2
+
+115070 storm rain
+LI
+ wh 19361
+MI
+ ss 1
+
+115071 storm rain
+LI
+ wh 18148
+MI
+ ss 2
+
+115078 storm rain
+LI
+ wh 19959
+MI
+ ss 2
+
+115082 storm rain
+LI
+ wh 16612
+MI
+ ss 1
+
+115121 storm rain
+LI
+ wh 10782
+MI
+ ss 1
+
+115128 storm rain
+LI
+ wh 18891
+MI
+ ss 2
+
+115218 storm rain
+LI
+ wh 10954
+MI
+ ss 2
+
+115285 storm rain
+LI
+ wh 11476
+MI
+ ss 1
+
+115290 storm rain
+LI
+ wh 18470
+MI
+ ss 2
+
+115303 storm rain
+LI
+ wh 16400
+MI
+ ss 2
+
+115306 storm rain
+LI
+ wh 12347
+MI
+ ss 1
+
+115314 storm rain
+LI
+ wh 15464
+MI
+ ss 2
+
+115323 storm rain
+LI
+ wh 13447
+MI
+ ss 1
+
+115375 storm rain
+LI
+ wh 13352
+MI
+ ss 1
+
+115381 storm rain
+LI
+ wh 17878
+MI
+ ss 1
+
+115393 storm rain
+LI
+ wh 15946
+MI
+ ss 2
+
+115405 storm rain
+LI
+ wh 18442
+MI
+ ss 2
+
+115440 storm rain
+LI
+ wh 17604
+MI
+ ss 2
+
+115467 storm rain
+LI
+ wh 18859
+MI
+ ss 1
+
+115563 storm rain
+LI
+ wh 13681
+MI
+ ss 2
+
+115605 storm rain
+LI
+ wh 18092
+MI
+ ss 1
+
+115617 storm rain
+LI
+ wh 19231
+MI
+ ss 1
+
+115618 storm rain
+LI
+ wh 10975
+MI
+ ss 2
+
+115625 storm rain
+LI
+ wh 15105
+MI
+ ss 1
+
+115661 storm rain
+LI
+ wh 17486
+MI
+ ss 2
+
+115678 storm rain
+LI
+ wh 17505
+MI
+ ss 2
+
+115688 storm rain
+LI
+ wh 19927
+MI
+ ss 2
+
+115692 storm rain
+LI
+ wh 15887
+MI
+ ss 1
+
+115728 storm rain
+LI
+ wh 11062
+MI
+ ss 2
+
+115771 storm rain
+LI
+ wh 18497
+MI
+ ss 1
+
+115772 storm rain
+LI
+ wh 19038
+MI
+ ss 1
+
+115802 storm rain
+LI
+ wh 19330
+MI
+ ss 2
+
+115838 storm rain
+LI
+ wh 10736
+MI
+ ss 1
+
+115842 storm rain
+LI
+ wh 11850
+MI
+ ss 1
+
+115855 storm rain
+LI
+ wh 10769
+MI
+ ss 1
+
+115857 storm rain
+LI
+ wh 17353
+MI
+ ss 1
+
+115882 storm rain
+LI
+ wh 14480
+MI
+ ss 2
+
+115906 storm rain
+LI
+ wh 15912
+MI
+ ss 1
+
+115907 storm rain
+LI
+ wh 16180
+MI
+ ss 2
+
+115934 storm rain
+LI
+ wh 15300
+MI
+ ss 2
+
+115936 storm rain
+LI
+ wh 19311
+MI
+ ss 2
+
+115937 storm rain
+LI
+ wh 11741
+MI
+ ss 1
+
+115942 storm rain
+LI
+ wh 16454
+MI
+ ss 2
+
+115947 storm rain
+LI
+ wh 13832
+MI
+ ss 2
+
+115949 storm rain
+LI
+ wh 15712
+MI
+ ss 2
+
+115952 storm rain
+LI
+ wh 10852
+MI
+ ss 2
+
+115954 storm rain
+LI
+ wh 15016
+MI
+ ss 2
+
+116007 storm rain
+LI
+ wh 16850
+MI
+ ss 2
+
+116015 storm rain
+LI
+ wh 12867
+MI
+ ss 2
+
+116028 storm rain
+LI
+ wh 17398
+MI
+ ss 2
+
+116056 storm rain
+LI
+ wh 15536
+MI
+ ss 1
+
+116065 storm rain
+LI
+ wh 19449
+MI
+ ss 2
+
+116098 storm rain
+LI
+ wh 16141
+MI
+ ss 1
+
+116099 storm rain
+LI
+ wh 16667
+MI
+ ss 1
+
+116127 storm rain
+LI
+ wh 13482
+MI
+ ss 1
+
+116180 storm rain
+LI
+ wh 16089
+MI
+ ss 2
+
+116199 storm rain
+LI
+ wh 15295
+MI
+ ss 2
+
+116207 storm rain
+LI
+ wh 18914
+MI
+ ss 1
+
+116223 storm rain
+LI
+ wh 13210
+MI
+ ss 2
+
+116249 storm rain
+LI
+ wh 15625
+MI
+ ss 2
+
+116301 storm rain
+LI
+ wh 18131
+MI
+ ss 2
+
+116325 storm rain
+LI
+ wh 19042
+MI
+ ss 2
+
+116341 storm rain
+LI
+ wh 15364
+MI
+ ss 1
+
+116383 storm rain
+LI
+ wh 10785
+MI
+ ss 1
+
+116418 storm rain
+LI
+ wh 11840
+MI
+ ss 2
+
+116450 storm rain
+LI
+ wh 16684
+MI
+ ss 1
+
+116451 storm rain
+LI
+ wh 14933
+MI
+ ss 1
+
+116470 storm rain
+LI
+ wh 10773
+MI
+ ss 1
+
+116498 storm rain
+LI
+ wh 16575
+MI
+ ss 2
+
+116512 storm rain
+LI
+ wh 18314
+MI
+ ss 1
+
+116516 storm rain
+LI
+ wh 13163
+MI
+ ss 2
+
+116543 storm rain
+LI
+ wh 12900
+MI
+ ss 2
+
+116560 storm rain
+LI
+ wh 13321
+MI
+ ss 1
+
+116561 storm rain
+LI
+ wh 16277
+MI
+ ss 1
+
+116565 storm rain
+LI
+ wh 17544
+MI
+ ss 2
+
+116568 storm rain
+LI
+ wh 14538
+MI
+ ss 1
+
+116641 storm rain
+LI
+ wh 18669
+MI
+ ss 2
+
+116661 storm rain
+LI
+ wh 16789
+MI
+ ss 1
+
+116662 storm rain
+LI
+ wh 18571
+MI
+ ss 2
+
+116664 storm rain
+LI
+ wh 16100
+MI
+ ss 1
+
+116692 storm rain
+LI
+ wh 17332
+MI
+ ss 2
+
+116705 storm rain
+LI
+ wh 16981
+MI
+ ss 2
+
+116716 storm rain
+LI
+ wh 13195
+MI
+ ss 1
+
+116723 storm rain
+LI
+ wh 17844
+MI
+ ss 1
+
+116724 storm rain
+LI
+ wh 11292
+MI
+ ss 2
+
+116729 storm rain
+LI
+ wh 18978
+MI
+ ss 1
+
+116768 storm rain
+LI
+ wh 17282
+MI
+ ss 2
+
+116808 storm rain
+LI
+ wh 16567
+MI
+ ss 2
+
+116855 storm rain
+LI
+ wh 11060
+MI
+ ss 2
+
+116867 storm rain
+LI
+ wh 19368
+MI
+ ss 2
+
+116924 storm rain
+LI
+ wh 10717
+MI
+ ss 1
+
+116968 storm rain
+LI
+ wh 11360
+MI
+ ss 2
+
+116986 storm rain
+LI
+ wh 13131
+MI
+ ss 2
+
+116989 storm rain
+LI
+ wh 12423
+MI
+ ss 2
+
+117026 storm rain
+LI
+ wh 15859
+MI
+ ss 2
+
+117075 storm rain
+LI
+ wh 15514
+MI
+ ss 2
+
+117098 storm rain
+LI
+ wh 17451
+MI
+ ss 1
+
+117143 storm rain
+LI
+ wh 10126
+MI
+ ss 2
+
+117167 storm rain
+LI
+ wh 12011
+MI
+ ss 2
+
+117191 storm rain
+LI
+ wh 17659
+MI
+ ss 1
+
+117196 storm rain
+LI
+ wh 17034
+MI
+ ss 1
+
+117207 storm rain
+LI
+ wh 16925
+MI
+ ss 1
+
+117249 storm rain
+LI
+ wh 18787
+MI
+ ss 1
+
+117257 storm rain
+LI
+ wh 16861
+MI
+ ss 1
+
+117301 storm rain
+LI
+ wh 18226
+MI
+ ss 2
+
+117318 storm rain
+LI
+ wh 12098
+MI
+ ss 1
+
+117328 storm rain
+LI
+ wh 17233
+MI
+ ss 1
+
+117330 storm rain
+LI
+ wh 17972
+MI
+ ss 1
+
+117352 storm rain
+LI
+ wh 13963
+MI
+ ss 1
+
+117361 storm rain
+LI
+ wh 10207
+MI
+ ss 1
+
+117395 storm rain
+LI
+ wh 12627
+MI
+ ss 1
+
+117396 storm rain
+LI
+ wh 18558
+MI
+ ss 2
+
+117409 storm rain
+LI
+ wh 12250
+MI
+ ss 2
+
+117410 storm rain
+LI
+ wh 10908
+MI
+ ss 2
+
+117425 storm rain
+LI
+ wh 13744
+MI
+ ss 2
+
+117434 storm rain
+LI
+ wh 12292
+MI
+ ss 1
+
+117443 storm rain
+LI
+ wh 10680
+MI
+ ss 1
+
+117495 storm rain
+LI
+ wh 14343
+MI
+ ss 1
+
+117508 storm rain
+LI
+ wh 10390
+MI
+ ss 1
+
+117527 storm rain
+LI
+ wh 15201
+MI
+ ss 2
+
+117532 storm rain
+LI
+ wh 15306
+MI
+ ss 2
+
+117553 storm rain
+LI
+ wh 11736
+MI
+ ss 1
+
+117554 storm rain
+LI
+ wh 12382
+MI
+ ss 2
+
+117591 storm rain
+LI
+ wh 19181
+MI
+ ss 2
+
+117622 storm rain
+LI
+ wh 19498
+MI
+ ss 2
+
+117646 storm rain
+LI
+ wh 13715
+MI
+ ss 2
+
+117653 storm rain
+LI
+ wh 16548
+MI
+ ss 1
+
+117671 storm rain
+LI
+ wh 14120
+MI
+ ss 1
+
+117674 storm rain
+LI
+ wh 12021
+MI
+ ss 1
+
+117679 storm rain
+LI
+ wh 17724
+MI
+ ss 2
+
+117698 storm rain
+LI
+ wh 15257
+MI
+ ss 1
+
+117704 storm rain
+LI
+ wh 19160
+MI
+ ss 1
+
+117711 storm rain
+LI
+ wh 11868
+MI
+ ss 2
+
+117742 storm rain
+LI
+ wh 15816
+MI
+ ss 1
+
+117750 storm rain
+LI
+ wh 12952
+MI
+ ss 2
+
+117760 storm rain
+LI
+ wh 19528
+MI
+ ss 2
+
+117768 storm rain
+LI
+ wh 17427
+MI
+ ss 2
+
+117771 storm rain
+LI
+ wh 17615
+MI
+ ss 1
+
+117811 storm rain
+LI
+ wh 19706
+MI
+ ss 1
+
+117824 storm rain
+LI
+ wh 12046
+MI
+ ss 2
+
+117858 storm rain
+LI
+ wh 17104
+MI
+ ss 2
+
+117904 deadchar ni
+CH
+ ni 278
+ he -1
+ pr 1
+ at 60
+ df 60
+ po 2
+
+117905 storm rain
+LI
+ wh 14101
+MI
+ ss 2
+
+117913 storm rain
+LI
+ wh 13902
+MI
+ ss 1
+
+117920 storm rain
+LI
+ wh 19117
+MI
+ ss 2
+
+117945 storm rain
+LI
+ wh 18843
+MI
+ ss 1
+
+117965 storm rain
+LI
+ wh 18734
+MI
+ ss 2
+
+117969 storm rain
+LI
+ wh 12935
+MI
+ ss 2
+
+117973 storm rain
+LI
+ wh 10477
+MI
+ ss 2
+
+117974 storm rain
+LI
+ wh 18097
+MI
+ ss 2
+
+117995 storm rain
+LI
+ wh 13837
+MI
+ ss 2
+
+118011 storm rain
+LI
+ wh 13887
+MI
+ ss 1
+
+118017 storm rain
+LI
+ wh 17403
+MI
+ ss 2
+
+118054 storm rain
+LI
+ wh 14667
+MI
+ ss 2
+
+118056 storm rain
+LI
+ wh 12862
+MI
+ ss 1
+
+118072 storm rain
+LI
+ wh 10656
+MI
+ ss 1
+
+118095 storm rain
+LI
+ wh 12543
+MI
+ ss 2
+
+118117 storm rain
+LI
+ wh 11032
+MI
+ ss 2
+
+118128 storm rain
+LI
+ wh 14051
+MI
+ ss 2
+
+118162 storm rain
+LI
+ wh 19393
+MI
+ ss 1
+
+118191 storm rain
+LI
+ wh 14851
+MI
+ ss 2
+
+118195 storm rain
+LI
+ wh 19118
+MI
+ ss 1
+
+118208 storm rain
+LI
+ wh 13858
+MI
+ ss 2
+
+118214 storm rain
+LI
+ wh 13964
+MI
+ ss 1
+
+118226 storm rain
+LI
+ wh 10772
+MI
+ ss 1
+
+118248 storm rain
+LI
+ wh 11345
+MI
+ ss 1
+
+118249 storm rain
+LI
+ wh 13237
+MI
+ ss 2
+
+118262 storm rain
+LI
+ wh 17772
+MI
+ ss 2
+
+118298 storm rain
+LI
+ wh 15658
+MI
+ ss 2
+
+118319 storm rain
+LI
+ wh 13249
+MI
+ ss 2
+
+118326 storm rain
+LI
+ wh 13322
+MI
+ ss 2
+
+118341 storm rain
+LI
+ wh 10397
+MI
+ ss 1
+
+118434 storm rain
+LI
+ wh 10518
+MI
+ ss 1
+
+118448 storm rain
+LI
+ wh 10335
+MI
+ ss 1
+
+118482 storm rain
+LI
+ wh 11382
+MI
+ ss 2
+
+118508 storm rain
+LI
+ wh 15827
+MI
+ ss 2
+
+118534 storm rain
+LI
+ wh 18646
+MI
+ ss 1
+
+118535 storm rain
+LI
+ wh 12517
+MI
+ ss 2
+
+118558 storm rain
+LI
+ wh 18630
+MI
+ ss 2
+
+118560 storm rain
+LI
+ wh 11393
+MI
+ ss 1
+
+118567 storm rain
+LI
+ wh 11651
+MI
+ ss 2
+
+118586 storm rain
+LI
+ wh 13007
+MI
+ ss 2
+
+118602 storm rain
+LI
+ wh 18591
+MI
+ ss 2
+
+118607 storm rain
+LI
+ wh 11200
+MI
+ ss 2
+
+118608 storm rain
+LI
+ wh 15583
+MI
+ ss 1
+
+118615 storm rain
+LI
+ wh 12121
+MI
+ ss 1
+
+118662 storm rain
+LI
+ wh 17132
+MI
+ ss 2
+
+118707 storm rain
+LI
+ wh 13050
+MI
+ ss 2
+
+118719 storm rain
+LI
+ wh 15394
+MI
+ ss 1
+
+118798 storm rain
+LI
+ wh 14083
+MI
+ ss 2
+
+118817 storm rain
+LI
+ wh 11186
+MI
+ ss 1
+
+118840 storm rain
+LI
+ wh 12542
+MI
+ ss 1
+
+118845 storm rain
+LI
+ wh 13410
+MI
+ ss 1
+
+118858 storm rain
+LI
+ wh 18420
+MI
+ ss 1
+
+118874 storm rain
+LI
+ wh 11220
+MI
+ ss 2
+
+118891 storm rain
+LI
+ wh 19102
+MI
+ ss 1
+
+118899 storm rain
+LI
+ wh 16282
+MI
+ ss 2
+
+118952 storm rain
+LI
+ wh 11298
+MI
+ ss 1
+
+118997 storm rain
+LI
+ wh 19248
+MI
+ ss 1
+
+118999 deadchar ni
+CH
+ ni 292
+ he -1
+ pr 1
+ at 60
+ df 60
+ po 2
+
+119005 storm rain
+LI
+ wh 13705
+MI
+ ss 2
+
+119008 storm rain
+LI
+ wh 10932
+MI
+ ss 1
+
+119010 storm rain
+LI
+ wh 10724
+MI
+ ss 2
+
+119011 storm rain
+LI
+ wh 19862
+MI
+ ss 1
+
+119016 storm rain
+LI
+ wh 18459
+MI
+ ss 2
+
+119049 storm rain
+LI
+ wh 11872
+MI
+ ss 1
+
+119125 storm rain
+LI
+ wh 17558
+MI
+ ss 1
+
+119152 storm rain
+LI
+ wh 17437
+MI
+ ss 2
+
+119158 storm rain
+LI
+ wh 14474
+MI
+ ss 1
+
+119162 storm rain
+LI
+ wh 14106
+MI
+ ss 1
+
+119216 storm rain
+LI
+ wh 17766
+MI
+ ss 2
+
+119218 storm rain
+LI
+ wh 19080
+MI
+ ss 1
+
+119235 storm rain
+LI
+ wh 11644
+MI
+ ss 2
+
+119248 storm rain
+LI
+ wh 16078
+MI
+ ss 1
+
+119281 storm rain
+LI
+ wh 17072
+MI
+ ss 1
+
+119293 storm rain
+LI
+ wh 15146
+MI
+ ss 2
+
+119301 storm rain
+LI
+ wh 17887
+MI
+ ss 1
+
+119324 storm rain
+LI
+ wh 12669
+MI
+ ss 2
+
+119339 storm rain
+LI
+ wh 14588
+MI
+ ss 1
+
+119363 storm rain
+LI
+ wh 14659
+MI
+ ss 1
+
+119412 storm rain
+LI
+ wh 15413
+MI
+ ss 1
+
+119429 storm rain
+LI
+ wh 18853
+MI
+ ss 1
+
+119431 storm rain
+LI
+ wh 11157
+MI
+ ss 2
+
+119436 storm rain
+LI
+ wh 13529
+MI
+ ss 2
+
+119439 storm rain
+LI
+ wh 12232
+MI
+ ss 2
+
+119440 storm rain
+LI
+ wh 16120
+MI
+ ss 1
+
+119446 storm rain
+LI
+ wh 12780
+MI
+ ss 1
+
+119456 storm rain
+LI
+ wh 16346
+MI
+ ss 1
+
+119490 storm rain
+LI
+ wh 13813
+MI
+ ss 2
+
+119498 storm rain
+LI
+ wh 18007
+MI
+ ss 2
+
+119524 storm rain
+LI
+ wh 13345
+MI
+ ss 2
+
+119525 storm rain
+LI
+ wh 12703
+MI
+ ss 1
+
+119542 storm rain
+LI
+ wh 12594
+MI
+ ss 2
+
+119574 storm rain
+LI
+ wh 13231
+MI
+ ss 2
+
+119592 storm rain
+LI
+ wh 10228
+MI
+ ss 1
+
+119600 storm rain
+LI
+ wh 13048
+MI
+ ss 2
+
+119621 storm rain
+LI
+ wh 10662
+MI
+ ss 2
+
+119632 storm rain
+LI
+ wh 12506
+MI
+ ss 1
+
+119639 storm rain
+LI
+ wh 16106
+MI
+ ss 2
+
+119646 storm rain
+LI
+ wh 17439
+MI
+ ss 1
+
+119652 storm rain
+LI
+ wh 11948
+MI
+ ss 2
+
+119692 storm rain
+LI
+ wh 10099
+MI
+ ss 1
+
+119720 storm rain
+LI
+ wh 11359
+MI
+ ss 1
+
+119749 storm rain
+LI
+ wh 19496
+MI
+ ss 2
+
+119751 storm rain
+LI
+ wh 10812
+MI
+ ss 1
+
+119800 storm rain
+LI
+ wh 18889
+MI
+ ss 2
+
+119803 storm rain
+LI
+ wh 12716
+MI
+ ss 1
+
+119814 storm rain
+LI
+ wh 11589
+MI
+ ss 1
+
+119834 storm rain
+LI
+ wh 11107
+MI
+ ss 2
+
+119845 storm rain
+LI
+ wh 17913
+MI
+ ss 1
+
+119864 storm rain
+LI
+ wh 14912
+MI
+ ss 1
+
+119910 storm wind
+na 100
+LI
+ wh 12815
+MI
+ sb 5490
+ mc 255
+ ss 414
+ mh 12815
+ co 275
+
+119947 storm rain
+LI
+ wh 16738
+MI
+ ss 2
+
+120016 storm rain
+LI
+ wh 19185
+MI
+ ss 2
+
+120028 storm rain
+LI
+ wh 16103
+MI
+ ss 1
+
+120031 storm rain
+LI
+ wh 12779
+MI
+ ss 2
+
+120052 storm rain
+LI
+ wh 17812
+MI
+ ss 2
+
+120085 storm rain
+LI
+ wh 18736
+MI
+ ss 1
+
+120091 storm rain
+LI
+ wh 18261
+MI
+ ss 1
+
+120100 storm rain
+LI
+ wh 16112
+MI
+ ss 2
+
+120108 storm rain
+LI
+ wh 10077
+MI
+ ss 2
+
+120117 storm rain
+LI
+ wh 16616
+MI
+ ss 1
+
+120125 storm rain
+LI
+ wh 11081
+MI
+ ss 2
+
+120177 storm rain
+LI
+ wh 10260
+MI
+ ss 1
+
+120223 storm rain
+LI
+ wh 10586
+MI
+ ss 1
+
+120231 storm rain
+LI
+ wh 15333
+MI
+ ss 2
+
+120299 storm rain
+LI
+ wh 18801
+MI
+ ss 2
+
+120305 storm rain
+LI
+ wh 13043
+MI
+ ss 2
+
+120317 storm rain
+LI
+ wh 17116
+MI
+ ss 1
+
+120345 storm rain
+LI
+ wh 14122
+MI
+ ss 1
+
+120385 storm rain
+LI
+ wh 12767
+MI
+ ss 1
+
+120396 storm rain
+LI
+ wh 14167
+MI
+ ss 2
+
+120405 storm rain
+LI
+ wh 16964
+MI
+ ss 2
+
+120406 storm rain
+LI
+ wh 14927
+MI
+ ss 2
+
+120408 storm rain
+LI
+ wh 16268
+MI
+ ss 1
+
+120422 storm rain
+LI
+ wh 10753
+MI
+ ss 2
+
+120450 storm rain
+LI
+ wh 14028
+MI
+ ss 2
+
+120451 storm rain
+LI
+ wh 14918
+MI
+ ss 2
+
+120458 storm rain
+LI
+ wh 16191
+MI
+ ss 1
+
+120474 storm rain
+LI
+ wh 18688
+MI
+ ss 1
+
+120477 storm rain
+LI
+ wh 14785
+MI
+ ss 1
+
+120488 storm rain
+LI
+ wh 15906
+MI
+ ss 2
+
+120492 storm rain
+LI
+ wh 15081
+MI
+ ss 1
+
+120499 storm rain
+LI
+ wh 11747
+MI
+ ss 2
+
+120502 storm rain
+LI
+ wh 12018
+MI
+ ss 1
+
+120534 storm rain
+LI
+ wh 10917
+MI
+ ss 1
+
+120540 storm rain
+LI
+ wh 12328
+MI
+ ss 2
+
+120546 storm rain
+LI
+ wh 11091
+MI
+ ss 2
+
+120570 storm rain
+LI
+ wh 12946
+MI
+ ss 2
+
+120580 storm rain
+LI
+ wh 19455
+MI
+ ss 2
+
+120590 storm rain
+LI
+ wh 16816
+MI
+ ss 1
+
+120609 storm rain
+LI
+ wh 18227
+MI
+ ss 1
+
+120610 storm rain
+LI
+ wh 11722
+MI
+ ss 1
+
+120620 deadchar 0
+CH
+ ni 32
+ he 64
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+120674 storm rain
+LI
+ wh 12821
+MI
+ ss 1
+
+120681 storm rain
+LI
+ wh 15732
+MI
+ ss 2
+
+120693 storm rain
+LI
+ wh 13414
+MI
+ ss 1
+
+120726 storm rain
+LI
+ wh 11617
+MI
+ ss 1
+
+120755 storm rain
+LI
+ wh 11003
+MI
+ ss 2
+
+120761 storm rain
+LI
+ wh 14552
+MI
+ ss 1
+
+120796 storm rain
+LI
+ wh 16073
+MI
+ ss 2
+
+120804 storm rain
+LI
+ wh 19222
+MI
+ ss 1
+
+120812 storm rain
+LI
+ wh 12373
+MI
+ ss 2
+
+120864 storm rain
+LI
+ wh 11424
+MI
+ ss 2
+
+120884 storm rain
+LI
+ wh 10247
+MI
+ ss 2
+
+120913 storm rain
+LI
+ wh 14264
+MI
+ ss 2
+
+120921 storm rain
+LI
+ wh 13597
+MI
+ ss 1
+
+120930 storm rain
+LI
+ wh 12051
+MI
+ ss 2
+
+120932 storm rain
+LI
+ wh 17628
+MI
+ ss 2
+
+120941 storm rain
+LI
+ wh 17242
+MI
+ ss 1
+
+120960 storm rain
+LI
+ wh 13755
+MI
+ ss 2
+
+120961 storm rain
+LI
+ wh 11405
+MI
+ ss 1
+
+120979 storm rain
+LI
+ wh 13817
+MI
+ ss 1
+
+120986 storm rain
+LI
+ wh 19609
+MI
+ ss 1
+
+120996 storm rain
+LI
+ wh 18588
+MI
+ ss 1
+
+120998 storm rain
+LI
+ wh 14158
+MI
+ ss 2
+
+121009 storm rain
+LI
+ wh 11307
+MI
+ ss 1
+
+121032 storm rain
+LI
+ wh 18717
+MI
+ ss 1
+
+121043 storm rain
+LI
+ wh 13397
+MI
+ ss 2
+
+121045 storm rain
+LI
+ wh 13076
+MI
+ ss 1
+
+121052 storm rain
+LI
+ wh 13178
+MI
+ ss 1
+
+121059 storm rain
+LI
+ wh 10313
+MI
+ ss 1
+
+121068 storm rain
+LI
+ wh 14383
+MI
+ ss 2
+
+121069 storm rain
+LI
+ wh 18003
+MI
+ ss 1
+
+121072 storm rain
+LI
+ wh 19154
+MI
+ ss 1
+
+121078 storm rain
+LI
+ wh 13796
+MI
+ ss 2
+
+121102 storm rain
+LI
+ wh 18520
+MI
+ ss 1
+
+121120 storm rain
+LI
+ wh 12800
+MI
+ ss 2
+
+121123 storm rain
+LI
+ wh 10491
+MI
+ ss 1
+
+121125 storm rain
+LI
+ wh 16279
+MI
+ ss 1
+
+121142 storm rain
+LI
+ wh 17249
+MI
+ ss 2
+
+121162 storm rain
+LI
+ wh 13847
+MI
+ ss 2
+
+121175 storm rain
+LI
+ wh 16583
+MI
+ ss 2
+
+121198 storm rain
+LI
+ wh 18798
+MI
+ ss 1
+
+121216 storm rain
+LI
+ wh 19332
+MI
+ ss 1
+
+121233 storm rain
+LI
+ wh 10398
+MI
+ ss 1
+
+121235 storm rain
+LI
+ wh 15674
+MI
+ ss 1
+
+121248 storm rain
+LI
+ wh 19076
+MI
+ ss 2
+
+121262 storm rain
+LI
+ wh 18676
+MI
+ ss 1
+
+121263 storm rain
+LI
+ wh 19387
+MI
+ ss 2
+
+121272 storm rain
+LI
+ wh 17783
+MI
+ ss 1
+
+121280 storm rain
+LI
+ wh 11820
+MI
+ ss 2
+
+121286 storm rain
+LI
+ wh 13417
+MI
+ ss 2
+
+121307 storm rain
+LI
+ wh 14394
+MI
+ ss 1
+
+121314 storm rain
+LI
+ wh 19287
+MI
+ ss 1
+
+121376 storm rain
+LI
+ wh 11995
+MI
+ ss 1
+
+121385 storm rain
+LI
+ wh 15592
+MI
+ ss 2
+
+121393 storm rain
+LI
+ wh 10091
+MI
+ ss 1
+
+121394 storm rain
+LI
+ wh 11421
+MI
+ ss 2
+
+121402 storm rain
+LI
+ wh 19929
+MI
+ ss 2
+
+121409 storm rain
+LI
+ wh 18199
+MI
+ ss 1
+
+121418 storm rain
+LI
+ wh 10691
+MI
+ ss 1
+
+121448 storm rain
+LI
+ wh 15070
+MI
+ ss 1
+
+121459 storm rain
+LI
+ wh 10177
+MI
+ ss 2
+
+121493 storm rain
+LI
+ wh 16985
+MI
+ ss 2
+
+121537 storm rain
+LI
+ wh 17895
+MI
+ ss 2
+
+121571 storm rain
+LI
+ wh 15993
+MI
+ ss 2
+
+121581 storm rain
+LI
+ wh 10516
+MI
+ ss 2
+
+121615 storm rain
+LI
+ wh 12035
+MI
+ ss 1
+
+121673 storm rain
+LI
+ wh 17461
+MI
+ ss 1
+
+121684 storm rain
+LI
+ wh 10607
+MI
+ ss 2
+
+121689 storm rain
+LI
+ wh 10217
+MI
+ ss 2
+
+121690 storm rain
+LI
+ wh 12158
+MI
+ ss 2
+
+121728 storm rain
+LI
+ wh 10461
+MI
+ ss 1
+
+121739 storm rain
+LI
+ wh 18395
+MI
+ ss 2
+
+121770 storm rain
+LI
+ wh 15098
+MI
+ ss 2
+
+121789 storm rain
+LI
+ wh 18578
+MI
+ ss 1
+
+121790 storm rain
+LI
+ wh 11594
+MI
+ ss 2
+
+121791 storm rain
+LI
+ wh 10498
+MI
+ ss 1
+
+121810 storm rain
+LI
+ wh 14007
+MI
+ ss 2
+
+121838 storm rain
+LI
+ wh 13654
+MI
+ ss 1
+
+121856 storm rain
+LI
+ wh 16322
+MI
+ ss 1
+
+121869 storm rain
+LI
+ wh 12293
+MI
+ ss 1
+
+121874 storm rain
+LI
+ wh 16217
+MI
+ ss 2
+
+121910 storm rain
+LI
+ wh 16327
+MI
+ ss 1
+
+121926 storm rain
+LI
+ wh 12140
+MI
+ ss 1
+
+121932 storm rain
+LI
+ wh 11302
+MI
+ ss 1
+
+121934 storm rain
+LI
+ wh 12116
+MI
+ ss 1
+
+121943 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 22 7792
+CO
+ li attack m931
+ ar 68931 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+121947 storm rain
+LI
+ wh 19023
+MI
+ ss 1
+
+121952 storm rain
+LI
+ wh 19984
+MI
+ ss 2
+
+122044 storm rain
+LI
+ wh 13393
+MI
+ ss 2
+
+122086 storm rain
+LI
+ wh 14044
+MI
+ ss 2
+
+122091 storm rain
+LI
+ wh 14413
+MI
+ ss 1
+
+122097 storm rain
+LI
+ wh 14914
+MI
+ ss 1
+
+122110 storm rain
+LI
+ wh 10449
+MI
+ ss 1
+
+122139 storm rain
+LI
+ wh 12000
+MI
+ ss 2
+
+122184 storm rain
+LI
+ wh 12945
+MI
+ ss 1
+
+122189 storm rain
+LI
+ wh 11019
+MI
+ ss 1
+
+122238 storm rain
+LI
+ wh 17770
+MI
+ ss 2
+
+122281 storm rain
+LI
+ wh 12922
+MI
+ ss 1
+
+122313 storm rain
+LI
+ wh 18705
+MI
+ ss 1
+
+122315 storm rain
+LI
+ wh 13956
+MI
+ ss 2
+
+122323 storm rain
+LI
+ wh 18554
+MI
+ ss 2
+
+122390 storm rain
+LI
+ wh 13146
+MI
+ ss 1
+
+122398 storm rain
+LI
+ wh 14434
+MI
+ ss 1
+
+122449 storm rain
+LI
+ wh 13367
+MI
+ ss 2
+
+122456 storm rain
+LI
+ wh 12313
+MI
+ ss 2
+
+122457 storm rain
+LI
+ wh 14425
+MI
+ ss 1
+
+122462 storm rain
+LI
+ wh 19365
+MI
+ ss 1
+
+122469 storm rain
+LI
+ wh 14156
+MI
+ ss 1
+
+122485 storm rain
+LI
+ wh 13668
+MI
+ ss 2
+
+122506 storm rain
+LI
+ wh 12540
+MI
+ ss 2
+
+122527 storm rain
+LI
+ wh 16186
+MI
+ ss 1
+
+122529 storm rain
+LI
+ wh 16744
+MI
+ ss 2
+
+122530 storm rain
+LI
+ wh 14631
+MI
+ ss 1
+
+122533 storm rain
+LI
+ wh 12466
+MI
+ ss 1
+
+122537 storm rain
+LI
+ wh 19149
+MI
+ ss 2
+
+122591 storm rain
+LI
+ wh 18772
+MI
+ ss 1
+
+122622 storm rain
+LI
+ wh 13183
+MI
+ ss 1
+
+122651 storm rain
+LI
+ wh 17828
+MI
+ ss 2
+
+122689 storm rain
+LI
+ wh 10778
+MI
+ ss 1
+
+122700 storm rain
+LI
+ wh 10173
+MI
+ ss 2
+
+122729 storm rain
+LI
+ wh 16119
+MI
+ ss 1
+
+122736 storm rain
+LI
+ wh 18398
+MI
+ ss 1
+
+122772 storm rain
+LI
+ wh 19317
+MI
+ ss 2
+
+122863 storm wind
+na Death Mist
+LI
+ wh 14648
+MI
+ sb 74720
+ mc 245
+ ss 14
+ mh 14547
+ co 275
+
+122875 storm rain
+LI
+ wh 12471
+MI
+ ss 1
+
+122884 storm rain
+LI
+ wh 10453
+MI
+ ss 1
+
+122898 storm rain
+LI
+ wh 16198
+MI
+ ss 2
+
+122919 storm rain
+LI
+ wh 10721
+MI
+ ss 2
+
+122926 storm rain
+LI
+ wh 19541
+MI
+ ss 2
+
+122934 storm rain
+LI
+ wh 13460
+MI
+ ss 2
+
+122971 storm rain
+LI
+ wh 12807
+MI
+ ss 1
+
+123000 deadchar 0
+CH
+ ni 32
+ he 73
+ lk 4
+ at 60
+ df 60
+ dt 260 8 7778
+CO
+ li attack t783
+ ar 74783 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+123078 storm rain
+LI
+ wh 11287
+MI
+ ss 2
+
+123128 storm rain
+LI
+ wh 18911
+MI
+ ss 2
+
+123202 storm rain
+LI
+ wh 11172
+MI
+ ss 1
+
+123204 storm rain
+LI
+ wh 13074
+MI
+ ss 2
+
+123211 storm rain
+LI
+ wh 16409
+MI
+ ss 1
+
+123212 storm rain
+LI
+ wh 14251
+MI
+ ss 1
+
+123227 storm rain
+LI
+ wh 19272
+MI
+ ss 1
+
+123242 storm rain
+LI
+ wh 12105
+MI
+ ss 2
+
+123259 storm rain
+LI
+ wh 14455
+MI
+ ss 2
+
+123277 storm rain
+LI
+ wh 18643
+MI
+ ss 2
+
+123304 storm rain
+LI
+ wh 11057
+MI
+ ss 1
+
+123305 storm rain
+LI
+ wh 12465
+MI
+ ss 2
+
+123307 storm rain
+LI
+ wh 18579
+MI
+ ss 2
+
+123316 storm rain
+na Hellion
+LI
+ wh 14648
+MI
+ sb 113562
+ mc 238
+ ss 35
+ mh 14651
+ co 276
+
+123330 storm rain
+LI
+ wh 18954
+MI
+ ss 2
+
+123336 storm rain
+LI
+ wh 18865
+MI
+ ss 2
+
+123347 storm rain
+LI
+ wh 11317
+MI
+ ss 1
+
+123365 storm rain
+LI
+ wh 17458
+MI
+ ss 2
+
+123384 storm rain
+LI
+ wh 11952
+MI
+ ss 1
+
+123406 storm rain
+LI
+ wh 11074
+MI
+ ss 2
+
+123413 storm rain
+LI
+ wh 11140
+MI
+ ss 1
+
+123507 storm rain
+LI
+ wh 12930
+MI
+ ss 1
+
+123514 storm rain
+LI
+ wh 18935
+MI
+ ss 1
+
+123545 storm rain
+LI
+ wh 12608
+MI
+ ss 2
+
+123551 storm rain
+LI
+ wh 12920
+MI
+ ss 2
+
+123555 storm rain
+LI
+ wh 15055
+MI
+ ss 1
+
+123569 storm rain
+LI
+ wh 13566
+MI
+ ss 2
+
+123585 storm rain
+LI
+ wh 11014
+MI
+ ss 1
+
+123586 storm rain
+LI
+ wh 16312
+MI
+ ss 2
+
+123610 storm rain
+LI
+ wh 18276
+MI
+ ss 2
+
+123632 storm rain
+LI
+ wh 19961
+MI
+ ss 1
+
+123648 storm rain
+LI
+ wh 17359
+MI
+ ss 1
+
+123649 storm rain
+LI
+ wh 14614
+MI
+ ss 2
+
+123650 storm rain
+LI
+ wh 17310
+MI
+ ss 2
+
+123651 storm rain
+LI
+ wh 17762
+MI
+ ss 2
+
+123663 storm rain
+LI
+ wh 13538
+MI
+ ss 2
+
+123667 storm rain
+LI
+ wh 14968
+MI
+ ss 1
+
+123673 storm rain
+LI
+ wh 15113
+MI
+ ss 1
+
+123682 storm rain
+LI
+ wh 14776
+MI
+ ss 2
+
+123684 storm rain
+LI
+ wh 11683
+MI
+ ss 1
+
+123687 storm rain
+LI
+ wh 15344
+MI
+ ss 2
+
+123724 storm rain
+LI
+ wh 11253
+MI
+ ss 1
+
+123744 storm rain
+LI
+ wh 19930
+MI
+ ss 1
+
+123748 storm rain
+LI
+ wh 15406
+MI
+ ss 1
+
+123754 storm rain
+LI
+ wh 18927
+MI
+ ss 1
+
+123755 storm rain
+LI
+ wh 15632
+MI
+ ss 2
+
+123784 storm rain
+LI
+ wh 11381
+MI
+ ss 1
+
+123802 storm rain
+LI
+ wh 10307
+MI
+ ss 1
+
+123809 storm rain
+LI
+ wh 14891
+MI
+ ss 2
+
+123810 storm rain
+LI
+ wh 12581
+MI
+ ss 1
+
+123813 storm rain
+LI
+ wh 11582
+MI
+ ss 2
+
+123850 storm rain
+LI
+ wh 13103
+MI
+ ss 1
+
+123854 storm rain
+LI
+ wh 12897
+MI
+ ss 1
+
+123873 storm rain
+LI
+ wh 19378
+MI
+ ss 2
+
+123877 storm rain
+LI
+ wh 12368
+MI
+ ss 1
+
+123882 storm rain
+LI
+ wh 17693
+MI
+ ss 1
+
+123884 storm rain
+LI
+ wh 15223
+MI
+ ss 2
+
+123911 storm rain
+LI
+ wh 11512
+MI
+ ss 2
+
+123957 storm rain
+LI
+ wh 12073
+MI
+ ss 1
+
+123958 storm rain
+LI
+ wh 15052
+MI
+ ss 2
+
+123977 storm rain
+LI
+ wh 19822
+MI
+ ss 1
+
+123993 storm rain
+LI
+ wh 14995
+MI
+ ss 1
+
+124005 storm rain
+LI
+ wh 12100
+MI
+ ss 2
+
+124006 storm rain
+LI
+ wh 17426
+MI
+ ss 2
+
+124007 storm rain
+LI
+ wh 13010
+MI
+ ss 2
+
+124008 storm rain
+LI
+ wh 13812
+MI
+ ss 2
+
+124019 storm rain
+LI
+ wh 12277
+MI
+ ss 1
+
+124021 storm rain
+LI
+ wh 19932
+MI
+ ss 1
+
+124022 storm rain
+LI
+ wh 18505
+MI
+ ss 1
+
+124048 storm rain
+LI
+ wh 13415
+MI
+ ss 1
+
+124049 storm rain
+LI
+ wh 15192
+MI
+ ss 2
+
+124058 storm rain
+LI
+ wh 19782
+MI
+ ss 2
+
+124064 storm rain
+LI
+ wh 19401
+MI
+ ss 2
+
+124083 storm rain
+LI
+ wh 18429
+MI
+ ss 2
+
+124112 storm rain
+LI
+ wh 19342
+MI
+ ss 1
+
+124173 storm rain
+LI
+ wh 11680
+MI
+ ss 1
+
+124185 storm rain
+LI
+ wh 15219
+MI
+ ss 1
+
+124193 storm rain
+LI
+ wh 18277
+MI
+ ss 1
+
+124221 storm rain
+LI
+ wh 15422
+MI
+ ss 2
+
+124233 storm rain
+LI
+ wh 10024
+MI
+ ss 1
+
+124237 storm rain
+LI
+ wh 13405
+MI
+ ss 1
+
+124251 storm rain
+LI
+ wh 19969
+MI
+ ss 1
+
+124284 storm rain
+LI
+ wh 12642
+MI
+ ss 1
+
+124290 storm rain
+LI
+ wh 12882
+MI
+ ss 2
+
+124336 storm rain
+LI
+ wh 11959
+MI
+ ss 2
+
+124348 storm rain
+LI
+ wh 15731
+MI
+ ss 1
+
+124350 storm rain
+LI
+ wh 11454
+MI
+ ss 2
+
+124364 storm rain
+LI
+ wh 10153
+MI
+ ss 1
+
+124368 storm rain
+LI
+ wh 18788
+MI
+ ss 2
+
+124369 storm rain
+LI
+ wh 10291
+MI
+ ss 2
+
+124370 storm rain
+LI
+ wh 17556
+MI
+ ss 1
+
+124379 storm rain
+LI
+ wh 13493
+MI
+ ss 2
+
+124385 storm rain
+LI
+ wh 14819
+MI
+ ss 1
+
+124390 storm rain
+LI
+ wh 15109
+MI
+ ss 2
+
+124413 storm rain
+LI
+ wh 10190
+MI
+ ss 1
+
+124431 storm rain
+LI
+ wh 12064
+MI
+ ss 1
+
+124442 storm rain
+LI
+ wh 12115
+MI
+ ss 1
+
+124461 storm rain
+LI
+ wh 15325
+MI
+ ss 1
+
+124479 storm rain
+LI
+ wh 19673
+MI
+ ss 1
+
+124532 storm rain
+LI
+ wh 14027
+MI
+ ss 2
+
+124535 storm rain
+LI
+ wh 12948
+MI
+ ss 1
+
+124554 storm rain
+LI
+ wh 16414
+MI
+ ss 2
+
+124561 storm rain
+LI
+ wh 13444
+MI
+ ss 1
+
+124587 storm rain
+LI
+ wh 16649
+MI
+ ss 1
+
+124627 storm rain
+LI
+ wh 10655
+MI
+ ss 1
+
+124651 storm rain
+LI
+ wh 14619
+MI
+ ss 2
+
+124684 storm rain
+LI
+ wh 16602
+MI
+ ss 1
+
+124685 storm rain
+LI
+ wh 16646
+MI
+ ss 2
+
+124718 storm rain
+LI
+ wh 12436
+MI
+ ss 1
+
+124777 storm rain
+LI
+ wh 19010
+MI
+ ss 2
+
+124798 storm rain
+LI
+ wh 15432
+MI
+ ss 1
+
+124801 storm rain
+LI
+ wh 15739
+MI
+ ss 1
+
+124826 storm rain
+LI
+ wh 14656
+MI
+ ss 1
+
+124846 storm rain
+LI
+ wh 17369
+MI
+ ss 1
+
+124847 storm rain
+LI
+ wh 11478
+MI
+ ss 1
+
+124898 storm rain
+LI
+ wh 16039
+MI
+ ss 1
+
+124899 storm rain
+LI
+ wh 13563
+MI
+ ss 1
+
+124913 storm rain
+LI
+ wh 11129
+MI
+ ss 2
+
+124916 storm rain
+LI
+ wh 11616
+MI
+ ss 2
+
+124924 storm rain
+LI
+ wh 14356
+MI
+ ss 1
+
+124932 storm rain
+LI
+ wh 10946
+MI
+ ss 1
+
+124938 storm rain
+LI
+ wh 12334
+MI
+ ss 2
+
+124956 storm rain
+LI
+ wh 11943
+MI
+ ss 2
+
+124960 storm rain
+LI
+ wh 14086
+MI
+ ss 1
+
+124988 storm rain
+LI
+ wh 10378
+MI
+ ss 2
+
+125001 storm rain
+LI
+ wh 18014
+MI
+ ss 2
+
+125003 storm rain
+LI
+ wh 13264
+MI
+ ss 2
+
+125015 storm rain
+LI
+ wh 16637
+MI
+ ss 2
+
+125038 storm rain
+LI
+ wh 19995
+MI
+ ss 2
+
+125050 storm rain
+LI
+ wh 10596
+MI
+ ss 2
+
+125052 storm rain
+LI
+ wh 12637
+MI
+ ss 2
+
+125057 storm rain
+LI
+ wh 18028
+MI
+ ss 2
+
+125061 storm rain
+LI
+ wh 17678
+MI
+ ss 1
+
+125094 storm rain
+LI
+ wh 12539
+MI
+ ss 2
+
+125096 storm rain
+LI
+ wh 10971
+MI
+ ss 2
+
+125098 storm rain
+LI
+ wh 15746
+MI
+ ss 1
+
+125105 storm rain
+LI
+ wh 12820
+MI
+ ss 2
+
+125138 storm rain
+LI
+ wh 19985
+MI
+ ss 1
+
+125153 storm rain
+LI
+ wh 13337
+MI
+ ss 1
+
+125175 storm rain
+LI
+ wh 18864
+MI
+ ss 1
+
+125194 storm rain
+LI
+ wh 16445
+MI
+ ss 2
+
+125201 storm rain
+LI
+ wh 15800
+MI
+ ss 2
+
+125210 storm rain
+LI
+ wh 12332
+MI
+ ss 1
+
+125236 storm rain
+LI
+ wh 15505
+MI
+ ss 2
+
+125271 storm rain
+LI
+ wh 10945
+MI
+ ss 1
+
+125305 storm rain
+LI
+ wh 10820
+MI
+ ss 2
+
+125311 storm rain
+LI
+ wh 14153
+MI
+ ss 1
+
+125331 storm rain
+LI
+ wh 17014
+MI
+ ss 1
+
+125354 storm rain
+LI
+ wh 18528
+MI
+ ss 2
+
+125409 storm rain
+LI
+ wh 17409
+MI
+ ss 1
+
+125412 storm rain
+LI
+ wh 12636
+MI
+ ss 2
+
+125413 storm rain
+LI
+ wh 13691
+MI
+ ss 1
+
+125417 storm rain
+LI
+ wh 18995
+MI
+ ss 2
+
+125418 storm rain
+LI
+ wh 11063
+MI
+ ss 1
+
+125429 storm rain
+LI
+ wh 16521
+MI
+ ss 1
+
+125444 storm rain
+LI
+ wh 11482
+MI
+ ss 1
+
+125456 storm rain
+LI
+ wh 17651
+MI
+ ss 1
+
+125465 storm rain
+LI
+ wh 10079
+MI
+ ss 1
+
+125473 storm rain
+LI
+ wh 19351
+MI
+ ss 2
+
+125490 storm rain
+LI
+ wh 17226
+MI
+ ss 2
+
+125491 storm rain
+LI
+ wh 13084
+MI
+ ss 1
+
+125497 storm rain
+LI
+ wh 14089
+MI
+ ss 2
+
+125521 storm rain
+LI
+ wh 17758
+MI
+ ss 1
+
+125546 storm rain
+LI
+ wh 10632
+MI
+ ss 1
+
+125549 storm rain
+LI
+ wh 12101
+MI
+ ss 2
+
+125570 storm rain
+LI
+ wh 14520
+MI
+ ss 2
+
+125574 deadchar 0
+CH
+ he -1
+ lk 4
+ at 60
+ df 60
+ dt 260 12 7782
+MI
+ ca g
+
+125582 deadchar 0
+CH
+ ni 291
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 23 7793
+
+125588 storm rain
+LI
+ wh 19567
+MI
+ ss 1
+
+125595 storm rain
+LI
+ wh 11094
+MI
+ ss 1
+
+125607 storm rain
+LI
+ wh 17970
+MI
+ ss 1
+
+125647 storm rain
+LI
+ wh 19682
+MI
+ ss 2
+
+125648 storm rain
+LI
+ wh 11117
+MI
+ ss 2
+
+125681 storm rain
+LI
+ wh 15372
+MI
+ ss 1
+
+125682 storm rain
+LI
+ wh 15649
+MI
+ ss 2
+
+125686 storm rain
+LI
+ wh 13136
+MI
+ ss 1
+
+125690 storm rain
+LI
+ wh 10197
+MI
+ ss 1
+
+125697 storm rain
+LI
+ wh 17791
+MI
+ ss 2
+
+125703 storm rain
+LI
+ wh 13214
+MI
+ ss 2
+
+125719 storm rain
+LI
+ wh 17019
+MI
+ ss 1
+
+125723 storm rain
+LI
+ wh 15331
+MI
+ ss 2
+
+125727 storm rain
+LI
+ wh 14075
+MI
+ ss 2
+
+125729 storm rain
+LI
+ wh 14414
+MI
+ ss 2
+
+125756 storm rain
+LI
+ wh 13116
+MI
+ ss 2
+
+125800 storm rain
+LI
+ wh 12750
+MI
+ ss 1
+
+125801 storm rain
+LI
+ wh 19004
+MI
+ ss 2
+
+125803 storm rain
+LI
+ wh 12206
+MI
+ ss 2
+
+125806 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 21 7791
+CO
+ li attack g129
+ ar 64129 0 0 0 0 0 0 0
+ st 1
+ de 1
+ pr 3
+
+125819 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+125827 storm rain
+LI
+ wh 12978
+MI
+ ss 2
+
+125867 storm rain
+LI
+ wh 11018
+MI
+ ss 1
+
+125870 storm rain
+LI
+ wh 17880
+MI
+ ss 1
+
+125871 storm rain
+LI
+ wh 13978
+MI
+ ss 2
+
+125872 storm rain
+LI
+ wh 10598
+MI
+ ss 1
+
+125877 storm rain
+LI
+ wh 13473
+MI
+ ss 1
+
+125897 storm rain
+LI
+ wh 13579
+MI
+ ss 1
+
+125922 storm rain
+LI
+ wh 16828
+MI
+ ss 1
+
+125934 storm rain
+LI
+ wh 16676
+MI
+ ss 2
+
+125936 storm rain
+LI
+ wh 10572
+MI
+ ss 1
+
+125970 storm rain
+LI
+ wh 13594
+MI
+ ss 1
+
+125975 storm rain
+LI
+ wh 10888
+MI
+ ss 1
+
+125984 storm rain
+LI
+ wh 12398
+MI
+ ss 1
+
+126053 storm rain
+LI
+ wh 14498
+MI
+ ss 2
+
+126066 storm rain
+LI
+ wh 17815
+MI
+ ss 2
+
+126095 storm rain
+LI
+ wh 16227
+MI
+ ss 2
+
+126109 storm rain
+LI
+ wh 16440
+MI
+ ss 1
+
+126112 storm rain
+LI
+ wh 12348
+MI
+ ss 1
+
+126114 storm rain
+LI
+ wh 11535
+MI
+ ss 1
+
+126127 storm rain
+LI
+ wh 16333
+MI
+ ss 1
+
+126133 storm rain
+LI
+ wh 13049
+MI
+ ss 2
+
+126139 storm rain
+LI
+ wh 12707
+MI
+ ss 2
+
+126169 storm rain
+LI
+ wh 18713
+MI
+ ss 1
+
+126179 storm rain
+LI
+ wh 11282
+MI
+ ss 1
+
+126184 storm rain
+LI
+ wh 19797
+MI
+ ss 1
+
+126186 storm rain
+LI
+ wh 12532
+MI
+ ss 2
+
+126195 storm rain
+LI
+ wh 15497
+MI
+ ss 1
+
+126197 storm rain
+LI
+ wh 15033
+MI
+ ss 1
+
+126214 storm rain
+LI
+ wh 15718
+MI
+ ss 1
+
+126220 storm rain
+LI
+ wh 12395
+MI
+ ss 2
+
+126239 storm rain
+LI
+ wh 11269
+MI
+ ss 2
+
+126252 storm rain
+LI
+ wh 12318
+MI
+ ss 1
+
+126284 storm rain
+LI
+ wh 17470
+MI
+ ss 2
+
+126291 storm rain
+LI
+ wh 11968
+MI
+ ss 1
+
+126313 storm rain
+na Musketeer Hail
+LI
+ wh 12448
+MI
+ sb 77001
+ mc 212
+ ss 191
+ mh 14473
+ co 276
+
+126317 storm rain
+LI
+ wh 13947
+MI
+ ss 1
+
+126338 storm rain
+LI
+ wh 14977
+MI
+ ss 1
+
+126340 storm rain
+LI
+ wh 12626
+MI
+ ss 1
+
+126358 storm rain
+LI
+ wh 16029
+MI
+ ss 2
+
+126377 storm rain
+LI
+ wh 12034
+MI
+ ss 2
+
+126385 storm rain
+LI
+ wh 18834
+MI
+ ss 1
+
+126438 storm rain
+LI
+ wh 19900
+MI
+ ss 2
+
+126448 storm rain
+LI
+ wh 16984
+MI
+ ss 1
+
+126505 storm rain
+LI
+ wh 19045
+MI
+ ss 2
+
+126528 storm rain
+LI
+ wh 17657
+MI
+ ss 2
+
+126557 storm rain
+LI
+ wh 14561
+MI
+ ss 1
+
+126563 storm rain
+LI
+ wh 10645
+MI
+ ss 1
+
+126597 storm rain
+LI
+ wh 13590
+MI
+ ss 1
+
+126624 storm rain
+LI
+ wh 13835
+MI
+ ss 1
+
+126667 storm rain
+LI
+ wh 13370
+MI
+ ss 1
+
+126709 deadchar 0
+CH
+ ni 32
+ he 68
+ lk 4
+ at 60
+ df 60
+ dt 260 2 7772
+CO
+ li attack 94051
+ ar 94051 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+126731 storm rain
+LI
+ wh 14712
+MI
+ ss 1
+
+126739 storm rain
+LI
+ wh 14170
+MI
+ ss 1
+
+126746 storm rain
+LI
+ wh 10781
+MI
+ ss 2
+
+126747 storm rain
+LI
+ wh 14319
+MI
+ ss 2
+
+126761 storm rain
+LI
+ wh 13455
+MI
+ ss 1
+
+126762 storm rain
+LI
+ wh 14323
+MI
+ ss 1
+
+126787 storm rain
+LI
+ wh 10505
+MI
+ ss 2
+
+126798 storm rain
+LI
+ wh 10874
+MI
+ ss 1
+
+126800 storm rain
+LI
+ wh 19242
+MI
+ ss 2
+
+126828 storm rain
+LI
+ wh 13435
+MI
+ ss 2
+
+126847 storm rain
+LI
+ wh 16898
+MI
+ ss 1
+
+126855 storm rain
+LI
+ wh 11139
+MI
+ ss 2
+
+126861 storm rain
+LI
+ wh 12950
+MI
+ ss 2
+
+126867 storm rain
+LI
+ wh 15962
+MI
+ ss 2
+
+126891 storm rain
+LI
+ wh 19828
+MI
+ ss 2
+
+126902 storm rain
+LI
+ wh 19192
+MI
+ ss 2
+
+126903 storm rain
+LI
+ wh 18167
+MI
+ ss 1
+
+126904 storm rain
+LI
+ wh 12559
+MI
+ ss 1
+
+126926 storm rain
+LI
+ wh 11944
+MI
+ ss 1
+
+126935 storm rain
+LI
+ wh 15136
+MI
+ ss 2
+
+126947 storm rain
+LI
+ wh 15250
+MI
+ ss 2
+
+126962 storm rain
+LI
+ wh 18033
+MI
+ ss 1
+
+127011 storm rain
+LI
+ wh 13013
+MI
+ ss 1
+
+127016 storm rain
+LI
+ wh 12859
+MI
+ ss 1
+
+127031 storm rain
+LI
+ wh 10285
+MI
+ ss 2
+
+127033 storm rain
+LI
+ wh 19348
+MI
+ ss 1
+
+127051 storm rain
+LI
+ wh 14034
+MI
+ ss 2
+
+127063 storm rain
+LI
+ wh 15068
+MI
+ ss 1
+
+127078 storm rain
+LI
+ wh 10941
+MI
+ ss 2
+
+127107 storm rain
+LI
+ wh 11861
+MI
+ ss 1
+
+127147 storm rain
+LI
+ wh 10621
+MI
+ ss 1
+
+127167 storm rain
+LI
+ wh 15482
+MI
+ ss 2
+
+127189 storm rain
+LI
+ wh 16883
+MI
+ ss 1
+
+127217 storm rain
+LI
+ wh 11791
+MI
+ ss 2
+
+127223 storm rain
+LI
+ wh 17467
+MI
+ ss 2
+
+127230 storm rain
+LI
+ wh 15123
+MI
+ ss 2
+
+127256 storm rain
+LI
+ wh 18179
+MI
+ ss 2
+
+127273 storm rain
+LI
+ wh 11150
+MI
+ ss 1
+
+127339 storm rain
+LI
+ wh 10837
+MI
+ ss 1
+
+127351 storm rain
+LI
+ wh 16607
+MI
+ ss 2
+
+127355 storm rain
+LI
+ wh 18681
+MI
+ ss 1
+
+127382 storm rain
+LI
+ wh 10877
+MI
+ ss 2
+
+127387 storm rain
+LI
+ wh 11813
+MI
+ ss 1
+
+127391 storm rain
+LI
+ wh 11805
+MI
+ ss 2
+
+127401 storm rain
+LI
+ wh 13861
+MI
+ ss 1
+
+127408 storm rain
+LI
+ wh 14282
+MI
+ ss 1
+
+127421 storm rain
+LI
+ wh 17313
+MI
+ ss 1
+
+127428 storm rain
+LI
+ wh 17992
+MI
+ ss 2
+
+127448 storm rain
+LI
+ wh 10833
+MI
+ ss 1
+
+127458 storm rain
+LI
+ wh 15410
+MI
+ ss 1
+
+127487 storm rain
+LI
+ wh 15944
+MI
+ ss 2
+
+127591 storm rain
+LI
+ wh 19544
+MI
+ ss 2
+
+127626 storm rain
+LI
+ wh 19308
+MI
+ ss 1
+
+127628 storm rain
+LI
+ wh 19040
+MI
+ ss 1
+
+127639 storm rain
+LI
+ wh 12908
+MI
+ ss 1
+
+127642 storm rain
+LI
+ wh 11676
+MI
+ ss 2
+
+127643 storm rain
+LI
+ wh 12214
+MI
+ ss 1
+
+127658 storm rain
+LI
+ wh 17135
+MI
+ ss 2
+
+127674 storm rain
+LI
+ wh 17902
+MI
+ ss 1
+
+127676 storm rain
+LI
+ wh 12162
+MI
+ ss 1
+
+127679 storm rain
+LI
+ wh 19223
+MI
+ ss 2
+
+127684 storm rain
+LI
+ wh 18692
+MI
+ ss 2
+
+127693 storm rain
+LI
+ wh 12671
+MI
+ ss 2
+
+127695 storm rain
+LI
+ wh 19175
+MI
+ ss 2
+
+127709 storm rain
+LI
+ wh 11499
+MI
+ ss 2
+
+127722 storm rain
+LI
+ wh 19204
+MI
+ ss 1
+
+127724 storm rain
+LI
+ wh 10114
+MI
+ ss 2
+
+127735 storm rain
+LI
+ wh 13983
+MI
+ ss 1
+
+127737 storm rain
+LI
+ wh 16685
+MI
+ ss 1
+
+127808 storm rain
+LI
+ wh 16116
+MI
+ ss 2
+
+127819 storm rain
+LI
+ wh 16547
+MI
+ ss 2
+
+127823 storm rain
+LI
+ wh 12663
+MI
+ ss 1
+
+127863 storm rain
+LI
+ wh 19709
+MI
+ ss 2
+
+127872 storm rain
+LI
+ wh 10732
+MI
+ ss 1
+
+127923 storm rain
+LI
+ wh 14396
+MI
+ ss 2
+
+127936 storm rain
+LI
+ wh 14985
+MI
+ ss 2
+
+127959 storm rain
+LI
+ wh 19815
+MI
+ ss 2
+
+127992 storm rain
+LI
+ wh 12781
+MI
+ ss 1
+
+128009 storm rain
+LI
+ wh 10007
+MI
+ ss 2
+
+128052 storm rain
+LI
+ wh 13784
+MI
+ ss 2
+
+128058 storm rain
+LI
+ wh 12521
+MI
+ ss 2
+
+128078 storm rain
+LI
+ wh 14397
+MI
+ ss 1
+
+128079 storm rain
+LI
+ wh 16733
+MI
+ ss 1
+
+128132 storm rain
+LI
+ wh 15053
+MI
+ ss 1
+
+128178 storm rain
+LI
+ wh 11753
+MI
+ ss 1
+
+128179 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+CO
+ li attack 144806
+ ar 144806 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+128196 storm rain
+LI
+ wh 14823
+MI
+ ss 1
+
+128216 storm rain
+LI
+ wh 17102
+MI
+ ss 1
+
+128220 storm rain
+LI
+ wh 14402
+MI
+ ss 2
+
+128251 storm rain
+LI
+ wh 17990
+MI
+ ss 2
+
+128267 storm rain
+LI
+ wh 13216
+MI
+ ss 1
+
+128271 storm rain
+LI
+ wh 12583
+MI
+ ss 2
+
+128282 storm rain
+LI
+ wh 16839
+MI
+ ss 2
+
+128315 storm rain
+LI
+ wh 12770
+MI
+ ss 2
+
+128371 storm rain
+LI
+ wh 10488
+MI
+ ss 1
+
+128385 storm rain
+LI
+ wh 14367
+MI
+ ss 1
+
+128403 storm rain
+LI
+ wh 18563
+MI
+ ss 1
+
+128410 storm rain
+LI
+ wh 10826
+MI
+ ss 1
+
+128422 storm rain
+LI
+ wh 17991
+MI
+ ss 2
+
+128442 storm rain
+LI
+ wh 12124
+MI
+ ss 2
+
+128456 storm rain
+LI
+ wh 18289
+MI
+ ss 2
+
+128465 storm rain
+LI
+ wh 16546
+MI
+ ss 2
+
+128513 storm rain
+LI
+ wh 13774
+MI
+ ss 1
+
+128538 storm rain
+LI
+ wh 16231
+MI
+ ss 1
+
+128566 storm rain
+LI
+ wh 16122
+MI
+ ss 2
+
+128578 storm rain
+LI
+ wh 10341
+MI
+ ss 1
+
+128636 storm rain
+LI
+ wh 11458
+MI
+ ss 1
+
+128641 storm rain
+LI
+ wh 18604
+MI
+ ss 2
+
+128659 storm rain
+LI
+ wh 18597
+MI
+ ss 2
+
+128707 storm rain
+LI
+ wh 15809
+MI
+ ss 2
+
+128712 storm rain
+LI
+ wh 15023
+MI
+ ss 2
+
+128745 storm rain
+LI
+ wh 17784
+MI
+ ss 1
+
+128754 storm rain
+LI
+ wh 13014
+MI
+ ss 1
+
+128788 storm rain
+LI
+ wh 10848
+MI
+ ss 1
+
+128827 storm rain
+LI
+ wh 18450
+MI
+ ss 1
+
+128843 storm rain
+LI
+ wh 11371
+MI
+ ss 2
+
+128852 storm rain
+LI
+ wh 18436
+MI
+ ss 1
+
+128869 storm rain
+LI
+ wh 11841
+MI
+ ss 1
+
+128880 storm rain
+LI
+ wh 11642
+MI
+ ss 1
+
+128883 storm rain
+LI
+ wh 12587
+MI
+ ss 2
+
+128889 storm rain
+LI
+ wh 16476
+MI
+ ss 2
+
+128928 storm rain
+LI
+ wh 10246
+MI
+ ss 2
+
+128943 storm rain
+LI
+ wh 17343
+MI
+ ss 2
+
+129007 storm rain
+LI
+ wh 16071
+MI
+ ss 1
+
+129028 storm rain
+LI
+ wh 12951
+MI
+ ss 2
+
+129029 storm rain
+LI
+ wh 13952
+MI
+ ss 2
+
+129039 storm rain
+LI
+ wh 16497
+MI
+ ss 1
+
+129052 storm rain
+LI
+ wh 13823
+MI
+ ss 2
+
+129120 storm rain
+LI
+ wh 11612
+MI
+ ss 1
+
+129146 storm rain
+LI
+ wh 16463
+MI
+ ss 2
+
+129159 storm rain
+LI
+ wh 14143
+MI
+ ss 2
+
+129179 storm rain
+LI
+ wh 18002
+MI
+ ss 1
+
+129219 storm rain
+LI
+ wh 19717
+MI
+ ss 2
+
+129236 storm rain
+LI
+ wh 15225
+MI
+ ss 1
+
+129238 storm rain
+LI
+ wh 12964
+MI
+ ss 2
+
+129240 storm rain
+LI
+ wh 17644
+MI
+ ss 2
+
+129257 storm rain
+LI
+ wh 14786
+MI
+ ss 2
+
+129267 storm rain
+LI
+ wh 14765
+MI
+ ss 2
+
+129307 storm rain
+LI
+ wh 14469
+MI
+ ss 1
+
+129344 storm rain
+LI
+ wh 18374
+MI
+ ss 1
+
+129358 storm rain
+LI
+ wh 12877
+MI
+ ss 2
+
+129373 storm rain
+LI
+ wh 10759
+MI
+ ss 2
+
+129404 storm rain
+LI
+ wh 19092
+MI
+ ss 2
+
+129458 storm rain
+LI
+ wh 17685
+MI
+ ss 1
+
+129465 storm rain
+LI
+ wh 16241
+MI
+ ss 1
+
+129489 storm rain
+LI
+ wh 15454
+MI
+ ss 1
+
+129504 storm rain
+LI
+ wh 18154
+MI
+ ss 2
+
+129513 storm rain
+LI
+ wh 12514
+MI
+ ss 2
+
+129526 storm rain
+LI
+ wh 10744
+MI
+ ss 2
+
+129527 storm rain
+LI
+ wh 10020
+MI
+ ss 2
+
+129571 storm rain
+LI
+ wh 12479
+MI
+ ss 2
+
+129572 storm rain
+LI
+ wh 11620
+MI
+ ss 2
+
+129574 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+129591 storm rain
+LI
+ wh 10551
+MI
+ ss 1
+
+129595 storm rain
+LI
+ wh 11825
+MI
+ ss 1
+
+129596 storm rain
+LI
+ wh 14906
+MI
+ ss 1
+
+129599 storm rain
+LI
+ wh 19844
+MI
+ ss 1
+
+129609 storm rain
+LI
+ wh 19644
+MI
+ ss 2
+
+129621 storm rain
+LI
+ wh 19447
+MI
+ ss 1
+
+129622 storm rain
+LI
+ wh 11636
+MI
+ ss 1
+
+129652 storm rain
+LI
+ wh 10970
+MI
+ ss 1
+
+129655 storm rain
+LI
+ wh 36001
+MI
+ sb 6389
+ mc 206
+ ss 95
+ mh 36001
+ co 276
+
+129695 storm rain
+LI
+ wh 13501
+MI
+ ss 1
+
+129742 storm rain
+LI
+ wh 11918
+MI
+ ss 1
+
+129768 storm rain
+LI
+ wh 16014
+MI
+ ss 2
+
+129796 storm rain
+LI
+ wh 12698
+MI
+ ss 2
+
+129814 storm rain
+LI
+ wh 19491
+MI
+ ss 2
+
+129830 storm rain
+LI
+ wh 11333
+MI
+ ss 1
+
+129855 storm rain
+LI
+ wh 17279
+MI
+ ss 2
+
+129860 storm rain
+LI
+ wh 12538
+MI
+ ss 2
+
+129886 storm rain
+LI
+ wh 12647
+MI
+ ss 2
+
+129957 storm rain
+LI
+ wh 18266
+MI
+ ss 1
+
+129965 storm rain
+LI
+ wh 18144
+MI
+ ss 2
+
+129995 storm rain
+LI
+ wh 17725
+MI
+ ss 2
+
+130000 storm rain
+LI
+ wh 18809
+MI
+ ss 2
+
+130035 storm rain
+LI
+ wh 18776
+MI
+ ss 2
+
+130130 storm rain
+LI
+ wh 12805
+MI
+ ss 1
+
+130172 storm rain
+LI
+ wh 13196
+MI
+ ss 2
+
+130178 storm rain
+LI
+ wh 19514
+MI
+ ss 2
+
+130183 storm rain
+LI
+ wh 12451
+MI
+ ss 2
+
+130213 storm rain
+LI
+ wh 10216
+MI
+ ss 2
+
+130241 storm rain
+LI
+ wh 10669
+MI
+ ss 1
+
+130271 storm rain
+LI
+ wh 17859
+MI
+ ss 2
+
+130273 storm rain
+LI
+ wh 17585
+MI
+ ss 2
+
+130306 storm rain
+LI
+ wh 13981
+MI
+ ss 2
+
+130335 storm rain
+LI
+ wh 16892
+MI
+ ss 2
+
+130337 storm rain
+LI
+ wh 12417
+MI
+ ss 2
+
+130344 storm rain
+LI
+ wh 11618
+MI
+ ss 2
+
+130384 storm rain
+LI
+ wh 15678
+MI
+ ss 1
+
+130388 storm rain
+LI
+ wh 16903
+MI
+ ss 2
+
+130407 storm rain
+LI
+ wh 16629
+MI
+ ss 2
+
+130418 storm rain
+LI
+ wh 12234
+MI
+ ss 1
+
+130432 storm rain
+LI
+ wh 16471
+MI
+ ss 2
+
+130456 storm rain
+LI
+ wh 16537
+MI
+ ss 2
+
+130528 storm rain
+LI
+ wh 19502
+MI
+ ss 1
+
+130535 storm rain
+LI
+ wh 11313
+MI
+ ss 2
+
+130578 storm rain
+LI
+ wh 13507
+MI
+ ss 2
+
+130593 storm rain
+LI
+ wh 15838
+MI
+ ss 2
+
+130608 storm rain
+LI
+ wh 14350
+MI
+ ss 1
+
+130618 storm rain
+LI
+ wh 10685
+MI
+ ss 2
+
+130632 storm rain
+LI
+ wh 19244
+MI
+ ss 2
+
+130658 storm rain
+LI
+ wh 12496
+MI
+ ss 1
+
+130669 storm rain
+LI
+ wh 13785
+MI
+ ss 1
+
+130673 storm rain
+LI
+ wh 12834
+MI
+ ss 2
+
+130721 storm rain
+LI
+ wh 13191
+MI
+ ss 1
+
+130741 storm rain
+LI
+ wh 18603
+MI
+ ss 1
+
+130786 storm rain
+LI
+ wh 18133
+MI
+ ss 1
+
+130793 storm rain
+LI
+ wh 13533
+MI
+ ss 2
+
+130824 storm rain
+LI
+ wh 12588
+MI
+ ss 2
+
+130858 storm rain
+LI
+ wh 14317
+MI
+ ss 1
+
+130885 storm rain
+LI
+ wh 11485
+MI
+ ss 1
+
+130906 storm rain
+LI
+ wh 12957
+MI
+ ss 1
+
+130926 storm rain
+LI
+ wh 18769
+MI
+ ss 1
+
+130944 storm rain
+LI
+ wh 12523
+MI
+ ss 1
+
+130966 storm rain
+LI
+ wh 16728
+MI
+ ss 1
+
+130970 storm rain
+LI
+ wh 12444
+MI
+ ss 1
+
+131008 storm rain
+LI
+ wh 15888
+MI
+ ss 1
+
+131023 storm rain
+LI
+ wh 14446
+MI
+ ss 2
+
+131029 storm rain
+LI
+ wh 19438
+MI
+ ss 1
+
+131046 storm rain
+LI
+ wh 11104
+MI
+ ss 1
+
+131051 storm rain
+LI
+ wh 19778
+MI
+ ss 2
+
+131078 storm rain
+LI
+ wh 11221
+MI
+ ss 1
+
+131080 storm rain
+LI
+ wh 10988
+MI
+ ss 1
+
+131118 storm rain
+LI
+ wh 14805
+MI
+ ss 1
+
+131121 storm rain
+LI
+ wh 17183
+MI
+ ss 2
+
+131127 storm rain
+LI
+ wh 18861
+MI
+ ss 2
+
+131189 storm rain
+LI
+ wh 15378
+MI
+ ss 1
+
+131210 storm rain
+LI
+ wh 13290
+MI
+ ss 2
+
+131212 storm rain
+LI
+ wh 13100
+MI
+ ss 1
+
+131239 storm rain
+LI
+ wh 11035
+MI
+ ss 1
+
+131271 storm rain
+LI
+ wh 18796
+MI
+ ss 2
+
+131284 deadchar 0
+CH
+ ni 291
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 30 7800
+
+131303 storm rain
+LI
+ wh 17904
+MI
+ ss 2
+
+131314 storm rain
+LI
+ wh 14456
+MI
+ ss 2
+
+131344 storm rain
+LI
+ wh 13283
+MI
+ ss 2
+
+131350 storm rain
+LI
+ wh 15663
+MI
+ ss 1
+
+131398 storm rain
+LI
+ wh 13798
+MI
+ ss 1
+
+131405 storm rain
+LI
+ wh 11112
+MI
+ ss 2
+
+131417 storm rain
+LI
+ wh 10948
+MI
+ ss 1
+
+131448 storm rain
+LI
+ wh 18819
+MI
+ ss 1
+
+131457 storm rain
+LI
+ wh 13110
+MI
+ ss 2
+
+131464 storm rain
+LI
+ wh 13662
+MI
+ ss 1
+
+131513 storm rain
+LI
+ wh 15385
+MI
+ ss 1
+
+131527 storm rain
+LI
+ wh 18561
+MI
+ ss 1
+
+131582 storm rain
+LI
+ wh 18258
+MI
+ ss 2
+
+131588 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+131608 storm rain
+LI
+ wh 12837
+MI
+ ss 1
+
+131610 storm rain
+LI
+ wh 18009
+MI
+ ss 2
+
+131645 storm rain
+LI
+ wh 15233
+MI
+ ss 2
+
+131647 storm rain
+LI
+ wh 16465
+MI
+ ss 1
+
+131648 storm rain
+LI
+ wh 18755
+MI
+ ss 2
+
+131653 storm rain
+LI
+ wh 18384
+MI
+ ss 1
+
+131667 storm rain
+LI
+ wh 19189
+MI
+ ss 1
+
+131677 storm rain
+LI
+ wh 12089
+MI
+ ss 2
+
+131694 storm rain
+LI
+ wh 11847
+MI
+ ss 2
+
+131701 storm rain
+LI
+ wh 16754
+MI
+ ss 2
+
+131709 storm rain
+LI
+ wh 16412
+MI
+ ss 2
+
+131720 storm rain
+LI
+ wh 18966
+MI
+ ss 1
+
+131723 storm rain
+LI
+ wh 17316
+MI
+ ss 1
+
+131744 storm rain
+LI
+ wh 10425
+MI
+ ss 2
+
+131750 storm rain
+LI
+ wh 18265
+MI
+ ss 2
+
+131764 storm rain
+LI
+ wh 18044
+MI
+ ss 1
+
+131790 storm rain
+LI
+ wh 12640
+MI
+ ss 1
+
+131839 storm rain
+LI
+ wh 12682
+MI
+ ss 1
+
+131876 storm rain
+LI
+ wh 11502
+MI
+ ss 2
+
+131896 storm rain
+LI
+ wh 10484
+MI
+ ss 2
+
+131937 storm rain
+LI
+ wh 18644
+MI
+ ss 2
+
+131945 storm rain
+LI
+ wh 14842
+MI
+ ss 1
+
+131980 storm rain
+LI
+ wh 12077
+MI
+ ss 2
+
+131998 storm rain
+LI
+ wh 12022
+MI
+ ss 1
+
+131999 storm rain
+LI
+ wh 12437
+MI
+ ss 2
+
+132031 storm rain
+LI
+ wh 17896
+MI
+ ss 1
+
+132041 storm rain
+LI
+ wh 13663
+MI
+ ss 1
+
+132065 storm rain
+LI
+ wh 13646
+MI
+ ss 1
+
+132084 storm rain
+LI
+ wh 19475
+MI
+ ss 2
+
+132086 storm rain
+LI
+ wh 15042
+MI
+ ss 2
+
+132104 storm rain
+LI
+ wh 16545
+MI
+ ss 1
+
+132105 storm rain
+LI
+ wh 10868
+MI
+ ss 1
+
+132107 storm rain
+LI
+ wh 13491
+MI
+ ss 2
+
+132111 storm rain
+LI
+ wh 14607
+MI
+ ss 1
+
+132136 storm rain
+LI
+ wh 10373
+MI
+ ss 1
+
+132144 storm rain
+LI
+ wh 16285
+MI
+ ss 2
+
+132170 storm rain
+LI
+ wh 17205
+MI
+ ss 2
+
+132218 storm rain
+LI
+ wh 10336
+MI
+ ss 2
+
+132261 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+132279 storm rain
+LI
+ wh 14190
+MI
+ ss 1
+
+132287 storm rain
+LI
+ wh 17742
+MI
+ ss 1
+
+132300 storm rain
+LI
+ wh 11245
+MI
+ ss 1
+
+132307 storm rain
+LI
+ wh 15765
+MI
+ ss 1
+
+132312 storm rain
+LI
+ wh 10128
+MI
+ ss 1
+
+132329 storm rain
+LI
+ wh 10278
+MI
+ ss 1
+
+132340 storm rain
+LI
+ wh 13489
+MI
+ ss 2
+
+132353 storm rain
+LI
+ wh 12364
+MI
+ ss 1
+
+132366 storm rain
+LI
+ wh 19962
+MI
+ ss 1
+
+132377 storm rain
+LI
+ wh 18506
+MI
+ ss 2
+
+132381 storm rain
+LI
+ wh 19310
+MI
+ ss 2
+
+132410 storm rain
+LI
+ wh 19385
+MI
+ ss 1
+
+132414 storm rain
+LI
+ wh 19354
+MI
+ ss 2
+
+132417 storm rain
+LI
+ wh 17239
+MI
+ ss 2
+
+132418 storm rain
+LI
+ wh 10723
+MI
+ ss 2
+
+132433 storm rain
+LI
+ wh 19458
+MI
+ ss 2
+
+132444 storm rain
+LI
+ wh 12261
+MI
+ ss 2
+
+132454 storm rain
+LI
+ wh 19636
+MI
+ ss 2
+
+132461 storm rain
+LI
+ wh 14336
+MI
+ ss 1
+
+132478 storm rain
+LI
+ wh 12516
+MI
+ ss 1
+
+132493 storm rain
+LI
+ wh 12372
+MI
+ ss 2
+
+132497 storm rain
+LI
+ wh 12760
+MI
+ ss 1
+
+132514 storm rain
+LI
+ wh 10268
+MI
+ ss 1
+
+132541 storm rain
+LI
+ wh 18467
+MI
+ ss 2
+
+132545 storm rain
+LI
+ wh 12177
+MI
+ ss 2
+
+132567 storm rain
+LI
+ wh 14157
+MI
+ ss 1
+
+132592 storm rain
+LI
+ wh 12966
+MI
+ ss 1
+
+132604 storm rain
+LI
+ wh 13089
+MI
+ ss 1
+
+132607 storm rain
+LI
+ wh 16005
+MI
+ ss 2
+
+132633 storm rain
+LI
+ wh 14911
+MI
+ ss 2
+
+132634 storm rain
+LI
+ wh 11402
+MI
+ ss 2
+
+132646 storm rain
+LI
+ wh 15534
+MI
+ ss 2
+
+132666 storm rain
+LI
+ wh 16576
+MI
+ ss 2
+
+132667 storm rain
+LI
+ wh 15873
+MI
+ ss 2
+
+132696 storm rain
+LI
+ wh 13439
+MI
+ ss 2
+
+132698 storm rain
+LI
+ wh 16524
+MI
+ ss 1
+
+132737 storm rain
+LI
+ wh 19646
+MI
+ ss 2
+
+132738 storm rain
+LI
+ wh 12169
+MI
+ ss 1
+
+132748 storm rain
+LI
+ wh 19562
+MI
+ ss 1
+
+132756 storm rain
+LI
+ wh 13911
+MI
+ ss 2
+
+132767 deadchar ni
+CH
+ ni 289
+ he -1
+ pr 1
+ at 60
+ df 60
+ po 2
+
+132769 storm rain
+LI
+ wh 19097
+MI
+ ss 1
+
+132770 storm rain
+LI
+ wh 15569
+MI
+ ss 1
+
+132793 storm rain
+LI
+ wh 14099
+MI
+ ss 1
+
+132801 storm rain
+LI
+ wh 19270
+MI
+ ss 2
+
+132828 storm rain
+LI
+ wh 14988
+MI
+ ss 2
+
+132830 storm rain
+LI
+ wh 18740
+MI
+ ss 1
+
+132831 storm rain
+LI
+ wh 11239
+MI
+ ss 1
+
+132892 storm rain
+LI
+ wh 17182
+MI
+ ss 2
+
+132894 storm rain
+LI
+ wh 13884
+MI
+ ss 2
+
+132917 storm rain
+LI
+ wh 15148
+MI
+ ss 2
+
+132978 storm rain
+LI
+ wh 12154
+MI
+ ss 2
+
+133021 storm rain
+LI
+ wh 17571
+MI
+ ss 1
+
+133057 storm rain
+LI
+ wh 17645
+MI
+ ss 2
+
+133060 storm rain
+LI
+ wh 13881
+MI
+ ss 1
+
+133089 storm rain
+LI
+ wh 19099
+MI
+ ss 1
+
+133125 storm rain
+LI
+ wh 14573
+MI
+ ss 2
+
+133201 storm rain
+LI
+ wh 16249
+MI
+ ss 1
+
+133203 storm rain
+LI
+ wh 17956
+MI
+ ss 1
+
+133208 storm rain
+LI
+ wh 11255
+MI
+ ss 1
+
+133242 storm rain
+LI
+ wh 12081
+MI
+ ss 1
+
+133252 storm rain
+LI
+ wh 16055
+MI
+ ss 2
+
+133258 storm rain
+LI
+ wh 11327
+MI
+ ss 1
+
+133261 storm rain
+LI
+ wh 14166
+MI
+ ss 1
+
+133272 storm rain
+LI
+ wh 12667
+MI
+ ss 1
+
+133274 storm rain
+LI
+ wh 10123
+MI
+ ss 2
+
+133278 storm rain
+LI
+ wh 11052
+MI
+ ss 2
+
+133302 storm rain
+LI
+ wh 15903
+MI
+ ss 1
+
+133308 storm rain
+LI
+ wh 18445
+MI
+ ss 1
+
+133311 storm rain
+LI
+ wh 12223
+MI
+ ss 2
+
+133312 storm rain
+LI
+ wh 11527
+MI
+ ss 2
+
+133376 storm rain
+LI
+ wh 13495
+MI
+ ss 1
+
+133377 storm rain
+LI
+ wh 15547
+MI
+ ss 1
+
+133408 storm rain
+LI
+ wh 15520
+MI
+ ss 2
+
+133410 storm rain
+LI
+ wh 16762
+MI
+ ss 2
+
+133411 storm rain
+LI
+ wh 19999
+MI
+ ss 1
+
+133422 storm rain
+LI
+ wh 12993
+MI
+ ss 1
+
+133457 storm rain
+LI
+ wh 18139
+MI
+ ss 2
+
+133461 storm rain
+LI
+ wh 15207
+MI
+ ss 2
+
+133475 storm rain
+LI
+ wh 10997
+MI
+ ss 1
+
+133484 storm rain
+LI
+ wh 16171
+MI
+ ss 1
+
+133497 storm rain
+LI
+ wh 14032
+MI
+ ss 1
+
+133531 storm rain
+LI
+ wh 10039
+MI
+ ss 2
+
+133544 storm rain
+LI
+ wh 12931
+MI
+ ss 2
+
+133554 storm rain
+LI
+ wh 16031
+MI
+ ss 2
+
+133563 storm rain
+LI
+ wh 15692
+MI
+ ss 2
+
+133567 storm rain
+LI
+ wh 11084
+MI
+ ss 2
+
+133573 storm rain
+LI
+ wh 18653
+MI
+ ss 2
+
+133608 storm rain
+LI
+ wh 13781
+MI
+ ss 1
+
+133656 storm rain
+LI
+ wh 19633
+MI
+ ss 1
+
+133689 storm rain
+LI
+ wh 13707
+MI
+ ss 2
+
+133693 storm rain
+LI
+ wh 15452
+MI
+ ss 2
+
+133707 storm rain
+LI
+ wh 11237
+MI
+ ss 2
+
+133713 storm rain
+LI
+ wh 11797
+MI
+ ss 1
+
+133720 storm rain
+LI
+ wh 17312
+MI
+ ss 2
+
+133737 storm rain
+LI
+ wh 18055
+MI
+ ss 1
+
+133751 storm rain
+LI
+ wh 13592
+MI
+ ss 1
+
+133775 storm rain
+LI
+ wh 19059
+MI
+ ss 2
+
+133778 storm rain
+LI
+ wh 17745
+MI
+ ss 1
+
+133810 storm rain
+LI
+ wh 17734
+MI
+ ss 1
+
+133811 storm rain
+LI
+ wh 11912
+MI
+ ss 1
+
+133821 storm rain
+LI
+ wh 18605
+MI
+ ss 1
+
+133822 storm rain
+LI
+ wh 15733
+MI
+ ss 2
+
+133835 storm rain
+LI
+ wh 13623
+MI
+ ss 1
+
+133846 storm rain
+LI
+ wh 12686
+MI
+ ss 2
+
+133849 storm rain
+LI
+ wh 15975
+MI
+ ss 2
+
+133864 storm rain
+LI
+ wh 18650
+MI
+ ss 2
+
+133884 storm rain
+LI
+ wh 15450
+MI
+ ss 1
+
+133890 storm rain
+LI
+ wh 11348
+MI
+ ss 2
+
+133897 storm rain
+LI
+ wh 14393
+MI
+ ss 1
+
+133913 storm rain
+LI
+ wh 10995
+MI
+ ss 2
+
+133937 storm rain
+LI
+ wh 14164
+MI
+ ss 2
+
+133948 storm rain
+LI
+ wh 14572
+MI
+ ss 1
+
+133960 storm rain
+LI
+ wh 13636
+MI
+ ss 1
+
+134026 storm rain
+LI
+ wh 18143
+MI
+ ss 2
+
+134066 storm rain
+LI
+ wh 11692
+MI
+ ss 2
+
+134085 storm rain
+LI
+ wh 10016
+MI
+ ss 2
+
+134096 storm rain
+LI
+ wh 19026
+MI
+ ss 1
+
+134099 storm rain
+LI
+ wh 11929
+MI
+ ss 1
+
+134112 storm rain
+LI
+ wh 13176
+MI
+ ss 1
+
+134119 storm rain
+LI
+ wh 12936
+MI
+ ss 1
+
+134131 storm rain
+LI
+ wh 11802
+MI
+ ss 2
+
+134133 storm rain
+LI
+ wh 14983
+MI
+ ss 2
+
+134134 storm rain
+LI
+ wh 11400
+MI
+ ss 1
+
+134135 storm rain
+LI
+ wh 10419
+MI
+ ss 2
+
+134173 storm rain
+LI
+ wh 12094
+MI
+ ss 2
+
+134175 storm rain
+LI
+ wh 15755
+MI
+ ss 1
+
+134180 storm rain
+LI
+ wh 13913
+MI
+ ss 2
+
+134198 storm rain
+LI
+ wh 16369
+MI
+ ss 1
+
+134205 storm rain
+LI
+ wh 10670
+MI
+ ss 2
+
+134255 storm rain
+LI
+ wh 12502
+MI
+ ss 2
+
+134264 storm rain
+LI
+ wh 11734
+MI
+ ss 1
+
+134309 storm rain
+LI
+ wh 18628
+MI
+ ss 2
+
+134316 storm rain
+LI
+ wh 19226
+MI
+ ss 1
+
+134319 storm rain
+LI
+ wh 19697
+MI
+ ss 1
+
+134332 storm rain
+LI
+ wh 18352
+MI
+ ss 1
+
+134333 storm rain
+LI
+ wh 11598
+MI
+ ss 1
+
+134352 storm rain
+LI
+ wh 18368
+MI
+ ss 2
+
+134354 storm rain
+LI
+ wh 11766
+MI
+ ss 1
+
+134355 storm rain
+LI
+ wh 10631
+MI
+ ss 2
+
+134363 storm rain
+LI
+ wh 14518
+MI
+ ss 2
+
+134391 storm rain
+LI
+ wh 19268
+MI
+ ss 1
+
+134406 storm rain
+LI
+ wh 13622
+MI
+ ss 2
+
+134419 storm rain
+LI
+ wh 11541
+MI
+ ss 2
+
+134439 storm rain
+LI
+ wh 14812
+MI
+ ss 1
+
+134443 storm rain
+LI
+ wh 18584
+MI
+ ss 1
+
+134475 storm rain
+LI
+ wh 17064
+MI
+ ss 2
+
+134502 storm rain
+LI
+ wh 14591
+MI
+ ss 2
+
+134542 storm rain
+LI
+ wh 16368
+MI
+ ss 2
+
+134551 storm rain
+LI
+ wh 11049
+MI
+ ss 1
+
+134560 storm rain
+LI
+ wh 17462
+MI
+ ss 2
+
+134564 storm rain
+LI
+ wh 14358
+MI
+ ss 2
+
+134582 deadchar 0
+CH
+ ni 282
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 24 7794
+
+134588 storm rain
+LI
+ wh 16407
+MI
+ ss 2
+
+134610 storm rain
+LI
+ wh 17872
+MI
+ ss 1
+
+134632 storm rain
+LI
+ wh 19736
+MI
+ ss 1
+
+134638 storm rain
+LI
+ wh 16986
+MI
+ ss 1
+
+134685 storm rain
+LI
+ wh 13726
+MI
+ ss 2
+
+134693 storm rain
+LI
+ wh 17856
+MI
+ ss 1
+
+134729 storm rain
+LI
+ wh 14971
+MI
+ ss 1
+
+134741 deadchar 0
+CH
+ ni 24
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 28 7798
+
+134765 storm rain
+LI
+ wh 12010
+MI
+ ss 1
+
+134766 storm rain
+LI
+ wh 18039
+MI
+ ss 2
+
+134775 storm rain
+LI
+ wh 17911
+MI
+ ss 1
+
+134797 storm rain
+LI
+ wh 19794
+MI
+ ss 1
+
+134833 storm rain
+LI
+ wh 16929
+MI
+ ss 1
+
+134880 storm rain
+LI
+ wh 12818
+MI
+ ss 2
+
+134944 storm rain
+LI
+ wh 10388
+MI
+ ss 2
+
+134950 storm rain
+LI
+ wh 13989
+MI
+ ss 1
+
+134959 storm rain
+LI
+ wh 12117
+MI
+ ss 1
+
+135000 storm rain
+LI
+ wh 10102
+MI
+ ss 2
+
+135024 storm rain
+LI
+ wh 18857
+MI
+ ss 2
+
+135026 storm rain
+LI
+ wh 11754
+MI
+ ss 2
+
+135041 storm rain
+LI
+ wh 11285
+MI
+ ss 1
+
+135042 storm rain
+LI
+ wh 14273
+MI
+ ss 2
+
+135051 storm rain
+LI
+ wh 10209
+MI
+ ss 2
+
+135052 storm rain
+LI
+ wh 12279
+MI
+ ss 1
+
+135060 storm rain
+LI
+ wh 14965
+MI
+ ss 2
+
+135064 storm rain
+LI
+ wh 19366
+MI
+ ss 2
+
+135119 storm rain
+LI
+ wh 17636
+MI
+ ss 2
+
+135137 storm rain
+LI
+ wh 11110
+MI
+ ss 1
+
+135165 storm rain
+LI
+ wh 10319
+MI
+ ss 1
+
+135168 storm rain
+LI
+ wh 16260
+MI
+ ss 1
+
+135170 storm rain
+LI
+ wh 17069
+MI
+ ss 2
+
+135181 storm rain
+LI
+ wh 16997
+MI
+ ss 1
+
+135200 storm rain
+LI
+ wh 13067
+MI
+ ss 1
+
+135222 storm rain
+LI
+ wh 14904
+MI
+ ss 1
+
+135274 storm rain
+LI
+ wh 13940
+MI
+ ss 1
+
+135292 storm rain
+LI
+ wh 17951
+MI
+ ss 1
+
+135297 storm rain
+LI
+ wh 14997
+MI
+ ss 2
+
+135318 storm rain
+LI
+ wh 12036
+MI
+ ss 2
+
+135347 storm rain
+LI
+ wh 11461
+MI
+ ss 2
+
+135387 storm rain
+LI
+ wh 14594
+MI
+ ss 2
+
+135423 storm rain
+LI
+ wh 17038
+MI
+ ss 2
+
+135437 storm rain
+LI
+ wh 16310
+MI
+ ss 1
+
+135440 storm rain
+LI
+ wh 15492
+MI
+ ss 1
+
+135444 storm rain
+LI
+ wh 16976
+MI
+ ss 1
+
+135445 storm rain
+LI
+ wh 16940
+MI
+ ss 1
+
+135467 storm rain
+LI
+ wh 19182
+MI
+ ss 1
+
+135480 storm rain
+LI
+ wh 12795
+MI
+ ss 2
+
+135488 storm rain
+LI
+ wh 15282
+MI
+ ss 1
+
+135497 storm rain
+LI
+ wh 14217
+MI
+ ss 1
+
+135511 storm rain
+LI
+ wh 10659
+MI
+ ss 2
+
+135526 storm rain
+LI
+ wh 10901
+MI
+ ss 1
+
+135533 storm rain
+LI
+ wh 14500
+MI
+ ss 1
+
+135539 storm rain
+LI
+ wh 10222
+MI
+ ss 1
+
+135541 storm rain
+LI
+ wh 19833
+MI
+ ss 1
+
+135553 storm rain
+LI
+ wh 17509
+MI
+ ss 2
+
+135572 storm rain
+LI
+ wh 15795
+MI
+ ss 2
+
+135581 storm rain
+LI
+ wh 16541
+MI
+ ss 2
+
+135600 storm rain
+LI
+ wh 12860
+MI
+ ss 2
+
+135610 storm rain
+LI
+ wh 15684
+MI
+ ss 2
+
+135616 storm rain
+LI
+ wh 18832
+MI
+ ss 1
+
+135635 storm rain
+LI
+ wh 15357
+MI
+ ss 1
+
+135636 storm rain
+LI
+ wh 10344
+MI
+ ss 2
+
+135640 storm rain
+LI
+ wh 16755
+MI
+ ss 1
+
+135655 storm rain
+LI
+ wh 19493
+MI
+ ss 1
+
+135660 storm rain
+LI
+ wh 15050
+MI
+ ss 2
+
+135674 storm rain
+LI
+ wh 17481
+MI
+ ss 2
+
+135689 storm rain
+LI
+ wh 15078
+MI
+ ss 2
+
+135690 storm rain
+LI
+ wh 12929
+MI
+ ss 1
+
+135747 storm rain
+LI
+ wh 18515
+MI
+ ss 2
+
+135762 storm rain
+LI
+ wh 18878
+MI
+ ss 2
+
+135771 storm rain
+LI
+ wh 19558
+MI
+ ss 2
+
+135781 storm rain
+LI
+ wh 14750
+MI
+ ss 1
+
+135794 storm rain
+LI
+ wh 14080
+MI
+ ss 1
+
+135800 storm rain
+LI
+ wh 11215
+MI
+ ss 1
+
+135826 storm rain
+LI
+ wh 11016
+MI
+ ss 1
+
+135837 storm rain
+LI
+ wh 15459
+MI
+ ss 1
+
+135855 storm rain
+LI
+ wh 17161
+MI
+ ss 1
+
+135876 storm rain
+LI
+ wh 17491
+MI
+ ss 2
+
+135884 storm rain
+LI
+ wh 17264
+MI
+ ss 1
+
+135916 storm rain
+LI
+ wh 19143
+MI
+ ss 1
+
+135936 storm rain
+LI
+ wh 12486
+MI
+ ss 1
+
+135961 storm rain
+LI
+ wh 13930
+MI
+ ss 2
+
+135965 storm rain
+LI
+ wh 16388
+MI
+ ss 1
+
+135976 storm rain
+LI
+ wh 13795
+MI
+ ss 1
+
+135990 storm rain
+LI
+ wh 16109
+MI
+ ss 1
+
+136005 storm rain
+LI
+ wh 17871
+MI
+ ss 2
+
+136018 storm rain
+LI
+ wh 15964
+MI
+ ss 2
+
+136021 storm rain
+LI
+ wh 17305
+MI
+ ss 1
+
+136035 storm rain
+LI
+ wh 13498
+MI
+ ss 2
+
+136094 storm rain
+LI
+ wh 17022
+MI
+ ss 1
+
+136148 storm rain
+LI
+ wh 17583
+MI
+ ss 1
+
+136167 storm rain
+LI
+ wh 12076
+MI
+ ss 1
+
+136171 storm rain
+LI
+ wh 13261
+MI
+ sb 6686
+ ss 164
+
+136178 storm rain
+LI
+ wh 19261
+MI
+ ss 1
+
+136187 storm rain
+LI
+ wh 18568
+MI
+ ss 1
+
+136188 storm rain
+LI
+ wh 18649
+MI
+ ss 1
+
+136190 storm rain
+LI
+ wh 14300
+MI
+ ss 1
+
+136196 storm rain
+LI
+ wh 11171
+MI
+ ss 1
+
+136197 storm rain
+LI
+ wh 14222
+MI
+ ss 1
+
+136254 storm rain
+LI
+ wh 12378
+MI
+ ss 1
+
+136272 storm rain
+LI
+ wh 10924
+MI
+ ss 2
+
+136280 storm rain
+LI
+ wh 11951
+MI
+ ss 2
+
+136288 storm rain
+LI
+ wh 15488
+MI
+ ss 2
+
+136291 storm rain
+LI
+ wh 10192
+MI
+ ss 2
+
+136316 storm rain
+LI
+ wh 14674
+MI
+ ss 2
+
+136322 storm rain
+LI
+ wh 19251
+MI
+ ss 1
+
+136372 storm rain
+LI
+ wh 11760
+MI
+ ss 1
+
+136396 storm rain
+LI
+ wh 16183
+MI
+ ss 2
+
+136399 storm rain
+LI
+ wh 15317
+MI
+ ss 1
+
+136403 storm rain
+LI
+ wh 15667
+MI
+ ss 2
+
+136464 storm rain
+LI
+ wh 17290
+MI
+ ss 2
+
+136472 storm rain
+LI
+ wh 16780
+MI
+ ss 1
+
+136486 storm rain
+LI
+ wh 14313
+MI
+ ss 2
+
+136491 storm rain
+LI
+ wh 17377
+MI
+ ss 2
+
+136504 storm rain
+LI
+ wh 14990
+MI
+ ss 1
+
+136511 storm rain
+LI
+ wh 13599
+MI
+ ss 1
+
+136533 storm rain
+LI
+ wh 19148
+MI
+ ss 2
+
+136545 storm rain
+LI
+ wh 11873
+MI
+ ss 1
+
+136550 storm rain
+LI
+ wh 16947
+MI
+ ss 2
+
+136557 storm rain
+LI
+ wh 16353
+MI
+ ss 1
+
+136560 storm rain
+LI
+ wh 13106
+MI
+ ss 2
+
+136563 storm rain
+LI
+ wh 18211
+MI
+ ss 2
+
+136582 storm rain
+LI
+ wh 13742
+MI
+ ss 2
+
+136600 storm rain
+LI
+ wh 12415
+MI
+ ss 2
+
+136620 deadchar 0
+CH
+ ni 291
+ he -1
+ lk 4
+ at 60
+ df 60
+ po 2
+ dt 260 7 7777
+
+136670 storm rain
+LI
+ wh 10630
+MI
+ ss 2
+
+136683 storm rain
+LI
+ wh 14868
+MI
+ ss 2
+
+136707 storm rain
+LI
+ wh 18061
+MI
+ ss 2
+
+136728 storm rain
+LI
+ wh 10521
+MI
+ ss 1
+
+136731 storm rain
+LI
+ wh 18178
+MI
+ sb 66219
+ mc 203
+ ss 14
+ mh 18179
+ co 276
+
+136742 storm rain
+LI
+ wh 15535
+MI
+ ss 2
+
+136743 storm rain
+LI
+ wh 12383
+MI
+ ss 1
+
+136749 storm rain
+LI
+ wh 13371
+MI
+ ss 1
+
+136751 storm rain
+LI
+ wh 10394
+MI
+ ss 1
+
+136768 storm rain
+LI
+ wh 16525
+MI
+ ss 2
+
+136775 storm rain
+LI
+ wh 18494
+MI
+ ss 2
+
+136784 storm rain
+LI
+ wh 12200
+MI
+ ss 1
+
+136795 storm rain
+LI
+ wh 16254
+MI
+ ss 1
+
+136798 storm rain
+LI
+ wh 18902
+MI
+ ss 2
+
+136805 deadchar 0
+CH
+ ni 32
+ he 20
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 5 7775
+CO
+ li wait time 41
+ ar 0 41 0 0 0 0 0 0
+ wa -1
+ st 1
+ de 23
+ po 1
+ pr 1
+
+136813 storm rain
+LI
+ wh 11185
+MI
+ ss 1
+
+136815 storm rain
+LI
+ wh 12803
+MI
+ ss 2
+
+136826 storm rain
+LI
+ wh 17444
+MI
+ ss 2
+
+136828 storm rain
+LI
+ wh 16332
+MI
+ ss 2
+
+136854 storm rain
+LI
+ wh 12059
+MI
+ ss 1
+
+136887 storm rain
+LI
+ wh 13174
+MI
+ ss 2
+
+136891 storm rain
+LI
+ wh 13109
+MI
+ ss 1
+
+136901 storm rain
+LI
+ wh 15018
+MI
+ ss 2
+
+136931 storm rain
+LI
+ wh 13325
+MI
+ ss 2
+
+136942 storm rain
+LI
+ wh 15114
+MI
+ ss 1
+
+136959 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+137024 storm rain
+LI
+ wh 12664
+MI
+ ss 1
+
+137026 storm rain
+LI
+ wh 16617
+MI
+ ss 2
+
+137034 storm rain
+LI
+ wh 19470
+MI
+ ss 1
+
+137052 storm rain
+LI
+ wh 14816
+MI
+ ss 1
+
+137053 storm rain
+LI
+ wh 15877
+MI
+ ss 2
+
+137075 storm rain
+LI
+ wh 19346
+MI
+ ss 2
+
+137081 storm rain
+LI
+ wh 11831
+MI
+ ss 1
+
+137097 storm rain
+LI
+ wh 15697
+MI
+ ss 2
+
+137110 storm rain
+LI
+ wh 12144
+MI
+ ss 1
+
+137114 storm rain
+LI
+ wh 11707
+MI
+ ss 1
+
+137130 storm rain
+LI
+ wh 10863
+MI
+ ss 1
+
+137138 storm rain
+LI
+ wh 18910
+MI
+ ss 2
+
+137166 storm rain
+LI
+ wh 12924
+MI
+ ss 2
+
+137170 storm rain
+LI
+ wh 10606
+MI
+ ss 1
+
+137172 deadchar 0
+CH
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+ dt 260 4 7774
+MI
+ ca g
+
+137191 storm rain
+LI
+ wh 11543
+MI
+ ss 1
+
+137204 storm rain
+LI
+ wh 15846
+MI
+ ss 1
+
+137221 storm rain
+LI
+ wh 13419
+MI
+ ss 1
+
+137224 storm rain
+LI
+ wh 19769
+MI
+ ss 2
+
+137238 storm rain
+LI
+ wh 15537
+MI
+ ss 2
+
+137288 storm rain
+LI
+ wh 13347
+MI
+ ss 2
+
+137289 storm fog
+na Noxious Cloud
+LI
+ wh 14648
+MI
+ sb 113562
+ mc 245
+ ss 26
+ mh 14546
+ co 274
+
+137315 storm rain
+LI
+ wh 14869
+MI
+ ss 2
+
+137323 storm rain
+LI
+ wh 13374
+MI
+ ss 2
+
+137335 storm rain
+LI
+ wh 16634
+MI
+ ss 1
+
+137338 storm rain
+LI
+ wh 15150
+MI
+ ss 2
+
+137340 storm rain
+LI
+ wh 16813
+MI
+ ss 2
+
+137359 storm rain
+LI
+ wh 10034
+MI
+ ss 2
+
+137369 storm rain
+LI
+ wh 16009
+MI
+ ss 2
+
+137371 storm rain
+LI
+ wh 10199
+MI
+ ss 1
+
+137428 storm rain
+LI
+ wh 13730
+MI
+ ss 1
+
+137453 storm rain
+LI
+ wh 18849
+MI
+ ss 2
+
+137534 storm rain
+LI
+ wh 18559
+MI
+ ss 1
+
+137540 storm rain
+LI
+ wh 15040
+MI
+ ss 2
+
+137546 storm rain
+LI
+ wh 10822
+MI
+ ss 1
+
+137549 storm rain
+LI
+ wh 12810
+MI
+ ss 1
+
+137557 storm rain
+LI
+ wh 12792
+MI
+ ss 1
+
+137600 storm rain
+LI
+ wh 17730
+MI
+ ss 1
+
+137606 storm rain
+LI
+ wh 14894
+MI
+ ss 1
+
+137624 storm rain
+LI
+ wh 12053
+MI
+ ss 1
+
+137640 storm rain
+LI
+ wh 16555
+MI
+ ss 1
+
+137667 storm rain
+LI
+ wh 10780
+MI
+ ss 1
+
+137738 storm rain
+LI
+ wh 17455
+MI
+ ss 2
+
+137742 storm rain
+LI
+ wh 10460
+MI
+ ss 2
+
+137757 storm rain
+LI
+ wh 18381
+MI
+ ss 1
+
+137758 storm rain
+LI
+ wh 11552
+MI
+ ss 2
+
+137771 storm rain
+LI
+ wh 15950
+MI
+ ss 1
+
+137809 storm rain
+LI
+ wh 11238
+MI
+ ss 1
+
+137823 storm rain
+LI
+ wh 14065
+MI
+ ss 2
+
+137829 storm rain
+LI
+ wh 11864
+MI
+ ss 1
+
+137880 storm rain
+LI
+ wh 14685
+MI
+ ss 2
+
+137884 storm rain
+LI
+ wh 14569
+MI
+ ss 2
+
+137934 storm rain
+LI
+ wh 14618
+MI
+ ss 2
+
+137946 storm rain
+LI
+ wh 15743
+MI
+ ss 2
+
+137947 storm rain
+LI
+ wh 15511
+MI
+ ss 1
+
+137957 storm rain
+LI
+ wh 13525
+MI
+ ss 2
+
+137974 storm rain
+LI
+ wh 19213
+MI
+ ss 1
+
+137983 storm rain
+LI
+ wh 11168
+MI
+ ss 2
+
+138027 storm rain
+LI
+ wh 15627
+MI
+ ss 2
+
+138038 storm rain
+LI
+ wh 18231
+MI
+ ss 1
+
+138076 storm rain
+LI
+ wh 16615
+MI
+ ss 2
+
+138079 storm rain
+LI
+ wh 11048
+MI
+ ss 1
+
+138083 storm rain
+LI
+ wh 17374
+MI
+ ss 1
+
+138094 storm rain
+LI
+ wh 18302
+MI
+ ss 2
+
+138101 storm rain
+LI
+ wh 17267
+MI
+ ss 2
+
+138102 storm rain
+LI
+ wh 11174
+MI
+ ss 1
+
+138110 storm rain
+LI
+ wh 10896
+MI
+ ss 2
+
+138118 storm rain
+LI
+ wh 19279
+MI
+ ss 1
+
+138129 storm rain
+LI
+ wh 17914
+MI
+ ss 1
+
+138159 storm rain
+LI
+ wh 17940
+MI
+ ss 2
+
+138207 storm rain
+LI
+ wh 14832
+MI
+ ss 1
+
+138244 storm rain
+LI
+ wh 16651
+MI
+ ss 2
+
+138293 storm rain
+LI
+ wh 10405
+MI
+ ss 2
+
+138329 storm rain
+LI
+ wh 16331
+MI
+ ss 2
+
+138361 storm rain
+LI
+ wh 14344
+MI
+ ss 2
+
+138369 storm rain
+LI
+ wh 11270
+MI
+ ss 2
+
+138384 storm rain
+LI
+ wh 16761
+MI
+ ss 2
+
+138395 storm rain
+LI
+ wh 19578
+MI
+ ss 1
+
+138407 storm rain
+LI
+ wh 10396
+MI
+ ss 1
+
+138497 storm rain
+LI
+ wh 19811
+MI
+ ss 1
+
+138499 storm rain
+LI
+ wh 13805
+MI
+ ss 2
+
+138501 storm rain
+LI
+ wh 13916
+MI
+ ss 1
+
+138502 storm rain
+LI
+ wh 11321
+MI
+ ss 2
+
+138530 storm rain
+LI
+ wh 16044
+MI
+ ss 1
+
+138531 storm rain
+LI
+ wh 18434
+MI
+ ss 2
+
+138552 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 14 7784
+CO
+ li wait time 47
+ ar 0 47 0 0 0 0 0 0
+ wa -1
+ st 1
+ de 33
+ po 1
+ pr 1
+
+138574 storm rain
+LI
+ wh 16794
+MI
+ ss 2
+
+138600 storm rain
+LI
+ wh 17903
+MI
+ ss 1
+
+138633 storm rain
+LI
+ wh 11180
+MI
+ ss 2
+
+138673 storm rain
+LI
+ wh 16292
+MI
+ ss 2
+
+138694 storm rain
+LI
+ wh 11846
+MI
+ ss 1
+
+138701 storm rain
+LI
+ wh 14803
+MI
+ ss 1
+
+138713 storm rain
+LI
+ wh 13531
+MI
+ ss 1
+
+138717 storm rain
+LI
+ wh 14822
+MI
+ ss 1
+
+138747 storm rain
+LI
+ wh 19696
+MI
+ ss 2
+
+138748 storm rain
+LI
+ wh 15586
+MI
+ ss 2
+
+138749 storm rain
+LI
+ wh 15362
+MI
+ ss 1
+
+138758 storm rain
+LI
+ wh 13364
+MI
+ ss 2
+
+138765 storm rain
+LI
+ wh 10265
+MI
+ ss 1
+
+138777 storm rain
+LI
+ wh 11983
+MI
+ ss 2
+
+138825 storm rain
+LI
+ wh 13331
+MI
+ ss 2
+
+138842 storm rain
+LI
+ wh 13123
+MI
+ ss 2
+
+138849 storm rain
+LI
+ wh 18980
+MI
+ ss 2
+
+138875 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 7 7777
+CO
+ li attack 82361
+ ar 82361 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+138893 storm rain
+LI
+ wh 18785
+MI
+ ss 2
+
+138922 storm rain
+LI
+ wh 15316
+MI
+ ss 2
+
+138923 storm rain
+LI
+ wh 15671
+MI
+ ss 1
+
+138945 storm rain
+LI
+ wh 14227
+MI
+ ss 1
+
+138959 storm rain
+LI
+ wh 11164
+MI
+ ss 1
+
+138981 storm rain
+LI
+ wh 10462
+MI
+ ss 1
+
+138990 storm rain
+LI
+ wh 17216
+MI
+ ss 2
+
+138999 storm rain
+LI
+ wh 17590
+MI
+ ss 2
+
+139003 storm rain
+LI
+ wh 17415
+MI
+ ss 1
+
+139027 storm rain
+LI
+ wh 17433
+MI
+ ss 2
+
+139030 storm rain
+LI
+ wh 14810
+MI
+ ss 1
+
+139131 storm rain
+LI
+ wh 16026
+MI
+ ss 1
+
+139137 storm rain
+LI
+ wh 18281
+MI
+ ss 2
+
+139141 storm rain
+LI
+ wh 13712
+MI
+ ss 1
+
+139154 storm rain
+LI
+ wh 14707
+MI
+ ss 2
+
+139157 storm rain
+LI
+ wh 11845
+MI
+ ss 2
+
+139159 storm rain
+LI
+ wh 10208
+MI
+ ss 1
+
+139170 storm rain
+LI
+ wh 13513
+MI
+ ss 1
+
+139175 storm rain
+LI
+ wh 12576
+MI
+ ss 1
+
+139239 storm rain
+LI
+ wh 15890
+MI
+ ss 2
+
+139241 storm rain
+LI
+ wh 14662
+MI
+ ss 1
+
+139286 storm rain
+LI
+ wh 14542
+MI
+ ss 1
+
+139317 storm rain
+LI
+ wh 10768
+MI
+ ss 2
+
+139329 storm rain
+LI
+ wh 17946
+MI
+ ss 2
+
+139339 storm rain
+LI
+ wh 18062
+MI
+ ss 1
+
+139343 storm rain
+LI
+ wh 10799
+MI
+ ss 1
+
+139364 storm rain
+LI
+ wh 12990
+MI
+ ss 1
+
+139371 storm rain
+LI
+ wh 16726
+MI
+ ss 1
+
+139380 storm rain
+LI
+ wh 14050
+MI
+ ss 1
+
+139382 storm rain
+LI
+ wh 11576
+MI
+ ss 2
+
+139419 storm rain
+LI
+ wh 11004
+MI
+ ss 1
+
+139464 storm rain
+LI
+ wh 12997
+MI
+ ss 2
+
+139498 storm rain
+LI
+ wh 15631
+MI
+ ss 2
+
+139516 storm rain
+LI
+ wh 15475
+MI
+ ss 1
+
+139520 storm rain
+LI
+ wh 11877
+MI
+ ss 2
+
+139561 storm rain
+LI
+ wh 10403
+MI
+ ss 2
+
+139571 storm rain
+LI
+ wh 19827
+MI
+ ss 1
+
+139577 storm rain
+LI
+ wh 15106
+MI
+ sb 5557
+ ss 70
+
+139587 storm rain
+LI
+ wh 17499
+MI
+ ss 2
+
+139601 storm rain
+LI
+ wh 11640
+MI
+ ss 1
+
+139618 storm rain
+LI
+ wh 10865
+MI
+ ss 2
+
+139635 storm rain
+LI
+ wh 18572
+MI
+ ss 1
+
+139637 storm rain
+LI
+ wh 17829
+MI
+ ss 2
+
+139669 storm rain
+LI
+ wh 14636
+MI
+ ss 2
+
+139700 storm rain
+LI
+ wh 10245
+MI
+ ss 1
+
+139720 storm rain
+LI
+ wh 14630
+MI
+ ss 1
+
+139729 storm rain
+LI
+ wh 15242
+MI
+ ss 1
+
+139733 storm rain
+LI
+ wh 12618
+MI
+ ss 2
+
+139734 storm rain
+LI
+ wh 10049
+MI
+ ss 2
+
+139757 storm rain
+LI
+ wh 18751
+MI
+ ss 2
+
+139761 storm rain
+LI
+ wh 12685
+MI
+ ss 2
+
+139781 storm rain
+LI
+ wh 18828
+MI
+ ss 2
+
+139822 storm rain
+LI
+ wh 10045
+MI
+ ss 2
+
+139824 storm rain
+LI
+ wh 17348
+MI
+ ss 2
+
+139825 storm rain
+LI
+ wh 11121
+MI
+ ss 1
+
+139868 storm rain
+LI
+ wh 11599
+MI
+ ss 2
+
+139871 storm rain
+LI
+ wh 13648
+MI
+ ss 2
+
+139888 storm rain
+LI
+ wh 12762
+MI
+ ss 1
+
+139891 storm rain
+LI
+ wh 19161
+MI
+ ss 1
+
+139893 storm rain
+LI
+ wh 13151
+MI
+ ss 2
+
+139906 storm rain
+LI
+ wh 10766
+MI
+ ss 1
+
+139941 storm rain
+LI
+ wh 14037
+MI
+ ss 2
+
+139942 storm rain
+LI
+ wh 16958
+MI
+ ss 1
+
+139945 storm rain
+LI
+ wh 13092
+MI
+ ss 1
+
+139953 storm rain
+LI
+ wh 12252
+MI
+ ss 1
+
+139985 storm rain
+LI
+ wh 18534
+MI
+ ss 1
+
+139994 storm rain
+LI
+ wh 12275
+MI
+ ss 1
+
+139999 storm rain
+LI
+ wh 19388
+MI
+ ss 2
+
+140001 storm rain
+LI
+ wh 13667
+MI
+ ss 1
+
+140032 storm rain
+LI
+ wh 16004
+MI
+ ss 1
+
+140050 storm rain
+LI
+ wh 19473
+MI
+ ss 1
+
+140073 storm rain
+LI
+ wh 11363
+MI
+ ss 2
+
+140077 storm rain
+LI
+ wh 16213
+MI
+ ss 2
+
+140099 storm rain
+LI
+ wh 18407
+MI
+ ss 2
+
+140114 storm rain
+LI
+ wh 10563
+MI
+ ss 2
+
+140149 storm rain
+LI
+ wh 12151
+MI
+ ss 1
+
+140163 storm rain
+LI
+ wh 12853
+MI
+ ss 1
+
+140175 storm rain
+LI
+ wh 14980
+MI
+ ss 2
+
+140188 storm rain
+LI
+ wh 10290
+MI
+ ss 2
+
+140201 storm rain
+LI
+ wh 12982
+MI
+ ss 2
+
+140220 storm rain
+LI
+ wh 14609
+MI
+ ss 1
+
+140231 storm rain
+LI
+ wh 13425
+MI
+ ss 1
+
+140239 storm rain
+LI
+ wh 17807
+MI
+ ss 1
+
+140254 storm rain
+LI
+ wh 13001
+MI
+ ss 1
+
+140272 storm rain
+LI
+ wh 16923
+MI
+ ss 2
+
+140277 storm rain
+LI
+ wh 17626
+MI
+ ss 2
+
+140287 storm rain
+LI
+ wh 10059
+MI
+ ss 1
+
+140295 storm rain
+LI
+ wh 15311
+MI
+ ss 2
+
+140298 storm rain
+LI
+ wh 10999
+MI
+ ss 2
+
+140380 storm rain
+LI
+ wh 19724
+MI
+ ss 1
+
+140398 storm rain
+LI
+ wh 14935
+MI
+ ss 1
+
+140406 storm rain
+LI
+ wh 16730
+MI
+ ss 1
+
+140410 storm rain
+LI
+ wh 19591
+MI
+ ss 1
+
+140434 storm rain
+LI
+ wh 18315
+MI
+ ss 2
+
+140445 storm rain
+LI
+ wh 18082
+MI
+ ss 1
+
+140459 storm rain
+LI
+ wh 18063
+MI
+ ss 1
+
+140468 storm rain
+LI
+ wh 11744
+MI
+ ss 2
+
+140469 storm rain
+LI
+ wh 18413
+MI
+ ss 1
+
+140500 storm rain
+LI
+ wh 18236
+MI
+ ss 1
+
+140510 storm rain
+LI
+ wh 18897
+MI
+ ss 1
+
+140517 storm rain
+LI
+ wh 10871
+MI
+ ss 2
+
+140525 storm rain
+LI
+ wh 10412
+MI
+ ss 1
+
+140526 storm rain
+LI
+ wh 11883
+MI
+ ss 2
+
+140567 storm rain
+LI
+ wh 12092
+MI
+ ss 1
+
+140572 storm rain
+LI
+ wh 15517
+MI
+ ss 1
+
+140575 storm rain
+LI
+ wh 16936
+MI
+ ss 1
+
+140577 storm rain
+LI
+ wh 14244
+MI
+ ss 2
+
+140589 storm rain
+LI
+ wh 11637
+MI
+ ss 1
+
+140602 storm rain
+LI
+ wh 19151
+MI
+ ss 1
+
+140605 storm rain
+LI
+ wh 15847
+MI
+ ss 1
+
+140623 storm rain
+LI
+ wh 17178
+MI
+ ss 1
+
+140633 storm rain
+LI
+ wh 14769
+MI
+ ss 1
+
+140675 storm rain
+LI
+ wh 19698
+MI
+ ss 2
+
+140711 storm rain
+LI
+ wh 13184
+MI
+ ss 2
+
+140720 storm rain
+LI
+ wh 14543
+MI
+ ss 2
+
+140723 storm rain
+LI
+ wh 19298
+MI
+ ss 1
+
+140753 storm rain
+LI
+ wh 10819
+MI
+ ss 2
+
+140755 storm rain
+LI
+ wh 13190
+MI
+ ss 2
+
+140791 storm rain
+LI
+ wh 10146
+MI
+ ss 1
+
+140804 storm rain
+LI
+ wh 18948
+MI
+ ss 2
+
+140812 storm rain
+LI
+ wh 10136
+MI
+ ss 1
+
+140838 storm rain
+LI
+ wh 14112
+MI
+ ss 2
+
+140851 storm rain
+LI
+ wh 13879
+MI
+ ss 1
+
+140856 storm rain
+LI
+ wh 15664
+MI
+ ss 1
+
+140902 storm rain
+LI
+ wh 19290
+MI
+ ss 2
+
+140908 storm rain
+LI
+ wh 16881
+MI
+ ss 1
+
+140925 storm rain
+LI
+ wh 19792
+MI
+ ss 2
+
+140981 storm rain
+LI
+ wh 14172
+MI
+ ss 1
+
+141012 storm rain
+LI
+ wh 18240
+MI
+ ss 1
+
+141023 storm rain
+LI
+ wh 16378
+MI
+ ss 2
+
+141048 storm rain
+LI
+ wh 14314
+MI
+ ss 1
+
+141055 storm rain
+LI
+ wh 13936
+MI
+ ss 1
+
+141149 storm rain
+LI
+ wh 15308
+MI
+ ss 2
+
+141170 storm rain
+LI
+ wh 19116
+MI
+ ss 2
+
+141196 storm rain
+LI
+ wh 17929
+MI
+ ss 1
+
+141197 storm rain
+LI
+ wh 11210
+MI
+ ss 2
+
+141203 storm wind
+na 154
+LI
+ wh 12387
+MI
+ sb 9960
+ mc 242
+ ss 1693
+ mh 12387
+ co 275
+
+141207 storm rain
+LI
+ wh 15539
+MI
+ ss 2
+
+141228 storm rain
+LI
+ wh 19866
+MI
+ ss 2
+
+141284 storm rain
+LI
+ wh 10134
+MI
+ ss 1
+
+141301 storm rain
+LI
+ wh 19471
+MI
+ ss 1
+
+141327 storm rain
+LI
+ wh 13958
+MI
+ ss 2
+
+141329 storm rain
+LI
+ wh 18775
+MI
+ ss 2
+
+141336 storm rain
+LI
+ wh 14365
+MI
+ ss 1
+
+141343 storm rain
+LI
+ wh 15635
+MI
+ ss 2
+
+141384 storm rain
+LI
+ wh 15695
+MI
+ ss 2
+
+141389 storm rain
+LI
+ wh 19012
+MI
+ ss 2
+
+141407 storm rain
+LI
+ wh 16364
+MI
+ ss 1
+
+141452 deadchar 0
+CH
+ ni 32
+ si 1
+ lk 4
+ at 60
+ df 60
+ dt 260 28 7798
+CO
+ li attack 122452
+ ar 122452 0 0 0 0 0 0 0
+ wa 1
+ st 1
+ pr 3
+
+141460 storm rain
+LI
+ wh 14642
+MI
+ ss 2
+
+141482 storm rain
+LI
+ wh 15813
+MI
+ ss 2
+
+141549 storm rain
+LI
+ wh 13679
+MI
+ ss 2
+
+141566 storm rain
+LI
+ wh 16446
+MI
+ ss 2
+
+141581 storm rain
+LI
+ wh 17005
+MI
+ ss 2
+
+141602 storm rain
+LI
+ wh 18668
+MI
+ ss 1
+
+141633 storm rain
+LI
+ wh 10435
+MI
+ ss 1
+
+141635 storm rain
+LI
+ wh 14723
+MI
+ ss 1
+
+141657 storm rain
+LI
+ wh 16686
+MI
+ ss 1
+
+141663 storm rain
+LI
+ wh 13320
+MI
+ ss 1
+
+141682 storm rain
+LI
+ wh 13633
+MI
+ ss 1
+
+141687 storm rain
+LI
+ wh 19069
+MI
+ ss 2
+
+141690 storm rain
+LI
+ wh 12194
+MI
+ ss 2
+
+141699 storm rain
+LI
+ wh 11260
+MI
+ ss 1
+
+141733 storm rain
+LI
+ wh 15837
+MI
+ ss 2
+
+141761 storm rain
+LI
+ wh 10892
+MI
+ ss 1
+
+141763 storm rain
+LI
+ wh 11440
+MI
+ ss 2
+
+141799 storm rain
+LI
+ wh 12280
+MI
+ ss 2
+
+141818 storm rain
+LI
+ wh 11969
+MI
+ ss 1
+
+141822 storm rain
+LI
+ wh 14135
+MI
+ ss 2
+
+141856 storm rain
+LI
+ wh 17639
+MI
+ ss 1
+
+141865 storm rain
+LI
+ wh 13724
+MI
+ ss 1
+
+141868 storm rain
+LI
+ wh 11827
+MI
+ ss 2
+
+141872 storm rain
+LI
+ wh 11748
+MI
+ ss 2
+
+141875 storm rain
+LI
+ wh 11061
+MI
+ ss 1
+
+141914 storm rain
+LI
+ wh 11684
+MI
+ ss 1
+
+141915 storm rain
+LI
+ wh 18884
+MI
+ ss 2
+
+141920 storm rain
+LI
+ wh 13218
+MI
+ ss 2
+
+141929 storm rain
+LI
+ wh 17092
+MI
+ ss 1
+
+141945 storm rain
+LI
+ wh 10801
+MI
+ ss 1
+
+141991 storm rain
+LI
+ wh 14297
+MI
+ ss 2
+
+141996 storm rain
+LI
+ wh 18207
+MI
+ ss 1
+
+142054 storm rain
+LI
+ wh 13519
+MI
+ ss 1
+
+142062 storm rain
+LI
+ wh 12729
+MI
+ ss 1
+
+142066 storm rain
+LI
+ wh 11737
+MI
+ ss 2
+
+142073 storm rain
+LI
+ wh 11745
+MI
+ ss 1
+
+142082 storm rain
+LI
+ wh 12548
+MI
+ ss 2
+
+142100 storm rain
+LI
+ wh 17171
+MI
+ ss 1
+
+142139 storm rain
+LI
+ wh 18102
+MI
+ ss 2
+
+142143 storm rain
+LI
+ wh 13279
+MI
+ ss 2
+
+142165 storm rain
+LI
+ wh 17399
+MI
+ ss 2
+
+142200 storm rain
+LI
+ wh 18194
+MI
+ ss 1
+
+142206 storm rain
+LI
+ wh 11460
+MI
+ ss 1
+
+142214 storm rain
+LI
+ wh 17277
+MI
+ ss 1
+
+142220 storm rain
+LI
+ wh 12474
+MI
+ ss 2
+
+142249 storm rain
+LI
+ wh 16149
+MI
+ ss 1
+
+142274 storm rain
+LI
+ wh 15779
+MI
+ ss 1
+
+142275 storm rain
+LI
+ wh 19313
+MI
+ ss 1
+
+142278 storm rain
+LI
+ wh 17081
+MI
+ ss 2
+
+142279 storm rain
+LI
+ wh 19851
+MI
+ ss 1
+
+142294 storm rain
+LI
+ wh 19512
+MI
+ ss 1
+
+142302 storm rain
+LI
+ wh 11884
+MI
+ ss 1
+
+142311 storm rain
+LI
+ wh 11997
+MI
+ ss 2
+
+142330 storm rain
+LI
+ wh 17847
+MI
+ ss 1
+
+142336 storm rain
+LI
+ wh 11581
+MI
+ ss 2
+
+142350 storm rain
+LI
+ wh 18223
+MI
+ ss 1
+
+142361 storm rain
+LI
+ wh 19888
+MI
+ ss 2
+
+142378 storm rain
+LI
+ wh 11764
+MI
+ ss 2
+
+142385 storm rain
+LI
+ wh 17984
+MI
+ ss 2
+
+142389 storm rain
+LI
+ wh 13743
+MI
+ ss 2
+
+142396 storm rain
+LI
+ wh 10800
+MI
+ ss 1
+
+142418 storm rain
+LI
+ wh 15353
+MI
+ ss 2
+
+142430 storm rain
+LI
+ wh 18376
+MI
+ ss 1
+
+142498 storm rain
+LI
+ wh 12941
+MI
+ ss 1
+
+142499 storm rain
+LI
+ wh 19409
+MI
+ ss 1
+
+142502 storm rain
+LI
+ wh 17289
+MI
+ ss 1
+
+142562 storm rain
+LI
+ wh 17228
+MI
+ ss 1
+
+142564 storm rain
+LI
+ wh 15935
+MI
+ ss 2
+
+142565 storm rain
+LI
+ wh 14878
+MI
+ ss 1
+
+142569 storm rain
+LI
+ wh 13409
+MI
+ ss 1
+
+142589 storm rain
+LI
+ wh 16441
+MI
+ ss 1
+
+142657 storm rain
+LI
+ wh 12454
+MI
+ ss 2
+
+142658 storm rain
+LI
+ wh 18025
+MI
+ ss 1
+
+142693 storm rain
+LI
+ wh 11247
+MI
+ ss 1
+
+142695 storm rain
+LI
+ wh 11539
+MI
+ ss 1
+
+142725 storm rain
+LI
+ wh 19798
+MI
+ ss 2
+
+142774 storm rain
+LI
+ wh 14564
+MI
+ ss 2
+
+142785 storm rain
+LI
+ wh 10229
+MI
+ ss 1
+
+142803 storm rain
+LI
+ wh 15341
+MI
+ ss 1
+
+142809 storm rain
+LI
+ wh 13095
+MI
+ ss 2
+
+142858 storm rain
+LI
+ wh 13656
+MI
+ ss 2
+
+142892 storm fog
+LI
+ wh 15104
+MI
+ sb 5557
+ ss 26
+
+142917 storm rain
+LI
+ wh 11279
+MI
+ ss 1
+
+142932 storm rain
+LI
+ wh 17010
+MI
+ ss 1
+
+142939 storm rain
+LI
+ wh 15287
+MI
+ ss 2
+
+142971 storm rain
+LI
+ wh 14023
+MI
+ ss 1
+
+143021 storm rain
+LI
+ wh 15180
+MI
+ ss 2
+
+143023 storm rain
+LI
+ wh 11821
+MI
+ ss 1
+
+143044 storm rain
+LI
+ wh 12970
+MI
+ ss 1
+
+143056 storm rain
+LI
+ wh 17184
+MI
+ ss 1
+
+143058 storm rain
+LI
+ wh 19748
+MI
+ ss 2
+
+143071 storm rain
+LI
+ wh 12903
+MI
+ ss 2
+
+143074 storm rain
+LI
+ wh 15343
+MI
+ ss 1
+
+143082 storm rain
+LI
+ wh 14399
+MI
+ ss 2
+
+143090 storm rain
+LI
+ wh 18465
+MI
+ ss 2
+
+143108 storm rain
+LI
+ wh 15639
+MI
+ ss 1
+
+143154 storm rain
+LI
+ wh 11365
+MI
+ ss 1
+
+143171 storm rain
+LI
+ wh 14598
+MI
+ ss 2
+
+143172 storm rain
+LI
+ wh 18842
+MI
+ ss 1
+
+143192 storm rain
+LI
+ wh 15713
+MI
+ ss 2
+
+143196 storm rain
+LI
+ wh 15963
+MI
+ ss 2
+
+143201 storm rain
+LI
+ wh 12095
+MI
+ ss 2
+
+143218 storm rain
+LI
+ wh 17553
+MI
+ ss 1
+
+143219 storm rain
+LI
+ wh 10021
+MI
+ ss 2
+
+143254 storm rain
+LI
+ wh 13621
+MI
+ ss 1
+
+143264 storm rain
+LI
+ wh 15202
+MI
+ ss 2
+
+143278 storm rain
+LI
+ wh 19009
+MI
+ ss 2
+
+143319 storm rain
+LI
+ wh 19007
+MI
+ ss 2
+
+143345 storm rain
+LI
+ wh 16951
+MI
+ ss 2
+
+143387 storm rain
+LI
+ wh 12657
+MI
+ ss 2
+
+143395 storm rain
+LI
+ wh 16513
+MI
+ ss 2
+
+143418 storm rain
+LI
+ wh 11610
+MI
+ ss 2
+
+143423 storm rain
+LI
+ wh 16885
+MI
+ ss 1
+
+143431 storm rain
+LI
+ wh 16869
+MI
+ ss 2
+
+143477 storm rain
+LI
+ wh 19011
+MI
+ ss 2
+
+143506 storm rain
+LI
+ wh 19581
+MI
+ ss 1
+
+143516 storm rain
+LI
+ wh 19871
+MI
+ ss 2
+
+143518 storm rain
+LI
+ wh 14006
+MI
+ ss 1
+
+143528 storm rain
+LI
+ wh 13052
+MI
+ ss 1
+
+143529 storm rain
+LI
+ wh 14183
+MI
+ ss 2
+
+143537 storm rain
+LI
+ wh 16731
+MI
+ ss 1
+
+143584 storm rain
+LI
+ wh 16603
+MI
+ ss 1
+
+143590 storm rain
+LI
+ wh 12603
+MI
+ ss 2
+
+143620 storm rain
+LI
+ wh 18350
+MI
+ ss 2
+
+143632 storm rain
+LI
+ wh 19309
+MI
+ ss 2
+
+143654 storm rain
+LI
+ wh 10714
+MI
+ ss 2
+
+143655 storm rain
+LI
+ wh 13756
+MI
+ ss 1
+
+143751 storm rain
+LI
+ wh 12057
+MI
+ ss 2
+
+143760 storm rain
+LI
+ wh 12218
+MI
+ ss 1
+
+143775 storm rain
+LI
+ wh 15867
+MI
+ ss 1
+
+143777 storm rain
+LI
+ wh 12168
+MI
+ ss 2
+
+143824 storm rain
+LI
+ wh 15167
+MI
+ ss 1
+
+143826 storm rain
+LI
+ wh 13896
+MI
+ ss 1
+
+143827 storm rain
+LI
+ wh 18308
+MI
+ ss 2
+
+143845 storm rain
+LI
+ wh 16012
+MI
+ ss 1
+
+143867 storm rain
+LI
+ wh 19107
+MI
+ ss 2
+
+143872 storm rain
+LI
+ wh 15748
+MI
+ ss 2
+
+143884 storm rain
+LI
+ wh 18485
+MI
+ ss 1
+
+143889 storm rain
+LI
+ wh 11182
+MI
+ ss 2
+
+143890 storm rain
+LI
+ wh 11579
+MI
+ ss 1
+
+143898 storm rain
+LI
+ wh 14692
+MI
+ ss 1
+
+143922 storm rain
+LI
+ wh 17364
+MI
+ ss 2
+
+143926 storm rain
+LI
+ wh 10859
+MI
+ ss 2
+
+143962 storm rain
+LI
+ wh 11469
+MI
+ ss 2
+
+143963 storm rain
+LI
+ wh 19579
+MI
+ ss 1
+
+143973 storm rain
+LI
+ wh 14351
+MI
+ ss 1
+
+143974 storm rain
+LI
+ wh 14224
+MI
+ ss 2
+
+143976 storm rain
+LI
+ wh 18390
+MI
+ ss 1
+
+143981 storm rain
+LI
+ wh 15938
+MI
+ ss 1
+
+143984 storm rain
+LI
+ wh 12453
+MI
+ ss 2
+
+144000 storm rain
+LI
+ wh 11251
+MI
+ ss 2
+
+144018 storm rain
+LI
+ wh 18361
+MI
+ ss 2
+
+144160 storm rain
+LI
+ wh 13889
+MI
+ ss 1
+
+144175 storm rain
+LI
+ wh 12633
+MI
+ ss 1
+
+144176 storm rain
+LI
+ wh 18010
+MI
+ ss 1
+
+144196 storm rain
+LI
+ wh 19312
+MI
+ ss 1
+
+144197 storm rain
+LI
+ wh 16946
+MI
+ ss 1
+
+144198 storm rain
+LI
+ wh 13385
+MI
+ ss 2
+
+144212 storm rain
+LI
+ wh 14278
+MI
+ ss 2
+
+144247 storm rain
+LI
+ wh 19338
+MI
+ ss 1
+
+144279 storm rain
+LI
+ wh 19303
+MI
+ ss 2
+
+144280 storm rain
+LI
+ wh 14863
+MI
+ ss 2
+
+144294 storm rain
+LI
+ wh 14154
+MI
+ ss 2
+
+144310 storm rain
+LI
+ wh 18530
+MI
+ ss 1
+
+144311 storm rain
+LI
+ wh 19990
+MI
+ ss 2
+
+144325 storm rain
+LI
+ wh 13750
+MI
+ ss 2
+
+144330 storm rain
+LI
+ wh 14945
+MI
+ ss 2
+
+144391 storm rain
+LI
+ wh 13064
+MI
+ ss 1
+
+144394 storm rain
+LI
+ wh 12527
+MI
+ ss 1
+
+144397 storm rain
+LI
+ wh 17680
+MI
+ ss 1
+
+144410 storm rain
+LI
+ wh 14134
+MI
+ ss 2
+
+144452 storm rain
+LI
+ wh 14274
+MI
+ ss 1
+
+144472 storm rain
+LI
+ wh 14398
+MI
+ ss 2
+
+144479 storm rain
+LI
+ wh 16495
+MI
+ ss 1
+
+144484 storm rain
+LI
+ wh 13827
+MI
+ ss 2
+
+144492 storm rain
+LI
+ wh 11818
+MI
+ ss 1
+
+144513 storm rain
+LI
+ wh 15224
+MI
+ ss 1
+
+144514 storm rain
+LI
+ wh 18626
+MI
+ ss 1
+
+144531 storm rain
+LI
+ wh 17627
+MI
+ ss 2
+
+144541 storm rain
+LI
+ wh 10545
+MI
+ ss 2
+
+144565 storm rain
+LI
+ wh 13655
+MI
+ ss 2
+
+144575 storm rain
+LI
+ wh 19022
+MI
+ ss 2
+
+144588 storm rain
+LI
+ wh 10557
+MI
+ ss 1
+
+144627 storm rain
+LI
+ wh 17065
+MI
+ ss 2
+
+144633 storm rain
+LI
+ wh 13003
+MI
+ ss 1
+
+144638 storm rain
+LI
+ wh 10698
+MI
+ ss 1
+
+144646 storm rain
+LI
+ wh 13769
+MI
+ ss 1
+
+144648 storm rain
+LI
+ wh 18290
+MI
+ ss 2
+
+144699 storm rain
+LI
+ wh 16218
+MI
+ ss 1
+
+144771 storm rain
+LI
+ wh 13830
+MI
+ ss 1
+
+144787 storm rain
+LI
+ wh 14621
+MI
+ ss 1
+
+144811 storm rain
+LI
+ wh 19066
+MI
+ ss 2
+
+144843 storm rain
+LI
+ wh 19424
+MI
+ ss 1
+
+144859 storm rain
+LI
+ wh 16166
+MI
+ ss 1
+
+144862 storm rain
+LI
+ wh 17024
+MI
+ ss 2
+
+144865 storm rain
+LI
+ wh 10002
+MI
+ ss 1
+
+144920 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+144923 storm rain
+LI
+ wh 10156
+MI
+ ss 2
+
+144926 storm rain
+LI
+ wh 17774
+MI
+ ss 2
+
+144949 storm rain
+LI
+ wh 16559
+MI
+ ss 1
+
+144959 storm rain
+LI
+ wh 10985
+MI
+ ss 2
+
+144990 storm rain
+LI
+ wh 13569
+MI
+ ss 1
+
+144992 storm rain
+LI
+ wh 13316
+MI
+ ss 2
+
+145053 storm rain
+LI
+ wh 17688
+MI
+ ss 2
+
+145096 storm rain
+LI
+ wh 17442
+MI
+ ss 2
+
+145134 storm rain
+LI
+ wh 14645
+MI
+ ss 2
+
+145135 storm rain
+LI
+ wh 17673
+MI
+ ss 2
+
+145136 storm rain
+LI
+ wh 12838
+MI
+ ss 2
+
+145149 storm rain
+LI
+ wh 10930
+MI
+ ss 2
+
+145151 storm rain
+LI
+ wh 19718
+MI
+ ss 2
+
+145155 storm rain
+LI
+ wh 18095
+MI
+ ss 1
+
+145161 storm rain
+LI
+ wh 19689
+MI
+ ss 1
+
+145163 storm rain
+LI
+ wh 11188
+MI
+ ss 2
+
+145168 storm rain
+LI
+ wh 15548
+MI
+ ss 1
+
+145178 storm rain
+LI
+ wh 19147
+MI
+ ss 1
+
+145180 storm rain
+LI
+ wh 12758
+MI
+ ss 1
+
+145190 storm rain
+LI
+ wh 11782
+MI
+ ss 2
+
+145237 storm rain
+LI
+ wh 13070
+MI
+ ss 1
+
+145244 storm rain
+LI
+ wh 16324
+MI
+ ss 2
+
+145263 storm rain
+LI
+ wh 17987
+MI
+ ss 1
+
+145283 storm rain
+LI
+ wh 15952
+MI
+ ss 1
+
+145288 storm rain
+LI
+ wh 18477
+MI
+ ss 2
+
+145308 storm rain
+LI
+ wh 17260
+MI
+ ss 2
+
+145314 storm rain
+LI
+ wh 17923
+MI
+ ss 2
+
+145325 storm rain
+LI
+ wh 11428
+MI
+ ss 2
+
+145328 storm rain
+LI
+ wh 18793
+MI
+ ss 1
+
+145352 storm rain
+LI
+ wh 15614
+MI
+ ss 1
+
+145354 storm rain
+LI
+ wh 15557
+MI
+ ss 2
+
+145383 storm rain
+LI
+ wh 17524
+MI
+ ss 2
+
+145393 storm rain
+LI
+ wh 18623
+MI
+ ss 1
+
+145396 storm rain
+LI
+ wh 10038
+MI
+ ss 2
+
+145397 storm rain
+LI
+ wh 10658
+MI
+ ss 1
+
+145412 storm rain
+LI
+ wh 10543
+MI
+ ss 1
+
+145446 storm rain
+LI
+ wh 14536
+MI
+ ss 2
+
+145453 storm rain
+LI
+ wh 10257
+MI
+ ss 2
+
+145455 storm rain
+LI
+ wh 11484
+MI
+ ss 2
+
+145475 storm rain
+LI
+ wh 16437
+MI
+ ss 2
+
+145502 storm rain
+LI
+ wh 12802
+MI
+ ss 2
+
+145508 storm rain
+LI
+ wh 11761
+MI
+ ss 2
+
+145510 storm rain
+LI
+ wh 12004
+MI
+ ss 2
+
+145516 storm rain
+LI
+ wh 14124
+MI
+ ss 2
+
+145531 storm rain
+LI
+ wh 18415
+MI
+ ss 1
+
+145533 storm rain
+LI
+ wh 12584
+MI
+ ss 2
+
+145580 storm rain
+LI
+ wh 16370
+MI
+ ss 1
+
+145596 storm rain
+LI
+ wh 17143
+MI
+ ss 2
+
+145601 storm rain
+LI
+ wh 13680
+MI
+ ss 2
+
+145605 storm rain
+LI
+ wh 18903
+MI
+ ss 2
+
+145623 storm rain
+LI
+ wh 16878
+MI
+ ss 2
+
+145657 storm rain
+LI
+ wh 12533
+MI
+ ss 2
+
+145669 storm rain
+LI
+ wh 10181
+MI
+ ss 1
+
+145726 storm rain
+LI
+ wh 16618
+MI
+ ss 2
+
+145727 storm rain
+LI
+ wh 13574
+MI
+ ss 1
+
+145728 storm rain
+LI
+ wh 14079
+MI
+ ss 1
+
+145767 storm rain
+LI
+ wh 18348
+MI
+ ss 1
+
+145813 storm rain
+LI
+ wh 18651
+MI
+ ss 2
+
+145819 storm rain
+LI
+ wh 14648
+MI
+ sb 113562
+ mc 232
+ ss 23
+ mh 14649
+ co 276
+
+145820 storm rain
+LI
+ wh 15989
+MI
+ ss 1
+
+145825 storm rain
+LI
+ wh 11496
+MI
+ ss 2
+
+145837 storm rain
+LI
+ wh 12430
+MI
+ ss 1
+
+145850 storm rain
+LI
+ wh 10111
+MI
+ ss 1
+
+145851 storm rain
+LI
+ wh 17559
+MI
+ ss 2
+
+145864 storm rain
+LI
+ wh 16768
+MI
+ ss 2
+
+145878 storm rain
+LI
+ wh 11181
+MI
+ ss 1
+
+145922 storm rain
+LI
+ wh 10832
+MI
+ ss 1
+
+145960 storm rain
+LI
+ wh 15046
+MI
+ ss 2
+
+145974 storm rain
+LI
+ wh 16766
+MI
+ ss 1
+
+145989 storm rain
+LI
+ wh 14683
+MI
+ ss 1
+
+145991 storm rain
+LI
+ wh 19074
+MI
+ ss 1
+
+145993 storm rain
+LI
+ wh 16994
+MI
+ ss 2
+
+145994 storm rain
+LI
+ wh 19106
+MI
+ ss 1
+
+146043 storm rain
+LI
+ wh 13341
+MI
+ ss 2
+
+146050 storm rain
+LI
+ wh 19967
+MI
+ ss 2
+
+146053 storm rain
+LI
+ wh 18586
+MI
+ ss 2
+
+146054 storm rain
+LI
+ wh 16638
+MI
+ ss 2
+
+146064 storm rain
+LI
+ wh 13560
+MI
+ ss 1
+
+146066 storm rain
+LI
+ wh 15745
+MI
+ ss 1
+
+146078 storm rain
+LI
+ wh 18624
+MI
+ ss 1
+
+146083 storm rain
+LI
+ wh 14702
+MI
+ ss 2
+
+146086 storm rain
+LI
+ wh 18729
+MI
+ ss 1
+
+146089 storm rain
+LI
+ wh 18687
+MI
+ ss 1
+
+146151 storm rain
+LI
+ wh 15058
+MI
+ ss 2
+
+146159 storm rain
+LI
+ wh 18513
+MI
+ ss 2
+
+146165 storm rain
+LI
+ wh 17771
+MI
+ ss 1
+
+146189 storm rain
+LI
+ wh 16179
+MI
+ ss 2
+
+146196 storm rain
+LI
+ wh 13581
+MI
+ ss 1
+
+146197 storm rain
+LI
+ wh 19574
+MI
+ ss 1
+
+146205 storm rain
+LI
+ wh 13898
+MI
+ ss 1
+
+146290 storm rain
+LI
+ wh 13442
+MI
+ ss 1
+
+146298 storm rain
+LI
+ wh 14858
+MI
+ ss 2
+
+146334 storm rain
+LI
+ wh 18067
+MI
+ ss 1
+
+146352 storm rain
+LI
+ wh 16148
+MI
+ ss 1
+
+146368 storm rain
+LI
+ wh 19992
+MI
+ ss 2
+
+146375 storm rain
+LI
+ wh 12082
+MI
+ ss 1
+
+146386 storm rain
+LI
+ wh 11254
+MI
+ ss 1
+
+146395 storm rain
+LI
+ wh 11661
+MI
+ ss 2
+
+146419 storm rain
+LI
+ wh 13995
+MI
+ ss 2
+
+146485 storm rain
+LI
+ wh 10293
+MI
+ ss 2
+
+146505 storm rain
+LI
+ wh 16678
+MI
+ ss 2
+
+146516 storm rain
+LI
+ wh 12593
+MI
+ ss 2
+
+146534 storm rain
+LI
+ wh 18941
+MI
+ ss 1
+
+146543 storm rain
+LI
+ wh 19391
+MI
+ ss 2
+
+146566 storm rain
+LI
+ wh 19360
+MI
+ ss 1
+
+146570 storm rain
+LI
+ wh 16793
+MI
+ ss 1
+
+146575 storm rain
+LI
+ wh 17852
+MI
+ ss 1
+
+146577 storm rain
+LI
+ wh 17947
+MI
+ ss 1
+
+146580 storm rain
+LI
+ wh 11441
+MI
+ ss 2
+
+146598 storm rain
+LI
+ wh 16202
+MI
+ ss 1
+
+146616 storm rain
+LI
+ wh 11176
+MI
+ ss 2
+
+146728 storm rain
+LI
+ wh 18962
+MI
+ ss 2
+
+146744 storm rain
+LI
+ wh 18035
+MI
+ ss 2
+
+146746 storm rain
+LI
+ wh 19289
+MI
+ ss 2
+
+146791 storm rain
+LI
+ wh 12477
+MI
+ ss 2
+
+146805 storm rain
+LI
+ wh 15911
+MI
+ ss 1
+
+146808 storm rain
+LI
+ wh 17968
+MI
+ sb 68484
+ ss 37
+
+146829 storm rain
+LI
+ wh 18146
+MI
+ ss 2
+
+146839 storm rain
+LI
+ wh 17365
+MI
+ ss 2
+
+146867 storm rain
+LI
+ wh 10981
+MI
+ ss 1
+
+146907 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+146908 storm rain
+LI
+ wh 18271
+MI
+ ss 1
+
+146923 storm rain
+LI
+ wh 18356
+MI
+ ss 1
+
+146933 storm rain
+LI
+ wh 16939
+MI
+ ss 2
+
+146940 storm rain
+LI
+ wh 12392
+MI
+ ss 2
+
+146941 storm rain
+LI
+ wh 19524
+MI
+ ss 1
+
+146949 storm rain
+LI
+ wh 12687
+MI
+ ss 2
+
+146969 storm rain
+LI
+ wh 18110
+MI
+ ss 1
+
+147012 storm rain
+LI
+ wh 11073
+MI
+ ss 2
+
+147025 storm rain
+LI
+ wh 10639
+MI
+ ss 2
+
+147046 storm rain
+LI
+ wh 18291
+MI
+ ss 1
+
+147047 storm rain
+LI
+ wh 19172
+MI
+ ss 2
+
+147053 storm rain
+LI
+ wh 12272
+MI
+ ss 1
+
+147065 storm rain
+LI
+ wh 15788
+MI
+ ss 2
+
+147088 storm rain
+LI
+ wh 10590
+MI
+ ss 1
+
+147094 storm rain
+LI
+ wh 16110
+MI
+ ss 1
+
+147136 storm rain
+LI
+ wh 11630
+MI
+ ss 2
+
+147193 storm rain
+LI
+ wh 12049
+MI
+ ss 1
+
+147241 storm rain
+LI
+ wh 11123
+MI
+ ss 2
+
+147266 storm rain
+LI
+ wh 18670
+MI
+ ss 2
+
+147332 storm rain
+LI
+ wh 14947
+MI
+ ss 2
+
+147337 storm rain
+LI
+ wh 13145
+MI
+ ss 1
+
+147399 storm rain
+LI
+ wh 17547
+MI
+ ss 1
+
+147423 storm rain
+LI
+ wh 13240
+MI
+ ss 2
+
+147432 storm rain
+LI
+ wh 14826
+MI
+ ss 1
+
+147460 storm rain
+LI
+ wh 17836
+MI
+ ss 1
+
+147465 storm rain
+LI
+ wh 16550
+MI
+ ss 1
+
+147477 storm rain
+LI
+ wh 13395
+MI
+ ss 1
+
+147492 storm rain
+LI
+ wh 17339
+MI
+ ss 1
+
+147511 storm rain
+LI
+ wh 17003
+MI
+ ss 1
+
+147557 storm rain
+LI
+ wh 15159
+MI
+ ss 2
+
+147564 storm rain
+LI
+ wh 16505
+MI
+ ss 1
+
+147612 storm rain
+LI
+ wh 11625
+MI
+ ss 2
+
+147613 storm rain
+LI
+ wh 13500
+MI
+ ss 1
+
+147622 storm rain
+LI
+ wh 17676
+MI
+ ss 2
+
+147667 storm rain
+LI
+ wh 11212
+MI
+ ss 2
+
+147711 storm rain
+LI
+ wh 17129
+MI
+ ss 1
+
+147756 storm rain
+LI
+ wh 11114
+MI
+ ss 1
+
+147757 storm rain
+LI
+ wh 11115
+MI
+ ss 2
+
+147762 storm rain
+LI
+ wh 11982
+MI
+ ss 1
+
+147805 storm rain
+LI
+ wh 18844
+MI
+ ss 1
+
+147816 storm rain
+LI
+ wh 13568
+MI
+ ss 1
+
+147818 storm rain
+LI
+ wh 15856
+MI
+ ss 2
+
+147820 storm rain
+LI
+ wh 12488
+MI
+ ss 1
+
+147821 storm rain
+LI
+ wh 15210
+MI
+ ss 1
+
+147832 storm rain
+LI
+ wh 14309
+MI
+ ss 2
+
+147836 storm rain
+LI
+ wh 14401
+MI
+ ss 1
+
+147847 storm rain
+LI
+ wh 18869
+MI
+ ss 1
+
+147850 storm rain
+LI
+ wh 14844
+MI
+ ss 2
+
+147880 storm rain
+LI
+ wh 14119
+MI
+ ss 2
+
+147892 storm rain
+LI
+ wh 18797
+MI
+ ss 2
+
+147897 storm rain
+LI
+ wh 18100
+MI
+ ss 2
+
+147899 storm rain
+LI
+ wh 15094
+MI
+ ss 1
+
+147912 storm rain
+LI
+ wh 14777
+MI
+ ss 1
+
+147922 storm rain
+LI
+ wh 14062
+MI
+ ss 1
+
+147940 storm rain
+LI
+ wh 19657
+MI
+ ss 1
+
+147947 storm rain
+LI
+ wh 13028
+MI
+ ss 2
+
+147957 storm rain
+LI
+ wh 11374
+MI
+ ss 1
+
+147960 storm rain
+LI
+ wh 18616
+MI
+ ss 2
+
+147965 storm rain
+LI
+ wh 13114
+MI
+ ss 2
+
+147988 storm rain
+LI
+ wh 16426
+MI
+ ss 2
+
+147992 storm rain
+LI
+ wh 17386
+MI
+ ss 1
+
+147994 storm rain
+LI
+ wh 15384
+MI
+ ss 1
+
+148041 storm rain
+LI
+ wh 19015
+MI
+ ss 1
+
+148048 storm rain
+LI
+ wh 18863
+MI
+ ss 2
+
+148067 storm rain
+LI
+ wh 17971
+MI
+ ss 1
+
+148133 storm rain
+LI
+ wh 18727
+MI
+ ss 1
+
+148186 storm rain
+LI
+ wh 17047
+MI
+ ss 1
+
+148220 storm rain
+LI
+ wh 12379
+MI
+ ss 2
+
+148223 storm rain
+LI
+ wh 14376
+MI
+ ss 2
+
+148224 storm rain
+LI
+ wh 18795
+MI
+ ss 1
+
+148245 storm rain
+LI
+ wh 16255
+MI
+ ss 2
+
+148282 storm rain
+LI
+ wh 18915
+MI
+ ss 1
+
+148299 storm rain
+LI
+ wh 12096
+MI
+ ss 1
+
+148302 storm rain
+LI
+ wh 16805
+MI
+ ss 1
+
+148303 storm rain
+LI
+ wh 14647
+MI
+ ss 1
+
+148304 storm rain
+LI
+ wh 10422
+MI
+ ss 1
+
+148306 storm rain
+LI
+ wh 16173
+MI
+ ss 1
+
+148314 storm rain
+LI
+ wh 16052
+MI
+ ss 2
+
+148325 storm rain
+LI
+ wh 12283
+MI
+ ss 1
+
+148331 storm rain
+LI
+ wh 18940
+MI
+ ss 1
+
+148353 storm rain
+LI
+ wh 14507
+MI
+ ss 2
+
+148355 storm rain
+LI
+ wh 12131
+MI
+ ss 1
+
+148372 storm rain
+LI
+ wh 12798
+MI
+ ss 1
+
+148398 storm rain
+LI
+ wh 12709
+MI
+ ss 1
+
+148406 storm rain
+LI
+ wh 17756
+MI
+ ss 1
+
+148409 storm rain
+LI
+ wh 13739
+MI
+ ss 2
+
+148427 storm rain
+LI
+ wh 17330
+MI
+ ss 1
+
+148451 storm rain
+LI
+ wh 11532
+MI
+ ss 2
+
+148467 storm rain
+LI
+ wh 13058
+MI
+ ss 2
+
+148476 storm rain
+LI
+ wh 13105
+MI
+ ss 2
+
+148477 storm rain
+LI
+ wh 11055
+MI
+ ss 1
+
+148484 storm rain
+LI
+ wh 14076
+MI
+ ss 1
+
+148485 storm rain
+LI
+ wh 18820
+MI
+ ss 2
+
+148488 storm rain
+LI
+ wh 18987
+MI
+ ss 1
+
+148527 storm rain
+LI
+ wh 10133
+MI
+ ss 1
+
+148552 storm rain
+LI
+ wh 11892
+MI
+ ss 2
+
+148570 storm rain
+LI
+ wh 16134
+MI
+ ss 2
+
+148605 storm rain
+LI
+ wh 11038
+MI
+ ss 2
+
+148622 storm rain
+LI
+ wh 12813
+MI
+ ss 1
+
+148631 storm rain
+LI
+ wh 15845
+MI
+ ss 1
+
+148640 storm rain
+LI
+ wh 17501
+MI
+ ss 2
+
+148685 storm rain
+LI
+ wh 13665
+MI
+ ss 2
+
+148686 storm rain
+LI
+ wh 18262
+MI
+ ss 1
+
+148688 storm rain
+LI
+ wh 10104
+MI
+ ss 2
+
+148711 storm rain
+LI
+ wh 13179
+MI
+ ss 2
+
+148715 storm rain
+LI
+ wh 13044
+MI
+ ss 1
+
+148727 storm rain
+LI
+ wh 15781
+MI
+ ss 1
+
+148735 storm rain
+LI
+ wh 14198
+MI
+ ss 2
+
+148766 storm rain
+LI
+ wh 17920
+MI
+ ss 1
+
+148774 storm rain
+LI
+ wh 18573
+MI
+ ss 2
+
+148776 storm rain
+LI
+ wh 11632
+MI
+ ss 1
+
+148780 storm rain
+LI
+ wh 15812
+MI
+ ss 1
+
+148791 storm rain
+LI
+ wh 12159
+MI
+ ss 1
+
+148813 storm rain
+LI
+ wh 15747
+MI
+ ss 1
+
+148827 storm rain
+LI
+ wh 17542
+MI
+ ss 1
+
+148836 storm rain
+LI
+ wh 14142
+MI
+ ss 1
+
+148839 storm rain
+LI
+ wh 17351
+MI
+ ss 2
+
+148875 storm rain
+LI
+ wh 11230
+MI
+ ss 2
+
+148876 storm rain
+LI
+ wh 13155
+MI
+ ss 1
+
+148916 storm rain
+LI
+ wh 17849
+MI
+ ss 1
+
+148936 storm rain
+LI
+ wh 14969
+MI
+ ss 1
+
+148958 deadchar 0
+CH
+ ni 32
+ he 100
+ lk 4
+ at 60
+ df 60
+ dt 260 1 7771
+CO
+ li die
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+148963 storm rain
+LI
+ wh 12592
+MI
+ ss 1
+
+148970 storm rain
+LI
+ wh 12822
+MI
+ ss 1
+
+148974 storm rain
+LI
+ wh 19357
+MI
+ ss 2
+
+148987 storm rain
+LI
+ wh 15227
+MI
+ ss 2
+
+149011 storm rain
+LI
+ wh 14046
+MI
+ ss 1
+
+149018 storm rain
+LI
+ wh 13927
+MI
+ ss 2
+
+149028 storm rain
+LI
+ wh 14043
+MI
+ ss 2
+
+149029 storm rain
+LI
+ wh 18815
+MI
+ ss 1
+
+149050 storm rain
+LI
+ wh 12435
+MI
+ ss 1
+
+149067 storm rain
+LI
+ wh 16338
+MI
+ ss 1
+
+149076 storm rain
+LI
+ wh 14567
+MI
+ ss 1
+
+149088 storm rain
+LI
+ wh 12662
+MI
+ ss 1
+
+149116 storm rain
+LI
+ wh 13287
+MI
+ ss 2
+
+149157 storm rain
+LI
+ wh 10029
+MI
+ ss 1
+
+149167 storm rain
+LI
+ wh 14284
+MI
+ ss 1
+
+149174 storm rain
+LI
+ wh 19355
+MI
+ ss 2
+
+149176 storm rain
+LI
+ wh 19359
+MI
+ ss 2
+
+149199 storm rain
+LI
+ wh 13895
+MI
+ ss 2
+
+149211 storm rain
+LI
+ wh 15011
+MI
+ ss 2
+
+149218 storm rain
+LI
+ wh 14579
+MI
+ ss 1
+
+149229 storm rain
+LI
+ wh 13362
+MI
+ ss 1
+
+149230 storm rain
+LI
+ wh 15553
+MI
+ ss 2
+
+149236 storm rain
+LI
+ wh 18351
+MI
+ ss 2
+
+149255 storm rain
+LI
+ wh 13217
+MI
+ ss 1
+
+149312 storm rain
+LI
+ wh 15205
+MI
+ ss 1
+
+149314 storm rain
+LI
+ wh 16099
+MI
+ ss 2
+
+149330 storm rain
+LI
+ wh 12861
+MI
+ ss 2
+
+149334 storm rain
+LI
+ wh 13128
+MI
+ ss 2
+
+149368 storm rain
+LI
+ wh 17818
+MI
+ ss 1
+
+149379 storm rain
+LI
+ wh 13270
+MI
+ ss 2
+
+149387 storm rain
+LI
+ wh 14887
+MI
+ ss 2
+
+149407 storm rain
+LI
+ wh 15498
+MI
+ ss 1
+
+149426 storm rain
+LI
+ wh 10005
+MI
+ ss 1
+
+149438 storm rain
+LI
+ wh 14998
+MI
+ ss 2
+
+149455 storm rain
+LI
+ wh 13108
+MI
+ ss 2
+
+149476 storm rain
+LI
+ wh 16056
+MI
+ ss 2
+
+149479 storm rain
+LI
+ wh 17713
+MI
+ ss 2
+
+149480 storm rain
+LI
+ wh 16955
+MI
+ ss 2
+
+149481 storm rain
+LI
+ wh 11927
+MI
+ ss 1
+
+149484 storm rain
+LI
+ wh 14171
+MI
+ ss 1
+
+149497 storm rain
+LI
+ wh 13807
+MI
+ ss 1
+
+149519 storm rain
+LI
+ wh 13229
+MI
+ ss 2
+
+149520 storm rain
+LI
+ wh 18298
+MI
+ ss 2
+
+149529 storm rain
+LI
+ wh 19768
+MI
+ ss 2
+
+149559 storm rain
+LI
+ wh 15054
+MI
+ ss 1
+
+149579 storm rain
+LI
+ wh 14354
+MI
+ ss 2
+
+149591 storm rain
+LI
+ wh 13608
+MI
+ ss 2
+
+149607 storm rain
+LI
+ wh 18345
+MI
+ ss 1
+
+149609 storm rain
+LI
+ wh 18963
+MI
+ sb 1245
+ ss 109
+
+149634 storm rain
+LI
+ wh 19762
+MI
+ ss 1
+
+149645 storm rain
+LI
+ wh 10672
+MI
+ ss 1
+
+149652 storm rain
+LI
+ wh 11358
+MI
+ ss 1
+
+149653 storm rain
+LI
+ wh 19443
+MI
+ ss 1
+
+149673 storm rain
+LI
+ wh 17980
+MI
+ ss 2
+
+149675 storm rain
+LI
+ wh 15522
+MI
+ ss 2
+
+149695 storm rain
+LI
+ wh 19542
+MI
+ ss 1
+
+149698 storm rain
+LI
+ wh 15550
+MI
+ ss 2
+
+149709 storm rain
+LI
+ wh 13219
+MI
+ ss 2
+
+149732 storm rain
+LI
+ wh 15005
+MI
+ ss 1
+
+149738 storm rain
+LI
+ wh 10722
+MI
+ ss 1
+
+149747 storm rain
+LI
+ wh 14010
+MI
+ ss 1
+
+149761 storm rain
+LI
+ wh 15036
+MI
+ ss 1
+
+149765 storm rain
+LI
+ wh 31694
+MI
+ sb 8520
+ mc 248
+ ss 7
+ mh 31694
+ co 276
+
+149781 storm rain
+LI
+ wh 18524
+MI
+ ss 1
+
+149791 storm rain
+LI
+ wh 19444
+MI
+ ss 2
+
+149816 storm rain
+LI
+ wh 17831
+MI
+ ss 1
+
+149822 storm rain
+LI
+ wh 12426
+MI
+ ss 1
+
+149873 storm rain
+LI
+ wh 19908
+MI
+ ss 1
+
+149885 storm rain
+LI
+ wh 13716
+MI
+ ss 1
+
+149900 storm rain
+LI
+ wh 16387
+MI
+ ss 2
+
+149933 storm rain
+LI
+ wh 11671
+MI
+ ss 1
+
+149936 storm rain
+LI
+ wh 18397
+MI
+ ss 1
+
+149940 storm rain
+LI
+ wh 11142
+MI
+ ss 2
+
+149943 storm rain
+LI
+ wh 13844
+MI
+ ss 2
+

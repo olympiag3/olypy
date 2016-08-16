@@ -1,0 +1,58 @@
+51259 player pl_regular
+na Centori
+il	1 6750 \
+	77 50 \
+	78 100
+PL
+ fn CRR
+ em waxxzombie@hotmail.com
+ np 30
+ fs 65
+ ft 103
+ lt 105
+ kn 610 700 
+ un 69631 69611 
+ uf 63267 69133 63268 63957 70982 
+
+69631 char 0
+na Londo Mollari
+LI
+ wh 58423
+ hl 69611 
+CH
+ lo 51259
+ he 100
+ lk 2
+ lr 2
+ sl	610 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li STUDY 600
+ ar 600 0 0 0 0 0 0 0
+ wa 7
+ po 1
+ pr 3
+
+69611 char 0
+na Vir
+LI
+ wh 69631
+CH
+ lo 51259
+ he 100
+ lk 2
+ lr 1
+ sl	700 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li STUDY 700
+ ar 700 0 0 0 0 0 0 0
+ st 1
+ de 7
+ po 1
+ pr 3
+

@@ -56,8 +56,8 @@ def boxlist_print(key, array):
     return
 
 def boxlist_print_pd(key, array):
-    if len(array) != 4 and len(array) != 6:
-        raise ValueError('array must be of length 4 or 6')
+    if len(array) < 4 or len(array) > 6:
+        raise ValueError('array must be of length 4 to 6')
     boxlist_print(key, array)
     return
 
@@ -139,7 +139,7 @@ grand_format = [
         { 'tl': 1 }, { 'rs': 1 },
         { 'of': boxlist_print },
         { 're': boxlist_print },
-        { 'rq': boxlist_print_tab },
+        { 'rq': partial( fixed, 3, '\t' ) },
         { 'pr': 1 }, { 'np': 1 }, { 'ne': 1 },
     ] },
     { 'GA': [
@@ -185,17 +185,33 @@ def print_one_thing(datum):
             raise ValueError('unknown type')
     print()
 
-def write_oly_file(data):
+def fixup_ms(data):
+    '''
+    For whatever reason, the value in IM/ms needs to have a trailing space
+    '''
+    for box in data:
+        if 'IM' in data[box]:
+            if 'ms' in data[box]['IM']:
+                value = data[box]['IM']['ms']
+                value[0] += ' '
+                data[box]['IM']['ms'] = value
+
+def write_oly_file(data, orig_order):
     '''
     The main function that drives outputting a file
     TODO: how can I make this write only e.g. loc ships etc... see io.c::write_kind()
-    TODO: orig_order=boxlist XXX needed for roundtrip
+    TODO: orig_order=boxlist XXX needed for roundtrip of factions and sometimes loc
+    TODO: IM/ms needs a trailing space
     '''
 
-    s = sorted([int(s) for s in data.keys()])
+    fixup_ms(data)
 
-    for k in s:
-        print_one_thing(data[str(k)])
+    if len(orig_order) == 0:
+        s = sorted([int(box) for box in data.keys()])
+        orig_order = [str(box) for box in s]
+
+    for box in orig_order:
+        print_one_thing(data[box])
 
 def read_oly_file(f):
     '''
@@ -204,8 +220,8 @@ def read_oly_file(f):
 
     data = {}
     prev = ''
-    thingie = ''
-    subthingie = ''
+    box = ''
+    subbox = ''
     orig_order = []
 
     for line in f:
@@ -225,46 +241,50 @@ def read_oly_file(f):
             line = new
 
         if line == '':
-            thingie = ''
-            subthingie = ''
+            box = ''
+            subbox = ''
             continue
 
         pieces = line.split()
         what = pieces.pop(0)
 
-        if not thingie:
+        if not box:
             if line.startswith('\t') or line.startswith(' '):
                 raise ValueError('line cannot start with whitespace')
             if what.isdigit():
-                thingie = what
-                orig_order += thingie
-                data[thingie] = {}
-                data[thingie]['firstline'] = [ ' '.join([what] + pieces) ]
+                box = what
+                orig_order.append(box)
+                data[box] = {}
+                data[box]['firstline'] = [ ' '.join([what] + pieces) ]
                 continue
             else:
                 raise ValueError('unknown first line')
 
         if len(what) == 2 and what.isupper():
-            subthingie = what
-            data[thingie] = data.get(thingie,{})
-            data[thingie][subthingie] = data[thingie].get(subthingie,{})
+            subbox = what
+            data[box] = data.get(box,{})
+            data[box][subbox] = data[box].get(subbox,{})
             continue
 
         if not(line.startswith('\t') or line.startswith(' ')):
-            if data[thingie].get(what) is not None:
+            if data[box].get(what) is not None:
                 raise ValueError('saw a non-continuation for an existing item')
-            if what != 'na':
-                data[thingie][what] = pieces
+            if what == 'na':
+                data[box][what] = [ untrimmed_line[3:].rstrip('\n') ]
             else:
-                data[thingie][what] = [ untrimmed_line[3:].rstrip('\n') ]
-            subthingie = ''
+                data[box][what] = pieces
+            subbox = ''
         else:
-            if what != 'am' and data[thingie].get(subthingie).get(what) is not None:
+            if what != 'am' and data[box].get(subbox).get(what) is not None:
                 raise ValueError
             if what == 'am':
-                am = data[thingie].get(subthingie,{}).get('am',[])
-                am += pieces
-                data[thingie][subthingie]['am'] = am
+                am = data[box].get(subbox,{}).get('am',[])
+                am.append(pieces) # list of lists
+                data[box][subbox]['am'] = am
+            elif what == 'ds':
+                data[box][subbox][what] = [ untrimmed_line[4:].rstrip('\n') ]
+            elif what == 'li':
+                data[box][subbox][what] = [ untrimmed_line[4:].rstrip('\n') ]
             else:
-                data[thingie][subthingie][what] = pieces
-    return data
+                data[box][subbox][what] = pieces
+    return data, orig_order

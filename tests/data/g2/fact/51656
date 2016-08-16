@@ -1,0 +1,147 @@
+51656 player pl_regular
+na Invisible Touch
+il	1 4125 \
+	77 50
+CH
+PL
+ fn Jason T Fike
+ em jasnic@mindspring.com
+ pw nightfall
+ np 22
+ fs 22
+ ft 116
+ lt 118
+ kn 600 601 602 603 610 630 631 632 730 732 \
+	733 800 802 1585 14275 
+ un 136748 146584 129204 138111 90475 
+ uf 119916 96977 147699 127773 91532 
+CO
+ li pledge fa4
+ ar 51304 0 0 0 0 0 0 0
+ pr 1
+
+136748 char 0
+na shade
+il	78 100 \
+	94 10
+tl	2 95 9 4 0 0 0 0 \
+	2 78 100 5 0 0 0 0 \
+	2 94 10 3 0 0 0 0
+LI
+ wh 58736
+ hl 146584 129204 
+CH
+ lo 51656
+ he 100
+ lk 2
+ lr 2
+ sl	600 2 21 0 0 \
+	601 1 1 0 0 \
+	602 1 1 0 0 \
+	603 1 1 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 94 10 3
+ ar 94 10 3 0 0 0 0 0
+ st 1
+ pr 1
+
+146584 char 0
+na Silk
+il	94 12
+tl	2 94 12 3 0 0 0 0
+LI
+ wh 136748
+CH
+ lo 51656
+ he 100
+ lk 2
+ lr 1
+ sl	630 2 28 0 0 \
+	610 2 21 0 0 \
+	631 1 8 0 0 \
+	632 1 1 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 94 12 3
+ ar 94 12 3 0 0 0 0 0
+ st 1
+ pr 1
+
+129204 char 0
+na Gaston
+il	94 28
+tl	2 94 12 3 0 0 0 0
+LI
+ wh 136748
+CH
+ lo 51656
+ he 100
+ lk 2
+ lr 1
+ sl	630 2 28 0 0 \
+	610 2 21 0 0 \
+	631 1 8 0 0 \
+	632 1 1 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 94 12 3
+ ar 94 12 3 0 0 0 0 0
+ st 1
+ pr 1
+
+138111 char 0
+na Jahova
+il	1 200 \
+	95 14
+LI
+ wh 1585
+CH
+ lo 51656
+ he 100
+ lk 2
+ lr 1
+ sl	800 2 28 0 0 \
+	802 1 7 0 0
+ bp 50
+ at 80
+ df 80
+CM
+ im 1
+ ma 1
+ ca 1
+CO
+ li make 95 14
+ ar 95 14 14 14 0 0 0 0
+ st 1
+ de 14
+ po 1
+ pr 3
+
+90475 char 0
+na Constable Rannox
+LI
+ wh 14275
+CH
+ lo 51656
+ he 100
+ lk 2
+ lr 1
+ sl	730 2 21 0 0 \
+	600 1 1 0 0 \
+	732 2 14 0 0 \
+	733 1 1 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li stack garrison
+ ar 3524 0 0 0 0 0 0 0
+ pr 1
+

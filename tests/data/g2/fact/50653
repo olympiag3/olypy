@@ -1,0 +1,108 @@
+50653 player pl_regular
+na The Blackstar Brigade
+il	1 4200 \
+	77 50 \
+	78 100
+PL
+ fn Eoghann Irving
+ em webmaster@sflare.com
+ np 14
+ fs 100
+ ft 187
+ lt 190
+ kn 600 610 680 700 730 732 800 
+ un 126607 129226 107428 86099 
+ uf 102115 122312 92431 125626 125985 
+CO
+ li rumor 1
+ ar 1 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+126607 char 0
+na Aravor Dunedin
+LI
+ wh 57081
+ hl 129226 107428 86099 
+CH
+ lo 50653
+ he 100
+ lk 2
+ lr 2
+ sl	800 2 28 0 0
+ bp 50
+ at 80
+ df 80
+CM
+ im 1
+ ma 1
+ ca 1
+CO
+ li give 129226 1 100
+ ar 129226 1 100 0 0 0 0 0
+ st 1
+ pr 1
+
+129226 char 0
+na Grogan
+il	95 1
+LI
+ wh 126607
+CH
+ lo 50653
+ he 100
+ lk 2
+ lr 1
+ sl	730 2 21 0 0 \
+	732 2 14 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 95 30 7
+ ar 95 30 7 0 0 0 0 0
+ st 1
+ pr 1
+
+107428 char 0
+na Kron
+il	95 6
+LI
+ wh 126607
+CH
+ lo 50653
+ he 100
+ lk 2
+ lr 1
+ sl	610 2 21 0 0 \
+	680 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 95 30 7
+ ar 95 30 7 0 0 0 0 0
+ st 1
+ pr 1
+
+86099 char 0
+na Festar
+il	95 15
+LI
+ wh 126607
+CH
+ lo 50653
+ he 100
+ lk 2
+ lr 1
+ sl	600 2 21 0 0 \
+	700 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 95 30 7
+ ar 95 30 7 0 0 0 0 0
+ st 1
+ pr 1
+

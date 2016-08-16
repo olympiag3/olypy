@@ -1,0 +1,464 @@
+51372 player pl_regular
+na grull
+il	1 750 \
+	77 50 \
+	78 100
+an 51372 
+CH
+PL
+ fn david snook
+ em drassan_consortium@hotmail.com
+ ve dchslib@netins.net
+ pw alice123
+ np 1
+ fs 3
+ ft 55
+ so 1
+ lt 260
+ kn 69 610 611 612 613 615 616 617 630 632 \
+	633 634 635 641 650 653 654 670 671 672 680 \
+	682 700 702 720 721 722 820 821 822 823 824 \
+	825 826 827 828 829 831 832 833 880 881 882 \
+	883 884 885 886 887 888 889 891 892 893 894 \
+	14223 14323 14423 14523 14623 14723 14823 14923 15023 15123 15223 \
+	15323 15423 15523 15623 15723 15823 15828 15923 15924 15925 15926 \
+	15927 15928 32289 38048 57618 65434 
+ un 91617 3764 97334 118569 118511 118594 117496 8803 137416 \
+	137028 132783 101093 90474 79153 73569 65126 64499 113826 106638 
+ uf 136733 87031 140562 121284 93913 
+CO
+ li accept 0 0
+ ar 0 0 0 0 0 0 0 0
+ st 1
+
+91617 char 0
+na New noble
+il	1 1000
+LI
+ wh 99167
+ hl 3764 97334 118569 118511 118594 117496 8803 137416 137028 \
+	132783 101093 90474 79153 73569 65126 64499 113826 106638 
+CH
+ lo 51372
+ he 100
+ lk 2
+ lr 1
+ sl	650 2 28 0 0 \
+	654 2 28 24 0 \
+	610 2 21 1 0 \
+	653 2 28 0 0 \
+	611 1 14 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+3764 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 50353
+ he 100
+ lk 3
+ lr 994
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+97334 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 22 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+118569 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 85
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+118511 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+118594 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 85
+ sl	650 2 28 0 0 \
+	654 2 28 24 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+117496 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 24 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+8803 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 50278
+ he 100
+ lk 3
+ lr 994
+ sl	650 2 28 0 0 \
+	654 2 28 25 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+137416 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 85
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+137028 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 22 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+132783 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+101093 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+90474 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+79153 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 50278
+ he 100
+ lk 3
+ lr 994
+ sl	650 2 28 0 0 \
+	654 2 28 25 0 \
+	610 2 21 1 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+73569 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 51695
+ he 100
+ lk 3
+ lr 992
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 6 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+65126 char 0
+na New noble
+tl	2 95 989 7 0 0 0 0
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 51695
+ he 100
+ lk 3
+ lr 992
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 6 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+64499 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 51695
+ he 100
+ lk 3
+ lr 992
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 6 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+113826 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 55207
+ he 100
+ lk 3
+ lr 995
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 9 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+106638 char 0
+na New noble
+LI
+ wh 91617
+CH
+ lo 51372
+ pl 55207
+ he 100
+ lk 3
+ lr 995
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 9 0
+ bh 3
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+

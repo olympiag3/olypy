@@ -1,0 +1,40 @@
+53186 player pl_regular
+na The Shadows
+il	1 7525 \
+	77 50 \
+	78 100
+PL
+ fn Chad L. Shipley
+ em k_haugsnes@yahoo.no
+ ve k_haugsnes@yahoo.no
+ pw TVR
+ np 36
+ fs 100
+ ft 72
+ lt 178
+ kn 610 611 
+ un 71597 
+ uf 69656 63143 69978 71224 69500 
+
+71597 char 0
+na Arrion
+LI
+ wh 58736
+CH
+ lo 53186
+ he 100
+ lk 2
+ lr 2
+ sl	610 2 21 0 0 \
+	611 1 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li study 611
+ ar 611 0 0 0 0 0 0 0
+ st 1
+ de 7
+ po 1
+ pr 3
+

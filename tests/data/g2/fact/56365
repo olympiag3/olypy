@@ -1,0 +1,111 @@
+56365 player pl_regular
+na New Rome
+il	1 5035 \
+	78 50
+PL
+ fn Mark L. Barnes
+ em Mbarnes28@worldnet.att.net
+ np 33
+ fs 2
+ ft 52
+ lt 66
+ kn 600 602 610 616 680 700 702 730 732 733 \
+	800 802 860 14273 14274 14275 14373 14374 58736 78832 
+ un 3743 5794 4381 7244 
+ uf 3046 3770 8622 6094 8755 
+
+3743 char 0
+na Octavius
+il	77 5 \
+	74687 10
+LI
+ wh 14273
+ hl 5794 
+CH
+ lo 56365
+ he 100
+ lk 2
+ lr 2
+ sl	610 2 21 1 0 \
+	616 2 14 3 0 \
+	730 2 21 0 0 \
+	732 2 14 0 0 \
+	733 2 14 0 0
+ bp 50
+ at 97
+ df 80
+CO
+ li move cc73
+ ar 14273 4 14273 0 0 7 14274 0
+ st 1
+ ue 1
+ de 7
+ pr 2
+
+5794 char 0
+na Julius
+il	94 10
+tl	2 94 10 1 0 0 0 0 \
+	2 77 20 12 0 0 0 0
+LI
+ wh 3743
+ hl 4381 
+CH
+ lo 56365
+ he 100
+ lk 2
+ lr 1
+ sl	700 2 21 0 0 \
+	702 2 14 1 0
+ bp 50
+ at 80
+ df 80
+CO
+ li stack 3743
+ ar 3743 0 0 0 0 0 0 0
+ st 1
+ ue 1
+ pr 1
+
+4381 char 0
+na Croeus
+LI
+ wh 5794
+CH
+ lo 56365
+ he 100
+ lk 2
+ lr 1
+ sl	610 2 21 0 0 \
+	680 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li stack 5794
+ ar 5794 0 0 0 0 0 0 0
+ st 1
+ pr 1
+
+7244 char 0
+na Augustus
+LI
+ wh 78832
+CH
+ lo 56365
+ he 100
+ lk 2
+ lr 1
+ sl	600 2 21 0 0 \
+	602 2 14 1 0
+ bp 50
+ at 80
+ df 80
+CO
+ li build roundship
+ ar 0 0 0 0 0 0 0 0
+ st 1
+ de 9
+ po 1
+ pr 3
+

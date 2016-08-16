@@ -1,0 +1,28 @@
+50958 player pl_regular
+na Friends
+il	1 8175 \
+	77 50 \
+	78 100
+PL
+ fn shane lillibridge
+ em s06438@grog.ric.edu
+ np 39
+ fs 100
+ ft 54
+ lt 53
+ un 8276 
+ uf 8282 8294 8317 78558 67509 
+
+8276 char 0
+na Otis
+LI
+ wh 58335
+CH
+ lo 50958
+ he 100
+ lk 2
+ lr 2
+ bp 50
+ at 80
+ df 80
+

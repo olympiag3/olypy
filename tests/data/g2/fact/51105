@@ -1,0 +1,28 @@
+51105 player pl_regular
+na Lords of Khorne
+il	1 8175 \
+	77 50 \
+	78 100
+PL
+ fn Dave Morris
+ em dave.g.morris@mailexcite.com
+ np 39
+ fs 100
+ ft 54
+ lt 53
+ un 7774 
+ uf 8131 8145 8146 8150 8157 
+
+7774 char 0
+na Lord Derfel
+LI
+ wh 58112
+CH
+ lo 51105
+ he 100
+ lk 2
+ lr 2
+ bp 50
+ at 80
+ df 80
+

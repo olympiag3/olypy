@@ -1,0 +1,98 @@
+50447 player pl_regular
+na Starks of Winterfell
+il	1 6250 \
+	77 50 \
+	78 100
+PL
+ fn Brian McKnight
+ em bmcknigh@bellsouth.net
+ np 26
+ fs 23
+ ft 107
+ lt 107
+ kn 610 612 700 730 
+ un 60107 59019 68653 78089 
+ uf 74195 78757 68975 60125 68976 
+
+60107 char 0
+na Robert Stark
+LI
+ wh 57140
+ hl 59019 68653 78089 
+CH
+ lo 50447
+ he 100
+ lk 2
+ lr 2
+ sl	730 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li train 11 7      
+ ar 11 7 7 7 0 0 0 0
+ st 1
+ de 7
+ po 1
+ pr 3
+
+59019 char 0
+na Jon the Bastard
+LI
+ wh 60107
+CH
+ lo 50447
+ he 100
+ lk 2
+ lr 1
+ sl	610 2 21 0 0 \
+	612 1 14 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 94 6 3     
+ ar 94 6 3 0 0 0 0 0
+ st 1
+ pr 1
+
+68653 char 0
+na Lady Sansa
+LI
+ wh 60107
+CH
+ lo 50447
+ he 100
+ lk 2
+ lr 1
+ sl	700 1 7 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li study 700       
+ ar 700 0 0 0 0 0 0 0
+ st 1
+ de 7
+ po 1
+ pr 3
+
+78089 char 0
+na Arya the Audacious
+LI
+ wh 60107
+CH
+ lo 50447
+ he 100
+ lk 2
+ lr 1
+ sl	610 2 21 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li sell 94 6 3     
+ ar 94 6 3 0 0 0 0 0
+ st 1
+ pr 1
+

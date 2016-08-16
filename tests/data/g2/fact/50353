@@ -1,0 +1,423 @@
+50353 player pl_regular
+na Thommie
+il	1 696 \
+	77 50 \
+	78 100
+an 50353 
+CH
+PL
+ fn Thommie Dahlman
+ em drassan_consortium@hotmail.com
+ ve thommie_d@hotmail.com
+ pw You da man
+ np 8
+ fs 90
+ ft 52
+ so 1
+ lt 260
+ kn 610 611 612 650 653 654 15511 15512 15513 15514 \
+	15515 15516 15517 15518 15519 15520 15521 15522 15523 15611 15623 \
+	15711 15723 15811 15823 15828 15911 15923 15924 15925 15926 15927 \
+	15928 16011 16111 16210 16211 32289 38048 57618 65434 
+ un 3059 7565 79347 81677 114782 126178 112678 87937 129849 \
+	91307 89041 105932 104620 100403 108239 89111 
+ uf 122114 111498 97532 103230 124120 
+CO
+ li accept 0 0
+ ar 0 0 0 0 0 0 0 0
+ st 1
+
+3059 char 0
+na New noble
+il	1 200
+LI
+ wh 15828
+ hl 7565 79347 81677 114782 126178 112678 87937 129849 91307 \
+	89041 105932 104620 
+CH
+ lo 50353
+ he 100
+ lk 2
+ lr 1
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0 \
+	653 2 28 0 0 \
+	611 2 28 0 0 \
+	612 2 28 1 0
+ mo 7799
+ at 80
+ df 80
+CO
+ li move s
+ ar 0 3 15928 0 0 8 15828 0
+ cs 2
+ wa 6
+ st 1
+ ue 1
+ de 2
+ pr 2
+
+7565 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 22 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+79347 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+81677 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 23 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+114782 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+126178 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+112678 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+87937 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+129849 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 87
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 19 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+91307 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 84
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 1 0 \
+	611 2 28 0 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+89041 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ he 100
+ lk 3
+ lr 87
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 20 0 \
+	611 2 28 0 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+105932 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ pl 55207
+ he 100
+ lk 3
+ lr 997
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 8 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+104620 char 0
+na New noble
+LI
+ wh 3059
+CH
+ lo 50353
+ pl 55207
+ he 100
+ lk 3
+ lr 997
+ sl	650 2 28 0 0 \
+	610 2 21 1 0 \
+	654 2 28 8 0
+ mo 7799
+ bh 5
+ bp 50
+ at 80
+ df 80
+CO
+ li give 99167 16
+ ar 99167 16 0 0 0 0 0 0
+ st 1
+ pr 1
+
+100403 char 0
+na New noble
+il	278 6
+LI
+ wh 15928
+ hl 108239 89111 
+CH
+ lo 50353
+ he 100
+ lk 1
+ lr 401
+ sl	650 2 28 0 0 \
+	654 2 28 21 0 \
+	610 2 21 0 0
+ bh 5
+ bp 50
+ at 80
+ df 80
+ ct 51478 51695 55207 56754 50353 50278 51695 51478 51372 \
+	55245 50229 55207 
+CO
+ li breed 278 278
+ ar 278 278 0 0 0 0 0 0
+ cs 2
+ wa 15
+ st 1
+ de 5
+ pr 3
+
+108239 char 0
+na New noble
+il	278 2
+LI
+ wh 100403
+CH
+ lo 50353
+ pl 51478
+ he 100
+ lk 3
+ lr 998
+ sl	650 2 28 0 0 \
+	654 2 28 8 0 \
+	610 2 21 1 0
+ bh 9
+ bp 50
+ at 80
+ df 80
+CO
+ li breed 278 278
+ ar 278 278 0 0 0 0 0 0
+ cs 2
+ wa 15
+ st 1
+ de 5
+ pr 3
+
+89111 char 0
+na New noble
+il	278 2
+LI
+ wh 100403
+CH
+ lo 50353
+ pl 51478
+ he 100
+ lk 3
+ lr 999
+ sl	650 2 28 0 0 \
+	654 2 28 5 0 \
+	610 2 21 1 0
+ bh 9
+ bp 50
+ at 80
+ df 80
+CO
+ li breed 278 278
+ ar 278 278 0 0 0 0 0 0
+ cs 2
+ wa 16
+ st 1
+ de 4
+ pr 3
+

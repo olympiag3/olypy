@@ -1,0 +1,86 @@
+55378 player pl_regular
+na The Society of Harmonious Fist
+il	1 3875 \
+	77 50 \
+	78 100
+PL
+ fn Dennis Guh
+ em vanpus@gte.net
+ pw storm
+ np 13
+ fs 100
+ ft 194
+ lt 195
+ kn 610 630 800 
+ un 89671 106978 81117 
+ uf 81354 104302 109754 137010 116590 
+
+89671 char 0
+na Wong Yin-Shon
+il	1 100 \
+	94 2
+LI
+ wh 58335
+CH
+ lo 55378
+ he 100
+ lk 2
+ lr 2
+ sl	610 1 7 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li make 94 2           
+ ar 94 2 2 2 0 0 0 0
+ st 1
+ de 2
+ po 1
+ pr 3
+
+106978 char 0
+na Wu-Song
+il	95 15
+LI
+ wh 58335
+CH
+ lo 55378
+ he 100
+ lk 2
+ lr 1
+ sl	610 1 7 0 0 \
+	630 1 7 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li make 95 15          
+ ar 95 15 15 15 0 0 0 0
+ st 1
+ de 15
+ po 1
+ pr 3
+
+81117 char 0
+na Kong-Ming
+il	1 100 \
+	94 8
+LI
+ wh 58335
+CH
+ lo 55378
+ he 100
+ lk 2
+ lr 1
+ sl	800 1 14 0 0
+ bp 50
+ at 80
+ df 80
+CO
+ li make 94 8        
+ ar 94 8 8 8 0 0 0 0
+ st 1
+ de 8
+ po 1
+ pr 3
+
