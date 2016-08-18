@@ -49,19 +49,20 @@ def to_oid(oid_int):
         return str(oid_int)
 
 def to_int(oid):
-    if re.fullmatch(r'[a-z][a-z]\d', oid): # CCN
+    # re.fullmatch is python 3.4+
+    if re.match(r'\A[a-z][a-z]\d\Z', oid): # CCN
         return str(_i(oid[0]) * 26 * 10 + _i(oid[1]) * 10 + int(oid[2]) + 50000)
-    elif re.fullmatch(r'[a-z][a-z]\d\d', oid): # CCNN, location
+    elif re.match(r'\A[a-z][a-z]\d\d\Z', oid): # CCNN, location
         return str(letter2_to_int[oid[0]]*20*100 + letter2_to_int[oid[1]]*100 + int(oid[2:]) + 10000)
-    elif re.fullmatch(r'[a-z]\d\d', oid): # CNN
+    elif re.match(r'\A[a-z]\d\d\Z', oid): # CNN
         return str(_i(oid[0]) * 100 + int(oid[1:]) + 56760)
-    elif re.fullmatch(r'[a-z]\d\d\d', oid): # CNNN
+    elif re.match(r'\A[a-z]\d\d\d\Z', oid): # CNNN
         return str(_i(oid[0]) * 1000 + int(oid[1:]) + 59000)
-    elif re.fullmatch(r'\d\d\d\d', oid): # NNNN
+    elif re.match(r'\A\d\d\d\d\Z', oid): # NNNN
         return str(oid)
-    elif re.fullmatch(r'\d\d\d\d\d', oid): # NNNNN
+    elif re.match(r'\A\d\d\d\d\d\Z', oid): # NNNNN
         return str(oid)
-    elif re.fullmatch(r'1\d\d\d\d\d', oid): # 1NNNNN
+    elif re.match(r'\A1\d\d\d\d\d\Z', oid): # 1NNNNN
         return str(oid)
     else:
         raise ValueError('invalid id value')
