@@ -1,7 +1,7 @@
 language: python
 python:
-  - "3.2"
-  - "3.3"
+#  - "3.2" # contextlib issue, at least
+#  - "3.3" # contextlib issue, at least
   - "3.4"
   - "3.5.0"
   - "3.5"
