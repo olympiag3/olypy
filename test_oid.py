@@ -17,9 +17,9 @@ oid_to_int = {
 
 invalid_oid = ('aa001', 'a0000', 'aaa0')
 
-def test_ids():
+def test_oid():
     for oid, oint in oid_to_int.items():
-        assert to_int(oid) == oint
+        assert to_int(oid) == str(oint)
         assert to_oid(oint) == oid
 
     with pytest.raises(ValueError):
@@ -27,6 +27,6 @@ def test_ids():
             to_int(oid)
 
     for oint in range(1000,100002):
-        assert to_int(to_oid(oint)) == oint
+        assert to_int(to_oid(oint)) == str(oint)
 
     # TODO: what about 1..999 ?

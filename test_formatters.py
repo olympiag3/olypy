@@ -42,9 +42,9 @@ def test_formatters(capsys):
     assert err == ''
     assert out == example_output
 
-    data, orig_order = read_oly_file(example_output.split('\n'))
-    write_oly_file(example_data, orig_order)
+    data = read_oly_file(example_output.split('\n'))
+    assert len(data) == 1
+    write_oly_file(data)
     out, err = capsys.readouterr()
     assert err == ''
     assert out == example_output
-    assert orig_order == [ '6666' ]

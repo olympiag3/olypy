@@ -16,7 +16,7 @@ done
 
 for f in data/g2/fact/*
 do
-   [ -f $f ] && echo $f && $COVERAGE ../roundtrip.py --test $f
+   [ -f $f ] && echo $f && $COVERAGE ../roundtrip.py --test --player $f
 done
 
 echo PASS

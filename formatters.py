@@ -4,6 +4,7 @@ Helper functions for reading/writing Olympia lib files
 
 import sys
 from functools import partial
+from oid import to_oid
 
 def fixed(count, char, key, array):
     if not array or len(array) == 0:
@@ -196,24 +197,29 @@ def fixup_ms(data):
                 value[0] += ' '
                 data[box]['IM']['ms'] = value
 
-def write_oly_file(data, orig_order):
+def write_oly_file(data, kind=False, verbose=False):
     '''
     The main function that drives outputting a file
-    TODO: how can I make this write only e.g. loc ships etc... see io.c::write_kind()
-    TODO: orig_order=boxlist XXX needed for roundtrip of factions and sometimes loc
-    TODO: IM/ms needs a trailing space
     '''
 
     fixup_ms(data)
 
-    if len(orig_order) == 0:
-        s = sorted([int(box) for box in data.keys()])
-        orig_order = [str(box) for box in s]
+    order = sorted([int(box) for box in data.keys()])
 
-    for box in orig_order:
+    count = 0
+    for box in order:
+        box = str(box)
+        if kind:
+            if not ' '+kind+' ' in data[box].get('firstline', '')[0]:
+                continue
         print_one_thing(data[box])
+        del data[box]
+        count += 1
 
-def read_oly_file(f):
+    if verbose:
+        print('wrote', count, verbose, 'boxes.', file=sys.stderr)
+
+def read_oly_file(f, verbose=False):
     '''
     Unlike io.c, we gut it out :-)
     '''
@@ -222,7 +228,10 @@ def read_oly_file(f):
     prev = ''
     box = ''
     subbox = ''
-    orig_order = []
+    is_player = False
+
+    if isinstance(f, str):
+        f = open(f, 'r')
 
     for line in f:
         untrimmed_line = line
@@ -253,7 +262,6 @@ def read_oly_file(f):
                 raise ValueError('line cannot start with whitespace')
             if what.isdigit():
                 box = what
-                orig_order.append(box)
                 data[box] = {}
                 data[box]['firstline'] = [ ' '.join([what] + pieces) ]
                 continue
@@ -287,4 +295,21 @@ def read_oly_file(f):
                 data[box][subbox][what] = [ untrimmed_line[4:].rstrip('\n') ]
             else:
                 data[box][subbox][what] = pieces
-    return data, orig_order
+
+    if verbose:
+        print('read', len(data), verbose, 'boxes.')
+
+    return data
+
+def write_player(data, box, verbose=False):
+    player_box = box
+    boxlist = data[box].get('PL', {}).get('un', {})
+    print_one_thing(data[box])
+    del data[box]
+    count = 0
+    for box in boxlist:
+        print_one_thing(data[box])
+        del data[box]
+        count += 1
+    if verbose:
+        print('wrote', count, 'characters for player', to_oid(int(player_box)), file=sys.stderr)
