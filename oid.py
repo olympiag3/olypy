@@ -65,7 +65,7 @@ def to_int(oid):
     elif re.match(r'\A1\d\d\d\d\d\Z', oid): # 1NNNNN
         return str(oid)
     else:
-        raise ValueError('invalid id value')
+        raise ValueError('invalid id value: '+oid)
 
 oid_kinds = {
     'NNNN': { 'start': 1000, 'end': 9999 }, # structures

@@ -10,7 +10,7 @@ def fixed(count, char, key, array):
     if not array or len(array) == 0:
         return
     if len(array) % count != 0:
-        raise ValueError('array is of incorrect length')
+        raise ValueError(key + ' array is of incorrect length')
 
     print(key,end='')
     print(char,end='')
