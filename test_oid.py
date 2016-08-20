@@ -1,5 +1,5 @@
 import pytest
-from oid import to_oid, to_int
+from oid import to_oid, to_int, allocate_oid
 
 oid_to_int = {
     '6940': 6940,
@@ -32,3 +32,14 @@ def test_oid():
         assert to_int(to_oid(oint)) == str(oint)
 
     # TODO: what about 1..999 ?
+
+    data = {}
+    intoid = allocate_oid(data, 'NNNN')
+    oid = to_oid(intoid)
+    assert len(oid) == 4
+    assert oid.isdigit()
+    intoid = allocate_oid(data, 'CCNN')
+    oid = to_oid(intoid)
+    assert len(oid) == 4
+    assert oid[0:2].isalpha()
+    assert oid[2:].isdigit()
