@@ -8,7 +8,7 @@ sys.path.append('../')
 
 from oid import to_int
 
-def run_one_test(y):
+def run_one_test(name, y):
     if y.get('lib', '') != 'defaultlib':
         raise ValueError('Sorry, defaultlib is the only supported lib atm.')
     ret = os.system('rm -rf lib')
@@ -37,24 +37,28 @@ def run_one_test(y):
     if ret != 0:
         raise ValueError('some problem running the actual sim')
 
+    expected_pass_count = 0
+    actual_pass_count = 0
     for f in pass_counts:
-        name = 'lib/save/2/' + to_int(f)
-        if not os.path.exists(name):
-            raise ValueError('expected {} to exist'.format(name))
-        pass_count = 0
-        with open(name, 'r') as fd:
+        expected_pass_count += pass_counts[f]
+        fname = 'lib/save/2/' + to_int(f)
+        if not os.path.exists(fname):
+            raise ValueError('expected {} to exist'.format(fname))
+        with open(fname, 'r') as fd:
             for line in fd:
                 if line.endswith('PASS\n'):
-                    pass_count += 1
+                    actual_pass_count += 1
 
-        if pass_counts[f] == pass_count:
-            print('pass count for {} looks correct'.format(f))
-        else:
-            print('pass count of {} for {} looks incorrect, expected {}'.format(pass_count, f, pass_counts[f]))
+    print('{}: {}/{} '.format(name, actual_pass_count, expected_pass_count), end='')
+
+    if actual_pass_count == expected_pass_count:
+        print('PASS')
+    else:
+        print('FAIL')
 
 tests = os.listdir('test-inputs')
 for t in tests:
     if not t.endswith('.yml'):
         continue
     with open('test-inputs/' + t, 'r') as f:
-        run_one_test(yaml.load(f))
+        run_one_test(t, yaml.load(f))
