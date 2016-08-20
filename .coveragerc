@@ -1,2 +1,3 @@
 [report]
-omit = test_*
+omit = test_*, id.py
+
