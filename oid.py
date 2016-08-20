@@ -17,6 +17,11 @@ def _i(c):
     return ord(c) - 97
 
 def to_oid(oid_int):
+    oid_int = str(oid_int)
+    if not oid_int.isdigit():
+        raise ValueError('expected an integer')
+    oid_int = int(oid_int)
+
     if oid_int < 10000: # character or item
         return str(oid_int)
     elif oid_int < 50000: # location

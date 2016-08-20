@@ -21,6 +21,7 @@ def test_oid():
     for oid, oint in oid_to_int.items():
         assert to_int(oid) == str(oint)
         assert to_oid(oint) == oid
+        assert to_oid(int(oint)) == oid
 
     with pytest.raises(ValueError):
         for oid in invalid_oid:
