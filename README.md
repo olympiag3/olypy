@@ -48,3 +48,6 @@ aa1 orders: |
    assert day 4 not day 5
 ```
 
+This example contains 3 tests. `assert` is similar to `wait`; it
+passes if the wait is 0-time, and fails elsewise. The `foo not foo` syntax
+is a way of expressing exact values.
