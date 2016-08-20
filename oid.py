@@ -42,7 +42,7 @@ def to_oid(oid_int):
         oid_int -= 56760
         residue = oid_int % 100
         first = oid_int // 100
-        return letters[first] + '{:02d}'.format(residue)
+        return letters2[first] + '{:02d}'.format(residue)
     elif oid_int < 59000:
         return str(oid_int)
     elif oid_int < 79000: # CNNN
@@ -56,13 +56,13 @@ def to_oid(oid_int):
 def to_int(oid):
     # re.fullmatch is python 3.4+
     if re.match(r'\A[a-z][a-z]\d\Z', oid): # CCN
-        return str(_i(oid[0]) * 26 * 10 + _i(oid[1]) * 10 + int(oid[2]) + 50000)
+        return str(_i(oid[0])*26*10 + _i(oid[1])*10 + int(oid[2]) + 50000)
     elif re.match(r'\A[a-z][a-z]\d\d\Z', oid): # CCNN, location
         return str(letter2_to_int[oid[0]]*20*100 + letter2_to_int[oid[1]]*100 + int(oid[2:]) + 10000)
     elif re.match(r'\A[a-z]\d\d\Z', oid): # CNN
-        return str(_i(oid[0]) * 100 + int(oid[1:]) + 56760)
+        return str(letter2_to_int[oid[0]]*100 + int(oid[1:]) + 56760)
     elif re.match(r'\A[a-z]\d\d\d\Z', oid): # CNNN
-        return str(_i(oid[0]) * 1000 + int(oid[1:]) + 59000)
+        return str(_i(oid[0])*1000 + int(oid[1:]) + 59000)
     elif re.match(r'\A\d\d\d\d\Z', oid): # NNNN
         return str(oid)
     elif re.match(r'\A\d\d\d\d\d\Z', oid): # NNNNN
