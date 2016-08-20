@@ -54,6 +54,7 @@ def to_oid(oid_int):
         return str(oid_int)
 
 def to_int(oid):
+    oid = str(oid)
     # re.fullmatch is python 3.4+
     if re.match(r'\A[a-z][a-z]\d\Z', oid): # CCN
         return str(_i(oid[0])*26*10 + _i(oid[1])*10 + int(oid[2]) + 50000)

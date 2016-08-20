@@ -5,26 +5,29 @@ Code that manipulates the in-memory Olympia database
 from oid import to_oid, to_int, allocate_oid
 
 def data_append(data, box, subbox, value):
+    box = str(box)
+    subbox = str(subbox)
     if not isinstance(value, list):
         value = [ value ]
 
     l = data[box].get(subbox, [])
-    [ l.append(v) for v in value ]
+    [ l.append(str(v)) for v in value ]
     data[box][subbox] = l
 
 def data_append2(data, box, subbox, key, value):
     '''
     append value to the at data[box][subbox], doing what's needed to initialize things
     '''
+    key = str(key)
     data[box] = data.get(box, {})
     data[box][subbox] = data[box].get(subbox, {})
     existing = data[box][subbox].get(key, [])
-    existing.append(value)
+    existing.append(str(value))
     data[box][subbox][key] = existing
 
 def data_newbox(data, oid_kind, firstline, oid=None):
     if oid:
-        oidint = to_int(oid)
+        oidint = to_int(str(oid))
     else:
         oidint = allocate_oid(data, oid_kind) # e.g. NNNN
     if oidint in data:
@@ -90,6 +93,7 @@ def add_structure(data, kind, where, name, progress=None, damage=None, defense=N
 def add_scroll(data, skill, loc, oid=None):
     oidint = data_newbox(data, 'CNNN', 'item scroll', oid=oid)
     locint = to_int(loc)
+    skill = str(skill)
 
     data[oidint]['na'] = [ 'Scroll of '+skill ]
     data[oidint]['IT'] = {}
