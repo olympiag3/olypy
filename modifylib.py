@@ -5,7 +5,7 @@ Read an entire lib directory
 import argparse
 
 from oid import to_oid, to_int, allocate_oid
-from formatters import read_players, write_players, read_lib, write_lib
+from oio import read_players, write_players, read_lib, write_lib
 
 parser = argparse.ArgumentParser(description='read an Olympia lib')
 

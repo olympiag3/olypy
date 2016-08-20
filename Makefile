@@ -16,7 +16,7 @@ clean_coverage:
 	rm -f qa-lib/.coverage.*
 
 test_coverage: clean_coverage
-	py.test --cov-report= --cov-append --cov oid --cov formatters
+	py.test --cov-report= --cov-append --cov oid --cov formatters --cov oio
 	(cd tests; COVERAGE='coverage run -a --source=..' ./test.sh)
 # strictly speaking the following isn't a test, I should make a proper test
 	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
