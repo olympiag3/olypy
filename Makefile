@@ -26,6 +26,6 @@ test_coverage: clean_coverage
 	coverage report
 
 defaultlib:
-	(cd qa-lib/modified-lib; mkdir -p html orders spool)
+	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
 	(cd qa-lib; python ../modifylib.py mapgen-lib)
 	(cd qa-lib/modified-lib; tar cjf ../../sim/defaultlib.tar.gz .)
