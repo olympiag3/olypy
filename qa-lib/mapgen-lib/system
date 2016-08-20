@@ -1,0 +1,20 @@
+sysclock: 1 30 3000
+indep_player=100
+gm_player=200
+skill_player=202
+from_host=foo@example.com
+reply_host=foo@example.com
+post=1
+init=1
+fr=58930
+tr=0
+ur=0
+fp=0
+hr=0
+hp=0
+hl=0
+nr=58783
+nl=47278
+np=206
+cr=0
+cp=210

@@ -1,0 +1,59 @@
+Normal
+
+   0123456789
+aa fFfmMmmpPp
+ b ..fmmmmp..
+ c ..ffffpp..
+ d ..........
+ f ..dpmmfs..
+ g ..dpmmFs..
+ h ..........
+ j ..pppfff..
+ k ..pmmmmf..
+ m pPpmMmmfFf
+   0123456789
+
+Cities
+
+aa01 56978 c18 Aachen, forest port
+aa04 57915 p55 Mallon, mountain
+aa08 57003 c43 Fontina, plain port
+ag06 58709 z49 Snowland, forest port
+am01 57580 k20 Koeln, plain port
+am04 57765 n05 Gnarr, mountain
+am08 58525 w65 Petus, forest port
+
+af04 is Mt. Olympus. No city.
+
+Faery
+   0123456789
+ba ..........
+ b .ffffffff.
+ c .fffffffF.
+ d .ffffffff.
+ f .ffffffff.
+ g .fFffffff.
+ h .fffffFff.
+ j .ffffffff.
+ k .ffffffff.
+ m ..........
+   0123456789
+
+bh06 56989 Faery City, forest
+bc08 57820 ?, forest port
+bg03 57005 ?, forest
+
+Hades
+
+cd03 57588 ?
+
+Cloudlands
+
+db01 57522 ?
+
+Subworld
+
+ej10
+...
+
+

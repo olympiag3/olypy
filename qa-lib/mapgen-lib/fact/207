@@ -1,0 +1,70 @@
+207 player pl_silent
+na Garrison units
+PL
+ pw GXuMgdYyVu
+ un 1319 2563 3375 8455 
+
+1319 char garrison
+il	16 91
+LI
+ wh 57580
+CH
+ lo 207
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+CM
+ dg 1
+MI
+ ca g
+
+2563 char garrison
+il	16 144
+LI
+ wh 57765
+CH
+ lo 207
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+CM
+ dg 1
+MI
+ ca g
+
+3375 char garrison
+il	16 101
+LI
+ wh 57003
+CH
+ lo 207
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+CM
+ dg 1
+MI
+ ca g
+
+8455 char garrison
+il	16 30
+LI
+ wh 57915
+CH
+ lo 207
+ he -1
+ lk 4
+ gu 1
+ at 60
+ df 60
+CM
+ dg 1
+MI
+ ca g
+
