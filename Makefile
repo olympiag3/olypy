@@ -16,7 +16,7 @@ clean_coverage:
 	rm -f qa-lib/.coverage.*
 
 test_coverage: clean_coverage
-	py.test --cov-report= --cov-append --cov oid --cov formatters --cov oio --cov data
+	py.test --cov-report= --cov-append --cov oid --cov formatters --cov oio --cov data --cov items
 	(cd tests; COVERAGE='coverage run -a --source=..' ./test.sh)
 	coverage combine tests/.coverage .coverage
 	coverage report
