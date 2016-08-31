@@ -1,12 +1,12 @@
 '''
-Read an entire lib directory
+Modify an existing lib directory to have a lot of additional stuff
 '''
 
 import argparse
 
 from oid import to_oid, to_int, allocate_oid
 from oio import read_lib, write_lib
-from data import place_new_unit, add_structure, add_scroll, add_potion
+from data import link_box, add_structure, add_scroll, add_potion
 
 parser = argparse.ArgumentParser(description='read an Olympia lib')
 
@@ -88,16 +88,16 @@ add_structure(data, 'castle6', 'w65', 'Paschen Castle', oid='4001')
 
 # add_garrison(loc, castle, oid=oid)
 
-place_new_unit(data, 1100, 1001)
-place_new_unit(data, 1101, 1100)
-place_new_unit(data, 1102, 'c18')
-place_new_unit(data, 1103, 1005)
-place_new_unit(data, 1104, 1001)
-place_new_unit(data, 1105, 1006)
+link_box(data, 1100, 1001)
+link_box(data, 1101, 1100)
+link_box(data, 1102, 'c18')
+link_box(data, 1103, 1005)
+link_box(data, 1104, 1001)
+link_box(data, 1105, 1006)
 
-place_new_unit(data, 2100, 2001)
-place_new_unit(data, 3100, 3001)
-place_new_unit(data, 4100, 4001)
+link_box(data, 2100, 2001)
+link_box(data, 3100, 3001)
+link_box(data, 4100, 4001)
 
 # fix mage aura, add 1100 auraculum
 # copy chars to other factions
