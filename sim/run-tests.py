@@ -61,4 +61,4 @@ for t in tests:
     if not t.endswith('.yml'):
         continue
     with open('test-inputs/' + t, 'r') as f:
-        run_one_test(t, yaml.load(f))
+        run_one_test(t, yaml.safe_load(f))

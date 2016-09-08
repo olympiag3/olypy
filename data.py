@@ -25,7 +25,7 @@ def data_append(data, box, subbox, value):
     box = str(box)
     subbox = str(subbox)
     if not isinstance(value, list):
-        value = [ value ]
+        value = [value]
 
     data[box] = data.get(box, {})
     l = data[box].get(subbox, [])
@@ -54,7 +54,7 @@ def data_append2(data, box, subbox, key, value):
     subbox = str(subbox)
     key = str(key)
     if not isinstance(value, list):
-        value = [ value ]
+        value = [value]
 
     data[box] = data.get(box, {})
     data[box][subbox] = data[box].get(subbox, {})
