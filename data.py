@@ -18,7 +18,7 @@ def _uniq_f11(seq):
         seen.add(x)
         yield x
 
-def data_append(data, box, subbox, value):
+def data_append(data, box, subbox, value, dedup=True):
     '''
     append value to list data[box][subbox], doing what's needed to initialize things
     '''
@@ -30,7 +30,8 @@ def data_append(data, box, subbox, value):
     data[box] = data.get(box, {})
     l = data[box].get(subbox, [])
     [ l.append(str(v)) for v in value ]
-    l = uniq_f11(l) # XXXv0 replace with if value not in l ...
+    if dedup:
+        l = uniq_f11(l) # XXXv0 replace with if value not in l ...
     data[box][subbox] = l
 
 def data_remove(data, box, subbox, value):
@@ -327,24 +328,24 @@ def add_scroll(data, skill, loc, who=None):
     loc = to_int(loc)
     skill = str(skill)
 
-    data[who]['na'] = [ 'Scroll of '+skill ]
+    data[who]['na'] = ['Scroll of '+skill]
     data[who]['IT'] = {}
-    data[who]['IT']['wt'] = [ 1 ]
-    data[who]['IT']['un'] = [ loc ]
+    data[who]['IT']['wt'] = [1]
+    data[who]['IT']['un'] = [loc]
     data[who]['IM'] = {}
-    data[who]['IM']['ms'] = [ skill ]
+    data[who]['IM']['ms'] = [skill]
 
-    data_append(data, loc, 'il', [ who, 1 ])
+    data_append(data, loc, 'il', [who, 1], dedup=False)
 
 def add_potion(data, kind, im, loc, who=None):
     who = data_newbox(data, 'CNNN', 'item 0', who=who)
     loc = to_int(loc)
 
-    data[who]['na'] = [ 'Potion of '+kind ]
+    data[who]['na'] = ['Potion of '+kind]
     data[who]['IT'] = {}
-    data[who]['IT']['wt'] = [ 1 ]
-    data[who]['IT']['un'] = [ loc ]
+    data[who]['IT']['wt'] = [1]
+    data[who]['IT']['un'] = [loc]
     data[who]['IM'] = im
 
-    data_append(data, loc, 'il', [ who, 1 ])
+    data_append(data, loc, 'il', [who, 1], dedup=False)
 

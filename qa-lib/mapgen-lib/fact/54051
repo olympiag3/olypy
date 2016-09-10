@@ -7,7 +7,7 @@ PL
  em p@example.com
  pw xxxxxxxx
  np 20
- fs 100000
+ fs 32767
  ft 1
  lt 100
  kn 69 

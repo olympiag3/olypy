@@ -1,0 +1,45 @@
+description: test ship-to-ship combat
+lib: defaultlib
+aa1 orders: |
+ unit 1102  # A2 in Aachen [c18]
+  claim 11 500
+  claim 77 100
+  claim 1 300
+  study 600 21
+  study 601 14
+  study 602 14
+  build roundship "First Ship" 100 1200
+  move c18
+  claim 77 100
+  build roundship "Second Ship" 100 1201
+  drop 11
+  drop 77 # this is a known bug in the old timsim code...
+  claim 19 8
+  assert not loc c18
+  assert loc 1201 # this succeeds if 1201 does not exist :/
+  sail s
+  assert not loc c18
+  assert shiploc ab01 # this succeeds if you aren't on a ship :/
+  drop 19
+  claim 54 1
+  fly out
+  assert loc ab01
+  fly n
+  assert loc c18
+  fly 1200
+  assert loc 1200 # this succeeds if 1200 doesn't exist :/
+  assert not loc c18
+  drop 54
+  claim 19 8
+  assert loc 1200 # blah
+  sail s
+  assert shiploc ab01 # blah
+
+  attack 1201 # now fixed
+  assert loc 1201
+  move 1200
+  assert loc 1200
+
+  hostile 1201
+  sail up # this is failing to trigger combat... why?
+  assert loc 1201

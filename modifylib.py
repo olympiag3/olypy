@@ -6,7 +6,7 @@ import argparse
 
 from oid import to_oid, to_int, allocate_oid
 from oio import read_lib, write_lib
-from data import link_box, add_structure, add_scroll, add_potion
+from data import set_where, add_structure, add_scroll, add_potion
 
 parser = argparse.ArgumentParser(description='read an Olympia lib')
 
@@ -33,7 +33,7 @@ def add_scrolls(data):
         for prefix in ownerprefix[owner]:
             for skill in skills:
                 oid = prefix + skill
-                add_scroll(data, skill, owner, oid=oid)
+                add_scroll(data, skill, owner, who=oid)
 
 def add_potions(data):
     ownerprefix = { 'aa1': [ 'a', ],
@@ -52,21 +52,21 @@ def add_potions(data):
         for prefix in ownerprefix[owner]:
             for r in range(500,510):
                 oid = prefix + str(r)
-                add_potion(data, 'heal', {'uk': [2]}, owner, oid=oid)
+                add_potion(data, 'heal', {'uk': [2]}, owner, who=oid)
             for r in range(510,512):
                 oid = prefix + str(r)
-                add_potion(data, 'death', {'uk': [1]}, owner, oid=oid)
+                add_potion(data, 'death', {'uk': [1]}, owner, who=oid)
             for r in range(520,522):
                 oid = prefix + str(r)
                 im = {'uk': [3]}
                 im['ct'] = [ ct[owner] ]
-                add_potion(data, 'slavery', im, owner, oid=oid)
+                add_potion(data, 'slavery', im, owner, who=oid)
             count = 530
             for pc in farcasts[owner]:
                 oid = prefix + str(count)
                 count += 1
                 im = {'uk': [5], 'pc': [to_int(pc)]}
-                add_potion(data, 'farcast '+pc, im, owner, oid=oid)
+                add_potion(data, 'farcast '+pc, im, owner, who=oid)
 
 data = read_lib(args.libdir)
 
@@ -74,30 +74,30 @@ add_scrolls(data)
 add_potions(data)
 #add_storms(data)
 
-add_structure(data, 'castle6', 'c18', 'Aachen Castle', oid='1001')
-add_structure(data, 'tower', '1001', 'Aachen Tower', oid='1002')
-add_structure(data, 'tower', 'c18', 'Aachen Outer Tower', oid='1003')
-add_structure(data, 'tower', 'aa01', 'Aachen Outside Tower', oid='1004')
-add_structure(data, 'temple', 'c18', 'Aachen Temple', oid='1005')
-add_structure(data, 'mine', 'aa01', 'Aachen Mine', oid='1006')
+add_structure(data, 'castle6', 'c18', 'Aachen Castle', who='1001')
+add_structure(data, 'tower', '1001', 'Aachen Tower', who='1002')
+add_structure(data, 'tower', 'c18', 'Aachen Outer Tower', who='1003')
+add_structure(data, 'tower', 'aa01', 'Aachen Outside Tower', who='1004')
+add_structure(data, 'temple', 'c18', 'Aachen Temple', who='1005')
+add_structure(data, 'mine', 'aa01', 'Aachen Mine', who='1006')
 
 # XXX structures for other factions
-add_structure(data, 'castle6', 'c43', 'Flugel Castle', oid='2001')
-add_structure(data, 'castle6', 'k20', 'Koeln Castle', oid='3001')
-add_structure(data, 'castle6', 'w65', 'Paschen Castle', oid='4001')
+add_structure(data, 'castle6', 'c43', 'Flugel Castle', who='2001')
+add_structure(data, 'castle6', 'k20', 'Koeln Castle', who='3001')
+add_structure(data, 'castle6', 'w65', 'Paschen Castle', who='4001')
 
-# add_garrison(loc, castle, oid=oid)
+# add_garrison(loc, castle, who=oid)
 
-link_box(data, 1100, 1001)
-link_box(data, 1101, 1100)
-link_box(data, 1102, 'c18')
-link_box(data, 1103, 1005)
-link_box(data, 1104, 1001)
-link_box(data, 1105, 1006)
+set_where(data, 1100, 1001)
+set_where(data, 1101, 1100)
+set_where(data, 1102, 'c18')
+set_where(data, 1103, 1005)
+set_where(data, 1104, 1001)
+set_where(data, 1105, 1006)
 
-link_box(data, 2100, 2001)
-link_box(data, 3100, 3001)
-link_box(data, 4100, 4001)
+set_where(data, 2100, 2001)
+set_where(data, 3100, 3001)
+set_where(data, 4100, 4001)
 
 # fix mage aura, add 1100 auraculum
 # copy chars to other factions

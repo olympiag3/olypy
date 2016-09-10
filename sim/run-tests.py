@@ -56,6 +56,12 @@ def run_one_test(name, y):
     else:
         print('FAIL')
 
+if len(sys.argv) > 1:
+    for name in sys.argv[1:]:
+        with open(name, 'r') as f:
+            run_one_test(name, yaml.safe_load(f))
+    sys.exit(0)
+
 tests = os.listdir('test-inputs')
 for t in tests:
     if not t.endswith('.yml'):

@@ -27,6 +27,9 @@ def test_append_remove():
     data = {}
     data_append(data, 1001, 'na', 'foo')
     assert data == {'1001': {'na': ['foo']}}
+    data_append(data, 1001, 'il', ['60000', 1], dedup=False)
+    data_append(data, 1001, 'il', ['60001', 1], dedup=False)
+    assert data == {'1001': {'na': ['foo'], 'il': ['60000', '1', '60001', '1']}}
 
     data = {}
     data_append(data, '1001', 'na', 'foo')
