@@ -2,7 +2,8 @@ import pytest
 
 from oid import to_int, to_oid
 from data import uniq_f11
-from data import data_append, data_remove, data_append2, data_remove2
+from data import data_append, data_remove, data_overwrite
+from data import data_append2, data_remove2, data_overwrite2
 from data import is_char, can_move, loop_here
 from data import upsert_box, upsert_location
 from data import dead_char_body, upsert_char
@@ -68,7 +69,15 @@ def test_append_remove():
     data_remove(data, 1001, 'na', 'foo')
     data_append(data, 1001, 'na', 'foo')
     assert data == {'1001': {'na': ['bar', 'foo']}}
-    return
+
+def test_overwrite():
+    data = {}
+    data_overwrite(data, 1, 2, ['3'])
+    assert data == {}
+
+    data = {'1001': {'na': ['Oleg the Loudmouth']}}
+    data_overwrite(data, 1001, 'na', ['Phydeaux, RIP'])
+    assert data == {'1001': {'na': ['Phydeaux, RIP']}}
 
 def test_append2_remove2():
     '''
@@ -115,7 +124,15 @@ def test_append2_remove2():
     data_remove2(data, 1001, 'LI', 'hl', 'foo')
     data_append2(data, 1001, 'LI', 'hl', 'foo')
     assert data == {'1001': {'LI': {'hl': ['bar', 'foo']}}}
-    return
+
+def test_overwrite2():
+    data = {}
+    data_overwrite2(data, 1, 2, 3, ['3'])
+    assert data == {}
+
+    data = {'1001': {'LI': {'wh': ['10000']}}}
+    data_overwrite2(data, 1001, 'LI', 'wh', ['10001'])
+    assert data == {'1001': {'LI': {'wh': ['10001']}}}
 
 def test_is_char_and_can_move():
     data = {'1001': {'firstline': ['1001 char 0']}}
@@ -124,7 +141,6 @@ def test_is_char_and_can_move():
     data = {'1001': {'firstline': ['1001 loc tower']}}
     assert not is_char(data, '1001') 
     assert not can_move(data, '1001') 
-    return
 
 def test_loop_here():
     data = {'1001': {'firstline': ['1001 loc tower'], 'LI': {'hl': ['1002']}},
@@ -134,7 +150,6 @@ def test_loop_here():
     assert loop_here(data, '1001', fogonly=True) == {'1002', '1003'}
     assert loop_here(data, '1002') == {'1003'}
     assert loop_here(data, '1002', fogonly=True) == set()
-    return
 
 def test_upsert_box():
     return
@@ -157,7 +172,6 @@ def test_set_where():
     set_where(data, '1001', '1002') # should do nothing
     assert data['1002']['LI']['hl'] == ['1001']
     assert data['1001']['LI']['wh'] == ['1002']
-    return
 
 def test_unset_where():
     data = {'1001': {'LI': {'wh': ['9999']}},
@@ -182,7 +196,6 @@ def test_unset_where():
     unset_where(data, '1001', promote_children=True)
     assert data['1002']['LI']['wh'] == ['9999']
     assert data['9999']['LI']['hl'] == ['1002']
-    return
 
 def test_data_newbox():
     '''

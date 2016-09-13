@@ -36,9 +36,10 @@ def data_append(data, box, subbox, value, dedup=True):
 
 def data_remove(data, box, subbox, value):
     '''
-    remove value to list data[box][subbox]
+    remove value from list data[box][subbox]
     '''
     box = str(box)
+    subbox = str(subbox)
     data[box] = data.get(box, {})
     l = data[box].get(subbox, [])
     try:
@@ -46,6 +47,15 @@ def data_remove(data, box, subbox, value):
         data[box][subbox] = l
     except ValueError:
         pass
+
+def data_overwrite(data, box, subbox, value):
+    '''
+    overwrite list with a new one
+    '''
+    box = str(box)
+    subbox = str(subbox)
+    if data.get(box, {}).get(subbox):
+        data[box][subbox] = value
 
 def data_append2(data, box, subbox, key, value):
     '''
@@ -77,6 +87,16 @@ def data_remove2(data, box, subbox, key, value):
         data[box][subbox][key] = l
     except ValueError:
         pass
+
+def data_overwrite2(data, box, subbox, key, value):
+    '''
+    overwrite list with a new one
+    '''
+    box = str(box)
+    subbox = str(subbox)
+    key = str(key)
+    if data.get(box, {}).get(subbox, {}).get(key, []):
+        data[box][subbox][key] = value
 
 def is_char(data, who):
     if ' char ' in data[who]['firstline'][0]:
