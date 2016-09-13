@@ -19,6 +19,19 @@ do
    [ -f $f ] && echo $f && $COVERAGE ../roundtrip.py --test --player $f
 done
 
+echo
+echo copylib
+echo
+
+rm -rf data/test-temporary
+mkdir data/test-temporary
+mkdir data/test-temporary/fact
+$COVERAGE ../copylib.py data/g2 data/test-temporary
+diff -r -q data/g2 data/test-temporary
+rm -rf data/test-temporary
+
+echo
+
 echo PASS
 exit 0
 

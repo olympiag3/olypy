@@ -17,7 +17,7 @@ def fixup_ms(data):
         if 'IM' in data[box]:
             if 'ms' in data[box]['IM']:
                 value = data[box]['IM']['ms']
-                value[0] += ' '
+                value[0] = value[0].strip() + ' '
                 data[box]['IM']['ms'] = value
 
 def write_oly_file(data, kind=False, verbose=False):
