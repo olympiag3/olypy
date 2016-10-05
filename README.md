@@ -15,7 +15,9 @@ olypy is intended to support:
 
 ## Installing
 
-Clone the repo. Note that Python 3.4+ is required; use penv if your
+Clone the repo.
+
+Note that Python 3.4+ is required; use [pyenv](https://github.com/yyuu/pyenv) if your
 system Python is old.
 
 ## Generating the QA database
