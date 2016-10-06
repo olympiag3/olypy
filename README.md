@@ -17,6 +17,11 @@ olypy is intended to support:
 
 Clone the repo.
 
+```
+python -m pip install -r requirements.txt
+make test
+```
+
 Note that Python 3.4+ is required; use [pyenv](https://github.com/yyuu/pyenv) if your
 system Python is old.
 
