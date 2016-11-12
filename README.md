@@ -15,15 +15,16 @@ olypy is intended to support:
 
 ## Installing
 
+Install python 3.4 or better, using pyenv or your favorite equivalent.
+
 Clone the repo.
+
+Install python modules and see if it works.
 
 ```
 python -m pip install -r requirements.txt
 make test
 ```
-
-Note that Python 3.4+ is required; use [pyenv](https://github.com/yyuu/pyenv) if your
-system Python is old.
 
 ## Generating the QA database
 
