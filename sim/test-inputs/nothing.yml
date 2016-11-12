@@ -1,0 +1,2 @@
+description: Show what happens with no orders. Useful to let humans writing tests see the world.
+lib: defaultlib
