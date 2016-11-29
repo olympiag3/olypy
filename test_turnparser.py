@@ -1,11 +1,10 @@
-import pytest
-
 from oid import to_int
-from turnparser import (parse_inventory, parse_admit, parse_attitudes,
-                        parse_skills, parse_partial_skills, parse_pending_trades,
-                        analyze_regions,
-                        match_line, remove_visions, parse_turn_header, parse_faction,
-                        parse_garrison_log, parse_character, parse_location)
+import turnparser
+
+
+def test_split_into_sections():
+    pass
+
 
 def test_parse_inventory():
     t = '''
@@ -17,7 +16,8 @@ def test_parse_inventory():
 
     '''
     ret = ['1', '3929', '52', '1']
-    assert parse_inventory(t) == ret
+    assert turnparser.parse_inventory(t) == ret
+
 
 def test_parse_admit():
     t = '''
@@ -29,7 +29,8 @@ def test_parse_admit():
     '''
     ret = [['1933', to_int('zb1'), '1001', '1002', '2001', '3001'],
            ['8738', to_int('qm9'), to_int('ez0')]]
-    assert parse_admit(t) == ret
+    assert turnparser.parse_admit(t) == ret
+
 
 def test_parse_attitudes():
     t = '''
@@ -42,7 +43,7 @@ def test_parse_attitudes():
     ret = {'defend': ['ad3', 'ez0', 'ig7', 'ja1', 'qm9'],
            'hostile': ['ad3'],
            'neutral': ['ad3']}
-    assert parse_attitudes(t) == ret
+    assert turnparser.parse_attitudes(t) == ret
 
     t = '''
 
@@ -52,7 +53,8 @@ def test_parse_attitudes():
 
     '''
     ret = {'defend': ['ad3', 'dk3', 'dq4', 'jq9', 'ju1', 'lr2', 'vh3', 'yc5', 'ye8']}
-    assert parse_attitudes(t) == ret
+    assert turnparser.parse_attitudes(t) == ret
+
 
 def test_parse_skills():
     t = '''
@@ -62,11 +64,12 @@ def test_parse_skills():
       Stealth [630]
 	    Conceal self [638], journeyman
     '''
-    ret = [ '610', '2', '21', '0', '0',
-            '611', '2', '28', '0', '0',
-            '630', '2', '28', '0', '0',
-            '638', '2', '28', '5', '0',]
-    assert parse_skills(t) == ret
+    ret = ['610', '2', '21', '0', '0',
+           '611', '2', '28', '0', '0',
+           '630', '2', '28', '0', '0',
+           '638', '2', '28', '5', '0']
+    assert turnparser.parse_skills(t) == ret
+
 
 def test_parse_partial_skills():
     t = '''
@@ -74,8 +77,9 @@ def test_parse_partial_skills():
       Raise undead [901], 0/21
     '''
     ret = ['847', '1', '7', '0', '0',
-           '901', '0', '0', '0', '0',]
-    assert parse_partial_skills(t) == ret
+           '901', '0', '0', '0', '0']
+    assert turnparser.parse_partial_skills(t) == ret
+
 
 def test_parse_pending_trades():
     t = '''
@@ -86,8 +90,29 @@ def test_parse_pending_trades():
        sell	   2  8,565   fish [87]
     '''
     ret = ['2', '95', '9849', '7', '0',  '0',  '0',  '0',
-           '2', '87', '8565', '2', '0',  '0',  '0',  '0',]
-    assert parse_pending_trades(t) == ret
+           '2', '87', '8565', '2', '0',  '0',  '0',  '0']
+    assert turnparser.parse_pending_trades(t) == ret
+
+
+def test_parse_location_top():
+    pass
+
+
+def test_parser_routes_leaving():
+    pass
+
+
+def test_parse_inner_locations():
+    pass
+
+
+def test_parse_market_report():
+    pass
+
+
+def test_parse_seen_here():
+    pass
+
 
 def test_analyze_regions():
     t = '''A
@@ -96,10 +121,11 @@ C
 D
  E
     '''
-    ret = {'A':['C', 'D'], 'C':['D']}
+    ret = {'A': ['C', 'D'], 'C': ['D']}
     region_after = {}
-    analyze_regions(t, region_after)
+    turnparser.analyze_regions(t, region_after)
     assert region_after == ret
+
 
 def test_match_line():
     t = '''
@@ -119,19 +145,20 @@ def test_match_line():
    Maximum aura:   102 (4+98)
 
     '''
-    health, = match_line(t, 'Health:', capture=r'(\d+)')
+    health, = turnparser.match_line(t, 'Health:', capture=r'(\d+)')
     assert health == '71'
 
-    attack, defense, missile = match_line(t, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
+    attack, defense, missile = turnparser.match_line(t, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
     assert attack == '80'
     assert defense == '81'
     assert missile == '0'
 
-    ca, = match_line(t, 'Current aura:')
+    ca, = turnparser.match_line(t, 'Current aura:')
     assert ca == '36'
 
-    foo, = match_line(t, 'Foo:')
-    assert foo == None
+    foo, = turnparser.match_line(t, 'Foo:')
+    assert foo is None
+
 
 def test_remove_visions():
     t = '''
@@ -149,10 +176,11 @@ def test_remove_visions():
 27:
 27: Location:       Tomb in swamp [4082], in province Swamp [aq21], in
 '''
-    s, visions = remove_visions(t)
+    s, visions = turnparser.remove_visions(t)
     assert s == r
     assert len(visions) == 1
     assert visions[0] == v
+
 
 def test_parse_turn_header():
     t = '''
@@ -195,20 +223,19 @@ Grinter
 				     Candide the Captain [3175]
 
     '''
-    ret = {'52341': { 'firstline': ['52341 player pl_regular'],
-                      'na': ["Oleg's Olympians"],
-                      'PL': {'fs': ['200'],
-                             'ft': ['1'],
-                             'kn': [],
-                             'lt': ['2'],
-                             'np': ['11'],
-                             'uf': ['8012', '6124', '4547', '5157', '3518'],
-                             'un': [],
-                            },
+    ret = {'52341': {'firstline': ['52341 player pl_regular'],
+                     'na': ["Oleg's Olympians"],
+                     'PL': {'fs': ['200'],
+                            'ft': ['1'],
+                            'kn': [],
+                            'lt': ['2'],
+                            'np': ['11'],
+                            'uf': ['8012', '6124', '4547', '5157', '3518'],
+                            'un': []},
                      }
            }
 
-    assert parse_turn_header({}, t) == ('52341', '2', ret)
+    assert turnparser.parse_turn_header({}, t) == ('52341', '2', ret)
 
     t = '''
 
@@ -238,13 +265,11 @@ The next five nobles formed will be:  7815 1933 8012 6124 4547
                             'lt': ['1'],
                             'np': ['18'],
                             'uf': ['7815', '1933', '8012', '6124', '4547'],
-                            'un': []
-                           },
+                            'un': []},
                      'firstline': ['52341 player pl_regular'],
-                     'na': ["Oleg's Olympians"]
-                    }
-          }
-    assert parse_turn_header({}, t) == ('52341', '1', ret)
+                     'na': ["Oleg's Olympians"]}}
+    assert turnparser.parse_turn_header({}, t) == ('52341', '1', ret)
+
 
 def test_parse_faction():
     t = '''
@@ -271,11 +296,13 @@ Unclaimed items:
                   ['9774', '52341']],
            'il': ['1', '4330', '52', '5', '78', '100']}
 
-    assert parse_faction(t) == ret
+    assert turnparser.parse_faction(t) == ret
+
 
 def test_parse_garrison_log():
     # XXXv2
-    assert 1 == 1
+    pass
+
 
 def test_parse_character():
     t = '''
@@ -414,7 +441,8 @@ Osswid the Destroyer [7271]
                          '860', '1', '7', '0', '0']},
            'LI': {},
     }
-    assert parse_character('Osswid the Destroyer', '7271', '50033', t) == ret
+    assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t) == ret
+
 
 def test_parse_location():
     t = '''Forest [bf23], forest, in Grinter, safe haven, civ-2
@@ -434,4 +462,4 @@ Seen here:
 
     '''
     ret = {}
-#XXXv0    assert parse_location(t) == ret
+    # XXXv0    assert parse_location(t) == ret
