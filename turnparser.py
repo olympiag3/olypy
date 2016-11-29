@@ -544,7 +544,7 @@ def parse_character(name, ident, factident, text):
         sick = 1
     else:
         sick = 0
-    health = re.search(r'\d+', health).group(0)
+    health = re.search(r'\d+|n/a', health).group(0)  # NPCs have health of 'n/a'
     attack, defense, missile = match_line(text, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
     behind, = match_line(text, 'behind', capture=r'(\d+)')
     break_point, = match_line(text, 'Break point:', capture=r'(\d+)')
@@ -732,5 +732,6 @@ def parse_turn_from_file(f):
 
 if __name__ == '__main__':
     for filename in sys.argv[1:]:
+        print('\nbegin filename', filename, '\n')
         with open(filename, 'r') as f:
             parse_turn_from_file(f)
