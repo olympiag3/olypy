@@ -298,6 +298,9 @@ Osswid the Destroyer [7271]
 		   Francisco Lopez [6710]
 		   Tom [8578]
    
+   Declared attitudes:
+      defend   qm9  zb1
+   
    Skills known:
       Shipcraft [600]
 	    Sailing [601], apprentice
@@ -317,7 +320,11 @@ Osswid the Destroyer [7271]
       Mining [720]
 	    Mine iron [721], apprentice
 	    Mine gold [722], apprentice
-
+   
+   Partially known skills:
+      Magic [800], 7/28
+      Gatecraft [860], 7/35
+   
    Inventory:
 	 qty  name				weight
 	 ---  ----				------
@@ -341,7 +348,7 @@ Osswid the Destroyer [7271]
       trade    price	qty   item
       -----    -----	---   ----
        sell	   7	100   clay pot [95]
-
+   
     '''
     ret = {'firstline': ['7271 char 0'],
            'na': ['Osswid the Destroyer'],
@@ -355,7 +362,8 @@ Osswid the Destroyer [7271]
                   '79', '2',
                   '94', '11',
                   '98', '1'],
-           'CH': {'at': ['89'],
+           'CH': {'ad': ['qm9', 'zb1'],
+                  'at': ['89'],
                   'bp': ['0'],
                   'df': ['168'],
                   'he': ['100'],
@@ -380,7 +388,9 @@ Osswid the Destroyer [7271]
                          '682', '2', '14', '0', '0',
                          '720', '2', '21', '0', '0',
                          '721', '2', '14', '0', '0',
-                         '722', '2', '14', '0', '0']},
+                         '722', '2', '14', '0', '0',
+                         '800', '1', '7', '0', '0',
+                         '860', '1', '7', '0', '0']},
            'LI': {},
     }
     assert parse_character('Osswid the Destroyer', '7271', '50033', t) == ret

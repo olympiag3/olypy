@@ -204,7 +204,8 @@ skill_days = {
     '885': '21',
     '886': '14',
     '887': '14',
-    '888': '21',
+    '888': '14',
+    '889': '21',
     '891': '28',
     '892': '14',
     '893': '21',
@@ -429,7 +430,10 @@ def parse_turn_header(data, turn):
     next5 = m.group(1).split()
 
     m = re.search(r'(\d+) fast study days are left', turn, re.M)
-    fast_study = m.group(1)
+    if m:
+        fast_study = m.group(1)
+    else:
+        fast_study = 0
 
     m = re.search(r'^Location\s+Stack\n--------\s+-----\n(.*?)\n\n', turn, re.M | re.S)
     if m: # does not exist in the initial turn :/
@@ -462,12 +466,14 @@ def parse_faction(text):
     ret = {}
 
     m = re.search(r'^Unclaimed items:\n\n(.*?)\n\n', text, re.M | re.S)
-    unclaimed_items = parse_inventory(m.group(1))
-    ret['il'] = unclaimed_items
+    if m:
+        unclaimed_items = parse_inventory(m.group(1))
+        ret['il'] = unclaimed_items
 
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
-    admits = parse_admit(m.group(1))
-    ret['am'] = admits
+    if m:
+        admits = parse_admit(m.group(1))
+        ret['am'] = admits
 
     m = re.search(r'^Declared attitudes:\n(.*?)\n\n', text, re.M | re.S)
     if m:
@@ -489,8 +495,13 @@ def parse_garrison_log(text):
 loyalty_kind = {'Unsworn': 0, 'Contract':1, 'Oath':2, 'Fear':3, 'Npc':4, 'Summon':5}
 
 def parse_character(name, ident, factident, text):
+    # dead characters have no loyalty
+    # TODOv2 make a body... but it's hard to figure out where to put the body
     loyalty, = match_line(text, 'Loyalty:')
-    lkind = str(loyalty_kind[re.search(r'[A-Za-z]+', loyalty).group(0)])
+    if loyalty is None:
+        return
+    m = re.search(r'[A-Za-z]+', loyalty)
+    lkind = str(loyalty_kind[m.group(0)])
     lrate = re.search(r'\d+', loyalty).group(0)
 
     health, = match_line(text, 'Health:')
@@ -513,17 +524,17 @@ def parse_character(name, ident, factident, text):
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
 
-    m = re.search(r'Declared attitudes:\n(.*?)\n\n', text, re.M | re.S)
+    m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
     if m:
         attitudes = parse_attitudes(m.group(1))
 
-    m = re.search(r'Skills known:\n(.*?)\n\n', text, re.M | re.S)
+    m = re.search(r'Skills known:\n(.*?)\n\s*\n', text, re.M | re.S)
     skills = []
     if m:
         skills = parse_skills(m.group(1))
 
-    m = re.search(r'Partially known skills:\n\n(.*?)\n\n', text, re.M | re.S)
+    m = re.search(r'Partially known skills:\n(.*?)\n\s*\n', text, re.M | re.S)
     if m:
         skills_partial = parse_partial_skills(m.group(1))
         skills.extend(skills_partial)
@@ -535,7 +546,7 @@ def parse_character(name, ident, factident, text):
 
     # TODOv2: scrolls
 
-    m = re.search(r'^Pending trades:\n\n(.*?)\n\n', text, re.M | re.S)
+    m = re.search(r'^Pending trades:\n\n(.*?)\n\s*\n', text, re.M | re.S)
     trades = []
     if m:
         trades = parse_pending_trades(m.group(1))
@@ -550,12 +561,6 @@ def parse_character(name, ident, factident, text):
         ret['il'] = inventory
     if len(trades) > 0:
         ret['tl'] = trades
-    if attitudes.get('neutral'):
-        ret['an'] = attitudes['neutral']
-    if attitudes.get('defend'):
-        ret['ad'] = attitudes['defend']
-    if attitudes.get('hostile'):
-        ret['ah'] = attitudes['hostile']
 
     ret['LI'] = {} # will get LI/wh eventually
 
@@ -566,6 +571,12 @@ def parse_character(name, ident, factident, text):
         ch['si'] = [1]
     ch['lk'] = lkind
     ch['lr'] = lrate
+    if attitudes.get('neutral'):
+        ch['an'] = attitudes['neutral']
+    if attitudes.get('defend'):
+        ch['ad'] = attitudes['defend']
+    if attitudes.get('hostile'):
+        ch['ah'] = attitudes['hostile']
     if len(skills) > 0:
         ch['sl'] = skills
     # prisoner
@@ -605,8 +616,11 @@ def parse_location(s):
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
-        print('s is', s)
-    parse_location_top(m.group(1))
+        print('failed to parse location, s is', s)
+    top = m.group(1)
+    if top == 'Lore sheets':
+        return
+    parse_location_top(top)
 
     # XXXv2 location-days, e.g. enemy units I don't see at the end of the turn
 
@@ -673,13 +687,13 @@ def parse_turn(turn):
 
     return data
 
-def read_a_turn(f):
+def parse_turn_from_file(f):
     turn = ''.join(f)
     turn.replace('\r\n', '\n')
 
-    data = initial_parse(turn)
+    data = parse_turn(turn)
 
 if __name__ == '__main__':
-    with open('/home/lindahl/game/g4/oleg.099', 'r') as f:
-        read_a_turn(f)
-
+    for filename in sys.argv[1:]:
+        with open(filename, 'r') as f:
+            parse_turn_from_file(f)
