@@ -19,38 +19,38 @@ inverted_directions = {'north': 3, 'east': 4, 'south': 1, 'west': 2, 'up': 6, 'd
 structure_type = set(('castle', 'tower', 'galley', 'roundship', 'temple', 'mine', 'inn'))
 
 geo_inventory = {
-    'mountain': [ '78', '50', '10', '10', '96', '50', '101', '1', '275', '1' ],
-    'plain': [ '51', '5', '10', '10', '96', '50', '101', '1', '275', '1' ],
-    'swamp': [ '66', '1', '96', '50', '101', '1', '274', '1' ],
-    'forest': [ '77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1' ],
-    'desert': [ '78', '10', '96', '50', '101', '1', '275', '1' ],
-    'ocean': [ '59', '30', '87', '50', '274', '1', '275', '1', '276', '1' ],
-    'cloud': [ '274', '1', '275', '1', '276', '1' ],
-    'underground': [ '101', '1', '96', '50' ],
-    'faery hill': [ ],
-    'island': [ '59', '30' ],
-    'ring of stones': [ ],
-    'mallorn grove': [ '65', '2', '70', '2' ],
-    'bog': [ '66', '4' ],
-    'cave': [ '67', '2' ],
-    'city': [ '10', '10', '294', '1', '277', '5', '96', '100', '101', '1' ],
-    'lair': [ ],
-    'graveyard': [ '31', '15', '273', '1' ],
-    'ruins': [ ],
-    'battlefield': [ ],
-    'enchanted forest': [ ],
-    'rocky hill': [ '78', '50' ],
-    'circle of trees': [ '77', '5', '64', '3' ],
-    'pits': [ '66', '4' ],
-    'pasture': [ '51', '5' ],
-    'oasis': [ ],
-    'yew grove': [ '68', '5' ],
-    'sand pit': [ '71', '1' ],
-    'sacred grove': [ '77', '5' ],
-    'poppy field': [ '93', '25' ],
-    'tunnel': [ '101', '1', '96', '50' ],
-    'sewer': [ ],
-    'chamber': [ '101', '1', '96', '50' ],
+    'mountain': ['78', '50', '10', '10', '96', '50', '101', '1', '275', '1'],
+    'plain': ['51', '5', '10', '10', '96', '50', '101', '1', '275', '1'],
+    'swamp': ['66', '1', '96', '50', '101', '1', '274', '1'],
+    'forest': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+    'desert': ['78', '10', '96', '50', '101', '1', '275', '1'],
+    'ocean': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
+    'cloud': ['274', '1', '275', '1', '276', '1'],
+    'underground': ['101', '1', '96', '50'],
+    'faery hill': [],
+    'island': ['59', '30'],
+    'ring of stones': [],
+    'mallorn grove': ['65', '2', '70', '2'],
+    'bog': ['66', '4'],
+    'cave': ['67', '2'],
+    'city': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
+    'lair': [],
+    'graveyard': ['31', '15', '273', '1'],
+    'ruins': [],
+    'battlefield': [],
+    'enchanted forest': [],
+    'rocky hill': ['78', '50'],
+    'circle of trees': ['77', '5', '64', '3'],
+    'pits': ['66', '4'],
+    'pasture': ['51', '5'],
+    'oasis': [],
+    'yew grove': ['68', '5'],
+    'sand pit': ['71', '1'],
+    'sacred grove': ['77', '5'],
+    'poppy field': ['93', '25'],
+    'tunnel': ['101', '1', '96', '50'],
+    'sewer': [],
+    'chamber': ['101', '1', '96', '50'],
 }
 
 # regions go from 58760-58999 ... and need to be in the correct order
@@ -58,7 +58,7 @@ geo_inventory = {
 region_after = {}
 
 type_to_region = {
-    'ocean': 'Great Sea', # if in main world
+    'ocean': 'Great Sea',  # if in main world
     'underground': 'Hades',
     'tunnel': 'Undercity',
     'cloud': 'Cloudlands',
@@ -239,6 +239,7 @@ trade_map = {
     'sell': '2',
 }
 
+
 def split_into_sections(text):
     dashes = '------------------------------------------------------------------------'
     sections = text.split(dashes)
@@ -249,7 +250,8 @@ def split_into_sections(text):
         ret.append(last + '\n' + dashes + '\n' + s)
         lines = s.rstrip().split('\n')
         last = lines[-1]
-    return ret[1:] # discard header
+    return ret[1:]  # discard header
+
 
 def parse_inventory(text):
     temp = {}
@@ -257,9 +259,9 @@ def parse_inventory(text):
     for line in text.split('\n'):
         m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(\d+)\]', line)
         if m:
-            qty, name, ident = m.group(1,2,3)
+            qty, name, ident = m.group(1, 2, 3)
             qty = qty.replace(',', '')
-            ident = int(ident) # so we can sort on it
+            ident = int(ident)  # so we can sort on it
             temp[ident] = qty
 
     keys = sorted(list(temp.keys()))
@@ -267,6 +269,7 @@ def parse_inventory(text):
     for k in keys:
         ret.extend((str(k), temp[k]))
     return ret
+
 
 def parse_admit(text):
     ret = []
@@ -279,13 +282,14 @@ def parse_admit(text):
                 ret.append([to_int(p) for p in parts[1:]])
     return ret
 
+
 def parse_attitudes(text):
     last = ''
     ret = {}
     for line in text.split('\n'):
         parts = line.split()
         if parts:
-            p0 = parts[0].lower() # on g4 turn 20, some reports have uppercase
+            p0 = parts[0].lower()  # on g4 turn 20, some reports have uppercase
             if p0 == 'neutral':
                 last = 'neutral'
                 ret[last] = parts[1:]
@@ -295,9 +299,10 @@ def parse_attitudes(text):
             elif p0 == 'hostile':
                 last = 'hostile'
                 ret[last] = parts[1:]
-            else: # continuation line
+            else:  # continuation line
                 ret[last].extend(parts)
     return ret
+
 
 def parse_skills(text):
     skill_exp_list = '|'.join(skill_experience.keys())
@@ -316,6 +321,7 @@ def parse_skills(text):
         ret.extend(d[k])
     return ret
 
+
 def parse_partial_skills(text):
     skills = re.findall(r'\[(.*?)\], (\d+)/', text)
     ret = []
@@ -326,6 +332,7 @@ def parse_partial_skills(text):
             kind = '1'
         ret.extend((s, kind, p, '0', '0'))
     return ret
+
 
 def parse_pending_trades(text):
     ret = []
@@ -342,30 +349,34 @@ def parse_pending_trades(text):
         ret.extend((trade, item[0], qty, price, '0', '0', '0', '0'))
     return ret
 
+
 def parse_location_top(text):
-# Forest [ah08], forest, in Acaren, wilderness
-# The Dark Lands [bk76], forest, in Barun, wilderness
-# Ocean [aq51], ocean, in Great Sea
-# Forest [fn23], forest, in Faery
-# Tunnel [vm89], tunnel, in Undercity
-# Sewer [z581], sewer, in Plain [az99], hidden
-# Graveyard [g462], graveyard, in province Forest [bw19]
-# Rimmon [m19], city, in province Plain [bz28]
-# Esnar [v96], port city, in province Plain [ar17]
+    '''
+Forest [ah08], forest, in Acaren, wilderness
+The Dark Lands [bk76], forest, in Barun, wilderness
+Ocean [aq51], ocean, in Great Sea
+Forest [fn23], forest, in Faery
+Tunnel [vm89], tunnel, in Undercity
+Sewer [z581], sewer, in Plain [az99], hidden
+Graveyard [g462], graveyard, in province Forest [bw19]
+Rimmon [m19], city, in province Plain [bz28]
+Esnar [v96], port city, in province Plain [ar17]
+    '''
 
     m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)', text)
-    loc_name, loc_id, kind, rest_str = m.group(1,2,3,4)
+    loc_name, loc_id, kind, rest_str = m.group(1, 2, 3, 4)
     # kind = terrain or 'city' or 'port city'
     # rest is a comma-separated list: region or province, hidden, wilderness|civ-N, safe haven
     rest = [s.strip() for s in rest_str.split(',')]
 
     loc_int = to_int(loc_id)
 
-
     # XXXv0
     return
 
+
 def parse_routes_leaving(text):
+    '''
 #   South, to Forest [bx39], Ishdol, 2 days <== ocean->coast lacks terrain
 #   West, swamp, to The Dark Lands [cv34], Teysel, 2 days <== this ocean->coast does have terrain?!
 #   South, city, to Hornmar [g02], Olbradim, 1 day
@@ -373,20 +384,26 @@ def parse_routes_leaving(text):
 #   West, to Ocean [bw38], 3 days <== no terrain for ocean->ocean
 #   East, underground, to Hades [rm21], hidden, 7 days
 #   Underground, to Hades [hs70], Hades, hidden, 1 day <== no terrain for a special direction SL,lt
+    '''
+
     # XXXv0
     return
+
 
 def parse_inner_locations(text):
     # XXXv0
     return
 
+
 def parse_market_report(text):
     # XXXv0
     return
 
+
 def parse_seen_here(text):
     # XXXv0
     return
+
 
 def analyze_regions(s, region_after):
     regions = []
@@ -403,13 +420,15 @@ def analyze_regions(s, region_after):
                 region_after[r].append(reg)
         regions.append(reg)
 
+
 def match_line(text, word, capture=None):
     if capture is None:
         capture = r'(.*)'
     m = re.search(r'\s+'+word+'\s+'+capture, text, re.M)
     if not m:
-        return None, # XXX this only works if the caller expects one result
+        return None,  # XXX this only works if the caller expects one result
     return m.groups()
+
 
 def remove_visions(s):
     '''
@@ -444,9 +463,10 @@ def remove_visions(s):
 
     return s, visions
 
+
 def parse_turn_header(data, turn):
     m = re.search(r'^Olympia (.\S) turn (\d+)', turn, re.M)
-    game = m.group(1)
+    # game = m.group(1)
     turn_num = m.group(2)
 
     m = re.search(r'^(?:Initial Position )?Report for (.{1,30}) \[(.{3,6})\]', turn, re.M)
@@ -466,7 +486,7 @@ def parse_turn_header(data, turn):
         fast_study = 0
 
     m = re.search(r'^Location\s+Stack\n--------\s+-----\n(.*?)\n\n', turn, re.M | re.S)
-    if m: # does not exist in the initial turn :/
+    if m:  # does not exist in the initial turn :/
         analyze_regions(m.group(1), region_after)
 
     # XXXv2 parse garr\s+where... to get cost of garrisons and complete garrison list (no fog, accurate castle info)
@@ -479,15 +499,16 @@ def parse_turn_header(data, turn):
     pl = {}
     pl['np'] = [nps]
     pl['fs'] = [fast_study]
-    pl['ft'] = ['1'] # first turn
-    pl['lt'] = [turn_num] # last turn
-    pl['kn'] = [] # to be filled in later
+    pl['ft'] = ['1']  # first turn
+    pl['lt'] = [turn_num]  # last turn
+    pl['kn'] = []  # to be filled in later
     pl['un'] = []
     pl['uf'] = next5
     fact['PL'] = pl
 
-    data[factint] = fact # XXXv0 should be labled with turn
+    data[factint] = fact  # XXXv0 should be labled with turn
     return factint, turn_num, data
+
 
 def parse_faction(text):
     '''
@@ -517,12 +538,14 @@ def parse_faction(text):
 
     return ret
 
+
 def parse_garrison_log(text):
     # XXXv2
     # need to track all give/get for all time to get hidden contents, esp gold
     return {}
 
-loyalty_kind = {'Unsworn': 0, 'Contract':1, 'Oath':2, 'Fear':3, 'Npc':4, 'Summon':5}
+loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
+
 
 def parse_character(name, ident, factident, text):
     # dead characters have no loyalty
@@ -593,7 +616,7 @@ def parse_character(name, ident, factident, text):
     if len(trades) > 0:
         ret['tl'] = trades
 
-    ret['LI'] = {} # will get LI/wh eventually
+    ret['LI'] = {}  # will get LI/wh eventually
 
     ch = {}
     ch['lo'] = [to_int(factident)]
@@ -635,15 +658,13 @@ def parse_character(name, ident, factident, text):
 
     return ret
 
+
 def parse_location(s):
-
-# parse_top
-
-# parse_leaving
-
-# guess city province - city come before impassible province link on leaving
-# guess terrain - ocean->coast, Hades, 
-# guess region - 
+    '''
+# XXXv0 guess city province - city come before impassible province link on leaving
+# XXXv0 guess terrain - ocean->coast, Hades,
+# XXXv0 guess regions
+    '''
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
@@ -673,12 +694,12 @@ def parse_location(s):
 
     m = re.search(r'^Ships docked at port:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_seen_here(m.group(1)) # same thing
-
+        parse_seen_here(m.group(1))  # same thing
 
     # XXXv0 do something with all this
 
     return
+
 
 def parse_turn(turn):
 
@@ -693,8 +714,8 @@ def parse_turn(turn):
         while True:
             m = re.match(r'^([^\[]{1,40}) \[(.{3})\]\n---------------', s)
             if m:
-                name, ident = m.group(1,2)
-                data = parse_faction(s) # XXXv0 merge data with data
+                name, ident = m.group(1, 2)
+                data = parse_faction(s)  # XXXv0 merge data with data
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:
@@ -702,12 +723,12 @@ def parse_turn(turn):
                 break
             m = re.match(r'^([^\[]{1,40}) \[(.{4,6})\]\n--------------', s)
             if m:
-                name, ident = m.group(1,2)
+                name, ident = m.group(1, 2)
                 s, visions = remove_visions(s)
                 # TODOv2 do something with visions
                 data = parse_character(name, ident, factint, s)
                 break
-            #m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)\n-------------', s)
+            # m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)\n-------------', s)
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
                 data = parse_location(s)
@@ -719,6 +740,7 @@ def parse_turn(turn):
     # XXXv0 form the above into characters and locations
 
     return data
+
 
 def parse_turn_from_file(f):
     turn = ''.join(f)
