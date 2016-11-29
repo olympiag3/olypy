@@ -331,7 +331,6 @@ def parse_pending_trades(text):
     ret = []
     for line in text.split('\n'):
         pieces = line.split(maxsplit=3)
-        print('pieces is', pieces, file=sys.stderr)
         if len(pieces) != 4:
             continue
         trade, price, qty, item = pieces
@@ -393,12 +392,9 @@ def analyze_regions(s, region_after):
     regions = []
     for line in s.split('\n'):
         if re.match(r'\s', line):
-            print('skipping line', line.rstrip())
             continue
         reg = line.rstrip()
-        print('line is', reg)
         for r in regions:
-            print('r is <{}>'.format(r))
             if region_after.get(r) is None:
                 region_after[r] = []
             try:
