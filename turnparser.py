@@ -285,13 +285,14 @@ def parse_attitudes(text):
     for line in text.split('\n'):
         parts = line.split()
         if parts:
-            if parts[0] == 'neutral':
+            p0 = parts[0].lower() # on g4 turn 20, some reports have uppercase
+            if p0 == 'neutral':
                 last = 'neutral'
                 ret[last] = parts[1:]
-            elif parts[0] == 'defend':
+            elif p0 == 'defend':
                 last = 'defend'
                 ret[last] = parts[1:]
-            elif parts[0] == 'hostile':
+            elif p0 == 'hostile':
                 last = 'hostile'
                 ret[last] = parts[1:]
             else: # continuation line
@@ -414,6 +415,39 @@ def match_line(text, word, capture=None):
         return None, # XXX this only works if the caller expects one result
     return m.groups()
 
+def remove_visions(s):
+    '''
+    Remove visions from a character report.
+    It's hard to figure out where a vision ends, so we do it wrong.
+
+    End is (1) different day (inaccurate) or (2) ' >' (repeat orbing)
+    '''
+    visions = []
+    while True:
+        m = re.search(r'^([ \d]\d:) (A vision|.*? receives a vision)', s, re.M)
+        if m:
+            day = m.group(1)
+            kind = m.group(2)
+            string = '^{} {} .*'.format(day, kind)
+            string = string.replace('[', '\\[')
+            string = string.replace(']', '\\]')
+            clip = re.search(string, s, re.M | re.S)
+            if clip:
+                lines = clip.group(0).split('\n')
+                wholeday = ''
+                for l in lines:
+                    if l.startswith(day):
+                        wholeday += l + '\n'
+                    else:
+                        break
+                s = s.replace(wholeday, '')
+                visions = [wholeday]
+                # XXX further processing to split same-day orbs
+        else:
+            break
+
+    return s, visions
+
 def parse_turn_header(data, turn):
     m = re.search(r'^Olympia (.\S) turn (\d+)', turn, re.M)
     game = m.group(1)
@@ -500,6 +534,7 @@ def parse_character(name, ident, factident, text):
     loyalty, = match_line(text, 'Loyalty:')
     if loyalty is None:
         return
+
     m = re.search(r'[A-Za-z]+', loyalty)
     lkind = str(loyalty_kind[m.group(0)])
     lrate = re.search(r'\d+', loyalty).group(0)
@@ -672,6 +707,8 @@ def parse_turn(turn):
             m = re.match(r'^([^\[]{1,40}) \[(.{4,6})\]\n--------------', s)
             if m:
                 name, ident = m.group(1,2)
+                s, visions = remove_visions(s)
+                # TODOv2 do something with visions
                 data = parse_character(name, ident, factint, s)
                 break
             #m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)\n-------------', s)

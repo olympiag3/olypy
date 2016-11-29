@@ -4,7 +4,7 @@ from oid import to_int
 from turnparser import (parse_inventory, parse_admit, parse_attitudes,
                         parse_skills, parse_partial_skills, parse_pending_trades,
                         analyze_regions,
-                        match_line, parse_turn_header, parse_faction,
+                        match_line, remove_visions, parse_turn_header, parse_faction,
                         parse_garrison_log, parse_character, parse_location)
 
 def test_parse_inventory():
@@ -35,7 +35,7 @@ def test_parse_attitudes():
     t = '''
 
       defend   ad3  ez0  ig7  ja1  qm9
-      hostile  ad3
+      Hostile  ad3
       neutral  ad3
 
     '''
@@ -132,6 +132,27 @@ def test_match_line():
 
     foo, = match_line(t, 'Foo:')
     assert foo == None
+
+def test_remove_visions():
+    t = '''
+26: Received 2 gold from Garrison [2346].
+27: Osswid the Brave [7651] receives a vision of RC-2080 [2080]:
+27:
+27: Location:       Tomb in swamp [4082], in province Swamp [aq21], in
+28: foo
+    '''
+    r = '''
+26: Received 2 gold from Garrison [2346].
+28: foo
+    '''
+    v = '''27: Osswid the Brave [7651] receives a vision of RC-2080 [2080]:
+27:
+27: Location:       Tomb in swamp [4082], in province Swamp [aq21], in
+'''
+    s, visions = remove_visions(t)
+    assert s == r
+    assert len(visions) == 1
+    assert visions[0] == v
 
 def test_parse_turn_header():
     t = '''
