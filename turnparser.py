@@ -292,15 +292,15 @@ def parse_attitudes(text):
             p0 = parts[0].lower()  # on g4 turn 20, some reports have uppercase
             if p0 == 'neutral':
                 last = 'neutral'
-                ret[last] = parts[1:]
+                ret[last] = [to_int(p) for p in parts[1:]]
             elif p0 == 'defend':
                 last = 'defend'
-                ret[last] = parts[1:]
+                ret[last] = [to_int(p) for p in parts[1:]]
             elif p0 == 'hostile':
                 last = 'hostile'
-                ret[last] = parts[1:]
+                ret[last] = [to_int(p) for p in parts[1:]]
             else:  # continuation line
-                ret[last].extend(parts)
+                ret[last].extend([to_int(p) for p in parts])
     return ret
 
 
@@ -361,27 +361,63 @@ Sewer [z581], sewer, in Plain [az99], hidden
 Graveyard [g462], graveyard, in province Forest [bw19]
 Rimmon [m19], city, in province Plain [bz28]
 Esnar [v96], port city, in province Plain [ar17]
+
+Every location: Name, loc_id, kind, outer thing (region or province or ...)
+Optional: civ-level (normal-world provinces only), hidden
+ Things are either province-sized or sublocs
+ Undercity chambers have civ levels? like normal provinces
+
+Some things are lies. Sewer z581 connects to a city, not the province it's allegedly in.
+This matters for things like visions, where we haven't seen the enclosing thing.
+The main problem here is the kind of the enclosure, which can be renamed.
+
     '''
 
     m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)', text)
     loc_name, loc_id, kind, rest_str = m.group(1, 2, 3, 4)
+    loc_int = to_int(loc_id)
     # kind = terrain or 'city' or 'port city'
     # rest is a comma-separated list: region or province, hidden, wilderness|civ-N, safe haven
     rest = [s.strip() for s in rest_str.split(',')]
+    enclosing = rest[0]
+    m = re.match(r'\[(.{3,6}?)\]', enclosing)
+    if m:
+        enclosing_id = m.group(1)
+        enclosing_int = to_int(enclosing_id)
+        region = 'Unknown'  # region is only unknown if it doesn't matter
+    else:
+        enclosing_id = ''
+        enclosing_int = 0
+        region = enclosing
+    civ = 0
+    safe_haven = 0
+    hidden = 0
+    if len(rest) > 1:
+        for r in rest:
+            if r == 'wilderness':
+                civ = 0
+                break
+            m = re.match(r'civ-(\d)', r)
+            if m:
+                civ = m.group(1)
+                break
+            if r == 'safe haven':
+                safe_haven = 1
+                break
+            if r == 'hidden':
+                hidden = 1
+            print('unknown rest in parse_location_top:', r)
 
-    loc_int = to_int(loc_id)
-
-    # XXXv0
-    return
+    return [loc_name, loc_int, kind, enclosing_int, region, civ, safe_haven, hidden]  # make me a thingie
 
 
 def parse_routes_leaving(text):
     '''
-#   South, to Forest [bx39], Ishdol, 2 days <== ocean->coast lacks terrain
+#   South, to Forest [bx39], Ishdol, 2 days <== ocean<->coast lacks terrain
+#   West, to Ocean [bw38], 3 days <== ocean<->ocean lacks terrain
 #   West, swamp, to The Dark Lands [cv34], Teysel, 2 days <== this ocean->coast does have terrain?!
 #   South, city, to Hornmar [g02], Olbradim, 1 day
 #   South, to Swamp [ac21], Olbradim, impassable <== no terrain for city province
-#   West, to Ocean [bw38], 3 days <== no terrain for ocean->ocean
 #   East, underground, to Hades [rm21], hidden, 7 days
 #   Underground, to Hades [hs70], Hades, hidden, 1 day <== no terrain for a special direction SL,lt
     '''
@@ -575,6 +611,7 @@ def parse_character(name, ident, factident, text):
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
         pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture=r'(.*?) \[(.{4,6})\]')
+    # XXXv2 Pledged to us: ...
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
 
@@ -651,8 +688,8 @@ def parse_character(name, ident, factident, text):
     cm = {}
     if concealed:
         cm['hs'] = [1]
-        if pledged_to:
-            cm['pl'] = to_int(pledged_to)
+    if pledged_to:
+        cm['pl'] = to_int(pledged_to)
     if len(cm):
         ret['CM'] = cm
 
@@ -728,7 +765,6 @@ def parse_turn(turn):
                 # TODOv2 do something with visions
                 data = parse_character(name, ident, factint, s)
                 break
-            # m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)\n-------------', s)
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
                 data = parse_location(s)

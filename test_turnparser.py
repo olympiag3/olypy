@@ -3,7 +3,37 @@ import turnparser
 
 
 def test_split_into_sections():
-    pass
+    t = '''
+Oleg's Olympians [ja1]
+------------------------------------------------------------------------
+asdf
+Garrison log
+------------------------------------------------------------------------
+ 1: 5027: Received nine pikes [75] from Babra [2233].
+Oleg the Loudmouth [6940]
+------------------------------------------------------------------------
+ 1: > press 0
+'''
+    ret = [
+'''Oleg's Olympians [ja1]
+------------------------------------------------------------------------
+
+asdf
+Garrison log
+''',
+'''Garrison log
+------------------------------------------------------------------------
+
+ 1: 5027: Received nine pikes [75] from Babra [2233].
+Oleg the Loudmouth [6940]
+''',
+'''Oleg the Loudmouth [6940]
+------------------------------------------------------------------------
+
+ 1: > press 0
+'''
+        ]
+    assert turnparser.split_into_sections(t) == ret
 
 
 def test_parse_inventory():
@@ -40,19 +70,18 @@ def test_parse_attitudes():
       neutral  ad3
 
     '''
-    ret = {'defend': ['ad3', 'ez0', 'ig7', 'ja1', 'qm9'],
-           'hostile': ['ad3'],
-           'neutral': ['ad3']}
+    ret = {'defend': [to_int('ad3'), to_int('ez0'), to_int('ig7'), to_int('ja1'), to_int('qm9')],
+           'hostile': [to_int('ad3')],
+           'neutral': [to_int('ad3')]}
     assert turnparser.parse_attitudes(t) == ret
 
     t = '''
 
    defend   ad3  dk3  dq4  
-            jq9  ju1  lr2
-            vh3  yc5  ye8
+            jq9
 
     '''
-    ret = {'defend': ['ad3', 'dk3', 'dq4', 'jq9', 'ju1', 'lr2', 'vh3', 'yc5', 'ye8']}
+    ret = {'defend': [to_int('ad3'), to_int('dk3'), to_int('dq4'), to_int('jq9')]}
     assert turnparser.parse_attitudes(t) == ret
 
 
@@ -95,7 +124,9 @@ def test_parse_pending_trades():
 
 
 def test_parse_location_top():
-    pass
+    t = 'Forest [ah08], forest, in Acaren, wilderness'
+    ret = ['Forest', to_int('ah08'), 'forest', 0, 'Acaren', 0, 0, 0]
+    assert turnparser.parse_location_top(t) == ret
 
 
 def test_parser_routes_leaving():
@@ -281,6 +312,11 @@ Admit permissions:
    admit 9724  ja1
    admit 9774  ja1
 
+Declared attitudes:
+   defend   ad3
+   hostile  ez0
+   neutral  hv5  hx7
+
 Unclaimed items:
 
       qty  name				     weight
@@ -290,10 +326,13 @@ Unclaimed items:
       100  stone [78]			     10,000  
 
     '''
-    ret = {'am': [['4256', '52341', '50033'],
+    ret = {'ad': [to_int('ad3')],
+           'ah': [to_int('ez0')],
+           'am': [['4256', '52341', '50033'],
                   ['7611', '6124'],
                   ['9724', '52341'],
                   ['9774', '52341']],
+           'an': [to_int('hv5'), to_int('hx7')],
            'il': ['1', '4330', '52', '5', '78', '100']}
 
     assert turnparser.parse_faction(t) == ret
@@ -337,6 +376,7 @@ Osswid the Destroyer [7271]
    Combat:	   attack 89, defense 168, missile 50
 		   behind 0  (front line in combat)
    Break point:    0% (fight to the death)
+   use  638 1      (concealing self)
    Receive Vision: 2 protection
    Pledged to:	   Yoyo 6 [6839]
    Pledged to us:  Tom [1753]
@@ -410,7 +450,7 @@ Osswid the Destroyer [7271]
                   '79', '2',
                   '94', '11',
                   '98', '1'],
-           'CH': {'ad': ['qm9', 'zb1'],
+           'CH': {'ad': [to_int('qm9'), to_int('zb1')],
                   'at': ['89'],
                   'bp': ['0'],
                   'df': ['168'],
@@ -439,6 +479,7 @@ Osswid the Destroyer [7271]
                          '722', '2', '14', '0', '0',
                          '800', '1', '7', '0', '0',
                          '860', '1', '7', '0', '0']},
+           'CM': {'hs': [1], 'pl': '6839'},
            'LI': {},
     }
     assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t) == ret
