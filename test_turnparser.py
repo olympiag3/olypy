@@ -1,3 +1,5 @@
+import pytest
+
 from oid import to_int
 import turnparser
 
@@ -127,22 +129,195 @@ def test_parse_location_top():
     t = 'Forest [ah08], forest, in Acaren, wilderness'
     ret = ['Forest', to_int('ah08'), 'forest', 0, 'Acaren', 0, 0, 0]
     assert turnparser.parse_location_top(t) == ret
+    assert turnparser.regions_set == set(('Cloudlands', 'Great Sea', 'Hades', 'Undercity',
+                                          'Acaren',))
 
 
-def test_parser_routes_leaving():
-    pass
+def test_parse_a_structure():
+    pass  # tested by test_parse_location
+
+
+def test_parse_a_character():
+    pass  # tested by test_parse_location
+
+
+def test_parse_a_structure_or_character():
+    pass  # tested by test_parse_location
+
+
+def test_parse_routes_leaving():
+    with pytest.raises(ValueError):
+        turnparser.parse_routes_leaving('South, to Forest, Ishdol, 2 days')
+    with pytest.raises(ValueError):
+        turnparser.parse_routes_leaving('South, to Forest [badiddd], Ishdol, 2 days')
+    with pytest.raises(ValueError):
+        turnparser.parse_routes_leaving('South, to Invalid [bx39], Ishdol, 2 days')
+    with pytest.raises(ValueError):
+        turnparser.parse_routes_leaving('South, to Forest [bx39], Ishdol, X days')
+    with pytest.raises(ValueError):
+        turnparser.parse_routes_leaving('South, to Forest [bx39], Ishdol')
+
+    # This test uses a grab-bag of stuff that would never appear together:
+    t = '''
+    West, swamp, to The Dark Lands [cv34], Teysel, 2 days
+    West, to Swamp [cv34], Teysel, 2 days
+    West, swamp, to The Dark Lands [cv34], 14 days
+    West, to Swamp [cv34], 14 days
+    South, city, to Hornmar [g02], Olbradim, 1 day
+    South, to Swamp [ac21], Olbradim, impassable
+    South, to Ocean [ac21], Great Sea, impassable
+    Out, to Forest [bg36], 1 day
+    Underground, to Hades [hs70], Hades, hidden, 1 day
+    Secret pass, to Forest [bw22], hidden, 8 days
+    Rocky channel, to Mountain [bz63], hidden, 2 days
+    Forest, to The Dark Lands [cn76], Gothin, 1 day
+    To Osswid's Roundship [6014], 0 days
+    '''
+    r = [{'days': '2',
+          'destination': '15634',
+          'dir': 'west',
+          'kind': 'swamp',
+          'name': 'The Dark Lands',
+          'region': 'Teysel'},
+         {'days': '2',
+          'destination': '15634',
+          'dir': 'west',
+          'kind': 'swamp',
+          'name': 'Swamp',
+          'region': 'Teysel'},
+         {'days': '14',
+          'destination': '15634',
+          'dir': 'west',
+          'kind': 'swamp',
+          'name': 'The Dark Lands'},
+         {'days': '14',
+          'destination': '15634',
+          'dir': 'west',
+          'kind': 'swamp',
+          'name': 'Swamp'},
+         {'days': '1',
+          'destination': '57262',
+          'dir': 'south',
+          'kind': 'city',
+          'name': 'Hornmar',
+          'region': 'Olbradim'},
+         {'destination': '10221',
+          'dir': 'south',
+          'impassable': 1,
+          'kind': 'swamp',
+          'name': 'Swamp',
+          'region': 'Olbradim'},
+         {'destination': '10221',
+          'dir': 'south',
+          'impassable': 1,
+          'kind': 'ocean',
+          'name': 'Ocean',
+          'region': 'Great Sea'},
+         {'days': '1',
+          'destination': '12536',
+          'dir': 'road',
+          'kind': 'forest',
+          'name': 'Forest'},
+         {'days': '1',
+          'destination': '23470',
+          'dir': 'road',
+          'hidden': 1,
+          'kind': 'underground',
+          'name': 'Hades',
+          'region': 'Hades'},
+         {'days': '8',
+          'destination': '13722',
+          'dir': 'road',
+          'hidden': 1,
+          'kind': 'forest',
+          'name': 'Forest'},
+         {'days': '2',
+          'destination': '13963',
+          'dir': 'road',
+          'hidden': 1,
+          'kind': 'mountain',
+          'name': 'Mountain'},
+         {'days': '1',
+          'destination': '15076',
+          'dir': 'faery road',
+          'kind': 'forest',
+          'name': 'The Dark Lands',
+          'region': 'Gothin'},
+         {'days': '0',
+          'destination': '6014',
+          'dir': 'faery road',
+          'kind': 'ship',
+          'name': "Osswid's Roundship"}]
+
+    assert turnparser.parse_routes_leaving(t) == r
 
 
 def test_parse_inner_locations():
-    pass
+    t = '''   Oleg the Loudmouth [6940], with 14 peasants, 11 workers
+   Woodrow Call [1771], with 19 peasants, accompanied by:
+      Pea Eye Parker [2480], with two peasants
+   Eric [2370], "A hooded cloak pulled up shrouding his face", with
+   15 peasants, five workers
+
+   Tub 1 [3622], roundship-in-progress, 46% completed, 19% loaded, owner:
+      Yoyo 2 [2259], with 20 workers, accompanied by:
+\t Yoyo 5 [3984], with two peasants, six sailors
+'''
+    stack = ['6940', '1771', 'down', '2480', 'up', '2370', '3622', 'down', '2259', 'down', '3984']
+    things = {'1771': {'il': {'10': [19]}},
+              '2259': {'il': {'11': [20]}},
+              '2370': {'il': {'10': [15], '11': [5]}},
+              '2480': {'il': {'10': [2]}},
+              '3622': {'SL': {'eg': [230], 'er': [500]}},
+              '3984': {'il': {'10': [2], '19': [6]}},
+              '6940': {'il': {'10': [14], '11': [11]}}}
+
+    s, t = turnparser.parse_inner_locations(t)
+    assert s == stack
+    assert t == things
 
 
 def test_parse_market_report():
-    pass
+    t = '''
+  trade    who   price    qty   wt/ea   item      
+  -----    ---   -----    ---   -----   ----    
+    buy    m19       7     17       5   clay pots [95]    
+    buy    m19      65      3   1,000   riding horses [52]    
+    buy    m19      83     38      43   tea [t526]    
+   sell    m19     100      5   2,000   oxen [76]    
+   sell    2002     80      3   2,000   oxen [76]    
+   sell    m19     130      3   1,000   riding horses [52]    
+   sell    m19      82     41      80   fine cloaks [g950]    
+   sell    m19      11     27     100   salt [r384]    
+    '''
+    r = ['1',           '95', '17',   '7', '0', '0', '0', '0',
+         '4',           '95', '17',   '7', '0', '0', '0', '0',
+         '1',           '52',  '3',  '65', '0', '0', '0', '0',
+         '4',           '52',  '3',  '65', '0', '0', '0', '0',
+         '1', to_int('t526'), '38',  '83', '0', '0', '0', '0',
+         '4', to_int('t526'), '38',  '83', '0', '0', '0', '0',
+         '2',           '76',  '5', '100', '0', '0', '0', '0',
+         '3',           '76',  '5', '100', '0', '0', '0', '0',
+         '2',           '76',  '3',  '80', '0', '0', '0', '0',
+         '3',           '76',  '3',  '80', '0', '0', '0', '0',
+         '2',           '52',  '3', '130', '0', '0', '0', '0',
+         '3',           '52',  '3', '130', '0', '0', '0', '0',
+         '2', to_int('g950'), '41',  '82', '0', '0', '0', '0',
+         '3', to_int('g950'), '41',  '82', '0', '0', '0', '36',
+         '2', to_int('r384'), '27',  '11', '0', '0', '0', '0',
+         '3', to_int('r384'), '27',  '11', '0', '0', '0', '36',
+         '1',           '93', '80',  '17', '0', '0', '0', '0',
+         '4',           '93', '80',  '17', '0', '0', '0', '0']
+
+    assert turnparser.parse_market_report(t) == r
 
 
 def test_parse_seen_here():
-    pass
+    pass  # same as test_parse_inner_locations
+
+
+def test_parse_ships_sighted():
+    pass  # same as test_parse_inner_locations
 
 
 def test_analyze_regions():

@@ -11,30 +11,52 @@ from oid import to_int
 current = {}
 mapdata = {}
 
-province_type = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean', 'tunnel'))
-
 directions = {'north': 1, 'east': 2, 'south': 3, 'west': 4, 'up': 5, 'down': 6}
 inverted_directions = {'north': 3, 'east': 4, 'south': 1, 'west': 2, 'up': 6, 'down': 5}
 
+road_directions = set(('secret pass', 'secret route', 'old road',
+                       'narrow channel', 'rocky channel', 'secret sea route',
+                       'underground'))
+special_directions = road_directions.union(set(('out',)))
+
+route_annotations = set(('hidden', 'impassable', 'port', 'port city', 'safe haven'))
+
+province_kinds = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean',
+                     'tunnel', 'chamber', 'cloud', 'underground'))
+subloc_kinds = set(('island', 'ring of stones', 'mallorn grove', 'bog', 'cave',
+                    'city', 'graveyard', 'ruins', 'battlefield', 'enchanted forest',
+                    'rocky hill', 'circle of trees', 'pits', 'pasture', 'oasis',
+                    'yew grove', 'sand pit', 'sacred grove', 'poppy field', 'lair',
+                    'faery hill', 'sewer'))
+
 structure_type = set(('castle', 'tower', 'galley', 'roundship', 'temple', 'mine', 'inn'))
 
+structure_er = {
+    'castle':  10000,
+    'tower':    2000,
+    'galley':    250,
+    'roundship': 500,
+    'temple':   1000,
+    'mine':      500,
+    'inn':       300,
+    'raft':       45}
+
 geo_inventory = {
+    # ordered same as mapgen.c
+    'ocean': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
+    'forest': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+    'swamp': ['66', '1', '96', '50', '101', '1', '274', '1'],
     'mountain': ['78', '50', '10', '10', '96', '50', '101', '1', '275', '1'],
     'plain': ['51', '5', '10', '10', '96', '50', '101', '1', '275', '1'],
-    'swamp': ['66', '1', '96', '50', '101', '1', '274', '1'],
-    'forest': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
     'desert': ['78', '10', '96', '50', '101', '1', '275', '1'],
-    'ocean': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
-    'cloud': ['274', '1', '275', '1', '276', '1'],
-    'underground': ['101', '1', '96', '50'],
-    'faery hill': [],
+
     'island': ['59', '30'],
     'ring of stones': [],
     'mallorn grove': ['65', '2', '70', '2'],
     'bog': ['66', '4'],
     'cave': ['67', '2'],
     'city': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
-    'lair': [],
+    #'guild' -- generic name for non-land non-ocean sublocs
     'graveyard': ['31', '15', '273', '1'],
     'ruins': [],
     'battlefield': [],
@@ -48,27 +70,34 @@ geo_inventory = {
     'sand pit': ['71', '1'],
     'sacred grove': ['77', '5'],
     'poppy field': ['93', '25'],
+    'lair': [],
+
+    # these are province-sized things in non-normal places
+    'cloud': ['274', '1', '275', '1', '276', '1'],
+    'underground': ['101', '1', '96', '50'],
     'tunnel': ['101', '1', '96', '50'],
-    'sewer': [],
     'chamber': ['101', '1', '96', '50'],
+
+    # and two final special things that link normal-faery and normal-undercity
+    'faery hill': [],
+    'sewer': [],
 }
 
 # regions go from 58760-58999 ... and need to be in the correct order
 # this dict is a list of every region which was observed to be after key r
+# XXXv0 also get region order from parse_location_top order
 region_after = {}
+regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
 
 type_to_region = {
-    'ocean': 'Great Sea',  # if in main world
+    'ocean': 'Great Sea',  # if in main world; ocean in Faery is in Faery region
     'underground': 'Hades',
     'tunnel': 'Undercity',
+    'chamber': 'Undercity',
     'cloud': 'Cloudlands',
 }
 
-has_6_directions = set(('tunnel', 'sewer'))
-
-is_road_direction = set(('Secret pass', 'Secret route', 'Old road',
-                         'Narrow channel', 'Rocky channel', 'Secret sea route',
-                         'Underground'))
+has_6_directions = set(('tunnel', 'sewer', 'chamber'))
 
 skill_days = {
     '600': '21',
@@ -235,8 +264,121 @@ skill_experience = {
 }
 
 trade_map = {
-    'buy': '3',
+    'buy': '1',
     'sell': '2',
+    'produce': '3',
+    'consume': '4'
+}
+
+noble_ranks = {'lord': 10,
+               'knight': 20,
+               'baron': 30,
+               'count': 40,
+               'earl': 60,
+               'marquess': 60,
+               'duke': 70,
+               'king': 80}
+
+numbers = {'one': 1,
+           'two': 2,
+           'three': 3,
+           'four': 4,
+           'five': 5,
+           'six': 6,
+           'seven': 7,
+           'eight': 8,
+           'nine': 9,
+           'ten': 10}
+
+name_to_inventory = {
+    'gold': '1',
+    'peasant': '10',
+    'worker': '11',
+    'soldier': '12',
+    'archer': '13',
+    'knight': '14',
+    'elite guard': '15',
+    'pikeman': '16',
+    'pikemen': '16',
+    'blessed soldier': '17',
+    'ghost warrior': '18',
+    'sailor': '19',
+    'swordsman': '20',
+    'swordsmen': '20',
+    'crossbowman': '21',
+    'crossbowmen': '21',
+    'elite archer': '22',
+    'angry peasant': '23',
+    'pirate': '24',
+    'elf': '25',
+    'elves': '25',
+    'spirit': '26',
+    'undead': '31',
+    'savage': '32',
+    'skeleton': '33',
+    'barbarian': '34',
+    'wild horse': '51',
+    'riding horse': '52',
+    'warmount': '53',
+    'winged horse': '54',
+    'nazgul': '55',
+    'floatsam': '59',
+    'battering ram': '60',
+    'catapult': '61',
+    'siege tower': '62',
+    'ratspider venom': '63',
+    'lana bark': '64',
+    'avinia leaf': '65',
+    'avinia leaves': '65',
+    'spiny root': '66',
+    'farrenstone': '67',
+    'yew': '68',
+    'elfstone': '69',
+    'mallorn wood': '70',
+    'pretus bones': '71',
+    'longbow': '72',
+    'plate armor': '73',
+    'longsword': '74',
+    'pike': '75',
+    'ox': '76',
+    'oxen': '76',
+    'wood': '77',
+    'stone': '78',
+    'iron': '79',
+    'leather': '80',
+    'ratspider': '81',
+    'mithril': '82',
+    'gate crystal': '83',
+    'blank scroll': '84',
+    'crossbow': '85',
+    'fish': '87',
+    'opium': '93',
+    'woven basket': '94',
+    'clay pot': '95',
+    'drum': '98',
+    'hide': '99',
+    'lead': '102',
+    'pitch': '261',
+    'centaur': '271',
+    'minotaur': '272',
+    'giant spider': '278',
+    'rat': '279',
+    'lion': '280',
+    'giant biard': '281',
+    'giant lizard': '282',
+    'bandit': '283',
+    'chimera': '284',
+    'harpie': '285',
+    'dragon': '286',
+    'orc': '287',
+    'gorgon': '288',
+    'wolf': '289',
+    'wolves': '289',
+    'cyclops': '291',
+    'giant': '292',
+    'faery': '293',
+    'faeries': '293',
+    'hound': '295'
 }
 
 
@@ -343,7 +485,7 @@ def parse_pending_trades(text):
         trade, price, qty, item = pieces
         trade = trade_map.get(trade)
         if trade is None:
-            continue
+            continue  # header lines
         qty = qty.replace(',', '')
         item = re.findall(r'\[(.*?)\]', item)
         ret.extend((trade, item[0], qty, price, '0', '0', '0', '0'))
@@ -379,8 +521,8 @@ The main problem here is the kind of the enclosure, which can be renamed.
     # kind = terrain or 'city' or 'port city'
     # rest is a comma-separated list: region or province, hidden, wilderness|civ-N, safe haven
     rest = [s.strip() for s in rest_str.split(',')]
-    enclosing = rest[0]
-    m = re.match(r'\[(.{3,6}?)\]', enclosing)
+    enclosing = rest.pop(0)
+    m = re.search(r'\[(.{3,6}?)\]', enclosing)
     if m:
         enclosing_id = m.group(1)
         enclosing_int = to_int(enclosing_id)
@@ -389,6 +531,8 @@ The main problem here is the kind of the enclosure, which can be renamed.
         enclosing_id = ''
         enclosing_int = 0
         region = enclosing
+        global regions_set
+        regions_set.add(region)
     civ = 0
     safe_haven = 0
     hidden = 0
@@ -406,34 +550,317 @@ The main problem here is the kind of the enclosure, which can be renamed.
                 break
             if r == 'hidden':
                 hidden = 1
-            print('unknown rest in parse_location_top:', r)
+                break
+            print('unknown rest in parse_location_top:', r, 'text is', text)
 
     return [loc_name, loc_int, kind, enclosing_int, region, civ, safe_haven, hidden]  # make me a thingie
+
+
+def parse_a_structure(parts):
+    kind = parts.pop(0).strip()
+    in_progress = False
+    if kind.endswith('-in-progress'):
+        in_progress = True
+        kind = kind.replace('-in-progress', '')
+
+    attr = {}
+    SL = {}
+    for p in parts:
+        p = p.strip()
+        if p.endswith('% completed'):
+            SL['er'] = [structure_er[kind]]
+            SL['eg'] = [int(structure_er[kind] * int(p.replace('% completed', '')) / 100)]
+        elif p.endswith('% damaged'):
+            SL['da'] = [p.replace('% damage', '')]
+        elif p.startswith('defense '):
+            SL['df'] = [p.replace('defense ', '')]
+        elif p.startswith('depth '):
+            SL['sd'] = [int(p.replace('depth ', '')) * 3]
+        elif p.startswith('level '):
+            SL['cl'] = p.replace('level ', '')
+        elif p.endswith('% loaded'):
+            pass  # nothing useful to do with loaded %
+        elif p.startswith('"') and p.endswith('"'):
+            pass
+        elif p == 'owner:':
+            pass
+        else:
+            raise ValueError('Unknown structure part parsing {}'.format(p))
+    attr['SL'] = SL
+    return attr
+
+
+def parse_a_character(parts):
+    attr = {}
+    CH = {}
+    il = {}
+    for p in parts:
+        p = p.strip()
+        if p in noble_ranks:
+            CH['ra'] = [noble_ranks[p]]
+        elif p.startswith('"') and p.endswith('"'):
+            pass
+        elif p == 'accompanied by:':
+            pass
+        elif p == 'prisoner':
+            CH['pr'] = [1]
+        else:
+            if p.startswith('with '):
+                p = p.replace('with ', '')
+            count, _, name = p.partition(' ')
+            if count in numbers:
+                count = numbers[count]
+            count = int(count)
+            if name not in name_to_inventory and name.endswith('s'):
+                if name[:-1] in name_to_inventory:
+                    name = name[:-1]
+            id = name_to_inventory[name]
+            il[id] = [count]
+    if len(il) > 0:
+        attr['il'] = il
+    if len(CH) > 0:
+        attr['CH'] = CH
+    return attr
+
+def parse_a_structure_or_character(s, stack, last_depth):
+    '''
+    Parse a single structure or character.
+    Place in stack context.
+    '''
+    depth = len(s) - len(s.lstrip(' '))
+
+    parts = s.lstrip(' ').split(',')
+
+    first = parts.pop(0)
+    m = re.match('(.*?) \[(.{3,6})\]', first)
+    if not m:
+        print('ack! s=', s)
+        raise ValueError('failed to parse structure/char name in {}'.format(first))
+    name, oid = m.group(1, 2)
+    oidint = to_int(oid)
+
+    if len(parts) > 0:
+        second = parts[0].strip()
+        if second in structure_type or second.endswith('-in-progress'):
+            thing = parse_a_structure(parts)
+        else:
+            thing = parse_a_character(parts)
+    else:
+        # it was a naked character name, no inventory
+        thing = {}
+
+    if last_depth is None:
+        last_depth = depth
+    if depth == last_depth:
+        stack.append(oidint)
+    elif depth > last_depth:
+        stack.append('down')
+        stack.append(oidint)
+    elif depth < last_depth:
+        stack.append('up')
+        stack.append(oidint)
+    last_depth = depth
+
+    return oidint, thing, last_depth
 
 
 def parse_routes_leaving(text):
     '''
 #   South, to Forest [bx39], Ishdol, 2 days <== ocean<->coast lacks terrain
-#   West, to Ocean [bw38], 3 days <== ocean<->ocean lacks terrain
+#   West, to Ocean [bw38], 3 days <== ocean<->ocean lacks terrain, but Ocean can't be renamed
 #   West, swamp, to The Dark Lands [cv34], Teysel, 2 days <== this ocean->coast does have terrain?!
 #   South, city, to Hornmar [g02], Olbradim, 1 day
 #   South, to Swamp [ac21], Olbradim, impassable <== no terrain for city province
 #   East, underground, to Hades [rm21], hidden, 7 days
-#   Underground, to Hades [hs70], Hades, hidden, 1 day <== no terrain for a special direction SL,lt
+#   Up, to Sewer [z471], Grinter, hidden, 0 days
+#   Down, to Tunnel [pz40], hidden, 5 days
+
+#   Secret pass, to Forest [bw22], hidden, 8 days
+#   Underground, to Hades [hs70], Hades, hidden, 1 day <== graveyard to hades, this is SL,lt
+#   Forest, to The Dark Lands [cz66], Gothin, 1 day <== faery hill to normal world, this is SL,lt
+#   To Plain [az03], Grinter, 1 day <== faery hill to normal world, SL,lt
+
+# ship visions only
+# 21:    To Osswid's Roundship [6014], 0 days
+
+
+    1) Fill in outgoing routes from the current location
+    2) Intuit boxes for all destinations, so we can fill in the half-seen parts of the map
+
+    parts: direction, terrain, [Tt]o Name [loc], region, hidden, d days?
     '''
 
-    # XXXv0
-    return
+    ret = []
+    for l in text.split('\n'):
+        if ',' not in l:
+            continue  # not a route
+        # XXXv0 location banner -- should match more generally?
+        if 'Notice to mortals' in l:
+            continue
+        if 'taking this route' in l:
+            continue
+        parts = l.split(',')
+        attr = {}
+        saw_loc = 0
+        for p in parts:
+            p = p.strip()
+            if p.lower() in directions:
+                attr['dir'] = p.lower()
+            elif p.lower() in special_directions:
+                attr['special_dir'] = p.lower()
+            elif p in geo_inventory:
+                attr['kind'] = p
+            elif p in route_annotations:
+                attr[p] = 1
+            elif '[' in p:
+                saw_loc = 1
+                if p.startswith('to ') or p.startswith('To '):
+                    p = p[3:]
+                m = re.search('(.*?) \[(.{3,6})\]', p)
+                if not m:
+                    raise ValueError('failed to match loc in {}'.format(p))
+                name, oid = m.group(1, 2)
+                attr['name'] = name
+                attr['destination'] = to_int(oid)
+                if 'kind' not in attr:
+                    if name.lower() in geo_inventory:
+                        attr['kind'] = name.lower()
+                    elif name == 'Hades':
+                        attr['kind'] = 'underground'
+                    elif '], 0 days' in l:
+                        attr['kind'] = 'ship'  # only for visions of ships
+                    else:
+                        raise ValueError('no kind for link {}'.format(l))
+            elif p.endswith(' day') or p.endswith(' days'):
+                m = re.match(r'(\d+) days?$', p)
+                if not m:
+                    raise ValueError('could not parse days out of '+p)
+                attr['days'] = m.group(1)
+            elif p in regions_set:
+                # regions are generally only visible on boundaries.
+                # no region = link is to the same region
+                attr['region'] = p
+            elif saw_loc and p[0] == p[0].upper():
+                # we don't know what this is, so let's guess it's a new region
+                regions_set.add(p)
+                attr['region'] = p
+            elif not saw_loc and p[0] == p[0].upper() and p.lower() in geo_inventory:
+                # Renamed provinces can lead with the geo
+                attr['kind'] = p.lower()
+            else:
+                print('unknown part of', p, 'in line', l)
+        if 'dir' not in attr and 'special_dir' not in attr:
+            # faery hill roads lack a direction to normal.
+            #  SL,lt from fairy hill to normal, SL,lf from normal to faery hill
+            #  don't be fooled, faery hills in a normal province appear to be a subloc but that's a lie
+            attr['dir'] = 'faery road'
+        if 'dir' not in attr:
+            if attr['special_dir'] == 'out':
+                # a normal subloc
+                attr['dir'] = 'out'
+            elif attr['special_dir'] == 'underground':
+                # Hades roads are 'Underground' direction
+                #  SL,lt in graveyard to hades, SL,lf in hades province to graveyard
+                attr['dir'] = 'hades road'
+            # actual roads have 2 ids in 'road'
+            #  kinda like a subloc, only GA tl points to the other end, GA,rh 1 for hidden
+            #  yeah, the 2 things in 'road' don't directly refer to each other
+            attr['dir'] = 'road'
+
+        if 'destination' not in attr:
+            raise ValueError('no destination parsed in'+l)
+        if 'days' not in attr and 'impassable' not in attr:
+            raise ValueError('no days parsed in'+l)
+
+        if 'special_dir' in attr:
+            del attr['special_dir']
+
+        # dir, name, kind, target, days, region(optional), annotations
+        ret.append(attr)
+
+    return ret
 
 
 def parse_inner_locations(text):
-    # XXXv0
-    return
+    '''
+   Faery hill [z777], faery hill, 1 day
+   Island [g039], island, 1 day
+   Wildefort [h63], port city, safe haven, 1 day
+   Iche [n15], city, 1 day
+   Atnerks' Mine [5948], mine, defense 10, depth 1
+   Genius of Love [4415], castle, defense 70, level 4, owner:
+      Tom [1753], baron, with 100 workers, six oxen, ten blessed soldiers,
+      11 sailors, 122 swordsmen, 227 crossbowmen, seven elite
+      archers, accompanied by:
+         Eckhart [7584], prisoner
+      Unclean University [7341], tower, defense 40
+      Astronomy [6629], tower, defense 40, owner:
+         Tom [5352]
+   Rocky hill [b861], rocky hill, 1 day 
+      New tower [6414], tower-in-progress, 57% completed, owner:
+         Lazarus the Librarian [6832], "Boss of the BSTC"
+
+    '''
+
+    things = {}
+    stack = []
+    accumulation = ''
+    last_depth = None
+
+    for l in text.split('\n'):
+        l = l.replace('\t', '        ')  # 1 tab = 8 spaces
+        print('l=', l)
+        first, _, _ = l.partition(',')
+        if '[' not in first:
+            # continuation line
+            accumulation += ' ' + l.lstrip(' ')
+        else:
+            if accumulation:
+                oidint, thing, last_depth = parse_a_structure_or_character(accumulation, stack, last_depth)
+                things[oidint] = thing
+            accumulation = l
+    if accumulation:
+        oidint, thing, _ = parse_a_structure_or_character(accumulation, stack, last_depth)
+        things[oidint] = thing
+
+    return stack, things
 
 
 def parse_market_report(text):
-    # XXXv0
-    return
+    ret = []
+    for line in text.split('\n'):
+        pieces = line.split(maxsplit=5)
+        if len(pieces) != 6:
+            continue
+        trade, who, price, qty, weight, item = pieces
+        trade = trade_map.get(trade)
+        if trade is None:
+            continue  # header lines
+        # XXXv0 discard all entries for who != city
+        # if it's my noble, I'll get it in Pending trades
+        # if it's not my noble, don't bother
+        qty = qty.replace(',', '')
+        item = re.findall(r'\[(.*?)\]', item)
+        i = item[0]
+        is_tradegood = 0
+        if i[0].isalpha():
+            is_tradegood = 1
+            i = to_int(i)
+        ret.extend((trade, i, qty, price, '0', '0', '0', '0'))
+        # If a city buys/sells, it also produces/consumes 1 => 4, 2 => 3.
+        if trade == '1':
+            ret.extend(('4', i, qty, price, '0', '0', '0', '0'))
+        if trade == '2' and is_tradegood:
+            # XXXv2 set tradegoods turns left accurately
+            ret.extend(('3', i, qty, price, '0', '0', '0', '36'))
+        elif trade == '2':
+            ret.extend(('3', i, qty, price, '0', '0', '0', '0'))
+    # opium. I'm definintely not going to track, this, let's start
+    # by having all cities buy 80 at 17 (max qty, min price)
+    ret.extend(('1', '93', '80', '17', '0', '0', '0', '0'))
+    ret.extend(('4', '93', '80', '17', '0', '0', '0', '0'))
+    # XXXv2 have swamp cities not buy opium
+    return ret
 
 
 def parse_seen_here(text):
@@ -441,8 +868,13 @@ def parse_seen_here(text):
     return
 
 
+def parse_ships_sighted(text):
+    # XXXv0
+    return
+
+
 def analyze_regions(s, region_after):
-    regions = []
+    regions = set()
     for line in s.split('\n'):
         if re.match(r'\s', line):
             continue
@@ -454,7 +886,7 @@ def analyze_regions(s, region_after):
                 region_after[r].index(reg)
             except ValueError:
                 region_after[r].append(reg)
-        regions.append(reg)
+        regions.add(reg)
 
 
 def match_line(text, word, capture=None):
@@ -697,11 +1129,6 @@ def parse_character(name, ident, factident, text):
 
 
 def parse_location(s):
-    '''
-# XXXv0 guess city province - city come before impassible province link on leaving
-# XXXv0 guess terrain - ocean->coast, Hades,
-# XXXv0 guess regions
-    '''
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
@@ -709,31 +1136,39 @@ def parse_location(s):
     top = m.group(1)
     if top == 'Lore sheets':
         return
-    parse_location_top(top)
+    name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
 
-    # XXXv2 location-days, e.g. enemy units I don't see at the end of the turn
-
-    m = re.search(r'^Routes leaving .*?:\n(.*?)\n\n', s, re.M | re.S)
+    m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_routes_leaving(m.group(1))
+        routes = parse_routes_leaving(m.group(1))
+
+    # XXXv0 if it's a sewer, update enclosing_int to be the city
+    # the city id can be found in routes.
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_inner_locations(m.group(1))
+        stack, things = parse_inner_locations(m.group(1))
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_market_report(m.group(1))
+        market = parse_market_report(m.group(1))
 
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_seen_here(m.group(1))
+        stack, things = parse_inner_locations(m.group(1))
+
+    m = re.search(r'^Ships sighted:\n(.*?)\n\n', s, re.M | re.S)
+    if m:
+        stack, things = parse_inner_locations(m.group(1))
 
     m = re.search(r'^Ships docked at port:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        parse_seen_here(m.group(1))  # same thing
+        stack, things = parse_inner_locations(m.group(1))
 
     # XXXv0 do something with all this
+    # when constructing actual routes,
+    #  faery hills are NOT a subloc of a normal province, they're a road
+    #   they are a normal subloc on the faery side
 
     return
 
