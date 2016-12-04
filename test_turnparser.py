@@ -4,6 +4,10 @@ from oid import to_int
 import turnparser
 
 
+def test_parse_an_id():
+    pass
+
+
 def test_split_into_sections():
     t = '''
 Oleg's Olympians [ja1]
@@ -215,25 +219,25 @@ def test_parse_routes_leaving():
           'region': 'Great Sea'},
          {'days': '1',
           'destination': '12536',
-          'dir': 'road',
+          'dir': 'road road',
           'kind': 'forest',
           'name': 'Forest'},
          {'days': '1',
           'destination': '23470',
-          'dir': 'road',
+          'dir': 'road road',
           'hidden': 1,
           'kind': 'underground',
           'name': 'Hades',
           'region': 'Hades'},
          {'days': '8',
           'destination': '13722',
-          'dir': 'road',
+          'dir': 'road road',
           'hidden': 1,
           'kind': 'forest',
           'name': 'Forest'},
          {'days': '2',
           'destination': '13963',
-          'dir': 'road',
+          'dir': 'road road',
           'hidden': 1,
           'kind': 'mountain',
           'name': 'Mountain'},

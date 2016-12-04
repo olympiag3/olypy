@@ -29,7 +29,7 @@ subloc_kinds = set(('island', 'ring of stones', 'mallorn grove', 'bog', 'cave',
                     'yew grove', 'sand pit', 'sacred grove', 'poppy field', 'lair',
                     'faery hill', 'sewer'))
 
-structure_type = set(('castle', 'tower', 'galley', 'roundship', 'temple', 'mine', 'inn'))
+structure_type = set(('castle', 'tower', 'galley', 'roundship', 'temple', 'mine', 'collapsed mine', 'inn'))
 
 structure_er = {
     'castle':  10000,
@@ -290,7 +290,7 @@ numbers = {'one': 1,
            'nine': 9,
            'ten': 10}
 
-name_to_inventory = {
+item_to_inventory = {
     'gold': '1',
     'peasant': '10',
     'worker': '11',
@@ -364,7 +364,7 @@ name_to_inventory = {
     'giant spider': '278',
     'rat': '279',
     'lion': '280',
-    'giant biard': '281',
+    'giant bird': '281',
     'giant lizard': '282',
     'bandit': '283',
     'chimera': '284',
@@ -376,10 +376,21 @@ name_to_inventory = {
     'wolves': '289',
     'cyclops': '291',
     'giant': '292',
-    'faery': '293',
+    'faerie': '293',
     'faeries': '293',
     'hound': '295'
 }
+
+mage_ranks = set(('conjurer', 'mage', 'wizard', 'sorcerer',
+                  '6th black circle', '5th black circle', '4th black circle',
+                  '3rd black circle', '2nd black circle', 'master of the black arts'))
+
+
+def parse_an_id(text):
+    m = re.search('\[(.{3,6})\]', text)
+    if not m:
+        raise ValueError('failed to find an id in '+text)
+    return to_int(m.group(1))
 
 
 def split_into_sections(text):
@@ -581,13 +592,41 @@ def parse_a_structure(parts):
         elif p.endswith('% loaded'):
             pass  # nothing useful to do with loaded %
         elif p.startswith('"') and p.endswith('"'):
+            continue
+        elif p == 'owner:':
+            continue
+        else:
+            raise ValueError('Unknown structure part parsing {}'.format(p))
+    attr['SL'] = SL
+    return kind, attr
+
+
+def parse_a_sublocation_route(parts):
+    '''
+   Wildefort [h63], port city, safe haven, 1 day
+   Graveyard [m656], graveyard, hidden, 1 day
+   Battlefield [j195], battlefield, hidden, 1 day
+    '''
+    kind = parts.pop(0).strip()
+    if kind not in subloc_kinds and kind != 'port city':
+        raise ValueError('invalid kind of a sublocation route, '+kind)
+
+    attr = {}
+    for p in parts:
+        p = p.strip()
+        if p == '1 day':
+            continue
+        elif p == 'hidden':
+            pass
+        elif p == 'safe haven':
             pass
         elif p == 'owner:':
             pass
         else:
-            raise ValueError('Unknown structure part parsing {}'.format(p))
-    attr['SL'] = SL
-    return attr
+            raise ValueError('unknown part in a sublocation route: '+p)
+
+    return kind, attr
+# subloc needs to return kind, LO/hi=1 for hidden, SL/sh=1 for safe haven
 
 
 def parse_a_character(parts):
@@ -599,28 +638,56 @@ def parse_a_character(parts):
         if p in noble_ranks:
             CH['ra'] = [noble_ranks[p]]
         elif p.startswith('"') and p.endswith('"'):
-            pass
+            continue
         elif p == 'accompanied by:':
-            pass
+            continue
         elif p == 'prisoner':
             CH['pr'] = [1]
+        elif p == 'garrison':
+            # city or province garrison XXXv0
+            continue
+        elif p == 'on guard':
+            continue
+        elif p == 'priest':
+            continue  # XXXv0
+        elif p in mage_ranks:
+            continue
+        elif (p in item_to_inventory or
+              p.endswith('s') and p[:-1] in item_to_inventory):
+            print('XXX saw an npc')
+            continue  # npcs like savages, controlled npcs like savage XXXv2
+        elif p.startswith('number: '):
+            continue  # also npc
         else:
             if p.startswith('with '):
                 p = p.replace('with ', '')
-            count, _, name = p.partition(' ')
+            if p.startswith('wearing '):
+                p = p.replace('wearing ', 'one ')
+            if p.startswith('wielding '):
+                p = p.replace('wielding ', 'one ')
+            count, _, item = p.partition(' ')
             if count in numbers:
                 count = numbers[count]
-            count = int(count)
-            if name not in name_to_inventory and name.endswith('s'):
-                if name[:-1] in name_to_inventory:
-                    name = name[:-1]
-            id = name_to_inventory[name]
+            try:
+                count = int(count)
+            except ValueError:
+                raise ValueError('Error parsing count in '+p+', parts is '+repr(parts))
+            if '[' in item:  # a unique item
+                id = parse_an_id(item)
+            else:
+                if item not in item_to_inventory and item.endswith('s'):
+                    if item[:-1] in item_to_inventory:
+                        item = item[:-1]
+                try:
+                    id = item_to_inventory[item]
+                except KeyError:
+                    raise KeyError('invalid key with parts: '+repr(parts))
             il[id] = [count]
     if len(il) > 0:
         attr['il'] = il
     if len(CH) > 0:
         attr['CH'] = CH
-    return attr
+    return 'char', attr
 
 def parse_a_structure_or_character(s, stack, last_depth):
     '''
@@ -641,13 +708,17 @@ def parse_a_structure_or_character(s, stack, last_depth):
 
     if len(parts) > 0:
         second = parts[0].strip()
+        print('examining second of', second)
         if second in structure_type or second.endswith('-in-progress'):
-            thing = parse_a_structure(parts)
+            kind, thing = parse_a_structure(parts)
+        elif second in route_annotations or second in subloc_kinds:
+            kind, thing = parse_a_sublocation_route(parts)
         else:
-            thing = parse_a_character(parts)
+            kind, thing = parse_a_character(parts)
     else:
         # it was a naked character name, no inventory
         thing = {}
+        kind = 'char'
 
     if last_depth is None:
         last_depth = depth
@@ -661,7 +732,7 @@ def parse_a_structure_or_character(s, stack, last_depth):
         stack.append(oidint)
     last_depth = depth
 
-    return oidint, thing, last_depth
+    return oidint, kind, thing, last_depth
 
 
 def parse_routes_leaving(text):
@@ -765,7 +836,7 @@ def parse_routes_leaving(text):
             # actual roads have 2 ids in 'road'
             #  kinda like a subloc, only GA tl points to the other end, GA,rh 1 for hidden
             #  yeah, the 2 things in 'road' don't directly refer to each other
-            attr['dir'] = 'road'
+            attr['dir'] = 'road road'
 
         if 'destination' not in attr:
             raise ValueError('no destination parsed in'+l)
@@ -808,19 +879,37 @@ def parse_inner_locations(text):
     last_depth = None
 
     for l in text.split('\n'):
+        l = l.replace(' *\t', '        ')  # 1 tab = 8 spaces
         l = l.replace('\t', '        ')  # 1 tab = 8 spaces
+        l = re.sub('".*?"', '""', l)  # throw out all banners
+        l = l.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
         print('l=', l)
-        first, _, _ = l.partition(',')
-        if '[' not in first:
+        parts = l.split(',')
+        continuation = False
+        if '[' not in parts[0]:
+            continuation = True
+        elif accumulation.endswith(','):
+            continuation = True
+        else:
+            # is it an item?
+            aparts = accumulation.split(',')
+            alast = aparts[-1]
+            if ' wearing' in alast or ' wielding' in alast:
+                if ']' not in alast:
+                    continuation = True
+
+        if continuation:
             # continuation line
             accumulation += ' ' + l.lstrip(' ')
         else:
             if accumulation:
-                oidint, thing, last_depth = parse_a_structure_or_character(accumulation, stack, last_depth)
+                oidint, kind, thing, last_depth = parse_a_structure_or_character(accumulation, stack, last_depth)
+                # XXXv0 propagate kind
                 things[oidint] = thing
             accumulation = l
     if accumulation:
-        oidint, thing, _ = parse_a_structure_or_character(accumulation, stack, last_depth)
+        oidint, kind, thing, _ = parse_a_structure_or_character(accumulation, stack, last_depth)
+        # XXXv0 propagate kind
         things[oidint] = thing
 
     return stack, things
@@ -1143,7 +1232,13 @@ def parse_location(s):
         routes = parse_routes_leaving(m.group(1))
 
     # XXXv0 if it's a sewer, update enclosing_int to be the city
-    # the city id can be found in routes.
+    # the city id can be found in the out route
+    if kind == 'sewer':
+        for r in routes:
+            if r['dir'] == 'out':
+                print('marking sewer {} as enclosed by {} instead of {}'.format(idint, r['target'], enclosing_int))
+                enclosing_int = r['target']
+                break
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
