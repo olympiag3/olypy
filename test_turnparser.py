@@ -5,7 +5,11 @@ import turnparser
 
 
 def test_parse_an_id():
-    pass
+    assert turnparser.parse_an_id('Foo [1024]') == '1024'
+    with pytest.raises(ValueError):
+        turnparser.parse_an_id('')
+    with pytest.raises(ValueError):
+        turnparser.parse_an_id('Foo [1234567]')
 
 
 def test_split_into_sections():
