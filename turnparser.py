@@ -617,11 +617,13 @@ def parse_a_sublocation_route(parts):
         if p == '1 day':
             continue
         elif p == 'hidden':
-            pass
+            continue
         elif p == 'safe haven':
-            pass
+            continue
         elif p == 'owner:':
-            pass
+            continue
+        elif p == '""':
+            continue
         else:
             raise ValueError('unknown part in a sublocation route: '+p)
 
@@ -648,8 +650,12 @@ def parse_a_character(parts):
             continue
         elif p == 'on guard':
             continue
+        elif p == 'flying':
+            continue
         elif p == 'priest':
             continue  # XXXv0
+        elif p == 'demon lord':
+            continue  # XXXv2 a thing you can summon
         elif p in mage_ranks:
             continue
         elif (p in item_to_inventory or
@@ -666,6 +672,7 @@ def parse_a_character(parts):
             if p.startswith('wielding '):
                 p = p.replace('wielding ', 'one ')
             count, _, item = p.partition(' ')
+            count = count.replace(',', '')
             if count in numbers:
                 count = numbers[count]
             try:
@@ -696,7 +703,7 @@ def parse_a_structure_or_character(s, stack, last_depth):
     '''
     depth = len(s) - len(s.lstrip(' '))
 
-    parts = s.lstrip(' ').split(',')
+    parts = s.lstrip(' ').split(', ')  # needs the space due to 1,000+ soldiers etc
 
     first = parts.pop(0)
     m = re.match('(.*?) \[(.{3,6})\]', first)
