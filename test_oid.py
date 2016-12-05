@@ -2,6 +2,7 @@ import pytest
 from oid import to_oid, to_int, allocate_oid
 
 oid_to_int = {
+    '1': 1,
     '6940': 6940,
     'aa01': 10001,
     'ab01': 10101,

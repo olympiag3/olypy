@@ -64,9 +64,7 @@ def to_int(oid):
         return str(letter2_to_int[oid[0]]*100 + int(oid[1:]) + 56760)
     elif re.match(r'\A[a-z]\d\d\d\Z', oid): # CNNN
         return str(_i(oid[0])*1000 + int(oid[1:]) + 59000)
-    elif re.match(r'\A\d\d\d\d\Z', oid): # NNNN
-        return str(oid)
-    elif re.match(r'\A\d\d\d\d\d\Z', oid): # NNNNN
+    elif re.match(r'\A\d{1,5}\Z', oid): # N through NNNNN
         return str(oid)
     elif re.match(r'\A1\d\d\d\d\d\Z', oid): # 1NNNNN
         return str(oid)
