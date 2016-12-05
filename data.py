@@ -368,4 +368,3 @@ def add_potion(data, kind, im, loc, who=None):
     data[who]['IM'] = im
 
     data_append(data, loc, 'il', [who, 1], dedup=False)
-
