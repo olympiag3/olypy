@@ -373,6 +373,9 @@ def test_match_line():
     foo, = turnparser.match_line(t, 'Foo:')
     assert foo is None
 
+    t = 'Province controlled by Castle [8103], castle, in Plain [ar16]'
+    cc, = turnparser.match_line(t, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
+    assert cc == '8103'
 
 def test_remove_visions():
     t = '''
@@ -518,7 +521,34 @@ Unclaimed items:
            'an': [to_int('hv5'), to_int('hx7')],
            'il': ['1', '4330', '52', '5', '78', '100']}
 
-    assert turnparser.parse_faction(t) == ret
+    assert turnparser.parse_faction(t, {}) == ret
+
+
+def test_analyze_garrison_list():
+    t = '''  2617	aj08   10   20	 50   15   8103 4797 7271 6839	... 2527
+  4514	aj09   10   20	 50   15   8103 4797 7271 6839	... 2527    '''
+    data = {}
+    r = {'2617': {'CH': {'at': [60],
+                         'df': [60],
+                         'gu': [1],
+                         'he': [-1],
+                         'lk': [4],
+                         'lo': [207]},
+                  'CM': {'dg': [1]},
+                  'LI': {'wh': ['10708']},
+                  'MT': {'ca': ['g']},
+                  'firstline': ['2617 char garrison']},
+         '4514': {'CH': {'at': [60],
+                         'df': [60],
+                         'gu': [1],
+                         'he': [-1],
+                         'lk': [4],
+                         'lo': [207]},
+                  'CM': {'dg': [1]},
+                  'LI': {'wh': ['10709']},
+                  'MT': {'ca': ['g']},
+                  'firstline': ['4514 char garrison']}}
+    assert turnparser.analyze_garrison_list(t, data) == r
 
 
 def test_parse_garrison_log():

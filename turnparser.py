@@ -7,10 +7,6 @@ import sys
 
 from oid import to_int
 
-# global state
-current = {}
-mapdata = {}
-
 directions = {'north': 1, 'east': 2, 'south': 3, 'west': 4, 'up': 5, 'down': 6}
 inverted_directions = {'north': 3, 'east': 4, 'south': 1, 'west': 2, 'up': 6, 'down': 5}
 
@@ -85,7 +81,7 @@ geo_inventory = {
 
 # regions go from 58760-58999 ... and need to be in the correct order
 # this dict is a list of every region which was observed to be after key r
-# XXXv0 also get region order from parse_location_top order
+# XXXv2 also get region order from parse_location_top order
 region_after = {}
 regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
 
@@ -646,9 +642,11 @@ def parse_a_character(parts):
         elif p == 'prisoner':
             CH['pr'] = [1]
         elif p == 'garrison':
-            # city or province garrison XXXv0
+            # city or province garrison... MI ca g and CM dg 1
+            # if not "our" garrison, set MI gc castleid to head of pledge chain
             continue
         elif p == 'on guard':
+            # sets 'CH gu 1'?
             continue
         elif p == 'flying':
             continue
@@ -988,9 +986,9 @@ def analyze_regions(s, region_after):
 def match_line(text, word, capture=None):
     if capture is None:
         capture = r'(.*)'
-    m = re.search(r'\s+'+word+'\s+'+capture, text, re.M)
+    m = re.search(r'\b'+word+'\s+'+capture, text, re.M)
     if not m:
-        return None,  # XXX this only works if the caller expects one result
+        return None,  # caller expects a list
     return m.groups()
 
 
@@ -1053,7 +1051,10 @@ def parse_turn_header(data, turn):
     if m:  # does not exist in the initial turn :/
         analyze_regions(m.group(1), region_after)
 
-    # XXXv2 parse garr\s+where... to get cost of garrisons and complete garrison list (no fog, accurate castle info)
+    # this is a complete garrison list (no fog) and accurate castle info
+    m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
+    if m:
+        data = analyze_garrison_list(m.group(1), data)
 
     factint = to_int(fact_id)
     fact = {}
@@ -1070,43 +1071,59 @@ def parse_turn_header(data, turn):
     pl['uf'] = next5
     fact['PL'] = pl
 
-    data[factint] = fact  # XXXv0 should be labled with turn
+    data[factint] = fact
     return factint, turn_num, data
 
 
-def parse_faction(text):
+def parse_faction(text, factbox):
     '''
     claim, admit, hostile|defend|neutral
     '''
-    ret = {}
-
     m = re.search(r'^Unclaimed items:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
         unclaimed_items = parse_inventory(m.group(1))
-        ret['il'] = unclaimed_items
+        factbox['il'] = unclaimed_items
 
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
         admits = parse_admit(m.group(1))
-        ret['am'] = admits
+        factbox['am'] = admits
 
     m = re.search(r'^Declared attitudes:\n(.*?)\n\n', text, re.M | re.S)
     if m:
         attitudes = parse_attitudes(m.group(1))
         if attitudes.get('neutral'):
-            ret['an'] = attitudes['neutral']
+            factbox['an'] = attitudes['neutral']
         if attitudes.get('defend'):
-            ret['ad'] = attitudes['defend']
+            factbox['ad'] = attitudes['defend']
         if attitudes.get('hostile'):
-            ret['ah'] = attitudes['hostile']
+            factbox['ah'] = attitudes['hostile']
 
-    return ret
+    return factbox
 
 
-def parse_garrison_log(text):
-    # XXXv2
-    # need to track all give/get for all time to get hidden contents, esp gold
-    return {}
+def analyze_garrison_list(text, data):
+    lines = text.split('\n')
+    for l in lines:
+        pieces = l.split()
+        garr = pieces[0]
+        where = to_int(pieces[1])
+        castle = to_int(pieces[6])
+        firstline = garr + ' char garrison'
+        # il will come from the location report
+        LI = {'wh': [where]}
+        CH = {'lo': [207], 'he': [-1], 'lk': [4], 'gu': [1], 'at': [60], 'df': [60]}
+        CM = {'dg': [1]}
+        MT = {'ca': ['g']}
+        box = {'firstline': [firstline], 'LI': LI, 'CH': CH, 'CM': CM, 'MT': MT}
+        data[garr] = box
+    return data
+
+
+def parse_garrison_log(text, data):
+    # this is the daily details, not the list
+    # XXXv2 need to track all give/get for all time to get hidden contents, esp gold
+    return data
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
@@ -1232,14 +1249,18 @@ def parse_location(s):
     top = m.group(1)
     if top == 'Lore sheets':
         return
+
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
+
+    controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
+    if controlling_castle is not None:
+        print('Saw a controlling castle of', controlling_castle)
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
         routes = parse_routes_leaving(m.group(1))
 
-    # XXXv0 if it's a sewer, update enclosing_int to be the city
-    # the city id can be found in the out route
+    # sewers incorrectly claim they are enclosed by the province. they're really a city subloc.
     if kind == 'sewer':
         for r in routes:
             if r['dir'] == 'out':
@@ -1268,28 +1289,25 @@ def parse_location(s):
         stack, things = parse_inner_locations(m.group(1))
 
     # XXXv0 do something with all this
-    # when constructing actual routes,
-    #  faery hills are NOT a subloc of a normal province, they're a road
-    #   they are a normal subloc on the faery side
+
+    # faery hills are NOT a subloc of a normal province,
+    #  they're a road to normal and a normal subloc on the faery side
+    # if a non-city garrison was seen, stick controlling castle in
 
     return
 
 
 def parse_turn(turn):
-
     data = {}
 
     factint, turn_num, data = parse_turn_header(data, turn)
-
-    current['factint'] = factint
-    current['turn'] = turn_num
 
     for s in split_into_sections(turn):
         while True:
             m = re.match(r'^([^\[]{1,40}) \[(.{3})\]\n---------------', s)
             if m:
                 name, ident = m.group(1, 2)
-                data = parse_faction(s)  # XXXv0 merge data with data
+                data[factint] = parse_faction(s, data[factint])
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:
