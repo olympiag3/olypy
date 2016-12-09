@@ -6,6 +6,7 @@ import re
 import sys
 
 from oid import to_int
+import data as db
 
 directions = {'north': 1, 'east': 2, 'south': 3, 'west': 4, 'up': 5, 'down': 6}
 inverted_directions = {'north': 3, 'east': 4, 'south': 1, 'west': 2, 'up': 6, 'down': 5}
@@ -406,18 +407,66 @@ def parse_inventory(text):
     temp = {}
 
     for line in text.split('\n'):
-        m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(\d+)\]', line)
+        m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(.{1,6}?)\]', line)
         if m:
             qty, name, ident = m.group(1, 2, 3)
             qty = qty.replace(',', '')
-            ident = int(ident)  # so we can sort on it
-            temp[ident] = qty
+            iident = int(to_int(ident))  # so we can sort on it
+            temp[iident] = [to_int(ident), name, qty]
 
-    keys = sorted(list(temp.keys()))
     ret = []
+    keys = sorted(list(temp.keys()))
     for k in keys:
-        ret.extend((str(k), temp[k]))
+        ret.extend(temp[k])
     return ret
+
+
+def make_fake_item(unit, ident, name, data):
+    '''
+    Based on incomplete info, make a fake unique item.
+    Used for things spotted in inventory.
+    '''
+    if ident in set(('401', '402', '403')):
+        # created aready
+        old = data[ident]['IT']['un'][0]
+        db.data_remove(data, old, 'il', ident)
+        data[ident]['IT']['un'] = [unit]
+    elif int(ident) < 10000:
+        # dead body, ok, if you raise this dead body you will be disappointed
+        return {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
+                'IT': {'pl': ['dead bodies'], 'wt': ['100'], 'un': unit}}
+    else:
+        # scroll, potion, Orb, Palantir, tradegood, armor/weapon/aura, npc_token, auraculum
+        if name == 'Scroll':
+            return { 'firstline': [ident + 'item scroll'], 'IT': {'wt': ['1'], 'un': [unit]},
+                     'IM': {'ms': ['801']}}
+        elif name == 'Strange potion' or name == 'Magic potion':
+            return { 'firstline': [ident + 'item 0'], 'IT': {'wt': ['1'], 'un': [unit]}}
+        elif name == 'Orb':
+            return { 'firstline': [ident + 'item 0'], 'IT': {'wt': ['1'], 'un': [unit]},
+                     'IM': {'uk': ['0']}}
+        elif name == 'Palantir':
+            return { 'firstline': [ident + 'item palantir'], 'IT': {'wt': ['2'], 'un': [unit]},
+                     'IM': {'uk': ['0']}}
+        # XXXv0 to do tradegood, I need weight
+        # to do armor/weapon/aura, I need more details, auraculum is similar
+        # to do npc_token, I need more details
+
+def groups(iterable, n):
+    '''
+    They say Python is elegant, but then I have to do this.
+    '''
+    return zip(*[iter(iterable)]*n)
+
+
+def create_unique_inventory(unit, inventory, data):
+    '''
+    Given an inventory list, create or fixup unique items on the list
+    '''
+    for ident, name, qty in groups(inventory, 3):
+        i = int(ident)
+        if i > 999 or i in set((401, 402, 403)):
+            make_fake_item(unit, ident, name, data)
 
 
 def parse_admit(text):
@@ -451,6 +500,15 @@ def parse_attitudes(text):
             else:  # continuation line
                 ret[last].extend([to_int(p) for p in parts])
     return ret
+
+
+def encode_attitudes(attitudes, box):
+    if 'neutral' in attitudes:
+        box['an'] = attitudes['neutral']
+    if 'defend' in attitudes:
+        box['ad'] = attitudes['defend']
+    if 'hostile' in attitudes:
+        box['ah'] = attitudes['hostile']
 
 
 def parse_skills(text):
@@ -499,6 +557,64 @@ def parse_pending_trades(text):
     return ret
 
 
+def make_routes_and_fakes_from_routes(routes, idint, region, data):
+    for r in routes:
+        dest = r['destination']
+        kind = r['kind']
+        dir = r['dir']
+        if dir in inverted_directions:
+            idir = inverted_directions[dir] - 1
+        else:
+            print('dir is', dir, 'dest', dest, 'idint', idint)
+            idir = -99999
+        if dest not in data:
+            if kind in province_kinds:
+                if 'hidden' in r:
+                    raise ValueError
+                data[dest] = {'firstline': [dest + ' loc ' + kind],
+                              'na': [r['name']],
+                              'il': geo_inventory[kind],
+                              'LI': {'wh': region},
+                              'LO': {'pd': [0, 0, 0, 0]}}
+                if 'impassable' in r:
+                    pass  # city, or mountain/sea. Make the link anyway.
+                if dir == 'out':
+                    continue  # subloc out routes will be created elsewhere
+                if idir > 4:
+                    raise ValueError  # I don't think this can happen
+                    data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
+                print('idir is', idir, 'kind is', kind, 'dest is', dest)
+                data[dest]['LO']['pd'][idir] = idint
+            elif kind == 'city' or kind == 'port city':
+                # figure out what province this city is in, there should be an impassible link
+                prov = None
+                for r in routes:
+                    if r['dir'] == dir and 'impassible' in r:
+                        prov = dest
+                        break
+                if prov is None:
+                    raise ValueError('subiteration could not discover province of a city route')
+                # the link is at the province, so don't make any LO here
+                data[dest] = {'firstline': [dest + ' loc city'],
+                              'na': [r['name']],
+                              'il': geo_inventory['city'],
+                              'LI': {'wh': prov}}
+            elif kind in subloc_kinds or kind in structure_type:
+                pass  # this only exists for visions of a castle, ship etc XXXv2
+        else:
+            # the destionation exists, but this link may not
+            if kind in province_kinds:
+                if dir == 'out':
+                    continue
+                if directions[dir] > 4:
+                    raise ValueError
+                data[dest]['LO']['pd'][idir] = idint
+            elif kind == 'city' or kind == 'port city':
+                # link is at the province level
+                pass
+        # XXXv2 what about roads?
+
+
 def parse_location_top(text):
     '''
 Forest [ah08], forest, in Acaren, wilderness
@@ -523,6 +639,8 @@ The main problem here is the kind of the enclosure, which can be renamed.
     '''
 
     m = re.match(r'^([^[]{1,40}?) \[(.{3,6}?)\], ([^,]*?), in (.*)', text)
+    if not m:
+        raise ValueError('Failed to find first line of location in text '+text)
     loc_name, loc_id, kind, rest_str = m.group(1, 2, 3, 4)
     loc_int = to_int(loc_id)
     # kind = terrain or 'city' or 'port city'
@@ -576,7 +694,7 @@ def parse_a_structure(parts):
         p = p.strip()
         if p.endswith('% completed'):
             SL['er'] = [structure_er[kind]]
-            SL['eg'] = [int(structure_er[kind] * int(p.replace('% completed', '')) / 100)]
+            SL['eg'] = [str(int(structure_er[kind] * int(p.replace('% completed', '')) / 100))]
         elif p.endswith('% damaged'):
             SL['da'] = [p.replace('% damage', '')]
         elif p.startswith('defense '):
@@ -640,7 +758,7 @@ def parse_a_character(parts):
         elif p == 'accompanied by:':
             continue
         elif p == 'prisoner':
-            CH['pr'] = [1]
+            CH['pr'] = ['1']
         elif p == 'garrison':
             # city or province garrison... MI ca g and CM dg 1
             # if not "our" garrison, set MI gc castleid to head of pledge chain
@@ -713,7 +831,6 @@ def parse_a_structure_or_character(s, stack, last_depth):
 
     if len(parts) > 0:
         second = parts[0].strip()
-        print('examining second of', second)
         if second in structure_type or second.endswith('-in-progress'):
             kind, thing = parse_a_structure(parts)
         elif second in route_annotations or second in subloc_kinds:
@@ -724,6 +841,18 @@ def parse_a_structure_or_character(s, stack, last_depth):
         # it was a naked character name, no inventory
         thing = {}
         kind = 'char'
+
+    if kind == 'char':
+        thing['firstline'] = [oidint + ' char 0']
+    else:
+        if kind == 'galley' or kind == 'roundship':
+            loc = ' ship '
+        else:
+            loc = ' loc '
+        if second.endswith('-in-progress'):
+            kind = kind + '-in-progress'
+        thing['firstline'] = [oidint + loc + kind]
+    thing['na'] = [name]
 
     if last_depth is None:
         last_depth = depth
@@ -825,11 +954,13 @@ def parse_routes_leaving(text):
                 attr['kind'] = p.lower()
             else:
                 print('unknown part of', p, 'in line', l)
+
         if 'dir' not in attr and 'special_dir' not in attr:
             # faery hill roads lack a direction to normal.
             #  SL,lt from fairy hill to normal, SL,lf from normal to faery hill
             #  don't be fooled, faery hills in a normal province appear to be a subloc but that's a lie
             attr['dir'] = 'faery road'
+
         if 'dir' not in attr:
             if attr['special_dir'] == 'out':
                 # a normal subloc
@@ -838,10 +969,12 @@ def parse_routes_leaving(text):
                 # Hades roads are 'Underground' direction
                 #  SL,lt in graveyard to hades, SL,lf in hades province to graveyard
                 attr['dir'] = 'hades road'
-            # actual roads have 2 ids in 'road'
-            #  kinda like a subloc, only GA tl points to the other end, GA,rh 1 for hidden
-            #  yeah, the 2 things in 'road' don't directly refer to each other
-            attr['dir'] = 'road road'
+            else:
+                # actual roads have 2 ids in 'road'
+                #  kinda like a subloc, only GA tl points to the other end, GA,rh 1 for hidden
+                #  yeah, the 2 things in 'road' don't directly refer to each other
+                print('here we are and attr special_dir is', attr['special_dir'])
+                attr['dir'] = 'road road'
 
         if 'destination' not in attr:
             raise ValueError('no destination parsed in'+l)
@@ -888,7 +1021,6 @@ def parse_inner_locations(text):
         l = l.replace('\t', '        ')  # 1 tab = 8 spaces
         l = re.sub('".*?"', '""', l)  # throw out all banners
         l = l.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
-        print('l=', l)
         parts = l.split(',')
         continuation = False
         if '[' not in parts[0]:
@@ -1110,60 +1242,90 @@ def analyze_garrison_list(text, data):
         where = to_int(pieces[1])
         castle = to_int(pieces[6])
         firstline = garr + ' char garrison'
-        # il will come from the location report
+        # il will come from the location report, if not foggy XXXv1 take it from last turn?
         LI = {'wh': [where]}
         CH = {'lo': [207], 'he': [-1], 'lk': [4], 'gu': [1], 'at': [60], 'df': [60]}
         CM = {'dg': [1]}
         MT = {'ca': ['g']}
         box = {'firstline': [firstline], 'LI': LI, 'CH': CH, 'CM': CM, 'MT': MT}
         data[garr] = box
+
+    # XXXv0 I have NOT made the where box and set LI hl.
     return data
 
 
 def parse_garrison_log(text, data):
     # this is the daily details, not the list
     # XXXv2 need to track all give/get for all time to get hidden contents, esp gold
-    return data
+    pass
+
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
 
-def parse_character(name, ident, factident, text):
+def parse_character(name, ident, factident, text, data):
     # dead characters have no loyalty
     # TODOv2 make a body... but it's hard to figure out where to put the body
     loyalty, = match_line(text, 'Loyalty:')
     if loyalty is None:
-        return
+        raise ValueError('Why am I here: ' + text)
 
     m = re.search(r'[A-Za-z]+', loyalty)
     lkind = str(loyalty_kind[m.group(0)])
     lrate = re.search(r'\d+', loyalty).group(0)
 
+    box = {}
+    CH = {'lk': [lkind], 'lr': [lrate]}
+    CM = {}
+
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
         sick = 1
+        CH['si'] = [1]
     else:
         sick = 0
     health = re.search(r'\d+|n/a', health).group(0)  # NPCs have health of 'n/a'
+    CH['he'] = [health]
+
     attack, defense, missile = match_line(text, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
+    CH['at'] = [attack]
+    CH['df'] = [defense]
+    if missile:
+        CH['mi'] = [missile]
+
     behind, = match_line(text, 'behind', capture=r'(\d+)')
+    if behind:
+        CH['bh'] = [behind]
+
     break_point, = match_line(text, 'Break point:', capture=r'(\d+)')
+    if break_point:
+        CH['bp'] = [break_point]
+
     concealed, = match_line(text, 'use  638 1')
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
+        CM['hs'] = [1]
     else:
         concealed = 0
+
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
         pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture=r'(.*?) \[(.{4,6})\]')
-    # XXXv2 Pledged to us: ...
+        CM['pl'] = [pledged_to]
+    # XXXv2 Pledged to us: ??? is this needed
+
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
+    if current_aura:
+        CM['ca'] = [current_aura]
+    if maximum_aura:
+        CM['ma'] = [maximum_aura]
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
     if m:
         attitudes = parse_attitudes(m.group(1))
+        encode_attitudes(attitudes, box)
 
     m = re.search(r'Skills known:\n(.*?)\n\s*\n', text, re.M | re.S)
     skills = []
@@ -1175,17 +1337,23 @@ def parse_character(name, ident, factident, text):
         skills_partial = parse_partial_skills(m.group(1))
         skills.extend(skills_partial)
 
+    if skills:
+        box['sl'] = skills
+
     m = re.search(r'Inventory:\n(.*?)\n\n', text, re.M | re.S)
     inventory = []
     if m:
         inventory = parse_inventory(m.group(1))
-
-    # TODOv2: scrolls
+        create_unique_inventory(ident, inventory, data)
+        box['il'] = inventory
+        # TODOv0: this includes unique items, which need to be created
+        #  scrolls, tradegoods, etc
 
     m = re.search(r'^Pending trades:\n\n(.*?)\n\s*\n', text, re.M | re.S)
     trades = []
     if m:
         trades = parse_pending_trades(m.group(1))
+        box['tl'] = trades
 
     # TODOv2: location and stacked under... day 31 it comes from the map, but what about visions? fog/concealed?
 
@@ -1238,10 +1406,10 @@ def parse_character(name, ident, factident, text):
     if len(cm):
         ret['CM'] = cm
 
-    return ret
+    data[to_int(ident)] = ret
 
 
-def parse_location(s):
+def parse_location(s, data):
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
@@ -1252,21 +1420,35 @@ def parse_location(s):
 
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
 
+    # begin upserting the location
+    data[idint] = {'firstline': [idint + ' loc ' + kind],
+                   'na': [name],
+                   'LI': {'wh': [enclosing_int or region]}}
+    if kind in geo_inventory:
+        data[idint]['il'] = geo_inventory[kind]
+    if kind in province_kinds:
+        if 'LO' not in data[idint]:
+            data[idint]['LO'] = {'pd': [0, 0, 0, 0]}
+
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
-    if controlling_castle is not None:
-        print('Saw a controlling castle of', controlling_castle)
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
         routes = parse_routes_leaving(m.group(1))
 
-    # sewers incorrectly claim they are enclosed by the province. they're really a city subloc.
-    if kind == 'sewer':
-        for r in routes:
-            if r['dir'] == 'out':
-                print('marking sewer {} as enclosed by {} instead of {}'.format(idint, r['target'], enclosing_int))
-                enclosing_int = r['target']
-                break
+        # sewers incorrectly claim they are enclosed by the province. they're really a city subloc.
+        if kind == 'sewer':
+            for r in routes:
+                if r['dir'] == 'out':
+                    print('marking sewer {} as enclosed by {} instead of {}'.format(idint, r['target'], enclosing_int))
+                    enclosing_int = r['target']
+                    data[idint]['LI']['wh'] = [enclosing_int]
+                    break
+
+        make_routes_and_fakes_from_routes(routes, idint, region, data)
+
+    # Now parse and then make all of the stuff present.
+    # stack accumulates everything
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -1297,7 +1479,7 @@ def parse_location(s):
     return
 
 
-def parse_turn(turn):
+def parse_turn(turn, everything=True):
     data = {}
 
     factint, turn_num, data = parse_turn_header(data, turn)
@@ -1311,18 +1493,22 @@ def parse_turn(turn):
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:
-                data = parse_garrison_log(s)
+                if not everything:
+                    break
+                parse_garrison_log(s, data)
                 break
             m = re.match(r'^([^\[]{1,40}) \[(.{4,6})\]\n--------------', s)
             if m:
+                if not everything:
+                    break
                 name, ident = m.group(1, 2)
                 s, visions = remove_visions(s)
                 # TODOv2 do something with visions
-                data = parse_character(name, ident, factint, s)
+                parse_character(name, ident, factint, s, data)
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
-                data = parse_location(s)
+                parse_location(s, data)
                 break
 
             # skip the rest: lore sheets, new players, order template
