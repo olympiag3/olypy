@@ -53,10 +53,16 @@ def test_parse_inventory():
       ---  ----				     ------
     3,929  gold [1]				  0  
 	1  riding horse [52]		      1,000  ride 150
+        1  Amulet of Halhere [b999]              10  +1 aura
+        1  Dior [n999]                           10  +100 defense
 
     '''
-    ret = ['1', 'gold', '3929', '52', 'riding horse', '1']
-    assert turnparser.parse_inventory(t) == ret
+    data = {}
+    ret = ['1', 'gold', '3929', 0, '',
+           '52', 'riding horse', '1', 0, '',
+           '60999', 'Amulet of Halhere', '1', '1', 'aura',
+           '72999', 'Dior', '1', '100', 'defense']
+    assert turnparser.parse_inventory(t, data) == ret
 
 
 def test_parse_admit():
@@ -519,9 +525,12 @@ Unclaimed items:
                   ['9724', '52341'],
                   ['9774', '52341']],
            'an': [to_int('hv5'), to_int('hx7')],
-           'il': ['1', 'gold', '4330', '52', 'riding horses', '5', '78', 'stone', '100']}
-
-    assert turnparser.parse_faction(t, {}) == ret
+           'il': ['1', 'gold', '4330', 0, '',
+                  '52', 'riding horses', '5', 0, '',
+                  '78', 'stone', '100', 0, '']}
+    data = {}
+    assert turnparser.parse_faction(t, {}, data) == ret
+    assert data == {}
 
 
 def test_analyze_garrison_list():
@@ -653,16 +662,16 @@ Osswid the Destroyer [7271]
     '''
     ret = {'7271': {'firstline': ['7271 char 0'],
                     'na': ['Osswid the Destroyer'],
-                    'il': ['1', 'gold', '26834',
-                           '10', 'peasants', '10',
-                           '12', 'soldiers', '380',
-                           '16', 'pikeman', '1',
-                           '17', 'blessed soldiers', '29',
-                           '20', 'swordsmen', '28',
-                           '78', 'stone', '303',
-                           '79', 'iron', '2',
-                           '94', 'woven baskets', '11',
-                           '98', 'drum', '1'],
+                    'il': ['1', 'gold', '26834', 0, '',
+                           '10', 'peasants', '10', 0, '',
+                           '12', 'soldiers', '380', 0, '',
+                           '16', 'pikeman', '1', 0, '',
+                           '17', 'blessed soldiers', '29', 0, '',
+                           '20', 'swordsmen', '28', 0, '',
+                           '78', 'stone', '303', 0, '',
+                           '79', 'iron', '2', 0, '',
+                           '94', 'woven baskets', '11', 0, '',
+                           '98', 'drum', '1', 0, ''],
                     'CH': {'ad': [to_int('qm9'), to_int('zb1')],
                            'at': ['89'],
                            'bp': ['0'],

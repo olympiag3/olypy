@@ -403,16 +403,23 @@ def split_into_sections(text):
     return ret[1:]  # discard header
 
 
-def parse_inventory(text):
+def parse_inventory(text, data):
     temp = {}
 
     for line in text.split('\n'):
-        m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(.{1,6}?)\]', line)
+        m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(.{1,6}?)\]\s+([\d,]+)\s*(.*)?', line)
         if m:
-            qty, name, ident = m.group(1, 2, 3)
+            qty, name, ident, weight, rest = m.group(1, 2, 3, 4, 5)
             qty = qty.replace(',', '')
+            plus, what = 0, ''
+            if rest:
+                r = re.match(r'\+(\d+) (attack|defense|missile|aura)', rest)
+                if r:
+                    plus, what = r.group(1, 2)
+                # not parsing: ride 150, cap 1,000, etcetc
+
             iident = int(to_int(ident))  # so we can sort on it
-            temp[iident] = [to_int(ident), name, qty]
+            temp[iident] = [to_int(ident), name, qty, plus, what]
 
     ret = []
     keys = sorted(list(temp.keys()))
@@ -463,10 +470,11 @@ def create_unique_inventory(unit, inventory, data):
     '''
     Given an inventory list, create or fixup unique items on the list
     '''
-    for ident, name, qty in groups(inventory, 3):
+    for ident, name, qty, plus, what in groups(inventory, 5):
         i = int(ident)
         if i > 999 or i in set((401, 402, 403)):
             make_fake_item(unit, ident, name, data)
+            # XXXv0 do something with plus and what
 
 
 def parse_admit(text):
@@ -1207,13 +1215,13 @@ def parse_turn_header(data, turn):
     return factint, turn_num, data
 
 
-def parse_faction(text, factbox):
+def parse_faction(text, factbox, data):
     '''
     claim, admit, hostile|defend|neutral
     '''
     m = re.search(r'^Unclaimed items:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
-        unclaimed_items = parse_inventory(m.group(1))
+        unclaimed_items = parse_inventory(m.group(1), data)
         factbox['il'] = unclaimed_items
 
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
@@ -1343,7 +1351,7 @@ def parse_character(name, ident, factident, text, data):
     m = re.search(r'Inventory:\n(.*?)\n\n', text, re.M | re.S)
     inventory = []
     if m:
-        inventory = parse_inventory(m.group(1))
+        inventory = parse_inventory(m.group(1), data)
         create_unique_inventory(ident, inventory, data)
         box['il'] = inventory
         # TODOv0: this includes unique items, which need to be created
@@ -1488,7 +1496,7 @@ def parse_turn(turn, everything=True):
             m = re.match(r'^([^\[]{1,40}) \[(.{3})\]\n---------------', s)
             if m:
                 name, ident = m.group(1, 2)
-                data[factint] = parse_faction(s, data[factint])
+                data[factint] = parse_faction(s, data[factint], data)
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:
