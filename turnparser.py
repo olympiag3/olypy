@@ -1406,7 +1406,7 @@ def parse_character(name, ident, factident, text, data):
     if len(cm):
         ret['CM'] = cm
 
-    data[to_int(ident)] = ret
+    return {to_int(ident): ret}
 
 
 def parse_location(s, data):
@@ -1420,7 +1420,6 @@ def parse_location(s, data):
 
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
 
-    # begin upserting the location
     data[idint] = {'firstline': [idint + ' loc ' + kind],
                    'na': [name],
                    'LI': {'wh': [enclosing_int or region]}}
@@ -1504,6 +1503,8 @@ def parse_turn(turn, everything=True):
                 name, ident = m.group(1, 2)
                 s, visions = remove_visions(s)
                 # TODOv2 do something with visions
+                # TODOv0 make sure that these characters have priority over
+                # what's seen in locations, which come later in the the turn
                 parse_character(name, ident, factint, s, data)
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)

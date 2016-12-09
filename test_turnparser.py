@@ -695,8 +695,8 @@ Osswid the Destroyer [7271]
                     'CM': {'hs': [1], 'pl': '6839'},
                     'LI': {}}}
     data = {}
-    turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
-    assert data == ret
+    assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data) == ret
+    assert data == {}  # unique items
 
 def test_parse_location():
     t = '''Forest [bf23], forest, in Grinter, safe haven, civ-2
