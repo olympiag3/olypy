@@ -1278,7 +1278,7 @@ def parse_faction(text, factint, data):
     m = re.search(r'^Unclaimed items:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
         unclaimed_items = parse_inventory(m.group(1), factint, data)
-        data[factint]['il'] = unclaimed_items
+        data[factint]['il'] = reformat_inventory(unclaimed_items)
 
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
@@ -1384,6 +1384,7 @@ def parse_character(name, ident, factident, text, data):
     inventory = []
     if m:
         inventory = parse_inventory(m.group(1), ident, data)
+        inventory = reformat_inventory(inventory)
 
     m = re.search(r'^Pending trades:\n\n(.*?)\n\s*\n', text, re.M | re.S)
     trades = []
