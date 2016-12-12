@@ -57,7 +57,7 @@ def data_overwrite(data, box, subbox, value):
     if data.get(box, {}).get(subbox):
         data[box][subbox] = value
 
-def data_append2(data, box, subbox, key, value):
+def data_append2(data, box, subbox, key, value, dedup=True):
     '''
     append value to list data[box][subbox][key], doing what's needed to initialize things
     '''
@@ -71,7 +71,8 @@ def data_append2(data, box, subbox, key, value):
     data[box][subbox] = data[box].get(subbox, {})
     l = data[box][subbox].get(key, [])
     [ l.append(str(v)) for v in value ]
-    l = uniq_f11(l) # XXXv0 replace with if value not in l ...
+    if dedup:
+        l = uniq_f11(l) # XXXv0 replace with if value not in l ...
     data[box][subbox][key] = l
 
 def data_remove2(data, box, subbox, key, value):

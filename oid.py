@@ -49,7 +49,7 @@ def to_oid(oid_int):
         oid_int -= 59000
         residue = oid_int % 1000
         first = oid_int // 1000
-        return letters[first] + '{:03d}'.format(residue)
+        return letters2[first] + '{:03d}'.format(residue)
     else: # storms, controlled units, etc
         return str(oid_int)
 
@@ -63,7 +63,7 @@ def to_int(oid):
     elif re.match(r'\A[a-z]\d\d\Z', oid): # CNN
         return str(letter2_to_int[oid[0]]*100 + int(oid[1:]) + 56760)
     elif re.match(r'\A[a-z]\d\d\d\Z', oid): # CNNN
-        return str(_i(oid[0])*1000 + int(oid[1:]) + 59000)
+        return str(letter2_to_int[oid[0]]*1000 + int(oid[1:]) + 59000)
     elif re.match(r'\A\d{1,5}\Z', oid): # N through NNNNN
         return str(oid)
     elif re.match(r'\A1\d\d\d\d\d\Z', oid): # 1NNNNN

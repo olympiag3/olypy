@@ -55,14 +55,28 @@ def test_parse_inventory():
 	1  riding horse [52]		      1,000  ride 150
         1  Amulet of Halhere [b999]              10  +1 aura
         1  Dior [n999]                           10  +100 defense
+        1  639 - Sneak in structure [b132]         1  
 
     '''
     data = {}
-    ret = ['1', 'gold', '3929', 0, '',
-           '52', 'riding horse', '1', 0, '',
-           '60999', 'Amulet of Halhere', '1', '1', 'aura',
-           '72999', 'Dior', '1', '100', 'defense']
-    assert turnparser.parse_inventory(t, data) == ret
+    ret = ['1', 'gold', '0', '3929', 0, '',
+           '52', 'riding horse', '1000', '1', 0, '',
+           '60132', '639 - Sneak in structure', '1', '1', 0, '',
+           '60999', 'Amulet of Halhere', '10', '1', '1', 'aura',
+           '69999', 'Dior', '10', '1', '100', 'defense']
+    assert turnparser.parse_inventory(t, '1000', data) == ret
+    unique_item_data = {'60132': {'IT': {'un': ['1000'], 'wt': ['1']},
+                                  'firstline': ['60132item 0'],
+                                  'na': ['Fake 639 - Sneak in structure']},
+                        '60999': {'IM': {'ba': ['1']},
+                                  'IT': {'un': ['1000'], 'wt': ['10']},
+                                  'firstline': ['60999 item artifact'],
+                                  'na': ['Amulet of Halhere']},
+                        '69999': {'IM': {'db': ['100']},
+                                  'IT': {'un': ['1000'], 'wt': ['10']},
+                                  'firstline': ['69999 item artifact'],
+                                  'na': ['Dior']}}
+    assert data == unique_item_data
 
 
 def test_parse_admit():
@@ -525,12 +539,12 @@ Unclaimed items:
                   ['9724', '52341'],
                   ['9774', '52341']],
            'an': [to_int('hv5'), to_int('hx7')],
-           'il': ['1', 'gold', '4330', 0, '',
-                  '52', 'riding horses', '5', 0, '',
-                  '78', 'stone', '100', 0, '']}
-    data = {}
-    assert turnparser.parse_faction(t, {}, data) == ret
-    assert data == {}
+           'il': ['1', 'gold', '0', '4330', 0, '',
+                  '52', 'riding horses', '5000', '5', 0, '',
+                  '78', 'stone', '10000', '100', 0, '']}
+    data = {'1000': {}}
+    turnparser.parse_faction(t, '1000', data)
+    assert data['1000'] == ret
 
 
 def test_analyze_garrison_list():
@@ -662,16 +676,16 @@ Osswid the Destroyer [7271]
     '''
     ret = {'7271': {'firstline': ['7271 char 0'],
                     'na': ['Osswid the Destroyer'],
-                    'il': ['1', 'gold', '26834', 0, '',
-                           '10', 'peasants', '10', 0, '',
-                           '12', 'soldiers', '380', 0, '',
-                           '16', 'pikeman', '1', 0, '',
-                           '17', 'blessed soldiers', '29', 0, '',
-                           '20', 'swordsmen', '28', 0, '',
-                           '78', 'stone', '303', 0, '',
-                           '79', 'iron', '2', 0, '',
-                           '94', 'woven baskets', '11', 0, '',
-                           '98', 'drum', '1', 0, ''],
+                    'il': ['1', 'gold', '0', '26834', 0, '',
+                           '10', 'peasants', '1000', '10', 0, '',
+                           '12', 'soldiers', '38000', '380', 0, '',
+                           '16', 'pikeman', '100', '1', 0, '',
+                           '17', 'blessed soldiers', '2900', '29', 0, '',
+                           '20', 'swordsmen', '2800', '28', 0, '',
+                           '78', 'stone', '30300', '303', 0, '',
+                           '79', 'iron', '20', '2', 0, '',
+                           '94', 'woven baskets', '11', '11', 0, '',
+                           '98', 'drum', '2', '1', 0, ''],
                     'CH': {'ad': [to_int('qm9'), to_int('zb1')],
                            'at': ['89'],
                            'bp': ['0'],
@@ -701,7 +715,7 @@ Osswid the Destroyer [7271]
                                   '722', '2', '14', '0', '0',
                                   '800', '1', '7', '0', '0',
                                   '860', '1', '7', '0', '0']},
-                    'CM': {'hs': [1], 'pl': '6839'},
+                    'CM': {'hs': ['1'], 'pl': '6839'},
                     'LI': {}}}
     data = {}
     assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data) == ret

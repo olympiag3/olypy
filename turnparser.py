@@ -5,11 +5,11 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 import re
 import sys
 
-from oid import to_int
+from oid import to_int, to_oid
 import data as db
 
-directions = {'north': 1, 'east': 2, 'south': 3, 'west': 4, 'up': 5, 'down': 6}
-inverted_directions = {'north': 3, 'east': 4, 'south': 1, 'west': 2, 'up': 6, 'down': 5}
+directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
+inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
 road_directions = set(('secret pass', 'secret route', 'old road',
                        'narrow channel', 'rocky channel', 'secret sea route',
@@ -384,7 +384,7 @@ mage_ranks = set(('conjurer', 'mage', 'wizard', 'sorcerer',
 
 
 def parse_an_id(text):
-    m = re.search('\[(.{3,6})\]', text)
+    m = re.search(r'\[(.{3,6})\]', text)
     if not m:
         raise ValueError('failed to find an id in '+text)
     return to_int(m.group(1))
@@ -403,14 +403,29 @@ def split_into_sections(text):
     return ret[1:]  # discard header
 
 
-def parse_inventory(text, data):
+def parse_inventory(text, unit, data):
     temp = {}
+    scroll_id = None
 
+    grab_next = 0
     for line in text.split('\n'):
-        m = re.match(r'\s+([\d,]+)\s+([\w ]+) \[(.{1,6}?)\]\s+([\d,]+)\s*(.*)?', line)
+        if grab_next:
+            grab_next = 0
+            m = re.search(r'\s(.*?)\s\[(\d\d\d)\]', line)
+            if m:
+                data[scroll_id]['na'] = [m.group(1)]
+                data[scroll_id]['IM']['ms'] = [m.group(2)]
+            elif '???' in line:
+                continue  # leave it faked
+            else:
+                raise ValueError('next line did not contain the scroll spell: '+line)
+            continue
+
+        m = re.match(r'\s+([\d,]+)\s+(.+?) \[(.{1,6}?)\]\s+([\d,]+)\s*(.*)?', line)
         if m:
             qty, name, ident, weight, rest = m.group(1, 2, 3, 4, 5)
             qty = qty.replace(',', '')
+            weight = weight.replace(',', '')
             plus, what = 0, ''
             if rest:
                 r = re.match(r'\+(\d+) (attack|defense|missile|aura)', rest)
@@ -418,8 +433,19 @@ def parse_inventory(text, data):
                     plus, what = r.group(1, 2)
                 # not parsing: ride 150, cap 1,000, etcetc
 
-            iident = int(to_int(ident))  # so we can sort on it
-            temp[iident] = [to_int(ident), name, qty, plus, what]
+            ident = to_int(ident)
+            temp[int(ident)] = [ident, name, weight, qty, plus, what]
+
+            if int(ident) > 399:
+                make_fake_item(unit, ident, name, weight, plus, what, data)
+            continue
+        m = re.search(r'\s(\w.+)\s\[(.{4})\] permits study of the following skills', line)
+        if m:
+            name = m.group(1)
+            scroll_id = to_int(m.group(2))
+            data[scroll_id]['na'] = [name]
+            # this thing must already exist, it's listed in the inventory above
+            grab_next = 1
 
     ret = []
     keys = sorted(list(temp.keys()))
@@ -427,54 +453,78 @@ def parse_inventory(text, data):
         ret.extend(temp[k])
     return ret
 
+artifact_kindmap = {'attack': 'ab', 'defense': 'db', 'missile': 'mb', 'aura': 'ba'}
 
-def make_fake_item(unit, ident, name, data):
+
+def make_fake_item(unit, ident, name, weight, plus, what, data):
     '''
     Based on incomplete info, make a fake unique item.
     Used for things spotted in inventory.
     '''
     if ident in set(('401', '402', '403')):
-        # created aready
+        # created aready. transfer from old owner to me.
         old = data[ident]['IT']['un'][0]
         db.data_remove(data, old, 'il', ident)
         data[ident]['IT']['un'] = [unit]
     elif int(ident) < 10000:
         # dead body, ok, if you raise this dead body you will be disappointed
-        return {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
-                'IT': {'pl': ['dead bodies'], 'wt': ['100'], 'un': unit}}
+        data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
+                'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': unit}}
+        return
     else:
-        # scroll, potion, Orb, Palantir, tradegood, armor/weapon/aura, npc_token, auraculum
-        if name == 'Scroll':
-            return { 'firstline': [ident + 'item scroll'], 'IT': {'wt': ['1'], 'un': [unit]},
-                     'IM': {'ms': ['801']}}
-        elif name == 'Strange potion' or name == 'Magic potion':
-            return { 'firstline': [ident + 'item 0'], 'IT': {'wt': ['1'], 'un': [unit]}}
-        elif name == 'Orb':
-            return { 'firstline': [ident + 'item 0'], 'IT': {'wt': ['1'], 'un': [unit]},
-                     'IM': {'uk': ['0']}}
-        elif name == 'Palantir':
-            return { 'firstline': [ident + 'item palantir'], 'IT': {'wt': ['2'], 'un': [unit]},
-                     'IM': {'uk': ['0']}}
-        # XXXv0 to do tradegood, I need weight
-        # to do armor/weapon/aura, I need more details, auraculum is similar
-        # to do npc_token, I need more details
+        # armor/weapon/aura item
+        if what in artifact_kindmap and weight == '10':
+            item = {'firstline': [ident + ' item artifact'],
+                    'na': [name],
+                    'IT': {'wt': [weight], 'un': [unit]},
+                    'IM': {}}
+            item['IM'][artifact_kindmap[what]] = [plus]
+            data[ident] = item
+            print('YYY made a scroll', ident)
+            print('YYY data[ident] is', data[ident])
+        elif (name == 'Scroll' and weight == '1') or (name == 'ancient scroll' and weight == '5'):
+            print('making scroll', ident)
+            data[ident] = {'firstline': [ident + 'item scroll'],
+                           'na': ['Scroll of Fakeness'],
+                           'IT': {'wt': ['1'], 'un': [unit]},
+                           'IM': {'ms': ['801']}}
+        elif name == 'Strange potion' or name == 'Magic potion' and weight == '1':
+            data[ident] = {'firstline': [ident + 'item 0'],
+                           'na': ['Potion of Fakeness'],
+                           'IT': {'wt': ['1'], 'un': [unit]}}
+        elif name == 'Orb' and weight == '1':
+            data[ident] = {'firstline': [ident + 'item 0'],
+                           'na': ['Orb'],
+                           'IT': {'wt': ['1'], 'un': [unit]},
+                           'IM': {'uk': ['0']}}
+        elif name == 'Palantir' and weight == '1':
+            data[ident] = {'firstline': [ident + ' item palantir'],
+                           'na': ['Palantir'],
+                           'IT': {'wt': ['2'], 'un': [unit]},
+                           'IM': {'uk': ['0']}}
+        elif weight == '0':  # this is probably a bug!
+            data[ident] = {'firstline': [ident + ' item npc_token'],
+                           'na': ['Fake ' + name],
+                           'IT': {'un': [unit]},
+                           'IM': {'tn': ['1'], 'ti': ['33']}}  # IM ti is a lie, also needs PL un filled in
+        elif int(weight) > 1:  # a guess
+            data[ident] = {'firstline': [ident + ' item tradegood'],
+                           'na': [name],
+                           'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
+        elif weight == '1':  # no idea, let's fake it
+            print('faking', name)
+            data[ident] = {'firstline': [ident + 'item 0'],
+                           'na': ['Fake ' + name],
+                           'IT': {'wt': ['1'], 'un': [unit]}}
+        else:
+            print('Unknown make_fake_item of name={} weight={}'.format(name, weight))
+
 
 def groups(iterable, n):
     '''
     They say Python is elegant, but then I have to do this.
     '''
     return zip(*[iter(iterable)]*n)
-
-
-def create_unique_inventory(unit, inventory, data):
-    '''
-    Given an inventory list, create or fixup unique items on the list
-    '''
-    for ident, name, qty, plus, what in groups(inventory, 5):
-        i = int(ident)
-        if i > 999 or i in set((401, 402, 403)):
-            make_fake_item(unit, ident, name, data)
-            # XXXv0 do something with plus and what
 
 
 def parse_admit(text):
@@ -508,15 +558,6 @@ def parse_attitudes(text):
             else:  # continuation line
                 ret[last].extend([to_int(p) for p in parts])
     return ret
-
-
-def encode_attitudes(attitudes, box):
-    if 'neutral' in attitudes:
-        box['an'] = attitudes['neutral']
-    if 'defend' in attitudes:
-        box['ad'] = attitudes['defend']
-    if 'hostile' in attitudes:
-        box['ah'] = attitudes['hostile']
 
 
 def parse_skills(text):
@@ -565,48 +606,48 @@ def parse_pending_trades(text):
     return ret
 
 
-def make_routes_and_fakes_from_routes(routes, idint, region, data):
+def make_locations_from_routes(routes, idint, region, data):
     for r in routes:
         dest = r['destination']
         kind = r['kind']
         dir = r['dir']
         if dir in inverted_directions:
-            idir = inverted_directions[dir] - 1
+            idir = inverted_directions[dir]
         else:
-            print('dir is', dir, 'dest', dest, 'idint', idint)
+            #print('dir is', dir, 'dest', dest, 'idint', idint)
             idir = -99999
         if dest not in data:
             if kind in province_kinds:
-                if 'hidden' in r:
-                    raise ValueError
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
                               'na': [r['name']],
                               'il': geo_inventory[kind],
-                              'LI': {'wh': region},
+                              'LI': {'wh': [region]},
                               'LO': {'pd': [0, 0, 0, 0]}}
                 if 'impassable' in r:
                     pass  # city, or mountain/sea. Make the link anyway.
                 if dir == 'out':
                     continue  # subloc out routes will be created elsewhere
-                if idir > 4:
-                    raise ValueError  # I don't think this can happen
+                if dir.endswith(' road'):
+                    continue  # roads are annoying to make. generally they're marked hidden GA rh 1. XXXv1
+                if 'hidden' in r:
+                    db.data_overwrite2(data, dest, 'LO', 'hi', ['1'])
+                if idir > 3:
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
-                print('idir is', idir, 'kind is', kind, 'dest is', dest)
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
-                # figure out what province this city is in, there should be an impassible link
+                # figure out what province this city is in, there should be an impassable link
                 prov = None
                 for r in routes:
-                    if r['dir'] == dir and 'impassible' in r:
+                    if r['dir'] == dir and 'impassable' in r:
                         prov = dest
                         break
                 if prov is None:
-                    raise ValueError('subiteration could not discover province of a city route')
+                    raise ValueError('subiteration could not discover province of a city route, province '+idint)
                 # the link is at the province, so don't make any LO here
                 data[dest] = {'firstline': [dest + ' loc city'],
                               'na': [r['name']],
                               'il': geo_inventory['city'],
-                              'LI': {'wh': prov}}
+                              'LI': {'wh': [prov]}}
             elif kind in subloc_kinds or kind in structure_type:
                 pass  # this only exists for visions of a castle, ship etc XXXv2
         else:
@@ -614,8 +655,11 @@ def make_routes_and_fakes_from_routes(routes, idint, region, data):
             if kind in province_kinds:
                 if dir == 'out':
                     continue
-                if directions[dir] > 4:
-                    raise ValueError
+                if dir.endswith(' road'):
+                    continue  # XXXv1
+                if idir > 3:
+                    if len(data[dest]['LO']['pd']) < 6:
+                        data[dest]['LO']['pd'].extend((0, 0))
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
                 # link is at the province level
@@ -732,25 +776,25 @@ def parse_a_sublocation_route(parts):
     kind = parts.pop(0).strip()
     if kind not in subloc_kinds and kind != 'port city':
         raise ValueError('invalid kind of a sublocation route, '+kind)
+    if kind == 'port city':
+        kind = 'port'
 
-    attr = {}
+    attr = {'kind': kind}
     for p in parts:
         p = p.strip()
         if p == '1 day':
             continue
         elif p == 'hidden':
-            continue
+            attr['hidden'] = 1  # LO hi 1
         elif p == 'safe haven':
-            continue
+            attr['safe haven'] = 1  # SL sh 1
         elif p == 'owner:':
             continue
         elif p == '""':
             continue
         else:
             raise ValueError('unknown part in a sublocation route: '+p)
-
     return kind, attr
-# subloc needs to return kind, LO/hi=1 for hidden, SL/sh=1 for safe haven
 
 
 def parse_a_character(parts):
@@ -785,9 +829,9 @@ def parse_a_character(parts):
         elif (p in item_to_inventory or
               p.endswith('s') and p[:-1] in item_to_inventory):
             print('XXX saw an npc')
-            continue  # npcs like savages, controlled npcs like savage XXXv2
+            continue  # npcs like savages, or controlled npcs like savage XXXv2
         elif p.startswith('number: '):
-            continue  # also npc
+            continue  # also npc, not a controlled one. However, a single Foo doesn't have number: 1
         else:
             if p.startswith('with '):
                 p = p.replace('with ', '')
@@ -819,6 +863,7 @@ def parse_a_character(parts):
     if len(CH) > 0:
         attr['CH'] = CH
     return 'char', attr
+
 
 def parse_a_structure_or_character(s, stack, last_depth):
     '''
@@ -1215,31 +1260,29 @@ def parse_turn_header(data, turn):
     return factint, turn_num, data
 
 
-def parse_faction(text, factbox, data):
+def parse_faction(text, factint, data):
     '''
     claim, admit, hostile|defend|neutral
     '''
     m = re.search(r'^Unclaimed items:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
-        unclaimed_items = parse_inventory(m.group(1), data)
-        factbox['il'] = unclaimed_items
+        unclaimed_items = parse_inventory(m.group(1), factint, data)
+        data[factint]['il'] = unclaimed_items
 
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
         admits = parse_admit(m.group(1))
-        factbox['am'] = admits
+        data[factint]['am'] = admits
 
     m = re.search(r'^Declared attitudes:\n(.*?)\n\n', text, re.M | re.S)
     if m:
         attitudes = parse_attitudes(m.group(1))
         if attitudes.get('neutral'):
-            factbox['an'] = attitudes['neutral']
+            data[factint]['an'] = attitudes['neutral']
         if attitudes.get('defend'):
-            factbox['ad'] = attitudes['defend']
+            data[factint]['ad'] = attitudes['defend']
         if attitudes.get('hostile'):
-            factbox['ah'] = attitudes['hostile']
-
-    return factbox
+            data[factint]['ah'] = attitudes['hostile']
 
 
 def analyze_garrison_list(text, data):
@@ -1272,8 +1315,10 @@ loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Su
 
 
 def parse_character(name, ident, factident, text, data):
-    # dead characters have no loyalty
-    # TODOv2 make a body... but it's hard to figure out where to put the body
+
+    # XXXv2 extract Location in case we are invisible
+    # it often has a linebreak in it
+
     loyalty, = match_line(text, 'Loyalty:')
     if loyalty is None:
         raise ValueError('Why am I here: ' + text)
@@ -1282,58 +1327,37 @@ def parse_character(name, ident, factident, text, data):
     lkind = str(loyalty_kind[m.group(0)])
     lrate = re.search(r'\d+', loyalty).group(0)
 
-    box = {}
-    CH = {'lk': [lkind], 'lr': [lrate]}
-    CM = {}
-
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
         sick = 1
-        CH['si'] = [1]
     else:
         sick = 0
     health = re.search(r'\d+|n/a', health).group(0)  # NPCs have health of 'n/a'
-    CH['he'] = [health]
 
     attack, defense, missile = match_line(text, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
-    CH['at'] = [attack]
-    CH['df'] = [defense]
-    if missile:
-        CH['mi'] = [missile]
 
     behind, = match_line(text, 'behind', capture=r'(\d+)')
-    if behind:
-        CH['bh'] = [behind]
 
     break_point, = match_line(text, 'Break point:', capture=r'(\d+)')
-    if break_point:
-        CH['bp'] = [break_point]
 
     concealed, = match_line(text, 'use  638 1')
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
-        CM['hs'] = [1]
     else:
         concealed = 0
 
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
         pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture=r'(.*?) \[(.{4,6})\]')
-        CM['pl'] = [pledged_to]
-    # XXXv2 Pledged to us: ??? is this needed
 
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
-    if current_aura:
-        CM['ca'] = [current_aura]
-    if maximum_aura:
-        CM['ma'] = [maximum_aura]
+    # XXXv2 extract full data from max aura 161 (3+158) and construct a fake auraculum if needed
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
     if m:
         attitudes = parse_attitudes(m.group(1))
-        encode_attitudes(attitudes, box)
 
     m = re.search(r'Skills known:\n(.*?)\n\s*\n', text, re.M | re.S)
     skills = []
@@ -1345,15 +1369,10 @@ def parse_character(name, ident, factident, text, data):
         skills_partial = parse_partial_skills(m.group(1))
         skills.extend(skills_partial)
 
-    if skills:
-        box['sl'] = skills
-
     m = re.search(r'Inventory:\n(.*?)\n\n', text, re.M | re.S)
     inventory = []
     if m:
-        inventory = parse_inventory(m.group(1), data)
-        create_unique_inventory(ident, inventory, data)
-        box['il'] = inventory
+        inventory = parse_inventory(m.group(1), ident, data)
         # TODOv0: this includes unique items, which need to be created
         #  scrolls, tradegoods, etc
 
@@ -1361,7 +1380,6 @@ def parse_character(name, ident, factident, text, data):
     trades = []
     if m:
         trades = parse_pending_trades(m.group(1))
-        box['tl'] = trades
 
     # TODOv2: location and stacked under... day 31 it comes from the map, but what about visions? fog/concealed?
 
@@ -1391,10 +1409,9 @@ def parse_character(name, ident, factident, text, data):
         ch['ah'] = attitudes['hostile']
     if len(skills) > 0:
         ch['sl'] = skills
-    # prisoner
-    # moving - hard one
-    # behind
-    # guard
+    if behind != '0':
+        ch['bh'] = [behind]
+    # guard?
     # time_flying XXXv2 - hard one
     if break_point:
         ch['bp'] = [break_point]
@@ -1408,7 +1425,7 @@ def parse_character(name, ident, factident, text, data):
 
     cm = {}
     if concealed:
-        cm['hs'] = [1]
+        cm['hs'] = ['1']
     if pledged_to:
         cm['pl'] = to_int(pledged_to)
     if len(cm):
@@ -1428,31 +1445,37 @@ def parse_location(s, data):
 
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
 
-    data[idint] = {'firstline': [idint + ' loc ' + kind],
-                   'na': [name],
-                   'LI': {'wh': [enclosing_int or region]}}
-    if kind in geo_inventory:
-        data[idint]['il'] = geo_inventory[kind]
-    if kind in province_kinds:
-        if 'LO' not in data[idint]:
-            data[idint]['LO'] = {'pd': [0, 0, 0, 0]}
+    if idint not in data:
+        data[idint] = {'firstline': [idint + ' loc ' + kind],
+                       'LI': {'wh': [enclosing_int or region]}}
+        if kind in geo_inventory:
+            data[idint]['il'] = geo_inventory[kind]
+        if kind in province_kinds:
+            db.data_append2(data, idint, 'LO', 'pd', [0, 0, 0, 0], dedup=False)
+        if safe_haven:
+            db.data_append2(data, idint, 'SL', 'sh', ['1'])
+        if hidden:
+            db.data_append2(data, idint, 'LO', 'li', ['1'])
 
+    db.data_overwrite(data, idint, 'na', [name])  # overwrite; it might have changed
+
+    # if it's not our garrison, we'll use this to set the owning castle
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
         routes = parse_routes_leaving(m.group(1))
 
-        # sewers incorrectly claim they are enclosed by the province. they're really a city subloc.
+        # Fixup: sewers incorrectly claim they are enclosed by the province.
+        # They're really a city subloc.
         if kind == 'sewer':
             for r in routes:
                 if r['dir'] == 'out':
-                    print('marking sewer {} as enclosed by {} instead of {}'.format(idint, r['target'], enclosing_int))
-                    enclosing_int = r['target']
-                    data[idint]['LI']['wh'] = [enclosing_int]
+                    enclosing_int = r['destination']
+                    db.data_overwrite2(data, idint, 'LI', 'wh', [enclosing_int])
                     break
 
-        make_routes_and_fakes_from_routes(routes, idint, region, data)
+        make_locations_from_routes(routes, idint, region, data)
 
     # Now parse and then make all of the stuff present.
     # stack accumulates everything
@@ -1496,7 +1519,7 @@ def parse_turn(turn, everything=True):
             m = re.match(r'^([^\[]{1,40}) \[(.{3})\]\n---------------', s)
             if m:
                 name, ident = m.group(1, 2)
-                data[factint] = parse_faction(s, data[factint], data)
+                parse_faction(s, factint, data)
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:

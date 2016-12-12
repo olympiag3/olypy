@@ -13,6 +13,7 @@ oid_to_int = {
     'b01': 56861,
     'w65': 58525,
     'c000': 61000,
+    'z999': 78999,
     '99999': 99999,
     '199999': 199999,
 }
@@ -31,8 +32,6 @@ def test_oid():
 
     for oint in range(1000,100002):
         assert to_int(to_oid(oint)) == str(oint)
-
-    # TODO: what about 1..999 ?
 
     data = {}
     intoid = allocate_oid(data, 'NNNN')
