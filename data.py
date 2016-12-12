@@ -53,8 +53,7 @@ def data_overwrite(data, box, subbox, value):
     overwrite list with a new one
     '''
     box = str(box)
-    if data.get(box) is None:
-        data[box] = {}
+    data[box] = data.get(box, {})
     subbox = str(subbox)
     data[box][subbox] = value
 
@@ -95,11 +94,9 @@ def data_overwrite2(data, box, subbox, key, value):
     overwrite list with a new one
     '''
     box = str(box)
-    if data.get(box) is None:
-        data[box] = {}
+    data[box] = data.get(box, {})
     subbox = str(subbox)
-    if data[box].get(subbox) is None:
-        data[box][subbox] = {}
+    data[box][subbox] = data[box].get(subbox, {})
     key = str(key)
     data[box][subbox][key] = value
 
