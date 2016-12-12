@@ -53,9 +53,10 @@ def data_overwrite(data, box, subbox, value):
     overwrite list with a new one
     '''
     box = str(box)
+    if data.get(box) is None:
+        data[box] = {}
     subbox = str(subbox)
-    if data.get(box, {}).get(subbox):
-        data[box][subbox] = value
+    data[box][subbox] = value
 
 def data_append2(data, box, subbox, key, value, dedup=True):
     '''
@@ -94,10 +95,13 @@ def data_overwrite2(data, box, subbox, key, value):
     overwrite list with a new one
     '''
     box = str(box)
+    if data.get(box) is None:
+        data[box] = {}
     subbox = str(subbox)
+    if data[box].get(subbox) is None:
+        data[box][subbox] = {}
     key = str(key)
-    if data.get(box, {}).get(subbox, {}).get(key, []):
-        data[box][subbox][key] = value
+    data[box][subbox][key] = value
 
 def is_char(data, who):
     if ' char ' in data[who]['firstline'][0]:

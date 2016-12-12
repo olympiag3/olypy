@@ -73,7 +73,7 @@ def test_append_remove():
 def test_overwrite():
     data = {}
     data_overwrite(data, 1, 2, ['3'])
-    assert data == {}
+    assert data == {'1': {'2': ['3']}}
 
     data = {'1001': {'na': ['Oleg the Loudmouth']}}
     data_overwrite(data, 1001, 'na', ['Phydeaux, RIP'])
@@ -128,7 +128,7 @@ def test_append2_remove2():
 def test_overwrite2():
     data = {}
     data_overwrite2(data, 1, 2, 3, ['3'])
-    assert data == {}
+    assert data == {'1': {'2': {'3': ['3']}}}
 
     data = {'1001': {'LI': {'wh': ['10000']}}}
     data_overwrite2(data, 1001, 'LI', 'wh', ['10001'])
