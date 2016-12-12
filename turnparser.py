@@ -453,6 +453,17 @@ def parse_inventory(text, unit, data):
         ret.extend(temp[k])
     return ret
 
+
+def reformat_inventory(inventory):
+    '''
+    Reformat a verbose inventory into what actually goes into the database
+    '''
+    ret = []
+    for k in groups(inventory, 6):
+        ret.extend([k[0], k[3]])
+    return ret
+
+
 artifact_kindmap = {'attack': 'ab', 'defense': 'db', 'missile': 'mb', 'aura': 'ba'}
 
 
@@ -651,7 +662,7 @@ def make_locations_from_routes(routes, idint, region, data):
             elif kind in subloc_kinds or kind in structure_type:
                 pass  # this only exists for visions of a castle, ship etc XXXv2
         else:
-            # the destionation exists, but this link may not
+            # the destination exists, but this link may not
             if kind in province_kinds:
                 if dir == 'out':
                     continue
@@ -1373,8 +1384,6 @@ def parse_character(name, ident, factident, text, data):
     inventory = []
     if m:
         inventory = parse_inventory(m.group(1), ident, data)
-        # TODOv0: this includes unique items, which need to be created
-        #  scrolls, tradegoods, etc
 
     m = re.search(r'^Pending trades:\n\n(.*?)\n\s*\n', text, re.M | re.S)
     trades = []
@@ -1509,8 +1518,7 @@ def parse_location(s, data):
     return
 
 
-def parse_turn(turn, everything=True):
-    data = {}
+def parse_turn(turn, data, everything=True):
 
     factint, turn_num, data = parse_turn_header(data, turn)
 
@@ -1548,17 +1556,16 @@ def parse_turn(turn, everything=True):
 
     # XXXv0 form the above into characters and locations
 
-    return data
 
-
-def parse_turn_from_file(f):
+def parse_turn_from_file(f, data):
     turn = ''.join(f)
     turn.replace('\r\n', '\n')
 
-    data = parse_turn(turn)
+    parse_turn(turn, data)
 
 if __name__ == '__main__':
+    data = {}
     for filename in sys.argv[1:]:
         print('\nbegin filename', filename, '\n')
         with open(filename, 'r') as f:
-            parse_turn_from_file(f)
+            parse_turn_from_file(f, data)

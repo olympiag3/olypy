@@ -64,7 +64,16 @@ def test_parse_inventory():
            '60132', '639 - Sneak in structure', '1', '1', 0, '',
            '60999', 'Amulet of Halhere', '10', '1', '1', 'aura',
            '69999', 'Dior', '10', '1', '100', 'defense']
-    assert turnparser.parse_inventory(t, '1000', data) == ret
+    inventory = turnparser.parse_inventory(t, '1000', data)
+    assert inventory == ret
+
+    il = ['1', '3929',
+          '52', '1',
+          '60132', '1',
+          '60999', '1',
+          '69999', '1']
+    assert turnparser.reformat_inventory(inventory) == il
+
     unique_item_data = {'60132': {'IT': {'un': ['1000'], 'wt': ['1']},
                                   'firstline': ['60132item 0'],
                                   'na': ['Fake 639 - Sneak in structure']},
