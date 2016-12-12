@@ -93,17 +93,17 @@ def upsert_location(data, newdata, top, promote_children=True):
     # thanks to the above processing of gone+new
     for lh in loop_here(newdata, top):
         hl = newdata[lh].get('LI', {}).get('hl', [])
-        box.data_overwrite2(data, lh, 'LI', 'hl', hl)
+        box.subbox_overwrite(data, lh, 'LI', 'hl', hl)
         for hll in hl:
-            box.data_overwrite(data, hll, 'LI', 'wh', lh)
+            box.box_overwrite(data, hll, 'LI', 'wh', lh)
     for f in invisible_friends:
         # put these on the end, that's OK
-        box.data_append2(data, lh, 'LI', 'hl', f)
+        box.subbox_append(data, lh, 'LI', 'hl', f)
 
     for lh in loop_here(newdata, top):
         tl = newdata[lh].get('tl')
         if tl is not None:
-            box.data_overwrite(data, lh, 'tl', tl)
+            box.box_overwrite(data, lh, 'tl', tl)
     # mid-turn trade info
     #  XXXv1 don't trust any city *counts* but end-of-turn; city *prices* do not change
     #  XXXv1 do figure out if tradegoods have expired: 2 visible mid-turn means others have expired
@@ -120,19 +120,19 @@ def dead_char_body(data, who):
     # XXXv1 melters, npcs don't get a body
     # XXXv0 set a location
 
-    box.data_overwrite(data, who, 'firstline', str(who) + ' item dead body')
-    box.data_overwrite2(data, who, 'MI', 'sn', data[who]['na'])
-    box.data_overwrite(data, who, 'na', 'dead body')
+    box.box_overwrite(data, who, 'firstline', str(who) + ' item dead body')
+    box.subbox_overwrite(data, who, 'MI', 'sn', data[who]['na'])
+    box.box_overwrite(data, who, 'na', 'dead body')
     pl = data[who]['CH']['lo']
-    box.data_overwrite2(data, who, 'MI', 'ol', pl)
-    box.data_overwrite2(data, who, 'IT', 'wt', 100)
-    box.data_overwrite2(data, who, 'IT', 'pl', 'dead bodies')
+    box.subbox_overwrite(data, who, 'MI', 'ol', pl)
+    box.subbox_overwrite(data, who, 'IT', 'wt', 100)
+    box.subbox_overwrite(data, who, 'IT', 'pl', 'dead bodies')
 
     # changing the firstline kind from char has consequences for the player thing
     # XXXv0 is this complete?
     # XXXv0 should I just let this get taken care of another way?
-    box.data_remove2(data, who, 'PL', 'un', who)
-    box.data_remove2(data, who, 'PL', 'kn', who)
+    box.subbox_remove(data, who, 'PL', 'un', who)
+    box.subbox_remove(data, who, 'PL', 'kn', who)
 
 
 def upsert_char(data, newdata, who):
@@ -157,10 +157,10 @@ def set_where(data, who, where):
     who = to_int(who)
     unset_where(data, who)
     where = to_int(where)
-    box.data_append2(data, who, 'LI', 'wh', where)
+    box.subbox_append(data, who, 'LI', 'wh', where)
     existing_hl = data[where].get('LI', {}).get('hl', [])
     if who not in existing_hl:
-        box.data_append2(data, where, 'LI', 'hl', who)
+        box.subbox_append(data, where, 'LI', 'hl', who)
 
 
 def unset_where(data, who, promote_children=True):
@@ -176,7 +176,7 @@ def unset_where(data, who, promote_children=True):
     hl = data[who].get('LI', {}).get('hl')
 
     if len(wh):
-        data[who]['LI']['wh'] = []  # XXXv0 box.data_overwrite2(...)
+        data[who]['LI']['wh'] = []  # XXXv0 box.subbox_overwrite(...)
         other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
         if other_hl is not None:
             try:
@@ -187,7 +187,7 @@ def unset_where(data, who, promote_children=True):
 
     if promote_children and hl is not None:
         for child in hl:
-            box.data_append2(data, wh[0], 'LI', 'hl', child)
+            box.subbox_append(data, wh[0], 'LI', 'hl', child)
             data[child]['LI']['wh'] = wh
 
 # XXXv0 can't have an endless loop of unlink->destroy->unlink
@@ -245,19 +245,19 @@ def add_structure(data, kind, where, name, progress=None, damage=None, defense=N
 
     # fully-finished structure
     if 'ca' in structures[kind]:
-        box.data_append2(data, who, 'SL', 'ca', structures[kind]['ca'])
+        box.subbox_append(data, who, 'SL', 'ca', structures[kind]['ca'])
     if 'cl' in structures[kind]:
-        box.data_append2(data, who, 'SL', 'cl', structures[kind]['cl'])
+        box.subbox_append(data, who, 'SL', 'cl', structures[kind]['cl'])
     if 'sd' in structures[kind]:
-        box.data_append2(data, who, 'SL', 'sd', structures[kind]['sd'])
-    box.data_append2(data, who, 'SL', 'de', defense or structures[kind]['de'])
+        box.subbox_append(data, who, 'SL', 'sd', structures[kind]['sd'])
+    box.subbox_append(data, who, 'SL', 'de', defense or structures[kind]['de'])
     if damage:
-        box.data_append2(data, who, 'SL', 'da', damage)
+        box.subbox_append(data, who, 'SL', 'da', damage)
 
     # XXX if under construction
     # remove ca if present
     # remove de
-    # box.data_append2(data, who, 'SL', 'er', structures[kind]['er'])
+    # box.subbox_append(data, who, 'SL', 'er', structures[kind]['er'])
     # compute eg
     # compute bm 0-4
     if progress:
@@ -276,7 +276,7 @@ def add_scroll(data, skill, loc, who=None):
     data[who]['IM'] = {}
     data[who]['IM']['ms'] = [skill]
 
-    box.data_append(data, loc, 'il', [who, 1], dedup=False)
+    box.box_append(data, loc, 'il', [who, 1], dedup=False)
 
 
 def add_potion(data, kind, im, loc, who=None):
@@ -289,4 +289,4 @@ def add_potion(data, kind, im, loc, who=None):
     data[who]['IT']['un'] = [loc]
     data[who]['IM'] = im
 
-    box.data_append(data, loc, 'il', [who, 1], dedup=False)
+    box.box_append(data, loc, 'il', [who, 1], dedup=False)

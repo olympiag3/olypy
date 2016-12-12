@@ -6,7 +6,7 @@ import re
 import sys
 
 from oid import to_int, to_oid
-import data as db
+import box
 
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
@@ -475,7 +475,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
     if ident in set(('401', '402', '403')):
         # created aready. transfer from old owner to me.
         old = data[ident]['IT']['un'][0]
-        db.data_remove(data, old, 'il', ident)
+        box.box_remove(data, old, 'il', ident)
         data[ident]['IT']['un'] = [unit]
     elif int(ident) < 10000:
         # dead body, ok, if you raise this dead body you will be disappointed
@@ -641,7 +641,7 @@ def make_locations_from_routes(routes, idint, region, data):
                 if dir.endswith(' road'):
                     continue  # roads are annoying to make. generally they're marked hidden GA rh 1. XXXv1
                 if 'hidden' in r:
-                    db.data_overwrite2(data, dest, 'LO', 'hi', ['1'])
+                    box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
                 if idir > 3:
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
@@ -1461,13 +1461,13 @@ def parse_location(s, data):
         if kind in geo_inventory:
             data[idint]['il'] = geo_inventory[kind]
         if kind in province_kinds:
-            db.data_append2(data, idint, 'LO', 'pd', [0, 0, 0, 0], dedup=False)
+            box.subbox_append(data, idint, 'LO', 'pd', [0, 0, 0, 0], dedup=False)
         if safe_haven:
-            db.data_append2(data, idint, 'SL', 'sh', ['1'])
+            box.subbox_append(data, idint, 'SL', 'sh', ['1'])
         if hidden:
-            db.data_append2(data, idint, 'LO', 'li', ['1'])
+            box.subbox_append(data, idint, 'LO', 'li', ['1'])
 
-    db.data_overwrite(data, idint, 'na', [name])  # overwrite; it might have changed
+    box.box_overwrite(data, idint, 'na', [name])  # overwrite; it might have changed
 
     # if it's not our garrison, we'll use this to set the owning castle
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
@@ -1482,7 +1482,7 @@ def parse_location(s, data):
             for r in routes:
                 if r['dir'] == 'out':
                     enclosing_int = r['destination']
-                    db.data_overwrite2(data, idint, 'LI', 'wh', [enclosing_int])
+                    box.subbox_overwrite(data, idint, 'LI', 'wh', [enclosing_int])
                     break
 
         make_locations_from_routes(routes, idint, region, data)

@@ -20,7 +20,7 @@ def _uniq_f11(seq):
         yield x
 
 
-def data_append(data, box, subbox, value, dedup=True):
+def box_append(data, box, subbox, value, dedup=True):
     '''
     append value to list data[box][subbox], doing what's needed to initialize things
     '''
@@ -38,7 +38,7 @@ def data_append(data, box, subbox, value, dedup=True):
     data[box][subbox] = l
 
 
-def data_remove(data, box, subbox, value):
+def box_remove(data, box, subbox, value):
     '''
     remove value from list data[box][subbox]
     '''
@@ -55,7 +55,7 @@ def data_remove(data, box, subbox, value):
         pass
 
 
-def data_overwrite(data, box, subbox, value):
+def box_overwrite(data, box, subbox, value):
     '''
     overwrite list with a new one
     '''
@@ -70,7 +70,7 @@ def data_overwrite(data, box, subbox, value):
     data[box][subbox] = value
 
 
-def data_append2(data, box, subbox, key, value, dedup=True):
+def subbox_append(data, box, subbox, key, value, dedup=True):
     '''
     append value to list data[box][subbox][key], doing what's needed to initialize things
     '''
@@ -90,7 +90,7 @@ def data_append2(data, box, subbox, key, value, dedup=True):
     data[box][subbox][key] = l
 
 
-def data_remove2(data, box, subbox, key, value):
+def subbox_remove(data, box, subbox, key, value):
     '''
     remove value from list data[box][subbox][key]
     '''
@@ -109,7 +109,7 @@ def data_remove2(data, box, subbox, key, value):
         pass
 
 
-def data_overwrite2(data, box, subbox, key, value):
+def subbox_overwrite(data, box, subbox, key, value):
     '''
     overwrite list with a new one
     '''
