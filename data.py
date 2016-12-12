@@ -7,8 +7,10 @@ from oid import to_oid, to_int, allocate_oid
 # uniq a list, order preserving
 # see: https://www.peterbe.com/plog/uniqifiers-benchmark
 
+
 def uniq_f11(seq):
     return list(_uniq_f11(seq))
+
 
 def _uniq_f11(seq):
     seen = set()
@@ -17,6 +19,7 @@ def _uniq_f11(seq):
             continue
         seen.add(x)
         yield x
+
 
 def data_append(data, box, subbox, value, dedup=True):
     '''
@@ -29,10 +32,11 @@ def data_append(data, box, subbox, value, dedup=True):
 
     data[box] = data.get(box, {})
     l = data[box].get(subbox, [])
-    [ l.append(str(v)) for v in value ]
+    [l.append(str(v)) for v in value]
     if dedup:
-        l = uniq_f11(l) # XXXv0 replace with if value not in l ...
+        l = uniq_f11(l)  # XXXv0 replace with if value not in l ...
     data[box][subbox] = l
+
 
 def data_remove(data, box, subbox, value):
     '''
@@ -48,6 +52,7 @@ def data_remove(data, box, subbox, value):
     except ValueError:
         pass
 
+
 def data_overwrite(data, box, subbox, value):
     '''
     overwrite list with a new one
@@ -56,6 +61,7 @@ def data_overwrite(data, box, subbox, value):
     data[box] = data.get(box, {})
     subbox = str(subbox)
     data[box][subbox] = value
+
 
 def data_append2(data, box, subbox, key, value, dedup=True):
     '''
@@ -70,10 +76,11 @@ def data_append2(data, box, subbox, key, value, dedup=True):
     data[box] = data.get(box, {})
     data[box][subbox] = data[box].get(subbox, {})
     l = data[box][subbox].get(key, [])
-    [ l.append(str(v)) for v in value ]
+    [l.append(str(v)) for v in value]
     if dedup:
-        l = uniq_f11(l) # XXXv0 replace with if value not in l ...
+        l = uniq_f11(l)  # XXXv0 replace with if value not in l ...
     data[box][subbox][key] = l
+
 
 def data_remove2(data, box, subbox, key, value):
     '''
@@ -82,12 +89,17 @@ def data_remove2(data, box, subbox, key, value):
     box = str(box)
     subbox = str(subbox)
     key = str(key)
-    l = data[box].get(subbox,{}).get(key, [])
+
+    data[box] = data.get(box, {})
+    data[box][subbox] = data[box].get(subbox, {})
+
+    l = data[box][subbox].get(key, [])
     try:
         l.remove(value)
         data[box][subbox][key] = l
     except ValueError:
         pass
+
 
 def data_overwrite2(data, box, subbox, key, value):
     '''
@@ -100,9 +112,11 @@ def data_overwrite2(data, box, subbox, key, value):
     key = str(key)
     data[box][subbox][key] = value
 
+
 def is_char(data, who):
     if ' char ' in data[who]['firstline'][0]:
         return True
+
 
 def can_move(data, who):
     '''
@@ -110,6 +124,7 @@ def can_move(data, who):
     '''
     if ' loc ' not in data[who]['firstline'][0]:
         return True
+
 
 def loop_here(data, who, fogonly=False):
     '''
@@ -124,12 +139,14 @@ def loop_here(data, who, fogonly=False):
                 if fogonly and not is_char(data, w):
                     continue
                 hls.add(w)
-                [hls.add(x) for x in loop_here(data,w)] # don't propagate fogonly, it only applies to top
+                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fogonly, it only applies to top
     return hls
+
 
 def upsert_box(data, newdata, who):
     '''
     '''
+
 
 def upsert_location(data, newdata, top, promote_children=True):
     '''
@@ -139,13 +156,13 @@ def upsert_location(data, newdata, top, promote_children=True):
     '''
 
     # if not the same type, destroy the previous thing
-    old_firstline = data.get(top, {}).get('firstline','99999 nothing nothing')
+    old_firstline = data.get(top, {}).get('firstline', '99999 nothing nothing')
     _, old_kind, old_subkind = old_firstline.split(' ', maxsplit=2)
     new_firstline = newdata[top]['firstline']
     _, new_kind, new_subkind = new_firstline.split(' ', maxsplit=2)
     # XXXv0 what about foo-in-progress to foo? lot of churn for castle with towers
     if old_kind != new_kind:
-        if top in data: # likely it is not
+        if top in data:  # likely it is not
             raise ValueError('hey check this out')
             destroy_box(data, top, promote_children=promote_children)
         else:
@@ -169,7 +186,7 @@ def upsert_location(data, newdata, top, promote_children=True):
                 # this char is visible in newdata. remove from invisible.
                 invisible_friends.remove(i)
     for g in list(gone):
-        if data[g].get('LO',{}).get('hi'):
+        if data[g].get('LO', {}).get('hi'):
             # hidden sublocs never actually go away
             gone.remove(g)
     for g in gone:
@@ -199,6 +216,7 @@ def upsert_location(data, newdata, top, promote_children=True):
     #  XXXv1 don't trust any city *counts* but end-of-turn; city *prices* do not change
     #  XXXv1 do figure out if tradegoods have expired: 2 visible mid-turn means others have expired
 
+
 def dead_char_body(data, who):
     '''
     Characters die mid-turn and become dead bodies. The previous
@@ -223,8 +241,10 @@ def dead_char_body(data, who):
     data_remove2(data, who, 'PL', 'un', who)
     data_remove2(data, who, 'PL', 'kn', who)
 
+
 def upsert_char(data, newdata, who):
     pass
+
 
 def destroy_box(data, who, promote_children=True):
     '''
@@ -239,6 +259,7 @@ def destroy_box(data, who, promote_children=True):
     # owner of storm - MI,sb {summoned by}
     # storm bound to a ship - ship has SL,bs ... and the storm has MI,bs=itself (?)
 
+
 def set_where(data, who, where):
     who = to_int(who)
     unset_where(data, who)
@@ -247,6 +268,7 @@ def set_where(data, who, where):
     existing_hl = data[where].get('LI', {}).get('hl', [])
     if who not in existing_hl:
         data_append2(data, where, 'LI', 'hl', who)
+
 
 def unset_where(data, who, promote_children=True):
     '''
@@ -261,7 +283,7 @@ def unset_where(data, who, promote_children=True):
     hl = data[who].get('LI', {}).get('hl')
 
     if len(wh):
-        data[who]['LI']['wh'] = [] # XXXv0 data_overwrite2(...)
+        data[who]['LI']['wh'] = []  # XXXv0 data_overwrite2(...)
         other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
         if other_hl is not None:
             try:
@@ -275,21 +297,22 @@ def unset_where(data, who, promote_children=True):
             data_append2(data, wh[0], 'LI', 'hl', child)
             data[child]['LI']['wh'] = wh
 
-# XXXv0 can't have an endless loop of unlink->destroy->unlink 
+# XXXv0 can't have an endless loop of unlink->destroy->unlink
 #    if not can_move(data, who):
 #        destroy_box(data, who)
+
 
 def data_newbox(data, oid_kind, firstline, who=None, overwrite=False):
     '''
     Create a new box. Intended for generating QA libs, not for parsing turns.
     '''
     if who:
-        who = to_int(who) # roundtrips if already an int
+        who = to_int(who)  # roundtrips if already an int
     else:
-        who = allocate_oid(data, oid_kind) # e.g. NNNN
+        who = allocate_oid(data, oid_kind)  # e.g. NNNN
     if who in data:
         if not overwrite:
-            raise ValueError( who + ' is already in data')
+            raise ValueError(who + ' is already in data')
         # if I am not the same thing, destory the old thing
         if data[who]['firstline'] != firstline:
             destroy_box(data, who)
@@ -299,20 +322,21 @@ def data_newbox(data, oid_kind, firstline, who=None, overwrite=False):
 
 structures = {
     # in-progress: bm, er, eg ... bm runs 0..4
-    'roundship': {'type': 'ship', 'de': 10, 'er': 50000, 'ca': 25000,},
-    'galley': {'type': 'ship', 'de': 20, 'er': 25000, 'ca': 5000,},
-    'inn': {'de': 10, 'er': 30000,},
-    'mine': {'de': 10, 'er': 50000, 'sd': 3, }, # depth is sd//3
+    'roundship': {'type': 'ship', 'de': 10, 'er': 50000, 'ca': 25000},
+    'galley': {'type': 'ship', 'de': 20, 'er': 25000, 'ca': 5000},
+    'inn': {'de': 10, 'er': 30000},
+    'mine': {'de': 10, 'er': 50000, 'sd': 3, },  # depth is sd//3
     'temple': {'de': 10, 'er': 100000, 'te': 750},
-    'tower': {'de': 40, 'er': 200000,},
-    'castle': {'de': 50, 'er': 1000000,},
-    'castle1': {'kind': 'castle', 'de': 55, 'er': 1000000, 'cl': 1,},
-    'castle2': {'kind': 'castle', 'de': 60, 'er': 1000000, 'cl': 2,},
-    'castle3': {'kind': 'castle', 'de': 65, 'er': 1000000, 'cl': 3,},
-    'castle4': {'kind': 'castle', 'de': 70, 'er': 1000000, 'cl': 4,},
-    'castle5': {'kind': 'castle', 'de': 75, 'er': 1000000, 'cl': 5,},
-    'castle6': {'kind': 'castle', 'de': 80, 'er': 1000000, 'cl': 6,},
+    'tower': {'de': 40, 'er': 200000},
+    'castle': {'de': 50, 'er': 1000000},
+    'castle1': {'kind': 'castle', 'de': 55, 'er': 1000000, 'cl': 1},
+    'castle2': {'kind': 'castle', 'de': 60, 'er': 1000000, 'cl': 2},
+    'castle3': {'kind': 'castle', 'de': 65, 'er': 1000000, 'cl': 3},
+    'castle4': {'kind': 'castle', 'de': 70, 'er': 1000000, 'cl': 4},
+    'castle5': {'kind': 'castle', 'de': 75, 'er': 1000000, 'cl': 5},
+    'castle6': {'kind': 'castle', 'de': 80, 'er': 1000000, 'cl': 6},
 }
+
 
 def add_structure(data, kind, where, name, progress=None, damage=None, defense=None, who=None):
     if kind not in structures:
@@ -321,9 +345,10 @@ def add_structure(data, kind, where, name, progress=None, damage=None, defense=N
     if where not in data:
         raise ValueError('where ' + where + ' is not in data')
 
-    who = data_newbox(data, 'NNNN', structures[kind].get('type', 'loc') + ' ' + structures[kind].get('kind', kind), who=who)
+    who = data_newbox(data, 'NNNN', structures[kind].get('type', 'loc') + ' ' +
+                      structures[kind].get('kind', kind), who=who)
     set_where(data, who, where)
-    data[who]['na'] = [ name ]
+    data[who]['na'] = [name]
 
     # fully-finished structure
     if 'ca' in structures[kind]:
@@ -339,11 +364,12 @@ def add_structure(data, kind, where, name, progress=None, damage=None, defense=N
     # XXX if under construction
     # remove ca if present
     # remove de
-    #data_append2(data, who, 'SL', 'er', structures[kind]['er'])
+    # data_append2(data, who, 'SL', 'er', structures[kind]['er'])
     # compute eg
     # compute bm 0-4
     if progress:
         raise ValueError
+
 
 def add_scroll(data, skill, loc, who=None):
     who = data_newbox(data, 'CNNN', 'item scroll', who=who)
@@ -358,6 +384,7 @@ def add_scroll(data, skill, loc, who=None):
     data[who]['IM']['ms'] = [skill]
 
     data_append(data, loc, 'il', [who, 1], dedup=False)
+
 
 def add_potion(data, kind, im, loc, who=None):
     who = data_newbox(data, 'CNNN', 'item 0', who=who)
