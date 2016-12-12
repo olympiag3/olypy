@@ -9,6 +9,7 @@ from contextlib import redirect_stdout
 from oid import to_oid
 from formatters import print_one_thing, read_oly_file
 
+
 def fixup_ms(data):
     '''
     For whatever reason, the value in IM/ms needs to have a trailing space
@@ -19,6 +20,7 @@ def fixup_ms(data):
                 value = data[box]['IM']['ms']
                 value[0] = value[0].strip() + ' '
                 data[box]['IM']['ms'] = value
+
 
 def write_oly_file(data, kind=False, verbose=False):
     '''
@@ -33,7 +35,7 @@ def write_oly_file(data, kind=False, verbose=False):
     for box in order:
         box = str(box)
         if kind:
-            if not ' '+kind+' ' in data[box].get('firstline', '')[0]:
+            if ' '+kind+' ' not in data[box].get('firstline', '')[0]:
                 continue
         print_one_thing(data[box])
         del data[box]
@@ -41,6 +43,7 @@ def write_oly_file(data, kind=False, verbose=False):
 
     if verbose:
         print('wrote', count, verbose, 'boxes.', file=sys.stderr)
+
 
 def write_player(data, box, verbose=False):
     player_box = box
@@ -55,6 +58,7 @@ def write_player(data, box, verbose=False):
     if verbose:
         print('wrote', count, 'characters for player', to_oid(int(player_box)), file=sys.stderr)
 
+
 def read_players(dir, verbose=False):
     '''
     read every fie in dir whose name is an integer
@@ -67,8 +71,9 @@ def read_players(dir, verbose=False):
             ret.update(data)
     return ret
 
+
 def write_players(data, dir, verbose=False):
-    boxlist = list(data.keys()) # we're deleting as we go
+    boxlist = list(data.keys())  # we're deleting as we go
     for box in boxlist:
         if data.get(box) is None:
             continue
@@ -76,7 +81,8 @@ def write_players(data, dir, verbose=False):
             filename = dir + '/fact/' + box
             with open(filename, 'w') as f:
                 with redirect_stdout(f):
-                    count = write_player(data, box, verbose=verbose)
+                    write_player(data, box, verbose=verbose)
+
 
 def read_lib(libdir):
     data = read_oly_file(libdir+'/loc', verbose='loc')
@@ -91,6 +97,7 @@ def read_lib(libdir):
     data.update(read_players(libdir+'/fact', verbose=True))
 
     return data
+
 
 def write_lib(data, libdir):
     with open(libdir+'/loc', 'w') as f:
@@ -119,5 +126,4 @@ def write_lib(data, libdir):
 
     with open(libdir+'/misc', 'w') as f:
         with redirect_stdout(f):
-            write_oly_file(data, verbose='misc') # catchall
-
+            write_oly_file(data, verbose='misc')  # catchall
