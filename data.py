@@ -31,6 +31,7 @@ def data_append(data, box, subbox, value, dedup=True):
         value = [value]
 
     data[box] = data.get(box, {})
+
     l = data[box].get(subbox, [])
     [l.append(str(v)) for v in value]
     if dedup:
@@ -44,7 +45,9 @@ def data_remove(data, box, subbox, value):
     '''
     box = str(box)
     subbox = str(subbox)
+
     data[box] = data.get(box, {})
+
     l = data[box].get(subbox, [])
     try:
         l.remove(value)
@@ -58,8 +61,10 @@ def data_overwrite(data, box, subbox, value):
     overwrite list with a new one
     '''
     box = str(box)
-    data[box] = data.get(box, {})
     subbox = str(subbox)
+
+    data[box] = data.get(box, {})
+
     data[box][subbox] = value
 
 
@@ -75,6 +80,7 @@ def data_append2(data, box, subbox, key, value, dedup=True):
 
     data[box] = data.get(box, {})
     data[box][subbox] = data[box].get(subbox, {})
+
     l = data[box][subbox].get(key, [])
     [l.append(str(v)) for v in value]
     if dedup:
@@ -106,10 +112,12 @@ def data_overwrite2(data, box, subbox, key, value):
     overwrite list with a new one
     '''
     box = str(box)
-    data[box] = data.get(box, {})
     subbox = str(subbox)
-    data[box][subbox] = data[box].get(subbox, {})
     key = str(key)
+
+    data[box] = data.get(box, {})
+    data[box][subbox] = data[box].get(subbox, {})
+
     data[box][subbox][key] = value
 
 
@@ -221,7 +229,8 @@ def dead_char_body(data, who):
     '''
     Characters die mid-turn and become dead bodies. The previous
     turn end-state isn't quite right to freeze, but we'll do that for v0 XXXv1
-    Location is province, or nowhere if at sea (province will be wrong if the char moved and died)
+    Location is province, or nowhere if at sea
+    Province will be wrong if the char moved and died
     '''
 
     # XXXv1 melters, npcs don't get a body
