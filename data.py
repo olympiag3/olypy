@@ -98,7 +98,7 @@ def upsert_location(data, newdata, top, promote_children=True):
             box.box_overwrite(data, hll, 'LI', 'wh', lh)
     for f in invisible_friends:
         # put these on the end, that's OK
-        box.subbox_append(data, lh, 'LI', 'hl', f)
+        box.subbox_append(data, lh, 'LI', 'hl', f, dedup=True)
 
     for lh in loop_here(newdata, top):
         tl = newdata[lh].get('tl')
@@ -157,10 +157,8 @@ def set_where(data, who, where):
     who = to_int(who)
     unset_where(data, who)
     where = to_int(where)
-    box.subbox_append(data, who, 'LI', 'wh', where)
-    existing_hl = data[where].get('LI', {}).get('hl', [])
-    if who not in existing_hl:
-        box.subbox_append(data, where, 'LI', 'hl', who)
+    box.subbox_overwrite(data, who, 'LI', 'wh', where)
+    box.subbox_append(data, where, 'LI', 'hl', who, dedup=True)
 
 
 def unset_where(data, who, promote_children=True):
@@ -187,7 +185,8 @@ def unset_where(data, who, promote_children=True):
 
     if promote_children and hl is not None:
         for child in hl:
-            box.subbox_append(data, wh[0], 'LI', 'hl', child)
+            # use set_where instead?
+            box.subbox_append(data, wh[0], 'LI', 'hl', child, dedup=True)
             data[child]['LI']['wh'] = wh
 
 # XXXv0 can't have an endless loop of unlink->destroy->unlink
@@ -245,14 +244,14 @@ def add_structure(data, kind, where, name, progress=None, damage=None, defense=N
 
     # fully-finished structure
     if 'ca' in structures[kind]:
-        box.subbox_append(data, who, 'SL', 'ca', structures[kind]['ca'])
+        box.subbox_overwrite(data, who, 'SL', 'ca', structures[kind]['ca'])
     if 'cl' in structures[kind]:
-        box.subbox_append(data, who, 'SL', 'cl', structures[kind]['cl'])
+        box.subbox_overwrite(data, who, 'SL', 'cl', structures[kind]['cl'])
     if 'sd' in structures[kind]:
-        box.subbox_append(data, who, 'SL', 'sd', structures[kind]['sd'])
-    box.subbox_append(data, who, 'SL', 'de', defense or structures[kind]['de'])
+        box.subbox_overwrite(data, who, 'SL', 'sd', structures[kind]['sd'])
+    box.subbox_overwrite(data, who, 'SL', 'de', defense or structures[kind]['de'])
     if damage:
-        box.subbox_append(data, who, 'SL', 'da', damage)
+        box.subbox_overwrite(data, who, 'SL', 'da', damage)
 
     # XXX if under construction
     # remove ca if present
@@ -276,7 +275,7 @@ def add_scroll(data, skill, loc, who=None):
     data[who]['IM'] = {}
     data[who]['IM']['ms'] = [skill]
 
-    box.box_append(data, loc, 'il', [who, 1], dedup=False)
+    box.box_append(data, loc, 'il', [who, 1])
 
 
 def add_potion(data, kind, im, loc, who=None):
@@ -289,4 +288,4 @@ def add_potion(data, kind, im, loc, who=None):
     data[who]['IT']['un'] = [loc]
     data[who]['IM'] = im
 
-    box.box_append(data, loc, 'il', [who, 1], dedup=False)
+    box.box_append(data, loc, 'il', [who, 1])

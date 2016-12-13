@@ -20,7 +20,7 @@ def _uniq_f11(seq):
         yield x
 
 
-def box_append(data, box, subbox, value, dedup=True):
+def box_append(data, box, subbox, value, dedup=False):
     '''
     append value to list data[box][subbox], doing what's needed to initialize things
     '''
@@ -70,7 +70,7 @@ def box_overwrite(data, box, subbox, value):
     data[box][subbox] = value
 
 
-def subbox_append(data, box, subbox, key, value, dedup=True):
+def subbox_append(data, box, subbox, key, value, dedup=False):
     '''
     append value to list data[box][subbox][key], doing what's needed to initialize things
     '''

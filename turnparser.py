@@ -678,6 +678,22 @@ def make_locations_from_routes(routes, idint, region, data):
         # XXXv2 what about roads?
 
 
+def make_direction_routes(routes, idint, kind, data):
+    '''
+    make normal direction routes
+    '''
+    if kind == 'city' or kind == 'port city':
+        return  # cities have no directions
+    for r in routes:
+        dir = r['dir']
+        if dir in directions:
+            dest = r['destination']
+            if data[idint].get('LO', {}).get('pd') is None:  # non-province?
+                box.subbox_overwrite(data, idint, 'LO', 'pd', [0, 0, 0, 0])
+            if int(directions[dir]) > 3 and len(data[idint]['LO']['pd']) < 6:
+                data[idint]['LO']['pd'].extend((0, 0))
+            data[idint]['LO']['pd'][directions[dir]] = dest
+
 def parse_location_top(text):
     '''
 Forest [ah08], forest, in Acaren, wilderness
@@ -1021,8 +1037,8 @@ def parse_routes_leaving(text):
 
         if 'dir' not in attr and 'special_dir' not in attr:
             # faery hill roads lack a direction to normal.
-            #  SL,lt from fairy hill to normal, SL,lf from normal to faery hill
-            #  don't be fooled, faery hills in a normal province appear to be a subloc but that's a lie
+            #  SL,lt from fairy hill to normal; SL,lf from normal to faery hill
+            # don't be fooled, faery hills in a normal province appear to be a subloc but that's a lie
             attr['dir'] = 'faery road'
 
         if 'dir' not in attr:
@@ -1461,11 +1477,11 @@ def parse_location(s, data):
         if kind in geo_inventory:
             data[idint]['il'] = geo_inventory[kind]
         if kind in province_kinds:
-            box.subbox_append(data, idint, 'LO', 'pd', [0, 0, 0, 0], dedup=False)
+            box.subbox_append(data, idint, 'LO', 'pd', [0, 0, 0, 0])
         if safe_haven:
-            box.subbox_append(data, idint, 'SL', 'sh', ['1'])
+            box.subbox_overwrite(data, idint, 'SL', 'sh', ['1'])
         if hidden:
-            box.subbox_append(data, idint, 'LO', 'li', ['1'])
+            box.subbox_overwrite(data, idint, 'LO', 'li', ['1'])
 
     box.box_overwrite(data, idint, 'na', [name])  # overwrite; it might have changed
 
@@ -1486,13 +1502,18 @@ def parse_location(s, data):
                     break
 
         make_locations_from_routes(routes, idint, region, data)
+        make_direction_routes(routes, idint, kind, data)
 
     # Now parse and then make all of the stuff present.
     # stack accumulates everything
+    # each stack starts at the base level
+    # one thing per thing: loc, structure, ship, character
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
         stack, things = parse_inner_locations(m.group(1))
+        # beware: faery hills are inner loc of faery, faery road in normal world
+        # locations never change, however, they may be hidden to this faction
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:

@@ -9,19 +9,19 @@ def test_uniq_f11():
 
 def test_append_remove():
     data = {}
-    box_append(data, 1001, 'na', 'foo')
+    box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['foo']}}
-    box_append(data, 1001, 'il', ['60000', 1], dedup=False)
-    box_append(data, 1001, 'il', ['60001', 1], dedup=False)
+    box_append(data, 1001, 'il', ['60000', 1])
+    box_append(data, 1001, 'il', ['60001', 1])
     assert data == {'1001': {'na': ['foo'], 'il': ['60000', '1', '60001', '1']}}
 
     data = {}
     box_append(data, '1001', 'na', 'foo')
     assert data == {'1001': {'na': ['foo']}}
-    box_append(data, '1001', 'na', 'bar')
+    box_append(data, '1001', 'na', 'bar', dedup=True)
     assert data == {'1001': {'na': ['foo', 'bar']}}
     del data['1001']['na']
-    box_append(data, '1001', 'na', ['foo', 'bar'])
+    box_append(data, '1001', 'na', ['foo', 'bar'], dedup=True)
     assert data == {'1001': {'na': ['foo', 'bar']}}
 
     data = {}
@@ -32,25 +32,25 @@ def test_append_remove():
     assert data == {'1001': {'na': []}}
     box_remove(data, 1001, 'na', 'bar')
     assert data == {'1001': {'na': []}}
-    box_append(data, 1001, 'na', ['foo', 'bar'])
+    box_append(data, 1001, 'na', ['foo', 'bar'], dedup=True)
     box_remove(data, 1001, 'na', 'foo')
     assert data == {'1001': {'na': ['bar']}}
-    box_append(data, 1001, 'na', 'foo')
+    box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['bar', 'foo']}}
     box_remove(data, 1001, 'na', 'bar')
     assert data == {'1001': {'na': ['foo']}}
 
     data = {}
     box_append(data, 1001, 'na', 'foo')
-    box_append(data, 1001, 'na', 'foo')
+    box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['foo']}}
-    box_append(data, 1001, 'na', 'bar')
-    box_append(data, 1001, 'na', 'foo')
+    box_append(data, 1001, 'na', 'bar', dedup=True)
+    box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['foo', 'bar']}}
-    box_append(data, 1001, 'na', 'bar')
+    box_append(data, 1001, 'na', 'bar', dedup=True)
     assert data == {'1001': {'na': ['foo', 'bar']}}
     box_remove(data, 1001, 'na', 'foo')
-    box_append(data, 1001, 'na', 'foo')
+    box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['bar', 'foo']}}
 
 def test_overwrite():
@@ -71,12 +71,12 @@ def test_append2_remove2():
     assert data == {'1001': {'LI': {'hl': ['foo']}}}
 
     data = {}
-    subbox_append(data, '1001', 'LI', 'hl', 'foo')
+    subbox_append(data, '1001', 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo']}}}
-    subbox_append(data, '1001', 'LI', 'hl', 'bar')
+    subbox_append(data, '1001', 'LI', 'hl', 'bar', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo', 'bar']}}}
     del data['1001']['LI']['hl']
-    subbox_append(data, '1001', 'LI', 'hl', ['foo', 'bar'])
+    subbox_append(data, '1001', 'LI', 'hl', ['foo', 'bar'], dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo', 'bar']}}}
 
     data = {}
@@ -87,25 +87,25 @@ def test_append2_remove2():
     assert data == {'1001': {'LI': {'hl': []}}}
     subbox_remove(data, 1001, 'LI', 'hl', 'bar')
     assert data == {'1001': {'LI': {'hl': []}}}
-    subbox_append(data, 1001, 'LI', 'hl', ['foo', 'bar'])
+    subbox_append(data, 1001, 'LI', 'hl', ['foo', 'bar'], dedup=True)
     subbox_remove(data, 1001, 'LI', 'hl', 'foo')
     assert data == {'1001': {'LI': {'hl': ['bar']}}}
-    subbox_append(data, 1001, 'LI', 'hl', 'foo')
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['bar', 'foo']}}}
     subbox_remove(data, 1001, 'LI', 'hl', 'bar')
     assert data == {'1001': {'LI': {'hl': ['foo']}}}
 
     data = {}
     subbox_append(data, 1001, 'LI', 'hl', 'foo')
-    subbox_append(data, 1001, 'LI', 'hl', 'foo')
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo']}}}
-    subbox_append(data, 1001, 'LI', 'hl', 'bar')
-    subbox_append(data, 1001, 'LI', 'hl', 'foo')
+    subbox_append(data, 1001, 'LI', 'hl', 'bar', dedup=True)
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo', 'bar']}}}
-    subbox_append(data, 1001, 'LI', 'hl', 'bar')
+    subbox_append(data, 1001, 'LI', 'hl', 'bar', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['foo', 'bar']}}}
     subbox_remove(data, 1001, 'LI', 'hl', 'foo')
-    subbox_append(data, 1001, 'LI', 'hl', 'foo')
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['bar', 'foo']}}}
 
 def test_overwrite2():
