@@ -96,7 +96,7 @@ def test_adds():
     check_where(data, 1003, 1004)
 
     data = {'1006': {}}
-    add_structure(data, 'tower', '1006', 'Foo', who='1005')
+    add_structure(data, 'tower', '1006', 'Foo', oid='1005')
     result = {'1005': {'firstline': ['1005 loc tower'],
                        'na': ['Foo'],
                        'LI': {'wh': ['1006']},
@@ -106,7 +106,7 @@ def test_adds():
     assert data == result
 
     data = {'1007': {}}
-    add_scroll(data, 600, 1007, who=1008)
+    add_scroll(data, 600, 1007, oid=1008)
     result = {'1007': {'il': ['1008', '1']},
               '1008': {'IM': {'ms': ['600']},
                        'IT': {'un': ['1007'], 'wt': [1]},
@@ -116,7 +116,7 @@ def test_adds():
     assert data == result
 
     data = {'1009': {}}
-    add_potion(data, 'heal', {'uk': ['2']}, 1009, who=1010)
+    add_potion(data, 'heal', {'uk': ['2']}, 1009, oid=1010)
     result = {'1010': {'IM': {'uk': ['2']},
                        'IT': {'un': ['1009'], 'wt': [1]},
                        'firstline': ['1010 item 0'],

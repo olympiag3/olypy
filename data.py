@@ -194,23 +194,23 @@ def unset_where(data, who, promote_children=True):
 #        destroy_box(data, who)
 
 
-def data_newbox(data, oid_kind, firstline, who=None, overwrite=False):
+def data_newbox(data, oid_kind, firstline, oid=None, overwrite=False):
     '''
     Create a new box. Intended for generating QA libs, not for parsing turns.
     '''
-    if who:
-        who = to_int(who)  # roundtrips if already an int
+    if oid:
+        oid = to_int(oid)  # roundtrips if already an int
     else:
-        who = allocate_oid(data, oid_kind)  # e.g. NNNN
-    if who in data:
+        oid = allocate_oid(data, oid_kind)  # e.g. NNNN
+    if oid in data:
         if not overwrite:
-            raise ValueError(who + ' is already in data')
+            raise ValueError(oid + ' is already in data')
         # if I am not the same thing, destory the old thing
-        if data[who]['firstline'] != firstline:
-            destroy_box(data, who)
-    data[who] = {}
-    data[who]['firstline'] = [str(who) + ' ' + firstline]
-    return who
+        if data[oid]['firstline'] != firstline:
+            destroy_box(data, oid)
+    data[oid] = {}
+    data[oid]['firstline'] = [str(oid) + ' ' + firstline]
+    return oid
 
 structures = {
     # in-progress: bm, er, eg ... bm runs 0..4
@@ -230,62 +230,62 @@ structures = {
 }
 
 
-def add_structure(data, kind, where, name, progress=None, damage=None, defense=None, who=None):
+def add_structure(data, kind, where, name, progress=None, damage=None, defense=None, oid=None):
     if kind not in structures:
         raise ValueError
     where = to_int(where)
     if where not in data:
         raise ValueError('where ' + where + ' is not in data')
 
-    who = data_newbox(data, 'NNNN', structures[kind].get('type', 'loc') + ' ' +
-                      structures[kind].get('kind', kind), who=who)
-    set_where(data, who, where)
-    data[who]['na'] = [name]
+    oid = data_newbox(data, 'NNNN', structures[kind].get('type', 'loc') + ' ' +
+                      structures[kind].get('kind', kind), oid=oid)
+    set_where(data, oid, where)
+    data[oid]['na'] = [name]
 
     # fully-finished structure
     if 'ca' in structures[kind]:
-        box.subbox_overwrite(data, who, 'SL', 'ca', structures[kind]['ca'])
+        box.subbox_overwrite(data, oid, 'SL', 'ca', structures[kind]['ca'])
     if 'cl' in structures[kind]:
-        box.subbox_overwrite(data, who, 'SL', 'cl', structures[kind]['cl'])
+        box.subbox_overwrite(data, oid, 'SL', 'cl', structures[kind]['cl'])
     if 'sd' in structures[kind]:
-        box.subbox_overwrite(data, who, 'SL', 'sd', structures[kind]['sd'])
-    box.subbox_overwrite(data, who, 'SL', 'de', defense or structures[kind]['de'])
+        box.subbox_overwrite(data, oid, 'SL', 'sd', structures[kind]['sd'])
+    box.subbox_overwrite(data, oid, 'SL', 'de', defense or structures[kind]['de'])
     if damage:
-        box.subbox_overwrite(data, who, 'SL', 'da', damage)
+        box.subbox_overwrite(data, oid, 'SL', 'da', damage)
 
     # XXX if under construction
     # remove ca if present
     # remove de
-    # box.subbox_append(data, who, 'SL', 'er', structures[kind]['er'])
+    # box.subbox_append(data, oid, 'SL', 'er', structures[kind]['er'])
     # compute eg
     # compute bm 0-4
     if progress:
         raise ValueError
 
 
-def add_scroll(data, skill, loc, who=None):
-    who = data_newbox(data, 'CNNN', 'item scroll', who=who)
-    loc = to_int(loc)
+def add_scroll(data, skill, unit, oid=None):
+    oid = data_newbox(data, 'CNNN', 'item scroll', oid=oid)
+    unit = to_int(unit)
     skill = str(skill)
 
-    data[who]['na'] = ['Scroll of '+skill]
-    data[who]['IT'] = {}
-    data[who]['IT']['wt'] = [1]
-    data[who]['IT']['un'] = [loc]
-    data[who]['IM'] = {}
-    data[who]['IM']['ms'] = [skill]
+    data[oid]['na'] = ['Scroll of '+skill]
+    data[oid]['IT'] = {}
+    data[oid]['IT']['wt'] = [1]
+    data[oid]['IT']['un'] = [unit]
+    data[oid]['IM'] = {}
+    data[oid]['IM']['ms'] = [skill]
 
-    box.box_append(data, loc, 'il', [who, 1])
+    box.box_append(data, unit, 'il', [oid, 1])
 
 
-def add_potion(data, kind, im, loc, who=None):
-    who = data_newbox(data, 'CNNN', 'item 0', who=who)
-    loc = to_int(loc)
+def add_potion(data, kind, im, unit, oid=None):
+    oid = data_newbox(data, 'CNNN', 'item 0', oid=oid)
+    unit = to_int(unit)
 
-    data[who]['na'] = ['Potion of '+kind]
-    data[who]['IT'] = {}
-    data[who]['IT']['wt'] = [1]
-    data[who]['IT']['un'] = [loc]
-    data[who]['IM'] = im
+    data[oid]['na'] = ['Potion of '+kind]
+    data[oid]['IT'] = {}
+    data[oid]['IT']['wt'] = [1]
+    data[oid]['IT']['un'] = [unit]
+    data[oid]['IM'] = im
 
-    box.box_append(data, loc, 'il', [who, 1])
+    box.box_append(data, unit, 'il', [oid, 1])

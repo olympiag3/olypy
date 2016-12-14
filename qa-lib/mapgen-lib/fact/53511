@@ -1,10 +1,10 @@
-52701 player pl_regular
-na K K
+53511 player pl_regular
+na Nicht Nibblers
 il	1 1195
 CH
 PL
  fn Someone
- em k@example.com
+ em n@example.com
  pw xxxxxxxx
  np 20
  fs 32767
@@ -16,7 +16,7 @@ PL
 CO
 
 3100 char 0
-na K
+na Nein
 LI
 CH
  lo 52701

@@ -1,5 +1,5 @@
-54051 player pl_regular
-na P P
+55131 player pl_regular
+na Troublesome Topiary
 il	1 1195
 CH
 PL
@@ -16,7 +16,7 @@ PL
 CO
 
 4100 char 0
-na P
+na Tout
 LI
 CH
  lo 54051
