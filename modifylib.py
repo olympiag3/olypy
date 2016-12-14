@@ -4,7 +4,7 @@ Modify an existing lib directory to have a lot of additional stuff
 
 import argparse
 
-from oid import to_oid, to_int, allocate_oid
+from oid import to_int
 from oio import read_lib, write_lib
 from data import set_where, add_structure, add_scroll, add_potion
 
@@ -13,53 +13,53 @@ parser = argparse.ArgumentParser(description='read an Olympia lib')
 parser.add_argument('libdir', help='Olympia lib directory')
 args = parser.parse_args()
 
+
 def add_scrolls(data):  # this is all 20 usable letters
-    ownerprefix = { 'aa1': [ 'a', 'b', 'c', 'd', 'f', ],
-                    'gg1': [ 'g', 'h', 'j', 'k', 'm', ],
-                    'nn1': [ 'n', 'p', 'q', 'r', 's', ],
-                    'tt1': [ 't', 'v', 'w', 'x', 'z', ],
-    }
-    skills = [ '600', '610', '630', '636', '637', '638', '639', '650', '657', '658', 
-               '659', '661', '670', '675', '676', '680', '690', '693', '694', '695', 
-               '696', '697', '700', '706', '707', '720', '723', '730', '750', '753', 
-               '754', '755', '756', '800', '807', '808', '809', '811', '812', '813', 
-               '814', '820', '825', '826', '827', '828', '829', '831', '832', '833', 
-               '840', '843', '844', '845', '846', '847', '848', '849', '851', '852', 
-               '860', '864', '865', '866', '867', '868', '869', '871', '872', '880', 
-               '885', '886', '887', '888', '889', '891', '892', '893', '894', '900', 
-               '904', '905', '906', '907', '908', '909', '911', '921', '922',
-    ]
+    ownerprefix = {'aa1': ['a', 'b', 'c', 'd', 'f'],
+                   'gg1': ['g', 'h', 'j', 'k', 'm'],
+                   'nn1': ['n', 'p', 'q', 'r', 's'],
+                   'tt1': ['t', 'v', 'w', 'x', 'z']}
+    skills = ['600', '610', '630', '636', '637', '638', '639', '650', '657', '658',
+              '659', '661', '670', '675', '676', '680', '690', '693', '694', '695',
+              '696', '697', '700', '706', '707', '720', '723', '730', '750', '753',
+              '754', '755', '756', '800', '807', '808', '809', '811', '812', '813',
+              '814', '820', '825', '826', '827', '828', '829', '831', '832', '833',
+              '840', '843', '844', '845', '846', '847', '848', '849', '851', '852',
+              '860', '864', '865', '866', '867', '868', '869', '871', '872', '880',
+              '885', '886', '887', '888', '889', '891', '892', '893', '894', '900',
+              '904', '905', '906', '907', '908', '909', '911', '921', '922']
+
     for owner in ownerprefix:
         for prefix in ownerprefix[owner]:
             for skill in skills:
                 oid = prefix + skill
                 add_scroll(data, skill, owner, oid=oid)
 
+
 def add_potions(data):
-    ownerprefix = { 'aa1': [ 'a', ],
-                    'gg1': [ 'g', ],
-                    'nn1': [ 'n', ],
-                    'tt1': [ 't', ],
-    }
-    ct = { 'aa1': '1001', 'gg1': '2001', 'nn1': '3001', 'tt1': '4001' }
+    ownerprefix = {'aa1': ['a'],
+                   'gg1': ['g'],
+                   'nn1': ['n'],
+                   'tt1': ['t']}
+    ct = {'aa1': '1001', 'gg1': '2001', 'nn1': '3001', 'tt1': '4001'}
     farcasts = {
-        'aa1': [ 'aa08', 'aa08', 'c43', 'c43', '2001', '2001', ],
+        'aa1': ['aa08', 'aa08', 'c43', 'c43', '2001', '2001'],
         'gg1': [],
         'nn1': [],
         'tt1': [],
     }
     for owner in ownerprefix:
         for prefix in ownerprefix[owner]:
-            for r in range(500,510):
+            for r in range(500, 510):
                 oid = prefix + str(r)
                 add_potion(data, 'heal', {'uk': [2]}, owner, oid=oid)
-            for r in range(510,512):
+            for r in range(510, 512):
                 oid = prefix + str(r)
                 add_potion(data, 'death', {'uk': [1]}, owner, oid=oid)
-            for r in range(520,522):
+            for r in range(520, 522):
                 oid = prefix + str(r)
                 im = {'uk': [3]}
-                im['ct'] = [ ct[owner] ]
+                im['ct'] = [ct[owner]]
                 add_potion(data, 'slavery', im, owner, oid=oid)
             count = 530
             for pc in farcasts[owner]:
@@ -72,7 +72,7 @@ data = read_lib(args.libdir)
 
 add_scrolls(data)
 add_potions(data)
-#add_storms(data)
+# add_storms(data)
 
 add_structure(data, 'castle6', 'c18', 'Aachen Castle', oid='1001')
 add_structure(data, 'tower', '1001', 'Aachen Tower', oid='1002')

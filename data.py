@@ -2,8 +2,9 @@
 Code that manipulates the in-memory Olympia database
 '''
 
-from oid import to_oid, to_int, allocate_oid
+from oid import to_int, allocate_oid
 import box
+
 
 def is_char(data, who):
     if ' char ' in data[who]['firstline'][0]:

@@ -13,8 +13,10 @@ from oio import write_oly_file, write_player
 parser = argparse.ArgumentParser(description='roundtrip Olympia files')
 parser.add_argument('--test', action='store_true')
 parser.add_argument('--player', action='store_true')
-parser.add_argument('inputfile', nargs='?', default=sys.stdin, type=argparse.FileType('r'), help='Olympia file to be read')
-parser.add_argument('outputfile', nargs='?', default=sys.stdout, type=argparse.FileType('w'), help='the file where output is written')
+parser.add_argument('inputfile', nargs='?', default=sys.stdin, type=argparse.FileType('r'),
+                    help='Olympia file to be read')
+parser.add_argument('outputfile', nargs='?', default=sys.stdout, type=argparse.FileType('w'),
+                    help='the file where output is written')
 
 args = parser.parse_args()
 
@@ -43,5 +45,3 @@ if args.test:
 data = read_oly_file(args.inputfile)
 write_oly_file(data)
 args.outputfile.close()
-
-

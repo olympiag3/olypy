@@ -86,14 +86,16 @@ items = {
 }
 
 collective = set(('gold', 'undead', 'nazgul', 'floatsam', 'yew', 'wood', 'iron', 'mithril', 'fish',
-                 'opium', 'lead', 'pitch', 'cyclops', 'lana bark', 'ratspider venom', 'plate armor',
-                 'mallorn wood', 'pretus bones'))
+                  'opium', 'lead', 'pitch', 'cyclops', 'lana bark', 'ratspider venom', 'plate armor',
+                  'mallorn wood', 'pretus bones'))
 
-unusual = { 'man': 'men', 'elf': 'elves', 'ox': 'oxen', 'wolf': 'wolves', 'faery': 'faeries',
-            'leaf': 'leaves' }
+unusual = {'man': 'men', 'elf': 'elves', 'ox': 'oxen', 'wolf': 'wolves', 'faery': 'faeries',
+           'leaf': 'leaves'}
+
 
 def item(i):
     return items.get(str(i), 'unknown')
+
 
 def item_plural(i):
     i = item(i)
@@ -105,4 +107,3 @@ def item_plural(i):
         if i.endswith(u):
             return i.replace(u, unusual[u])
     return i + 's'
-

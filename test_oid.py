@@ -20,6 +20,7 @@ oid_to_int = {
 
 invalid_oid = ('aa001', 'a0000', 'aaa0')
 
+
 def test_oid():
     for oid, oint in oid_to_int.items():
         assert to_int(oid) == str(oint)
@@ -30,7 +31,7 @@ def test_oid():
         for oid in invalid_oid:
             to_int(oid)
 
-    for oint in range(1000,100002):
+    for oint in range(1000, 100002):
         assert to_int(to_oid(oint)) == str(oint)
 
     data = {}

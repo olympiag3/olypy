@@ -5,7 +5,7 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 import re
 import sys
 
-from oid import to_int, to_oid
+from oid import to_int
 import box
 
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
@@ -53,7 +53,7 @@ geo_inventory = {
     'bog': ['66', '4'],
     'cave': ['67', '2'],
     'city': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
-    #'guild' -- generic name for non-land non-ocean sublocs
+    # 'guild' -- generic name for non-land non-ocean sublocs
     'graveyard': ['31', '15', '273', '1'],
     'ruins': [],
     'battlefield': [],
@@ -480,7 +480,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
     elif int(ident) < 10000:
         # dead body, ok, if you raise this dead body you will be disappointed
         data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
-                'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': unit}}
+                       'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': unit}}
         return
     else:
         # armor/weapon/aura item
@@ -625,7 +625,7 @@ def make_locations_from_routes(routes, idint, region, data):
         if dir in inverted_directions:
             idir = inverted_directions[dir]
         else:
-            #print('dir is', dir, 'dest', dest, 'idint', idint)
+            # print('dir is', dir, 'dest', dest, 'idint', idint)
             idir = -99999
         if dest not in data:
             if kind in province_kinds:
@@ -694,6 +694,7 @@ def make_direction_routes(routes, idint, kind, data):
             if int(directions[dir]) > 3 and len(data[idint]['LO']['pd']) < 6:
                 data[idint]['LO']['pd'].extend((0, 0))
             data[idint]['LO']['pd'][directions[dir]] = dest
+
 
 def parse_location_top(text):
     '''
@@ -765,7 +766,7 @@ def parse_a_structure(parts):
     kind = parts.pop(0).strip()
     in_progress = False
     if kind.endswith('-in-progress'):
-        in_progress = True
+        in_progress = True  # XXXv0 ???
         kind = kind.replace('-in-progress', '')
 
     attr = {}
@@ -1320,7 +1321,7 @@ def analyze_garrison_list(text, data):
         pieces = l.split()
         garr = pieces[0]
         where = to_int(pieces[1])
-        castle = to_int(pieces[6])
+        castle = to_int(pieces[6])  # XXXv0 use me
         firstline = garr + ' char garrison'
         # il will come from the location report, if not foggy XXXv1 take it from last turn?
         LI = {'wh': [where]}

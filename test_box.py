@@ -7,6 +7,7 @@ def test_uniq_f11():
     seq = [1, 2, 3, 2]
     assert uniq_f11(seq) == [1, 2, 3]
 
+
 def test_append_remove():
     data = {}
     box_append(data, 1001, 'na', 'foo', dedup=True)
@@ -53,6 +54,7 @@ def test_append_remove():
     box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['bar', 'foo']}}
 
+
 def test_overwrite():
     data = {}
     box_overwrite(data, 1, 2, ['3'])
@@ -61,6 +63,7 @@ def test_overwrite():
     data = {'1001': {'na': ['Oleg the Loudmouth']}}
     box_overwrite(data, 1001, 'na', ['Phydeaux, RIP'])
     assert data == {'1001': {'na': ['Phydeaux, RIP']}}
+
 
 def test_append2_remove2():
     '''
@@ -108,6 +111,7 @@ def test_append2_remove2():
     subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['bar', 'foo']}}}
 
+
 def test_overwrite2():
     data = {}
     subbox_overwrite(data, 1, 2, 3, ['3'])
@@ -116,4 +120,3 @@ def test_overwrite2():
     data = {'1001': {'LI': {'wh': ['10000']}}}
     subbox_overwrite(data, 1001, 'LI', 'wh', ['10001'])
     assert data == {'1001': {'LI': {'wh': ['10001']}}}
-

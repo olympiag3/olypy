@@ -305,7 +305,8 @@ def test_parse_inner_locations():
               '2259': {'firstline': ['2259 char 0'], 'il': {'11': [20]}, 'na': ['Yoyo 2']},
               '2370': {'firstline': ['2370 char 0'], 'il': {'10': [15], '11': [5]}, 'na': ['Eric']},
               '2480': {'firstline': ['2480 char 0'], 'il': {'10': [2]}, 'na': ['Pea Eye Parker']},
-              '3622': {'firstline': ['3622 ship roundship-in-progress'], 'SL': {'eg': ['230'], 'er': [500]}, 'na': ['Tub 1']},
+              '3622': {'firstline': ['3622 ship roundship-in-progress'],
+                       'SL': {'eg': ['230'], 'er': [500]}, 'na': ['Tub 1']},
               '3984': {'firstline': ['3984 char 0'], 'il': {'10': [2], '19': [6]}, 'na': ['Yoyo 5']},
               '6940': {'firstline': ['6940 char 0'], 'il': {'10': [14], '11': [11]}, 'na': ['Oleg the Loudmouth']}}
 
@@ -405,6 +406,7 @@ def test_match_line():
     t = 'Province controlled by Castle [8103], castle, in Plain [ar16]'
     cc, = turnparser.match_line(t, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
     assert cc == '8103'
+
 
 def test_remove_visions():
     t = '''
@@ -729,6 +731,7 @@ Osswid the Destroyer [7271]
     data = {}
     assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data) == ret
     assert data == {}  # unique items
+
 
 def test_parse_location():
     t = '''Forest [bf23], forest, in Grinter, safe haven, civ-2

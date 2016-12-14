@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from oid import  to_oid, to_int
+from oid import to_oid, to_int
 import sys
 
 for oid in sys.argv[1:]:

@@ -1,6 +1,5 @@
-import pytest
-
 from items import item, item_plural
+
 
 def test_items():
     assert item(71) == 'pretus bones'
