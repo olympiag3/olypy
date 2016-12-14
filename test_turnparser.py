@@ -336,6 +336,14 @@ def test_parse_routes_leaving():
     turnparser.make_locations_from_routes(r, '10101', 'Camaris', data)
     assert data == expected
 
+    data['10101'] = {'LI': {'wh': ['Camaris']},
+                     'LO': {'pd': [0, 0, 0, 0]},
+                     'firstline': ['10101 loc forest'],
+                     'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                     'na': ['Forest']}
+    turnparser.make_direction_routes(r, '10101', 'forest', data)
+    assert data['10101']['LO']['pd'] == [0, 0, '10221', '15634']
+
 
 def test_parse_inner_locations():
     t = '''   Oleg the Loudmouth [6940], with 14 peasants, 11 workers
