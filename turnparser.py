@@ -1135,7 +1135,7 @@ def parse_inner_locations(text):
     return stack, things
 
 
-def parse_market_report(text):
+def parse_market_report(text, include=None):
     ret = []
     for line in text.split('\n'):
         pieces = line.split(maxsplit=5)
@@ -1145,7 +1145,11 @@ def parse_market_report(text):
         trade = trade_map.get(trade)
         if trade is None:
             continue  # header lines
-        # XXXv0 discard all entries for who != city
+        if include is not None:
+            if who == '?':  # hidden trader
+                continue
+            if to_int(who) != include:
+                continue
         # if it's my noble, I'll get it in Pending trades
         # if it's not my noble, don't bother
         qty = qty.replace(',', '')
@@ -1520,7 +1524,8 @@ def parse_location(s, data):
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        market = parse_market_report(m.group(1))
+        market = parse_market_report(m.group(1), include=idint)
+        box.box_overwrite(data, idint, 'tl', market)
 
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
