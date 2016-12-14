@@ -292,6 +292,50 @@ def test_parse_routes_leaving():
 
     assert turnparser.parse_routes_leaving(t) == r
 
+    expected = {'10221': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': ['10101', 0, 0, 0]},
+                          'firstline': ['10221 loc swamp'],
+                          'il': ['66', '1', '96', '50', '101', '1', '274', '1'],
+                          'na': ['Swamp']},
+                '12536': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, 0, 0, 0]},
+                          'firstline': ['12536 loc forest'],
+                          'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                          'na': ['Forest']},
+                '13722': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, 0, 0, 0]},
+                          'firstline': ['13722 loc forest'],
+                          'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                          'na': ['Forest']},
+                '13963': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, 0, 0, 0]},
+                          'firstline': ['13963 loc mountain'],
+                          'il': ['78', '50', '10', '10', '96', '50', '101', '1', '275', '1'],
+                          'na': ['Mountain']},
+                '15076': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, 0, 0, 0]},
+                          'firstline': ['15076 loc forest'],
+                          'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                          'na': ['The Dark Lands']},
+                '15634': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, '10101', 0, 0]},
+                          'firstline': ['15634 loc swamp'],
+                          'il': ['66', '1', '96', '50', '101', '1', '274', '1'],
+                          'na': ['The Dark Lands']},
+                '23470': {'LI': {'wh': ['Camaris']},
+                          'LO': {'pd': [0, 0, 0, 0]},
+                          'firstline': ['23470 loc underground'],
+                          'il': ['101', '1', '96', '50'],
+                          'na': ['Hades']},
+                '57262': {'LI': {'wh': ['57262']},
+                          'firstline': ['57262 loc city'],
+                          'il': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
+                          'na': ['Swamp']}}
+
+    data = {}
+    turnparser.make_locations_from_routes(r, '10101', 'Camaris', data)
+    assert data == expected
+
 
 def test_parse_inner_locations():
     t = '''   Oleg the Loudmouth [6940], with 14 peasants, 11 workers
