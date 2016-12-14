@@ -642,6 +642,7 @@ def make_locations_from_routes(routes, idint, region, data):
                     continue  # roads are annoying to make. generally they're marked hidden GA rh 1. XXXv1
                 if 'hidden' in r:
                     box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
+                    # XXXv0 also add to my faction's PL kn
                 if idir > 3:
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
@@ -813,6 +814,7 @@ def parse_a_sublocation_route(parts):
             continue
         elif p == 'hidden':
             attr['hidden'] = 1  # LO hi 1
+            # XXXv0 also mark in my faction PL kn
         elif p == 'safe haven':
             attr['safe haven'] = 1  # SL sh 1
         elif p == 'owner:':
