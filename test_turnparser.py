@@ -823,5 +823,33 @@ Seen here:
       New noble [6386], with one peasant, one worker
 
     '''
-    ret = {}
-    # XXXv0    assert parse_location(t) == ret
+    r = {'12323': {'LI': {'wh': ['Grinter']},
+                   'LO': {'pd': [0, 0, '12423', 0]},
+                   'firstline': ['12323 loc forest'],
+                   'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                   'na': ['Forest']},
+         '12422': {'LI': {'wh': ['Grinter']},
+                   'LO': {'pd': [0, '12423', 0, 0]},
+                   'firstline': ['12422 loc forest'],
+                   'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                   'na': ['Forest']},
+         '12423': {'LI': {'wh': ['Grinter']},
+                   'LO': {'pd': ['12323', '12424', '12523', '12422']},
+                   'SL': {'sh': ['1']},
+                   'firstline': ['12423 loc forest'],
+                   'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
+                   'na': ['Forest']},
+         '12424': {'LI': {'wh': ['Grinter']},
+                   'LO': {'pd': [0, 0, 0, '12423']},
+                   'firstline': ['12424 loc ocean'],
+                   'il': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
+                   'na': ['Ocean']},
+         '12523': {'LI': {'wh': ['Grinter']},
+                   'LO': {'pd': ['12423', 0, 0, 0]},
+                   'firstline': ['12523 loc ocean'],
+                   'il': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
+                   'na': ['Ocean']}}
+
+    data = {}
+    turnparser.parse_location(t, data)
+    assert data == r
