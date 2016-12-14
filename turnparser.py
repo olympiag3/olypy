@@ -413,8 +413,8 @@ def parse_inventory(text, unit, data):
             grab_next = 0
             m = re.search(r'\s(.*?)\s\[(\d\d\d)\]', line)
             if m:
-                data[scroll_id]['na'] = [m.group(1)]
-                data[scroll_id]['IM']['ms'] = [m.group(2)]
+                #box.box_overwrite(data, scroll_id, 'na', [m.group(1)])
+                box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
             elif '???' in line:
                 continue  # leave it faked
             else:
@@ -524,7 +524,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
         elif weight == '1':  # no idea, let's fake it
             print('faking', name)
-            data[ident] = {'firstline': [ident + 'item 0'],
+            data[ident] = {'firstline': [ident + ' item 0'],
                            'na': ['Fake ' + name],
                            'IT': {'wt': ['1'], 'un': [unit]}}
         else:

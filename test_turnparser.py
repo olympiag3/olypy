@@ -55,13 +55,16 @@ def test_parse_inventory():
 	1  riding horse [52]		      1,000  ride 150
         1  Amulet of Halhere [b999]              10  +1 aura
         1  Dior [n999]                           10  +100 defense
-        1  639 - Sneak in structure [b132]         1  
+        1  639 - Sneak in structure [b199]         1  
+
+   639 - Sneak in structure [b199] permits study of the following skills:
+      Sneak into structure [639] (requires Stealth)
 
     '''
     data = {}
     ret = ['1', 'gold', '0', '3929', 0, '',
            '52', 'riding horse', '1000', '1', 0, '',
-           '60132', '639 - Sneak in structure', '1', '1', 0, '',
+           '60199', '639 - Sneak in structure', '1', '1', 0, '',
            '60999', 'Amulet of Halhere', '10', '1', '1', 'aura',
            '69999', 'Dior', '10', '1', '100', 'defense']
     inventory = turnparser.parse_inventory(t, '1000', data)
@@ -69,14 +72,15 @@ def test_parse_inventory():
 
     il = ['1', '3929',
           '52', '1',
-          '60132', '1',
+          '60199', '1',
           '60999', '1',
           '69999', '1']
     assert turnparser.reformat_inventory(inventory) == il
 
-    unique_item_data = {'60132': {'IT': {'un': ['1000'], 'wt': ['1']},
-                                  'firstline': ['60132item 0'],
-                                  'na': ['Fake 639 - Sneak in structure']},
+    unique_item_data = {'60199': {'IM': {'ms': ['639']},
+                                  'IT': {'un': ['1000'], 'wt': ['1']},
+                                  'firstline': ['60199 item 0'],
+                                  'na': ['639 - Sneak in structure']},
                         '60999': {'IM': {'ba': ['1']},
                                   'IT': {'un': ['1000'], 'wt': ['10']},
                                   'firstline': ['60999 item artifact'],
