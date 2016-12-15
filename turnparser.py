@@ -5,7 +5,7 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 import re
 import sys
 
-from oid import to_int
+from oid import to_int, to_oid
 import box
 
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
@@ -384,6 +384,9 @@ mage_ranks = set(('conjurer', 'mage', 'wizard', 'sorcerer',
 
 
 def parse_an_id(text):
+    '''
+    Returns the first Olympia id
+    '''
     m = re.search(r'\[(.{3,6})\]', text)
     if not m:
         raise ValueError('failed to find an id in '+text)
@@ -858,10 +861,9 @@ def parse_a_character(parts):
             continue
         elif (p in item_to_inventory or
               p.endswith('s') and p[:-1] in item_to_inventory):
-            print('XXX saw an npc')
             continue  # npcs like savages, or controlled npcs like savage XXXv2
         elif p.startswith('number: '):
-            continue  # also npc, not a controlled one. However, a single Foo doesn't have number: 1
+            continue  # definitely not a controlled npc
         else:
             if p.startswith('with '):
                 p = p.replace('with ', '')
@@ -1348,8 +1350,15 @@ loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Su
 
 def parse_character(name, ident, factident, text, data):
 
-    # XXXv2 extract Location in case we are invisible
-    # it often has a linebreak in it
+    m = re.search(r'^\s+Location:\s+(.*)\n(\s+)(.*)$', text, re.M)
+    if m:
+        location, whitespace, rest = m.group(1, 2, 3)
+        if len(whitespace) > 3:
+            # I don't really need to do this since I'm only parsing the first location
+            location += ' ' + rest
+        location = parse_an_id(location)
+    else:
+        raise ValueError('Did not find a location for character '+name+' '+ident)
 
     loyalty, = match_line(text, 'Loyalty:')
     if loyalty is None:
@@ -1375,6 +1384,9 @@ def parse_character(name, ident, factident, text, data):
     concealed, = match_line(text, 'use  638 1')
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
+        print('Concealed character', ident, 'is actually in location', location)
+        # XXXv0 use location to place this hidden character
+        # need to add it after all the location data is parsed
     else:
         concealed = 0
 
