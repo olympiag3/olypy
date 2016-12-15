@@ -366,7 +366,7 @@ def test_parse_inner_locations():
               '3984': {'firstline': ['3984 char 0'], 'il': {'10': [2], '19': [6]}, 'na': ['Yoyo 5']},
               '6940': {'firstline': ['6940 char 0'], 'il': {'10': [14], '11': [11]}, 'na': ['Oleg the Loudmouth']}}
 
-    s, t = turnparser.parse_inner_locations(t)
+    s, t = turnparser.parse_inner_locations(t.expandtabs())
     assert s == stack
     assert t == things
 

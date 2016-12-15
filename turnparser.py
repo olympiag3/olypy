@@ -1100,8 +1100,6 @@ def parse_inner_locations(text):
     last_depth = None
 
     for l in text.split('\n'):
-        l = l.replace(' *\t', '        ')  # 1 tab = 8 spaces
-        l = l.replace('\t', '        ')  # 1 tab = 8 spaces
         l = re.sub('".*?"', '""', l)  # throw out all banners
         l = l.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
         parts = l.split(',')
@@ -1588,7 +1586,7 @@ def parse_turn(turn, data, everything=True):
 
 
 def parse_turn_from_file(f, data):
-    turn = ''.join(f)
+    turn = ''.join(line.expandtabs() for line in f)
     turn.replace('\r\n', '\n')
 
     parse_turn(turn, data)
