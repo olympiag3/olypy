@@ -417,6 +417,7 @@ def parse_inventory(text, unit, data):
             m = re.search(r'\s(.*?)\s\[(\d\d\d)\]', line)
             if m:
                 #box.box_overwrite(data, scroll_id, 'na', [m.group(1)])
+                print('overwriting', scroll_id, 'IM ms', m.group(2))
                 box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
             elif '???' in line:
                 continue  # leave it faked
@@ -494,20 +495,17 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                     'IM': {}}
             item['IM'][artifact_kindmap[what]] = [plus]
             data[ident] = item
-            print('YYY made a scroll', ident)
-            print('YYY data[ident] is', data[ident])
         elif (name == 'Scroll' and weight == '1') or (name == 'ancient scroll' and weight == '5'):
-            print('making scroll', ident)
-            data[ident] = {'firstline': [ident + 'item scroll'],
+            data[ident] = {'firstline': [ident + ' item scroll'],
                            'na': ['Scroll of Fakeness'],
                            'IT': {'wt': ['1'], 'un': [unit]},
                            'IM': {'ms': ['801']}}
         elif name == 'Strange potion' or name == 'Magic potion' and weight == '1':
-            data[ident] = {'firstline': [ident + 'item 0'],
+            data[ident] = {'firstline': [ident + ' item 0'],
                            'na': ['Potion of Fakeness'],
                            'IT': {'wt': ['1'], 'un': [unit]}}
         elif name == 'Orb' and weight == '1':
-            data[ident] = {'firstline': [ident + 'item 0'],
+            data[ident] = {'firstline': [ident + ' item 0'],
                            'na': ['Orb'],
                            'IT': {'wt': ['1'], 'un': [unit]},
                            'IM': {'uk': ['0']}}
@@ -516,7 +514,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'na': ['Palantir'],
                            'IT': {'wt': ['2'], 'un': [unit]},
                            'IM': {'uk': ['0']}}
-        elif weight == '0':  # this is probably a bug!
+        elif weight == '0':  # this is probably a bug! I hope it is not fixed
             data[ident] = {'firstline': [ident + ' item npc_token'],
                            'na': ['Fake ' + name],
                            'IT': {'un': [unit]},
@@ -526,11 +524,12 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'na': [name],
                            'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
         elif weight == '1':  # no idea, let's fake it
-            print('faking', name)
+            print('TOTALLY FAKING', name, ident)
             data[ident] = {'firstline': [ident + ' item 0'],
                            'na': ['Fake ' + name],
                            'IT': {'wt': ['1'], 'un': [unit]}}
         else:
+            raise ValueError('weight is '+weight)
             print('Unknown make_fake_item of name={} weight={}'.format(name, weight))
 
 
@@ -845,7 +844,7 @@ def parse_a_character(parts):
         elif p == 'prisoner':
             CH['pr'] = ['1']
         elif p == 'garrison':
-            # city or province garrison... MI ca g and CM dg 1
+            # city or province garrison... MI ca g and CM dg 1 for both... MI gc castleid for province
             # if not "our" garrison, set MI gc castleid to head of pledge chain
             continue
         elif p == 'on guard':
@@ -902,6 +901,12 @@ def parse_a_structure_or_character(s, stack, last_depth):
     Parse a single structure or character.
     Place in stack context.
     '''
+
+    # if it's mine, there's leading '*'. dump it.
+    m = re.match(r'\s+\*', s)
+    if m:
+        s.replace('*', ' ', 1)
+
     depth = len(s) - len(s.lstrip(' '))
 
     parts = s.lstrip(' ').split(', ')  # needs the space due to 1,000+ soldiers etc
@@ -1259,6 +1264,9 @@ def parse_turn_header(data, turn):
 
     m = re.search(r'^The next five nobles formed will be:\s+(.*)', turn, re.M)
     next5 = m.group(1).split()
+    for uf in next5:
+        # destroy box first? XXXv0
+        data[uf] = {'firstline': [uf + ' unform 0']}
 
     m = re.search(r'(\d+) fast study days are left', turn, re.M)
     if m:
@@ -1273,7 +1281,7 @@ def parse_turn_header(data, turn):
     # this is a complete garrison list (no fog) and accurate castle info
     m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
     if m:
-        data = analyze_garrison_list(m.group(1), data)
+        analyze_garrison_list(m.group(1), data)
 
     factint = to_int(fact_id)
     fact = {}
@@ -1287,11 +1295,18 @@ def parse_turn_header(data, turn):
     pl['lt'] = [turn_num]  # last turn
     pl['kn'] = []  # to be filled in later
     pl['un'] = []
-    pl['uf'] = next5
+    pl['uf'] = next5  # XXXv0 make 'box unform 0' for these
     fact['PL'] = pl
 
     data[factint] = fact
     return factint, turn_num, data
+
+
+def create_garrison_player(data):
+    data['207'] = {'firstline': ['207 player pl_silent'],
+                   'na': ['Garrison units'],
+                   'PL': {'pw': ['crusty7']}}
+    # in the real game 207 has 'uf', however, I think we can safely leave it off
 
 
 def parse_faction(text, factint, data):
@@ -1325,18 +1340,26 @@ def analyze_garrison_list(text, data):
         pieces = l.split()
         garr = pieces[0]
         where = to_int(pieces[1])
-        castle = to_int(pieces[6])  # XXXv0 use me
+        castle = to_int(pieces[6])
         firstline = garr + ' char garrison'
-        # il will come from the location report, if not foggy XXXv1 take it from last turn?
+
+        if garr in data:
+            il = data[garr]['il']
+        else:
+            # we have no idea what's in the garrison. fake it.
+            il = ['12', '10']
+
         LI = {'wh': [where]}
         CH = {'lo': [207], 'he': [-1], 'lk': [4], 'gu': [1], 'at': [60], 'df': [60]}
         CM = {'dg': [1]}
-        MT = {'ca': ['g']}
-        box = {'firstline': [firstline], 'LI': LI, 'CH': CH, 'CM': CM, 'MT': MT}
-        data[garr] = box
+        MI = {'ca': ['g'], 'gc': [castle]}
+        data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
+        box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
 
-    # XXXv0 I have NOT made the where box and set LI hl.
-    return data
+        # XXXv0 enable this when we are making garrisons from the location report
+        # if where not in data:
+        #     raise ValueError('garrison from list in loc that does not exist: '+where)
+        # box.subbox_append(data, where, 'LI', 'hl', [garr], dedup=True)
 
 
 def parse_garrison_log(text, data):
@@ -1354,19 +1377,18 @@ def parse_character(name, ident, factident, text, data):
     if m:
         location, whitespace, rest = m.group(1, 2, 3)
         if len(whitespace) > 3:
-            # I don't really need to do this since I'm only parsing the first location
+            # I don't really need to do this since I'm only parsing the first location id
             location += ' ' + rest
         location = parse_an_id(location)
     else:
         raise ValueError('Did not find a location for character '+name+' '+ident)
 
-    loyalty, = match_line(text, 'Loyalty:')
-    if loyalty is None:
-        raise ValueError('Why am I here: ' + text)
+    lkind, lrate = match_line(text, 'Loyalty:', capture=r'([A-Za-z]+)-(\d+)')
+    lkind = str(loyalty_kind[lkind])
 
-    m = re.search(r'[A-Za-z]+', loyalty)
-    lkind = str(loyalty_kind[m.group(0)])
-    lrate = re.search(r'\d+', loyalty).group(0)
+    stacked_under, = match_line(text, 'Stacked under:')
+    if stacked_under is not None:
+        stacked_under = parse_an_id(stacked_under)
 
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
@@ -1375,7 +1397,7 @@ def parse_character(name, ident, factident, text, data):
         sick = 0
     health = re.search(r'\d+|n/a', health).group(0)  # NPCs have health of 'n/a'
 
-    attack, defense, missile = match_line(text, 'attack', capture=r'(\d+), defense (\d+), missile (\d+)')
+    attack, defense, missile = match_line(text, 'Combat:', capture=r'attack (\d+), defense (\d+), missile (\d+)')
 
     behind, = match_line(text, 'behind', capture=r'(\d+)')
 
@@ -1385,10 +1407,13 @@ def parse_character(name, ident, factident, text, data):
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
         print('Concealed character', ident, 'is actually in location', location)
-        # XXXv0 use location to place this hidden character
-        # need to add it after all the location data is parsed
+        if stacked_under is not None:
+            print('   and is stacked under', stacked_under)
+        # XXXv0 place this hidden character
+        # our turn's location data has already been parsed so it's safe to add me
     else:
         concealed = 0
+        # we should already be placed in 'location' XXXv0 check it
 
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
@@ -1396,7 +1421,17 @@ def parse_character(name, ident, factident, text, data):
 
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
+
     # XXXv2 extract full data from max aura 161 (3+158) and construct a fake auraculum if needed
+    aura_artifacts = 0
+    plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
+    if plus:
+        print('plus is', plus)
+        native_aura, _, aura_artifacts = plus.partition('+')
+        if _ != '+':
+            raise ValueError('failed parsing Max Aura plus of '+plus)
+        aura_artifacts = int(aura_artifacts)
+        # XXXv0 eventually figure out if I have an auraculum & how big it is
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
@@ -1456,8 +1491,7 @@ def parse_character(name, ident, factident, text, data):
         ch['bh'] = [behind]
     # guard?
     # time_flying XXXv2 - hard one
-    if break_point:
-        ch['bp'] = [break_point]
+    ch['bp'] = [break_point]
     # rank
     ch['at'] = [attack]
     ch['df'] = [defense]
@@ -1474,7 +1508,12 @@ def parse_character(name, ident, factident, text, data):
     if len(cm):
         ret['CM'] = cm
 
-    return {to_int(ident): ret}
+    # XXXv0 identity of my auraculum
+    # in some previous turn report it is "Created %s" after a "use 881"
+    # weight is a random number 1,3 -- 2 and 3 unique weights, 1 is ambiguous
+
+    data[to_int(ident)] = ret
+    box.subbox_append(data, factident, 'PL', 'un', ident, dedup=True)
 
 
 def parse_location(s, data):
@@ -1562,6 +1601,8 @@ def parse_turn(turn, data, everything=True):
 
     factint, turn_num, data = parse_turn_header(data, turn)
 
+    char_sections = {}
+
     for s in split_into_sections(turn):
         while True:
             m = re.match(r'^([^\[]{1,40}) \[(.{3})\]\n---------------', s)
@@ -1580,11 +1621,9 @@ def parse_turn(turn, data, everything=True):
                 if not everything:
                     break
                 name, ident = m.group(1, 2)
-                s, visions = remove_visions(s)
-                # TODOv2 do something with visions
-                # TODOv0 make sure that these characters have priority over
-                # what's seen in locations, which come later in the the turn
-                parse_character(name, ident, factint, s, data)
+                s, visions = remove_visions(s)  # TODOv2 do something with visions
+                # visions need to be processed prior to *all* day 31 processing!
+                char_sections[ident] = [name, ident, factint, s]
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
@@ -1593,6 +1632,10 @@ def parse_turn(turn, data, everything=True):
 
             # skip the rest: lore sheets, new players, order template
             break
+
+    for i in char_sections:
+        name, ident, factint, s = char_sections[i]
+        parse_character(name, ident, factint, s, data)
 
     # XXXv0 form the above into characters and locations
 

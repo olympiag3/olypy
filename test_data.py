@@ -5,47 +5,17 @@ from data import add_structure, add_scroll, add_potion
 
 
 def check_where(data, unit, loc):
+    '''
+    Used by other tests to verify that unit is in loc and vice-versa.
+    Does not work for unique items.
+    '''
     unitint = to_int(str(unit))
     locint = to_int(str(loc))
+    assert ' item ' not in data[unitint].get('firstline', '')
     assert data[unitint]['LI']['wh'] == [locint]
 
     # this will throw ValueError if it fails
     assert data[locint]['LI']['hl'].index(unitint) >= 0
-
-
-def test_is_char_and_can_move():
-    data = {'1001': {'firstline': ['1001 char 0']}}
-    assert is_char(data, '1001')
-    assert can_move(data, '1001')
-    data = {'1001': {'firstline': ['1001 loc tower']}}
-    assert not is_char(data, '1001')
-    assert not can_move(data, '1001')
-
-
-def test_loop_here():
-    data = {'1001': {'firstline': ['1001 loc tower'], 'LI': {'hl': ['1002']}},
-            '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1003']}},
-            '1003': {'firstline': ['1003 loc tower']}}  # yeah, nonsensical
-    assert loop_here(data, '1001') == {'1002', '1003'}
-    assert loop_here(data, '1001', fogonly=True) == {'1002', '1003'}
-    assert loop_here(data, '1002') == {'1003'}
-    assert loop_here(data, '1002', fogonly=True) == set()
-
-
-def test_upsert_box():
-    return
-
-
-def test_upsert_location():
-    return
-
-
-def test_upsert_char():
-    return
-
-
-def test_destroy_box():
-    return
 
 
 def test_set_where():
@@ -84,11 +54,44 @@ def test_unset_where():
     assert data['9999']['LI']['hl'] == ['1002']
 
 
-def test_data_newbox():
-    '''
-    Eh, tested by the various add_* below
-    '''
+def test_is_char_and_can_move():
+    data = {'1001': {'firstline': ['1001 char 0']}}
+    assert is_char(data, '1001')
+    assert can_move(data, '1001')
+    data = {'1001': {'firstline': ['1001 loc tower']}}
+    assert not is_char(data, '1001')
+    assert not can_move(data, '1001')
+
+
+def test_loop_here():
+    data = {'1001': {'firstline': ['1001 loc tower'], 'LI': {'hl': ['1002']}},
+            '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1003']}},
+            '1003': {'firstline': ['1003 loc tower']}}  # yeah, nonsensical
+    assert loop_here(data, '1001') == {'1002', '1003'}
+    assert loop_here(data, '1001', fogonly=True) == {'1002', '1003'}
+    assert loop_here(data, '1002') == {'1003'}
+    assert loop_here(data, '1002', fogonly=True) == set()
+
+
+def test_upsert_box():
     return
+
+
+def test_destroy_box():
+    return
+
+
+def test_upsert_location():
+    return
+
+
+def test_upsert_char():
+    return
+
+
+def test_data_newbox():
+    # Eh, tested by the various add_* below
+    pass
 
 
 def test_adds():

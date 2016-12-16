@@ -11,9 +11,51 @@ def is_char(data, who):
         return True
 
 
+def set_where(data, who, where):
+    who = to_int(who)
+    unset_where(data, who)
+    where = to_int(where)
+    box.subbox_overwrite(data, who, 'LI', 'wh', where)
+    box.subbox_append(data, where, 'LI', 'hl', who, dedup=True)
+
+
+def unset_where(data, who, promote_children=True):
+    '''
+    If I'm somewhere, remove me from that somewhere.
+    If promote_children & anyone is inside me, move them up.
+    I may well end up nowhere... that will get cleaned up in the end.
+    (Things that move can be nowhere... things that can't move should be destroyed XXXv0)
+    '''
+    if data.get(who) is None:
+        return
+    wh = data[who].get('LI', {}).get('wh', [])
+    hl = data[who].get('LI', {}).get('hl')
+
+    if len(wh):
+        data[who]['LI']['wh'] = []  # XXXv0 box.subbox_overwrite(...)
+        other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
+        if other_hl is not None:
+            try:
+                other_hl.remove(who)
+                data[wh[0]]['LI']['hl'] = other_hl
+            except ValueError:
+                pass
+
+    if promote_children and hl is not None:
+        for child in hl:
+            # use set_where instead?
+            box.subbox_append(data, wh[0], 'LI', 'hl', child, dedup=True)
+            data[child]['LI']['wh'] = wh
+
+# XXXv0 can't have an endless loop of unlink->destroy->unlink
+#    if not can_move(data, who):
+#        destroy_box(data, who)
+
+
 def can_move(data, who):
     '''
-    Used for situations such as deciding to destroy or unlink a no-longer-present box
+    Used for situations such as deciding to destroy or unwhere a no-longer-present box.
+    Everything but locs can move.
     '''
     if ' loc ' not in data[who]['firstline'][0]:
         return True
@@ -36,9 +78,32 @@ def loop_here(data, who, fogonly=False):
     return hls
 
 
+def destroy_box(data, who, promote_children=True):
+    '''
+    Destroy a box that's become something different.
+    '''
+    unset_where(data, who, promote_children=promote_children)
+    # XXXv0 other links:
+    # pledge chain - CM,pl is one-way so it needs a end-of-run fixup XXXv0
+    # lord: CH,lo and previous lord CH,pl -- needs end-of-run fixup XXXv0
+    # unique items - need to look at firstline - IT,un is where it is
+    # creater of things like storms, artifacts - IM,ct
+    # owner of storm - MI,sb {summoned by}
+    # storm bound to a ship - ship has SL,bs ... and the storm has MI,bs=itself (?)
+
+
 def upsert_box(data, newdata, who):
     '''
+    Given a new box, figure out if an existing box needs to be destroyed.
+    If it appears to be the same thing, merge the two boxes or overwrite the old one.
     '''
+
+
+def upsert_char(data, newdata, who):
+    '''
+    Similar to upsert_box(), only for a character.
+    '''
+    pass
 
 
 def upsert_location(data, newdata, top, promote_children=True):
@@ -136,68 +201,10 @@ def dead_char_body(data, who):
     box.subbox_remove(data, who, 'PL', 'kn', who)
 
 
-def upsert_char(data, newdata, who):
-    pass
-
-
-def destroy_box(data, who, promote_children=True):
-    '''
-    Destroy a box that's become something different.
-    '''
-    unset_where(data, who, promote_children=promote_children)
-    # XXXv0 other links:
-    # pledge chain - CM,pl is one-way so it needs a end-of-run fixup XXXv0
-    # lord: CH,lo and previous lord CH,pl -- needs end-of-run fixup XXXv0
-    # unique items - need to look at firstline - IT,un is where it is
-    # creater of things like storms, artifacts - IM,ct
-    # owner of storm - MI,sb {summoned by}
-    # storm bound to a ship - ship has SL,bs ... and the storm has MI,bs=itself (?)
-
-
-def set_where(data, who, where):
-    who = to_int(who)
-    unset_where(data, who)
-    where = to_int(where)
-    box.subbox_overwrite(data, who, 'LI', 'wh', where)
-    box.subbox_append(data, where, 'LI', 'hl', who, dedup=True)
-
-
-def unset_where(data, who, promote_children=True):
-    '''
-    If I'm somewhere, remove me from that somewhere.
-    If promote_children & anyone is inside me, move them up.
-    I may well end up nowhere... that will get cleaned up in the end.
-    (Things that move can be nowhere... things that can't move should be destroyed XXXv0)
-    '''
-    if data.get(who) is None:
-        return
-    wh = data[who].get('LI', {}).get('wh', [])
-    hl = data[who].get('LI', {}).get('hl')
-
-    if len(wh):
-        data[who]['LI']['wh'] = []  # XXXv0 box.subbox_overwrite(...)
-        other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
-        if other_hl is not None:
-            try:
-                other_hl.remove(who)
-                data[wh[0]]['LI']['hl'] = other_hl
-            except ValueError:
-                pass
-
-    if promote_children and hl is not None:
-        for child in hl:
-            # use set_where instead?
-            box.subbox_append(data, wh[0], 'LI', 'hl', child, dedup=True)
-            data[child]['LI']['wh'] = wh
-
-# XXXv0 can't have an endless loop of unlink->destroy->unlink
-#    if not can_move(data, who):
-#        destroy_box(data, who)
-
-
 def data_newbox(data, oid_kind, firstline, oid=None, overwrite=False):
     '''
     Create a new box. Intended for generating QA libs, not for parsing turns.
+    (Turn parsing uses upserts.)
     '''
     if oid:
         oid = to_int(oid)  # roundtrips if already an int

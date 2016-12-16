@@ -544,7 +544,10 @@ Grinter
 				     Candide the Captain [3175]
 
     '''
-    ret = {'52341': {'firstline': ['52341 player pl_regular'],
+    ret = {'3518': {'firstline': ['3518 unform 0']},
+           '4547': {'firstline': ['4547 unform 0']},
+           '5157': {'firstline': ['5157 unform 0']},
+           '52341': {'firstline': ['52341 player pl_regular'],
                      'na': ["Oleg's Olympians"],
                      'PL': {'fs': ['200'],
                             'ft': ['1'],
@@ -552,9 +555,9 @@ Grinter
                             'lt': ['2'],
                             'np': ['11'],
                             'uf': ['8012', '6124', '4547', '5157', '3518'],
-                            'un': []},
-                     }
-           }
+                            'un': []}},
+           '6124': {'firstline': ['6124 unform 0']},
+           '8012': {'firstline': ['8012 unform 0']}}
 
     assert turnparser.parse_turn_header({}, t) == ('52341', '2', ret)
 
@@ -580,7 +583,9 @@ The next five nobles formed will be:  7815 1933 8012 6124 4547
 200 fast study days are left.
 
     '''
-    ret = {'52341': {'PL': {'fs': ['200'],
+    ret = {'1933': {'firstline': ['1933 unform 0']},
+           '4547': {'firstline': ['4547 unform 0']},
+           '52341': {'PL': {'fs': ['200'],
                             'ft': ['1'],
                             'kn': [],
                             'lt': ['1'],
@@ -588,7 +593,11 @@ The next five nobles formed will be:  7815 1933 8012 6124 4547
                             'uf': ['7815', '1933', '8012', '6124', '4547'],
                             'un': []},
                      'firstline': ['52341 player pl_regular'],
-                     'na': ["Oleg's Olympians"]}}
+                     'na': ["Oleg's Olympians"]},
+           '6124': {'firstline': ['6124 unform 0']},
+           '7815': {'firstline': ['7815 unform 0']},
+           '8012': {'firstline': ['8012 unform 0']}}
+
     assert turnparser.parse_turn_header({}, t) == ('52341', '1', ret)
 
 
@@ -635,7 +644,8 @@ def test_analyze_garrison_list():
     t = '''  2617	aj08   10   20	 50   15   8103 4797 7271 6839	... 2527
   4514	aj09   10   20	 50   15   8103 4797 7271 6839	... 2527    '''
     data = {}
-    r = {'2617': {'CH': {'at': [60],
+    r = {'207': {'PL': {'un': ['2617', '4514']}},
+         '2617': {'CH': {'at': [60],
                          'df': [60],
                          'gu': [1],
                          'he': [-1],
@@ -643,8 +653,9 @@ def test_analyze_garrison_list():
                          'lo': [207]},
                   'CM': {'dg': [1]},
                   'LI': {'wh': ['10708']},
-                  'MT': {'ca': ['g']},
-                  'firstline': ['2617 char garrison']},
+                  'MI': {'ca': ['g'], 'gc': ['8103']},
+                  'firstline': ['2617 char garrison'],
+                  'il': ['12', '10']},
          '4514': {'CH': {'at': [60],
                          'df': [60],
                          'gu': [1],
@@ -653,9 +664,11 @@ def test_analyze_garrison_list():
                          'lo': [207]},
                   'CM': {'dg': [1]},
                   'LI': {'wh': ['10709']},
-                  'MT': {'ca': ['g']},
-                  'firstline': ['4514 char garrison']}}
-    assert turnparser.analyze_garrison_list(t, data) == r
+                  'MI': {'ca': ['g'], 'gc': ['8103']},
+                  'firstline': ['4514 char garrison'],
+                  'il': ['12', '10']}}
+    turnparser.analyze_garrison_list(t, data)
+    assert data == r
 
 
 def test_parse_garrison_log():
@@ -758,7 +771,8 @@ Osswid the Destroyer [7271]
        sell	   7	100   clay pot [95]
    
     '''
-    ret = {'7271': {'firstline': ['7271 char 0'],
+    ret = {'50033': {'PL': {'un': ['7271']}},
+           '7271': {'firstline': ['7271 char 0'],
                     'na': ['Osswid the Destroyer'],
                     'il': ['1', '26834',
                            '10', '10',
@@ -802,8 +816,8 @@ Osswid the Destroyer [7271]
                     'CM': {'hs': ['1'], 'pl': '6839'},
                     'LI': {}}}
     data = {}
-    assert turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data) == ret
-    assert data == {}  # unique items
+    turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
+    assert data == ret
 
 
 def test_parse_location():
