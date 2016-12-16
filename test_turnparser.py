@@ -487,6 +487,8 @@ def test_remove_visions():
 27: Osswid the Brave [7651] receives a vision of RC-2080 [2080]:
 27:
 27: Location:       Tomb in swamp [4082], in province Swamp [aq21], in
+27: Received 2 gold from Garrison [1610].
+27: > use Orb
 28: foo
     '''
     r = '''
@@ -496,11 +498,27 @@ def test_remove_visions():
     v = '''27: Osswid the Brave [7651] receives a vision of RC-2080 [2080]:
 27:
 27: Location:       Tomb in swamp [4082], in province Swamp [aq21], in
+27: Received 2 gold from Garrison [1610].
+27: > use Orb
 '''
     s, visions = turnparser.remove_visions(t)
     assert s == r
     assert len(visions) == 1
     assert visions[0] == v
+    # XXXv2 note that currently multiple orbs fall into the same vision!
+
+
+def test_remove_days():
+    t = '''26: Received 2 gold from Garrison [2346].
+
+27: foo
+
+    
+bar
+    '''
+    nondays, days = turnparser.remove_days(t)
+    assert nondays == '\n\n    \nbar\n    \n'
+    assert days == '26: Received 2 gold from Garrison [2346].\n27: foo\n'
 
 
 def test_parse_turn_header():

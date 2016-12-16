@@ -529,6 +529,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'na': ['Fake ' + name],
                            'IT': {'wt': ['1'], 'un': [unit]}}
         else:
+            # in theory this might include 2/3 of auraculi, but, none of ours are 2 or 3?!
             raise ValueError('weight is '+weight)
             print('Unknown make_fake_item of name={} weight={}'.format(name, weight))
 
@@ -1243,12 +1244,27 @@ def remove_visions(s):
                         break
                 s = s.replace(wholeday, '')
                 visions = [wholeday]
-                # XXX further processing to split same-day orbs
+                # XXXv2 further processing to split same-day orbs
         else:
             break
 
     return s, visions
 
+
+def remove_days(s):
+    '''
+    Remove anything with a day
+    '''
+    lines = s.split('\n')
+    days = ''
+    nondays = ''
+    for l in lines:
+        m = re.match(r'[ \d]\d: ', l)
+        if m:
+            days += l + '\n'
+        else:
+            nondays += l + '\n'
+    return nondays, days
 
 def parse_turn_header(data, turn):
     m = re.search(r'^Olympia (.\S) turn (\d+)', turn, re.M)
@@ -1459,7 +1475,7 @@ def parse_character(name, ident, factident, text, data):
     if m:
         trades = parse_pending_trades(m.group(1))
 
-    # TODOv2: location and stacked under... day 31 it comes from the map, but what about visions? fog/concealed?
+    # XXXv2: location and stacked under... day 31 it comes from the map, but what about visions? fog/concealed?
 
     ret = {}
     iint = to_int(ident)
@@ -1618,11 +1634,22 @@ def parse_turn(turn, data, everything=True):
                 break
             m = re.match(r'^([^\[]{1,40}) \[(.{4,6})\]\n--------------', s)
             if m:
+                name, ident = m.group(1, 2)
+
+                # XXXv2visions need to be processed prior to *all* day 31 processing!
+                # (which, currently, is not possible without a lot of rearrangement)
+                s, visions = remove_visions(s)
+
+                # XXXv0 accumulate all day chatter across all turns.
+                # For unknown unique items:
+                # Search for "Created Palantir [s999]." or "Produced one Strange potion [f999]",
+                # then back up to ": > use NNN" to figure out what kind of thing it is.
+                # Have to back-up twice for saving farcasts ("Next cast will be based from Mountain [aa01]"
+                # or "Project next cast to Foo [9999].")
+                s, days = remove_days(s)
+
                 if not everything:
                     break
-                name, ident = m.group(1, 2)
-                s, visions = remove_visions(s)  # TODOv2 do something with visions
-                # visions need to be processed prior to *all* day 31 processing!
                 char_sections[ident] = [name, ident, factint, s]
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
