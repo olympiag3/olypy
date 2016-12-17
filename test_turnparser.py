@@ -577,7 +577,7 @@ Grinter
            '6124': {'firstline': ['6124 unform 0']},
            '8012': {'firstline': ['8012 unform 0']}}
 
-    assert turnparser.parse_turn_header({}, t) == ('52341', '2', ret)
+    assert turnparser.parse_turn_header({}, t, True) == ('52341', '2', ret)
 
     t = '''
 
@@ -616,7 +616,7 @@ The next five nobles formed will be:  7815 1933 8012 6124 4547
            '7815': {'firstline': ['7815 unform 0']},
            '8012': {'firstline': ['8012 unform 0']}}
 
-    assert turnparser.parse_turn_header({}, t) == ('52341', '1', ret)
+    assert turnparser.parse_turn_header({}, t, True) == ('52341', '1', ret)
 
 
 def test_parse_faction():

@@ -8,6 +8,8 @@ import sys
 from oid import to_int, to_oid
 import box
 
+global_days = {}
+
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -419,6 +421,8 @@ def parse_inventory(text, unit, data):
                 #box.box_overwrite(data, scroll_id, 'na', [m.group(1)])
                 print('overwriting', scroll_id, 'IM ms', m.group(2))
                 box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
+                if 'fake' in data[scroll_id]:
+                    del data[scroll_id]['fake']
             elif '???' in line:
                 continue  # leave it faked
             else:
@@ -492,42 +496,45 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
             item = {'firstline': [ident + ' item artifact'],
                     'na': [name],
                     'IT': {'wt': [weight], 'un': [unit]},
-                    'IM': {}}
-            item['IM'][artifact_kindmap[what]] = [plus]
+                    'IM': {artifact_kindmap[what]: [plus]}}
             data[ident] = item
-        elif (name == 'Scroll' and weight == '1') or (name == 'ancient scroll' and weight == '5'):
+        elif weight == '5':
             data[ident] = {'firstline': [ident + ' item scroll'],
-                           'na': ['Scroll of Fakeness'],
+                           'na': [name],
                            'IT': {'wt': ['1'], 'un': [unit]},
-                           'IM': {'ms': ['801']}}
+                           'fake': 'yes'}
         elif name == 'Strange potion' or name == 'Magic potion' and weight == '1':
             data[ident] = {'firstline': [ident + ' item 0'],
-                           'na': ['Potion of Fakeness'],
-                           'IT': {'wt': ['1'], 'un': [unit]}}
+                           'na': [name],
+                           'IT': {'wt': ['1'], 'un': [unit]},
+                           'fake': 'yes'}
         elif name == 'Orb' and weight == '1':
             data[ident] = {'firstline': [ident + ' item 0'],
                            'na': ['Orb'],
                            'IT': {'wt': ['1'], 'un': [unit]},
-                           'IM': {'uk': ['0']}}
+                           'IM': {'uk': ['0']},
+                           'fake': 'yes'}
         elif name == 'Palantir' and weight == '1':
             data[ident] = {'firstline': [ident + ' item palantir'],
                            'na': ['Palantir'],
                            'IT': {'wt': ['2'], 'un': [unit]},
-                           'IM': {'uk': ['0']}}
+                           'IM': {'uk': ['0']},
+                           'fake': 'yes'}
         elif weight == '0':  # this is probably a bug! I hope it is not fixed
             data[ident] = {'firstline': [ident + ' item npc_token'],
-                           'na': ['Fake ' + name],
-                           'IT': {'un': [unit]},
-                           'IM': {'tn': ['1'], 'ti': ['33']}}  # IM ti is a lie, also needs PL un filled in
+                           'na': [name],
+                           'IT': {'un': [unit]},  # g2 database agrees IT wt is not set
+                           'IM': {'tn': ['1'], 'ti': ['33']},  # IM ti is a lie, also needs PL un filled in
+                           'fake': 'yes'}
         elif int(weight) > 1:  # a guess
             data[ident] = {'firstline': [ident + ' item tradegood'],
                            'na': [name],
                            'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
-        elif weight == '1':  # no idea, let's fake it
-            print('TOTALLY FAKING', name, ident)
+        elif weight == '1':  # no idea
             data[ident] = {'firstline': [ident + ' item 0'],
-                           'na': ['Fake ' + name],
-                           'IT': {'wt': ['1'], 'un': [unit]}}
+                           'na': [name],
+                           'IT': {'wt': ['1'], 'un': [unit]},
+                           'fake': 'yes'}
         else:
             # in theory this might include 2/3 of auraculi, but, none of ours are 2 or 3?!
             raise ValueError('weight is '+weight)
@@ -1266,7 +1273,7 @@ def remove_days(s):
             nondays += l + '\n'
     return nondays, days
 
-def parse_turn_header(data, turn):
+def parse_turn_header(data, turn, everything):
     m = re.search(r'^Olympia (.\S) turn (\d+)', turn, re.M)
     # game = m.group(1)
     turn_num = m.group(2)
@@ -1295,9 +1302,10 @@ def parse_turn_header(data, turn):
         analyze_regions(m.group(1), region_after)
 
     # this is a complete garrison list (no fog) and accurate castle info
-    m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
-    if m:
-        analyze_garrison_list(m.group(1), data)
+    if everything:
+        m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
+        if m:
+            analyze_garrison_list(m.group(1), data)
 
     factint = to_int(fact_id)
     fact = {}
@@ -1359,11 +1367,10 @@ def analyze_garrison_list(text, data):
         castle = to_int(pieces[6])
         firstline = garr + ' char garrison'
 
+        il = ['12', '10']  # if we have to fake it
         if garr in data:
-            il = data[garr]['il']
-        else:
-            # we have no idea what's in the garrison. fake it.
-            il = ['12', '10']
+            if ' char garrison' in data[garr]['firstline'] and 'il' in data[garr]:
+                il = data[garr]['il']
 
         LI = {'wh': [where]}
         CH = {'lo': [207], 'he': [-1], 'lk': [4], 'gu': [1], 'at': [60], 'df': [60]}
@@ -1615,7 +1622,7 @@ def parse_location(s, data):
 
 def parse_turn(turn, data, everything=True):
 
-    factint, turn_num, data = parse_turn_header(data, turn)
+    factint, turn_num, data = parse_turn_header(data, turn, everything)
 
     char_sections = {}
 
@@ -1647,6 +1654,11 @@ def parse_turn(turn, data, everything=True):
                 # Have to back-up twice for saving farcasts ("Next cast will be based from Mountain [aa01]"
                 # or "Project next cast to Foo [9999].")
                 s, days = remove_days(s)
+                if len(days):
+                    global global_days
+                    if ident not in global_days:
+                        global_days[ident] = ''
+                    global_days[ident] += days
 
                 if not everything:
                     break
@@ -1663,8 +1675,6 @@ def parse_turn(turn, data, everything=True):
     for i in char_sections:
         name, ident, factint, s = char_sections[i]
         parse_character(name, ident, factint, s, data)
-
-    # XXXv0 form the above into characters and locations
 
 
 def parse_turn_from_file(f, data):
