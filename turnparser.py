@@ -421,8 +421,6 @@ def parse_inventory(text, unit, data):
                 #box.box_overwrite(data, scroll_id, 'na', [m.group(1)])
                 print('overwriting', scroll_id, 'IM ms', m.group(2))
                 box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
-                if 'fake' in data[scroll_id]:
-                    del data[scroll_id]['fake']
             elif '???' in line:
                 continue  # leave it faked
             else:
@@ -447,12 +445,15 @@ def parse_inventory(text, unit, data):
             if int(ident) > 399:
                 make_fake_item(unit, ident, name, weight, plus, what, data)
             continue
+
         m = re.search(r'\s(\w.+)\s\[(.{4})\] permits study of the following skills', line)
         if m:
             name = m.group(1)
             scroll_id = to_int(m.group(2))
-            data[scroll_id]['na'] = [name]
-            # this thing must already exist, it's listed in the inventory above
+            data[scroll_id]['na'] = [name]  # removes 'Fake ' prefix
+            data[scroll_id]['firstline'] = [scroll_id + ' item scroll']
+            if 'fake' in data[scroll_id]:  # not present if ancient scroll
+                del data[scroll_id]['fake']
             grab_next = 1
 
     ret = []
@@ -491,54 +492,56 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                        'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': unit}}
         return
     else:
-        # armor/weapon/aura item
         if what in artifact_kindmap and weight == '10':
-            item = {'firstline': [ident + ' item artifact'],
-                    'na': [name],
-                    'IT': {'wt': [weight], 'un': [unit]},
-                    'IM': {artifact_kindmap[what]: [plus]}}
-            data[ident] = item
-        elif weight == '5':
+            # armor/weapon/aura item
+            data[ident] = {'firstline': [ident + ' item artifact'],
+                           'na': [name],
+                           'IT': {'wt': [weight], 'un': [unit]},
+                           'IM': {artifact_kindmap[what]: [plus]}}
+        elif weight == '10':
+            # aura item - held by non-mage. make it 1 point.
+            # XXXv2 if it was ever held by a mage in the past, remember the value?
+            data[ident] = {'firstline': [ident + ' item artifact'],
+                           'na': [name],
+                           'IT': {'wt': [weight], 'un': [unit]},
+                           'IM': {'ba': ['1']}}
+        elif weight == '5':  # ancient scroll
             data[ident] = {'firstline': [ident + ' item scroll'],
                            'na': [name],
-                           'IT': {'wt': ['1'], 'un': [unit]},
-                           'fake': 'yes'}
-        elif name == 'Strange potion' or name == 'Magic potion' and weight == '1':
-            data[ident] = {'firstline': [ident + ' item 0'],
-                           'na': [name],
-                           'IT': {'wt': ['1'], 'un': [unit]},
-                           'fake': 'yes'}
+                           'IT': {'wt': ['1'], 'un': [unit]}}  # type to be filled in later
         elif name == 'Orb' and weight == '1':
             data[ident] = {'firstline': [ident + ' item 0'],
-                           'na': ['Orb'],
+                           'na': ['Fake Orb'],
                            'IT': {'wt': ['1'], 'un': [unit]},
-                           'IM': {'uk': ['0']},
-                           'fake': 'yes'}
-        elif name == 'Palantir' and weight == '1':
-            data[ident] = {'firstline': [ident + ' item palantir'],
-                           'na': ['Palantir'],
-                           'IT': {'wt': ['2'], 'un': [unit]},
-                           'IM': {'uk': ['0']},
-                           'fake': 'yes'}
+                           'IM': {'uk': ['9']}}
         elif weight == '0':  # this is probably a bug! I hope it is not fixed
             data[ident] = {'firstline': [ident + ' item npc_token'],
                            'na': [name],
                            'IT': {'un': [unit]},  # g2 database agrees IT wt is not set
-                           'IM': {'tn': ['1'], 'ti': ['33']},  # IM ti is a lie, also needs PL un filled in
-                           'fake': 'yes'}
-        elif int(weight) > 1:  # a guess
+                           'IM': {'tn': ['1'], 'ti': ['33']}}  # IM ti is a lie, also needs PL un filled in
+        elif int(weight) > 14:  # lightest tradegood is 15
             data[ident] = {'firstline': [ident + ' item tradegood'],
                            'na': [name],
                            'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
-        elif weight == '1':  # no idea
-            data[ident] = {'firstline': [ident + ' item 0'],
-                           'na': [name],
+        elif weight == '1':  # probably a scroll or potion ... small chance of auraculum
+            data[ident] = {'firstline': [ident + ' item 0'],  # if scroll, will eventually be 'item scroll'
+                           'na': ['Fake '+name],
                            'IT': {'wt': ['1'], 'un': [unit]},
+                           'fake': 'yes'}
+        elif weight == '2':  # unusual weight -- auraculum or Palantir
+            data[ident] = {'firstline': [ident + ' item palantir'],
+                           'na': ['Fake '+name],
+                           'IT': {'wt': ['2'], 'un': [unit]},
+                           'fake': 'yes'}
+        elif weight == '3':  # must be an auraculum
+            data[ident] = {'firstline': [ident + ' item auraculum'],
+                           'na': ['Fake '+name],
+                           'IT': {'wt': ['3'], 'un': [unit]},
                            'fake': 'yes'}
         else:
             # in theory this might include 2/3 of auraculi, but, none of ours are 2 or 3?!
+            print('Unknown make_fake_item of name={} weight={} what={}'.format(name, weight, what))
             raise ValueError('weight is '+weight)
-            print('Unknown make_fake_item of name={} weight={}'.format(name, weight))
 
 
 def groups(iterable, n):
@@ -1273,6 +1276,7 @@ def remove_days(s):
             nondays += l + '\n'
     return nondays, days
 
+
 def parse_turn_header(data, turn, everything):
     m = re.search(r'^Olympia (.\S) turn (\d+)', turn, re.M)
     # game = m.group(1)
@@ -1287,9 +1291,10 @@ def parse_turn_header(data, turn, everything):
 
     m = re.search(r'^The next five nobles formed will be:\s+(.*)', turn, re.M)
     next5 = m.group(1).split()
-    for uf in next5:
-        # destroy box first? XXXv0
-        data[uf] = {'firstline': [uf + ' unform 0']}
+    if everything:
+        for uf in next5:
+            # destroy box first? XXXv0
+            data[uf] = {'firstline': [uf + ' unform 0']}
 
     m = re.search(r'(\d+) fast study days are left', turn, re.M)
     if m:
@@ -1389,6 +1394,66 @@ def parse_garrison_log(text, data):
     # this is the daily details, not the list
     # XXXv2 need to track all give/get for all time to get hidden contents, esp gold
     pass
+
+
+def resolve_fake_items(data):
+    for item in data:
+        if ' item ' in data[item]['firstline'][0] and 'fake' in data[item]:
+            oid = to_oid(item)
+            for unit in global_days:
+                if oid in global_days[unit]:
+                    print('unit', unit, 'mentions', oid)
+                    m = re.search(r'^[ \d]\d: (?:Created|Produced one) .*? \['+oid+r'\]\.?$', global_days[unit], re.M)
+                    if m:
+                        print('unit', unit, '  produced', oid)
+                        whole = m.group(0)
+                        before, _, after = global_days[unit].partition(whole)
+                        m = re.findall(r' \> use (\d+)(.*)', before, re.I)
+                        if m:
+                            # should be a list of tuples, let's grab the last one
+                            what, rest = m[-1]
+                            print('   use', what, rest)
+                            potion_to_uk = {'691': '2',  # heal
+                                            '694': '1',  # slavery
+                                            '696': '3'}  # death
+                            if what in potion_to_uk:
+                                if data[item]['na'][0].startswith('Fake '):
+                                    data[item]['na'] = [data[item]['na'][0][5:]]
+                                box.subbox_overwrite(data, item, 'IM', 'uk', potion_to_uk[what])
+                            elif what == '894':  # palantir
+                                if data[item]['na'][0].startswith('Fake '):
+                                    data[item]['na'] = [data[item]['na'][0][5:]]
+                                if data[item]['IT']['wt'][0] != '2':
+                                    raise ValueError('Wrong weight for palantir')
+                                box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
+                            elif what == '851':  # farcast
+                                box.subbox_overwrite(data, item, 'IM', 'uk', ['5'])
+                                assert len(m) > 1
+                                for i in range(len(m)-2, -1, -1):
+                                    what, rest = m[i]
+                                    if what == '849':
+                                        rest = rest.strip()
+                                        box.subbox_overwrite(data, item, 'IM', 'pc', [to_int(rest)])
+                                        break
+                                else:
+                                    raise ValueError('Could not find previous farcast to save')
+                            elif what == '881':
+                                if data[item]['na'][0].startswith('Fake '):
+                                    data[item]['na'] = [data[item]['na'][0][5:]]
+                                data[item]['firstline'] = [item + ' item auraculum']
+                                rest = rest.strip()
+                                rest = rest.partition(' ')[0]  # use 881 strength "name"...
+                                try:
+                                    rest = int(rest)
+                                except:
+                                    raise ValueError('Error parsing auraculum strength, use 881 '+rest)
+                                box.subbox_overwrite(data, item, 'IM', 'au', rest)
+                                # XXXv0 hook up this auraculum to character unit
+                            else:
+                                print('XXXXXXXXXXXXX Did not know what to do with unique item', oid)
+
+                            if 'fake' in data[item]:
+                                del data[item]['fake']
 
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
@@ -1647,15 +1712,8 @@ def parse_turn(turn, data, everything=True):
                 # (which, currently, is not possible without a lot of rearrangement)
                 s, visions = remove_visions(s)
 
-                # XXXv0 accumulate all day chatter across all turns.
-                # For unknown unique items:
-                # Search for "Created Palantir [s999]." or "Produced one Strange potion [f999]",
-                # then back up to ": > use NNN" to figure out what kind of thing it is.
-                # Have to back-up twice for saving farcasts ("Next cast will be based from Mountain [aa01]"
-                # or "Project next cast to Foo [9999].")
                 s, days = remove_days(s)
                 if len(days):
-                    global global_days
                     if ident not in global_days:
                         global_days[ident] = ''
                     global_days[ident] += days
