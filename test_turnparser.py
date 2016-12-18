@@ -79,7 +79,7 @@ def test_parse_inventory():
 
     unique_item_data = {'60199': {'IM': {'ms': ['639']},
                                   'IT': {'un': ['1000'], 'wt': ['1']},
-                                  'firstline': ['60199 item 0'],
+                                  'firstline': ['60199 item scroll'],
                                   'na': ['639 - Sneak in structure']},
                         '60999': {'IM': {'ba': ['1']},
                                   'IT': {'un': ['1000'], 'wt': ['10']},
