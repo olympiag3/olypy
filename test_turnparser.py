@@ -46,6 +46,32 @@ Oleg the Loudmouth [6940]
     assert turnparser.split_into_sections(t) == ret
 
 
+def test_parse_wait_args():
+    vectors = [['wait top', [8]],
+               ['wait time 7', [0, '7']],
+               ['wait loc aa01', [6, '10001']],
+               ['wait not day 7', [14, 1, '7']],
+               ['wait item 1 100', [4, '1', '100']],  # 2 args
+               ['wait item 1 100 day 7', [4, '1', '100', 1, '7']],
+               ['wait flag blue 1001', [5, 'blue', '1001']],
+               ['wait flag blue day 7', [5, 'blue', 1, '7']],
+               ['wait flag blue 1001 day 7', [5, 'blue', '1001', 1, '7']]]
+
+    for v in vectors:
+        order, ar = v
+        assert turnparser.parse_wait_args(order) == ar
+
+    raising_vectors = [['wait time', IndexError],
+                       ['wait item 1', IndexError],
+                       ['wait item 1 day 3', ValueError],
+                       ['wait flag blue blue day 7', ValueError],
+                       ['wait loc blue', ValueError]]
+    for v in raising_vectors:
+        order, e = v
+        with pytest.raises(e):
+            turnparser.parse_wait_args(order)
+
+
 def test_parse_inventory():
     t = '''
 

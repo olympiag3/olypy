@@ -408,6 +408,110 @@ def split_into_sections(text):
     return ret[1:]  # discard header
 
 
+wait_args = {'time': {'value': 0, 'nargs': 1},
+             'day': {'value': 1, 'nargs': 1},
+             'unit': {'value': 2, 'nargs': 1},
+             'gold': {'value': 3, 'nargs': 1},
+             'item': {'value': 4, 'nargs': 2},
+             'flag': {'value': 5, 'nargs': 1, 'special': 1},
+             'loc': {'value': 6, 'nargs': 1},
+             'stack': {'value': 7, 'nargs': 1},
+             'top': {'value': 8, 'nargs': 0},
+             'ferry': {'value': 9, 'nargs': 1},
+             'ship': {'value': 10, 'nargs': 1},
+             'rain': {'value': 11, 'nargs': 0},
+             'fog': {'value': 12, 'nargs': 0},
+             'wind': {'value': 13, 'nargs': 0},
+             'not': {'value': 14, 'nargs': 0},
+             'owner': {'value': 15, 'nargs': 0},
+             'raining': {'value': 11, 'nargs': 0},  # alias
+             'foggy': {'value': 12, 'nargs': 0},  # alias
+             'windy': {'value': 13, 'nargs': 0},  # alias
+             'clear': {'value': 19, 'nargs': 0},
+             'shiploc': {'value': 20, 'nargs': 1},
+             'month': {'value': 21, 'nargs': 1},
+             'turn': {'value': 22, 'nargs': 1}}
+
+
+def parse_wait_args(order):
+    '''
+    Duplicates parsing in c1.c:parse_wait_args()
+    '''
+    args = order.split()  # on spaces
+    ar = []
+    assert args.pop(0) == 'wait'
+    while len(args) > 0:
+        arg = args.pop(0)
+        if arg not in wait_args:
+            raise ValueError('unknown WAIT arg of '+arg+' in order '+order)
+        ar.append(wait_args[arg]['value'])
+        nargs = wait_args[arg]['nargs']
+        for _ in range(nargs):
+            if 'special' in wait_args[arg]:
+                ar.append(args.pop(0))  # flag blue
+            else:
+                ar.append(to_int(args.pop(0)))
+        if 'special' in wait_args[arg]:
+            # the next thing either doesn't exist, or is a unit, or is a wait name
+            if len(args) > 0:
+                if args[0] not in wait_args:
+                    ar.append(to_oid(args.pop(0)))
+    return ar
+
+
+def fake_order(unit, order, start_day, remaining, data):
+    '''
+    Ordinary multi-day commands:
+    bribe == use 671
+    explore
+    form
+    improve
+    pillage
+    quest
+    raze
+    repair
+    research
+    seek
+    study
+    terrorize
+
+    build -- 1-day-per unless a max days is set
+    collect has lots of aliases:
+     yew = use 703 = collect 68,
+     wood = use 702 = collect 77,
+     stone = use 682 = collect 78 == quarry
+     fish = use 603 = collect 87
+     catch == use 655 == collect 51
+     recruit = collect 10
+
+    move / fly / ride / sail == use 601
+       needs: destination, pr
+       CH mo set to days-since-epoch for the end of the move
+       Need to look back in days to find actual destination, start of move
+         30: (Flying|Travel|Sailing) to Forest [(xx39)] will take (five) days.
+
+    make -- different for 1-day vs other durations, we can tell by duration
+      all make commands take args "make foo qty days"
+      copy qty to 3rd arg(c) (which overwrites days)
+     train -- synonym for make
+
+    wait -- just needs 'li', looks like I don't have to set up args? I
+      definitely need to set 'de' properly for 'wait time N'
+
+    every non-category skill has "use", e.g. sail == use 601.
+
+    generic thing: CO ue is the skill level: novice=1 journey=2 teacher=3 master=4 grand=5
+     apparently it's a bug and this is not used if I build 2+ things
+    '''
+    ret = {}
+
+
+    # common to all commands
+    ret['cs'] = 2  # 2=RUN
+    ret['st'] = 1  # status = TRUE
+    return ret
+
+
 def parse_inventory(text, unit, data):
     temp = {}
     scroll_id = None
@@ -1685,6 +1789,41 @@ def parse_location(s, data):
     return
 
 
+def parse_in_progress_orders(s, data):
+    lines = s.split('\n')
+    unit = None
+    for l in lines:
+        divider = '   # > '
+        if l.startswith('unit '):
+            unit = l.partition(' ')[2].partition(' ')[0]
+        elif l.startswith(divider):
+            order_and_remaining = l[len(divider):]
+            if '(still executing)' in order_and_remaining:
+                order = order_and_remaining.replace('(still executing)', '').lower()
+                remaining = '0'
+            else:
+                m = re.match(r'^(.*) \(executing for ([a-z0-9,]+) more days?\)', order_and_remaining)
+                if m:
+                    order, remaining = m.group(1, 2)
+                    order = order.lower()
+                    remaining = remaining.replace(',', '')
+                else:
+                    raise ValueError('Canot parse a remaining out of '+order_and_remaining)
+
+            if not remaining.isdigit():
+                remaining = numbers[remaining]
+            if remaining == '0':
+                remaining = -1
+
+            # the following algo does the wrong thing for orders running more than 30 days. whatever.
+            splits = global_days[unit].split(': > ')
+            start_day = splits[-2][-3:]
+            if not start_day.startswith('\n'):
+                raise ValueError('Failed to parse an order day: '+start_day)
+            start_day = int(start_day[1:])
+
+            co = fake_order(unit, order, start_day, remaining, data)
+
 def parse_turn(turn, data, everything=True):
 
     factint, turn_num, data = parse_turn_header(data, turn, everything)
@@ -1727,7 +1866,14 @@ def parse_turn(turn, data, everything=True):
                 parse_location(s, data)
                 break
 
-            # skip the rest: lore sheets, new players, order template
+            m = re.search(r'^Order template\n------------', s)
+            if m:
+                if not everything:
+                    break
+                parse_in_progress_orders(s, data)
+                break
+
+            # skip the rest: lore sheets, new players
             break
 
     for i in char_sections:
