@@ -632,8 +632,6 @@ def parse_inventory(text, unit, data):
             grab_next = 0
             m = re.search(r'\s(.*?)\s\[(\d\d\d)\]', line)
             if m:
-                #box.box_overwrite(data, scroll_id, 'na', [m.group(1)])
-                print('overwriting', scroll_id, 'IM ms', m.group(2))
                 box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
             elif '???' in line:
                 continue  # leave it faked
@@ -754,7 +752,6 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'fake': 'yes'}
         else:
             # in theory this might include 2/3 of auraculi, but, none of ours are 2 or 3?!
-            print('Unknown make_fake_item of name={} weight={} what={}'.format(name, weight, what))
             raise ValueError('weight is '+weight)
 
 
@@ -852,7 +849,6 @@ def make_locations_from_routes(routes, idint, region, data):
         if dir in inverted_directions:
             idir = inverted_directions[dir]
         else:
-            # print('dir is', dir, 'dest', dest, 'idint', idint)
             idir = -99999
         if dest not in data:
             if kind in province_kinds:
@@ -984,7 +980,7 @@ The main problem here is the kind of the enclosure, which can be renamed.
             if r == 'hidden':
                 hidden = 1
                 break
-            print('unknown rest in parse_location_top:', r, 'text is', text)
+            raise ValueError('unknown rest in parse_location_top: {}, text is {}'.format(r, text))
 
     return [loc_name, loc_int, kind, enclosing_int, region, civ, safe_haven, hidden]  # make me a thingie
 
@@ -1139,7 +1135,6 @@ def parse_a_structure_or_character(s, stack, last_depth):
     first = parts.pop(0)
     m = re.match('(.*?) \[(.{3,6})\]', first)
     if not m:
-        print('ack! s=', s)
         raise ValueError('failed to parse structure/char name in {}'.format(first))
     name, oid = m.group(1, 2)
     oidint = to_int(oid)
@@ -1268,7 +1263,7 @@ def parse_routes_leaving(text):
                 # Renamed provinces can lead with the geo
                 attr['kind'] = p.lower()
             else:
-                print('unknown part of', p, 'in line', l)
+                raise ValueError('unknown part of {} in line {}'.format(p, l))
 
         if 'dir' not in attr and 'special_dir' not in attr:
             # faery hill roads lack a direction to normal.
@@ -1610,26 +1605,25 @@ def parse_garrison_log(text, data):
     pass
 
 
+potion_to_uk = {'691': '2',  # heal
+                '694': '1',  # slavery
+                '696': '3'}  # death
+
+
 def resolve_fake_items(data):
     for item in data:
         if ' item ' in data[item]['firstline'][0] and 'fake' in data[item]:
             oid = to_oid(item)
             for unit in global_days:
                 if oid in global_days[unit]:
-                    print('unit', unit, 'mentions', oid)
                     m = re.search(r'^[ \d]\d: (?:Created|Produced one) .*? \['+oid+r'\]\.?$', global_days[unit], re.M)
                     if m:
-                        print('unit', unit, '  produced', oid)
                         whole = m.group(0)
                         before, _, after = global_days[unit].partition(whole)
                         m = re.findall(r' \> use (\d+)(.*)', before, re.I)
                         if m:
                             # should be a list of tuples, let's grab the last one
                             what, rest = m[-1]
-                            print('   use', what, rest)
-                            potion_to_uk = {'691': '2',  # heal
-                                            '694': '1',  # slavery
-                                            '696': '3'}  # death
                             if what in potion_to_uk:
                                 if data[item]['na'][0].startswith('Fake '):
                                     data[item]['na'] = [data[item]['na'][0][5:]]
@@ -1656,18 +1650,23 @@ def resolve_fake_items(data):
                                     data[item]['na'] = [data[item]['na'][0][5:]]
                                 data[item]['firstline'] = [item + ' item auraculum']
                                 rest = rest.strip()
-                                rest = rest.partition(' ')[0]  # use 881 strength "name"...
+                                strength = rest.partition(' ')[0]
                                 try:
-                                    rest = int(rest)
+                                    strength = int(strength)
                                 except:
                                     raise ValueError('Error parsing auraculum strength, use 881 '+rest)
-                                box.subbox_overwrite(data, item, 'IM', 'au', rest)
-                                # XXXv0 hook up this auraculum to character unit
+                                box.subbox_overwrite(data, item, 'IM', 'au', strength)
+                                box.subbox_overwrite(data, unit, 'CM', 'ar', item)
                             else:
-                                print('XXXXXXXXXXXXX Did not know what to do with unique item', oid)
+                                raise ValueError('Failed to resolve unique item {} despite seeing creation'.format(oid))
 
                             if 'fake' in data[item]:
                                 del data[item]['fake']
+
+            if 'fake' in data[item]:  # did not see it being created
+                if data[item]['IT']['wt'][0] == '2':
+                    # auraculum or Palantir. Guess palantir.
+                    box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
 
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
@@ -1728,7 +1727,6 @@ def parse_character(name, ident, factident, text, data):
     aura_artifacts = 0
     plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
     if plus:
-        print('plus is', plus)
         native_aura, _, aura_artifacts = plus.partition('+')
         if _ != '+':
             raise ValueError('failed parsing Max Aura plus of '+plus)
@@ -1824,7 +1822,7 @@ def parse_location(s, data):
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
-        print('failed to parse location, s is', s)
+        raise ValueError('failed to parse location')
     top = m.group(1)
     if top == 'Lore sheets':
         return
@@ -1908,9 +1906,7 @@ def parse_in_progress_orders(s, unit, data):
         divider = '   # > '
         if l.startswith('unit '):
             unit = l.partition(' ')[2].partition(' ')[0]
-            print('checking orders for unit {}'.format(unit))
         elif l.startswith(divider):
-            print('saw divider for unit {}'.format(unit))
             order_and_remaining = l[len(divider):]
             if '(still executing)' in order_and_remaining:
                 order = order_and_remaining.replace('(still executing)', '').lower()
@@ -1923,8 +1919,6 @@ def parse_in_progress_orders(s, unit, data):
                     remaining = remaining.replace(',', '')
                 else:
                     raise ValueError('Canot parse a remaining out of '+order_and_remaining)
-
-            print('saw order {} for unit {}'.format(order, unit))
 
             if not remaining.isdigit():
                 remaining = str(numbers[remaining])

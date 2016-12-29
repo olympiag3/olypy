@@ -791,6 +791,64 @@ def test_parse_garrison_log():
     pass
 
 
+def test_resolve_fake_items():
+    # XXXv0 should test potion, palantir, farcast, auraculum
+
+    data = {'59111': {'firstline': ['59111 item 0'],
+                      'na': ['Magic potion'],
+                      'IT': {'wt': ['1'], 'un': ['1111']},
+                      'fake': 'yes'},
+            '65001': {'firstline': ['65001 item palantir'],
+                      'na': ['Magic potion'],
+                      'IT': {'wt': ['2'], 'un': ['1111']},
+                      'fake': 'yes'},
+            '65002': {'firstline': ['65002 item palantir'],
+                      'na': ['Magic potion'],
+                      'IT': {'wt': ['2'], 'un': ['1111']},
+                      'fake': 'yes'},
+            '67001': {'firstline': ['67001 item 0'],
+                      'na': ['Magic potion'],
+                      'IT': {'wt': ['1'], 'un': ['1111']},
+                      'fake': 'yes'},
+            '71001': {'firstline': ['671001 item 0'],
+                      'na': ['Magic potion'],
+                      'IT': {'wt': ['3'], 'un': ['1111']},
+                      'fake': 'yes'},
+            '1111': {'firstline': ['1111 char 0']}}
+
+    turnparser.global_days = {'1111': '''
+01: > Use 691
+01: Created foo [a111].
+01: > Use 894
+01: Produced one foo [h001]
+01: > use 849 ab00
+01: > use 849 aa00
+01: > use 851
+01: Created foo [k001].
+01: > use 881 38
+01: Produced one foo [q001]
+'''}
+
+    turnparser.resolve_fake_items(data)
+
+    print(data['59111'])
+    assert data['59111']['IM']['uk'][0] == '2'
+
+    assert data['65001']['IM']['uk'][0] == '4'
+    assert data['65002']['IM']['uk'][0] == '4'
+
+    assert data['67001']['IM']['uk'][0] == '5'
+    assert data['67001']['IM']['pc'][0] == '10000'
+
+    assert data['71001']['IM']['au'][0] == '38'
+    assert data['1111']['CM']['ar'][0] == '71001'
+
+    del data['65002']  # this one is still fake
+    for ident in data:
+        if ' item ' in data[ident]['firstline'][0]:
+            assert 'fake' not in data[ident]
+
+
 def test_parse_character():
     t = '''
 Osswid the Destroyer [7271]
