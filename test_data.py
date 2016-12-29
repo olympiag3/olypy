@@ -1,3 +1,5 @@
+import pytest
+
 from oid import to_int
 from data import is_char, can_move, loop_here
 from data import set_where, unset_where
@@ -64,13 +66,17 @@ def test_is_char_and_can_move():
 
 
 def test_loop_here():
-    data = {'1001': {'firstline': ['1001 loc tower'], 'LI': {'hl': ['1002']}},
-            '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1003']}},
-            '1003': {'firstline': ['1003 loc tower']}}  # yeah, nonsensical
-    assert loop_here(data, '1001') == {'1002', '1003'}
-    assert loop_here(data, '1001', fogonly=True) == {'1002', '1003'}
-    assert loop_here(data, '1002') == {'1003'}
-    assert loop_here(data, '1002', fogonly=True) == set()
+    data = {'1001': {'firstline': ['1001 loc forest'], 'LI': {'hl': ['1002', '1003']}},
+            '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1004']}},
+            '1003': {'firstline': ['1003 loc tower'], 'LI': {'hl': ['1005']}},
+            '1004': {'firstline': ['1004 char 0']},
+            '1005': {'firstline': ['1005 char 0']}}
+    assert loop_here(data, '1001') == {'1002', '1003', '1004', '1005'}
+    assert loop_here(data, '1001', fog=True) == {'1003', '1005'}
+    assert loop_here(data, '1003') == {'1005'}
+
+    if loop_here(data, '1003', fog=True) == {'1005'}:
+        pytest.xfail('have not implemented non-province fog yet')
 
 
 def test_upsert_box():

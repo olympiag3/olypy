@@ -7,6 +7,7 @@ import sys
 
 from oid import to_int, to_oid, to_int_safely
 import box
+import data as db
 
 global_days = {}
 
@@ -31,14 +32,14 @@ subloc_kinds = set(('island', 'ring of stones', 'mallorn grove', 'bog', 'cave',
 structure_type = set(('castle', 'tower', 'galley', 'roundship', 'temple', 'mine', 'collapsed mine', 'inn'))
 
 structure_er = {
-    'castle':  10000,
-    'tower':    2000,
-    'galley':    250,
-    'roundship': 500,
-    'temple':   1000,
-    'mine':      500,
-    'inn':       300,
-    'raft':       45}
+    'castle':  '10000',
+    'tower':    '2000',
+    'galley':    '250',
+    'roundship': '500',
+    'temple':   '1000',
+    'mine':      '500',
+    'inn':       '300',
+    'raft':       '45'}
 
 geo_inventory = {
     # ordered same as mapgen.c
@@ -863,9 +864,6 @@ def make_locations_from_routes(routes, idint, region, data):
                     continue  # subloc out routes will be created elsewhere
                 if dir.endswith(' road'):
                     continue  # roads are annoying to make. generally they're marked hidden GA rh 1. XXXv1
-                if 'hidden' in r:
-                    box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
-                    # XXXv0 also add to my faction's PL kn
                 if idir > 3:
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
@@ -899,6 +897,12 @@ def make_locations_from_routes(routes, idint, region, data):
             elif kind == 'city' or kind == 'port city':
                 # link is at the province level
                 pass
+
+        if 'hidden' in r and not dir.endswith(' road'):
+            print('setting LO hi for {}'.format(to_oid(dest)))
+            box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
+            print('box is {}'.format(data[dest]))
+
         # XXXv2 what about roads?
 
 
@@ -987,9 +991,7 @@ The main problem here is the kind of the enclosure, which can be renamed.
 
 def parse_a_structure(parts):
     kind = parts.pop(0).strip()
-    in_progress = False
     if kind.endswith('-in-progress'):
-        in_progress = True  # XXXv0 ???
         kind = kind.replace('-in-progress', '')
 
     attr = {}
@@ -998,7 +1000,7 @@ def parse_a_structure(parts):
         p = p.strip()
         if p.endswith('% completed'):
             SL['er'] = [structure_er[kind]]
-            SL['eg'] = [str(int(structure_er[kind] * int(p.replace('% completed', '')) / 100))]
+            SL['eg'] = [str(int(int(structure_er[kind]) * int(p.replace('% completed', '')) / 100))]
         elif p.endswith('% damaged'):
             SL['da'] = [p.replace('% damage', '')]
         elif p.startswith('defense '):
@@ -1026,21 +1028,24 @@ def parse_a_sublocation_route(parts):
    Battlefield [j195], battlefield, hidden, 1 day
     '''
     kind = parts.pop(0).strip()
-    if kind not in subloc_kinds and kind != 'port city':
-        raise ValueError('invalid kind of a sublocation route, '+kind)
     if kind == 'port city':
-        kind = 'port'
+        kind = 'city'
 
-    attr = {'kind': kind}
+    if kind not in subloc_kinds:
+        raise ValueError('invalid kind of a sublocation route, '+kind)
+
+    attr = {}
+
     for p in parts:
         p = p.strip()
         if p == '1 day':
             continue
         elif p == 'hidden':
-            attr['hidden'] = 1  # LO hi 1
-            # XXXv0 also mark in my faction PL kn
+            attr['LO'] = {}
+            attr['LO']['hi'] = ['1']
         elif p == 'safe haven':
-            attr['safe haven'] = 1  # SL sh 1
+            attr['SL'] = {}
+            attr['SL']['sh'] = ['1']
         elif p == 'owner:':
             continue
         elif p == '""':
@@ -1054,6 +1059,8 @@ def parse_a_character(parts):
     attr = {}
     CH = {}
     il = {}
+    CM = {}
+    MI = {}
     for p in parts:
         p = p.strip()
         if p in noble_ranks:
@@ -1065,11 +1072,12 @@ def parse_a_character(parts):
         elif p == 'prisoner':
             CH['pr'] = ['1']
         elif p == 'garrison':
-            # city or province garrison... MI ca g and CM dg 1 for both... MI gc castleid for province
-            # if not "our" garrison, set MI gc castleid to head of pledge chain
+            CM['dg'] = ['1']
+            MI['ca'] = ['g']
+            # controlling castle gc set elsewhere
             continue
         elif p == 'on guard':
-            # sets 'CH gu 1'?
+            CH['gu'] = ['1']
             continue
         elif p == 'flying':
             continue
@@ -1109,20 +1117,23 @@ def parse_a_character(parts):
                     id = item_to_inventory[item]
                 except KeyError:
                     raise KeyError('invalid key with parts: '+repr(parts))
-            il[id] = [count]
+            il[id] = [str(count)]
     if len(il) > 0:
         attr['il'] = il
     if len(CH) > 0:
         attr['CH'] = CH
+    if len(CM) > 0:
+        attr['CM'] = CM
+    if len(MI) > 0:
+        attr['MI'] = MI
     return 'char', attr
 
 
-def parse_a_structure_or_character(s, stack, last_depth):
+def parse_a_structure_or_character(s, previous, last_depth, things):
     '''
     Parse a single structure or character.
     Place in stack context.
     '''
-
     # if it's mine, there's leading '*'. dump it.
     m = re.match(r'\s+\*', s)
     if m:
@@ -1145,6 +1156,8 @@ def parse_a_structure_or_character(s, stack, last_depth):
             kind, thing = parse_a_structure(parts)
         elif second in route_annotations or second in subloc_kinds:
             kind, thing = parse_a_sublocation_route(parts)
+            if 'hi' in thing.get('LO', {}):
+                print('Subloc {} is hidden'.format(oid))  # XXXv0 this never fires
         else:
             kind, thing = parse_a_character(parts)
     else:
@@ -1163,20 +1176,26 @@ def parse_a_structure_or_character(s, stack, last_depth):
             kind = kind + '-in-progress'
         thing['firstline'] = [oidint + loc + kind]
     thing['na'] = [name]
+    thing['LI'] = {}
 
-    if last_depth is None:
-        last_depth = depth
-    if depth == last_depth:
-        stack.append(oidint)
-    elif depth > last_depth:
-        stack.append('down')
-        stack.append(oidint)
+    if last_depth is None or depth > last_depth:
+        # I am *under* the previous thing
+        where = previous
+    elif depth == last_depth:
+        # I am *after* the previous thing
+        where = things[previous]['LI']['wh'][0]
     elif depth < last_depth:
-        stack.append('up')
-        stack.append(oidint)
+        # I am *above* the previous thing
+        where = things[previous]['LI']['wh'][0]
+        where = things[where]['LI']['wh'][0]
+    thing['LI']['wh'] = [where]
+    box.subbox_append(things, where, 'LI', 'hl', [oidint])
+
     last_depth = depth
 
-    return oidint, kind, thing, last_depth
+    things[oidint] = thing
+
+    return oidint, last_depth
 
 
 def parse_routes_leaving(text):
@@ -1226,6 +1245,8 @@ def parse_routes_leaving(text):
             elif p in geo_inventory:
                 attr['kind'] = p
             elif p in route_annotations:
+                if p == 'hidden':
+                    print('Route to {} is hidden'.format(to_oid(attr['destination'])))
                 attr[p] = 1
             elif '[' in p:
                 saw_loc = 1
@@ -1300,7 +1321,7 @@ def parse_routes_leaving(text):
     return ret
 
 
-def parse_inner_locations(text):
+def parse_inner_locations(idint, text, things):
     '''
    Faery hill [z777], faery hill, 1 day
    Island [g039], island, 1 day
@@ -1321,10 +1342,9 @@ def parse_inner_locations(text):
 
     '''
 
-    things = {}
-    stack = []
     accumulation = ''
     last_depth = None
+    previous = idint
 
     for l in text.split('\n'):
         l = re.sub('".*?"', '""', l)  # throw out all banners
@@ -1348,16 +1368,12 @@ def parse_inner_locations(text):
             accumulation += ' ' + l.lstrip(' ')
         else:
             if accumulation:
-                oidint, kind, thing, last_depth = parse_a_structure_or_character(accumulation, stack, last_depth)
-                # XXXv0 propagate kind
-                things[oidint] = thing
+                previous, last_depth = parse_a_structure_or_character(accumulation, previous, last_depth, things)
             accumulation = l
     if accumulation:
-        oidint, kind, thing, _ = parse_a_structure_or_character(accumulation, stack, last_depth)
-        # XXXv0 propagate kind
-        things[oidint] = thing
+        _, _ = parse_a_structure_or_character(accumulation, previous, last_depth, things)
 
-    return stack, things
+    return things
 
 
 def parse_market_report(text, include=None):
@@ -1516,12 +1532,19 @@ def parse_turn_header(data, turn, everything):
         analyze_regions(m.group(1), region_after)
 
     # this is a complete garrison list (no fog) and accurate castle info
+    # all it lacks is inventory, visible or not
     if everything:
         m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
         if m:
             analyze_garrison_list(m.group(1), data)
 
     factint = to_int(fact_id)
+
+    if factint in data:
+        kn = data[factint]['PL']['kn']
+    else:
+        kn = []
+
     fact = {}
     fact['firstline'] = [factint + ' player pl_regular']
     fact['na'] = [fact_name]
@@ -1531,9 +1554,9 @@ def parse_turn_header(data, turn, everything):
     pl['fs'] = [fast_study]
     pl['ft'] = ['1']  # first turn
     pl['lt'] = [turn_num]  # last turn
-    pl['kn'] = []  # to be filled in later
+    pl['kn'] = kn
     pl['un'] = []
-    pl['uf'] = next5  # XXXv0 make 'box unform 0' for these
+    pl['uf'] = next5
     fact['PL'] = pl
 
     data[factint] = fact
@@ -1583,7 +1606,7 @@ def analyze_garrison_list(text, data):
 
         il = ['12', '10']  # if we have to fake it
         if garr in data:
-            if ' char garrison' in data[garr]['firstline'] and 'il' in data[garr]:
+            if ' char garrison' in data[garr]['firstline'][0] and 'il' in data[garr]:
                 il = data[garr]['il']
 
         LI = {'wh': [where]}
@@ -1668,6 +1691,20 @@ def resolve_fake_items(data):
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
 
+
+def remove_chars_and_ships(things):
+    '''
+    Most of the time we are only looking at 'loc' in the turn.
+    '''
+    nuke = []
+    for i in things:
+        if (' char ' in things[i]['firstline'][0] or
+            ' ship ' in things[i]['firstline'][0]):
+            db.unset_where(things, i)
+            nuke.append(i)
+
+    for i in nuke:
+        del things[i]
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
@@ -1818,7 +1855,7 @@ def parse_character(name, ident, factident, text, data):
     box.subbox_append(data, factident, 'PL', 'un', ident, dedup=True)
 
 
-def parse_location(s, data):
+def parse_location(s, factint, everything, data):
 
     m = re.match(r'^(.*?)\n-------------', s)
     if not m:
@@ -1828,6 +1865,8 @@ def parse_location(s, data):
         return
 
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
+    if kind == 'port city':
+        kind = 'city'
 
     if idint not in data:
         data[idint] = {'firstline': [idint + ' loc ' + kind],
@@ -1839,19 +1878,18 @@ def parse_location(s, data):
         if safe_haven:
             box.subbox_overwrite(data, idint, 'SL', 'sh', ['1'])
         if hidden:
-            box.subbox_overwrite(data, idint, 'LO', 'li', ['1'])
+            box.subbox_overwrite(data, idint, 'LO', 'hi', ['1'])
+            box.subbox_append(data, factint, 'PL', 'kn', idint, dedup=True)
 
-    box.box_overwrite(data, idint, 'na', [name])  # overwrite; it might have changed
+    box.box_overwrite(data, idint, 'na', [name])
 
-    # if it's not our garrison, we'll use this to set the owning castle
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
         routes = parse_routes_leaving(m.group(1))
 
-        # Fixup: sewers incorrectly claim they are enclosed by the province.
-        # They're really a city subloc.
+        # Fixup: sewers incorrectly claim they are enclosed by the province... actually city subloc
         if kind == 'sewer':
             for r in routes:
                 if r['dir'] == 'out':
@@ -1862,16 +1900,14 @@ def parse_location(s, data):
         make_locations_from_routes(routes, idint, region, data)
         make_direction_routes(routes, idint, kind, data)
 
-    # Now parse and then make all of the stuff present.
-    # stack accumulates everything
-    # each stack starts at the base level
-    # one thing per thing: loc, structure, ship, character
+    things = {idint: {'LI': {}, 'firstline': ['fake']}}
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        stack, things = parse_inner_locations(m.group(1))
-        # beware: faery hills are inner loc of faery, faery road in normal world
+        parse_inner_locations(idint, m.group(1), things)
+        # XXXv1 beware: faery hills are inner loc of faery, faery road in normal world
         # locations never change, however, they may be hidden to this faction
+        # all buildings are here
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -1880,21 +1916,37 @@ def parse_location(s, data):
 
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        stack, things = parse_inner_locations(m.group(1))
+        parse_inner_locations(idint, m.group(1), things)
 
     m = re.search(r'^Ships sighted:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        stack, things = parse_inner_locations(m.group(1))
+        parse_inner_locations(idint, m.group(1), things)
 
     m = re.search(r'^Ships docked at port:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        stack, things = parse_inner_locations(m.group(1))
+        parse_inner_locations(idint, m.group(1), things)
+
+    # if a non-city garrison was seen, stick controlling_castle in
+    # if it's my castle, I'll later fill in the correct gc from the garrison list
+    if controlling_castle:
+        for i in things:
+            if 'ca' in things[i].get('MI', {}):
+                box.subbox_overwrite(things, i, 'MI', 'gc', [controlling_castle])
+
+    if not everything:
+        remove_chars_and_ships(things)
+
+    hl = things[idint].get('LI', {}).get('hl', [])
+    del things[idint]
+
+    for i in things:
+        if 'hi' in things[i].get('LO', {}):
+            box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
 
     # XXXv0 do something with all this
-
-    # faery hills are NOT a subloc of a normal province,
-    #  they're a road to normal and a normal subloc on the faery side
-    # if a non-city garrison was seen, stick controlling castle in
+    # stationary things can be destroyed / unplaced / created / placed at will
+    # moving things (chars and ships) should be treated more carefully
+    # for i in things:
 
     return
 
@@ -1980,7 +2032,7 @@ def parse_turn(turn, data, everything=True):
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
-                parse_location(s, data)
+                parse_location(s, factint, everything, data)
                 break
 
             m = re.search(r'^Order template\n------------', s)
@@ -2012,3 +2064,13 @@ if __name__ == '__main__':
         print('\nbegin filename', filename, '\n')
         with open(filename, 'r') as f:
             parse_turn_from_file(f, data)
+
+# XXXv2 storms from the location map
+# It is raining.
+#    Rain [144478], storm, strength 1
+# XXXv2 storm owner from turn
+# storm  kind  owner   loc  strength
+# -----  ----  -----  ----  --------
+# 82999  wind   8012  aq99     19
+# XXXv2 walk global_days to find if it's bound
+# XXXv2 random storms on map

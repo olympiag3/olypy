@@ -453,19 +453,41 @@ def test_parse_inner_locations():
       Yoyo 2 [2259], with 20 workers, accompanied by:
 \t Yoyo 5 [3984], with two peasants, six sailors
 '''
-    stack = ['6940', '1771', 'down', '2480', 'up', '2370', '3622', 'down', '2259', 'down', '3984']
-    things = {'1771': {'firstline': ['1771 char 0'], 'il': {'10': [19]}, 'na': ['Woodrow Call']},
-              '2259': {'firstline': ['2259 char 0'], 'il': {'11': [20]}, 'na': ['Yoyo 2']},
-              '2370': {'firstline': ['2370 char 0'], 'il': {'10': [15], '11': [5]}, 'na': ['Eric']},
-              '2480': {'firstline': ['2480 char 0'], 'il': {'10': [2]}, 'na': ['Pea Eye Parker']},
-              '3622': {'firstline': ['3622 ship roundship-in-progress'],
-                       'SL': {'eg': ['230'], 'er': [500]}, 'na': ['Tub 1']},
-              '3984': {'firstline': ['3984 char 0'], 'il': {'10': [2], '19': [6]}, 'na': ['Yoyo 5']},
-              '6940': {'firstline': ['6940 char 0'], 'il': {'10': [14], '11': [11]}, 'na': ['Oleg the Loudmouth']}}
+    ret = {'1001': {'LI': {'hl': ['6940', '1771', '2370', '3622']}},
+           '1771': {'LI': {'hl': ['2480'], 'wh': ['1001']},
+                    'firstline': ['1771 char 0'],
+                    'il': {'10': ['19']},
+                    'na': ['Woodrow Call']},
+           '2259': {'LI': {'hl': ['3984'], 'wh': ['3622']},
+                    'firstline': ['2259 char 0'],
+                    'il': {'11': ['20']},
+                    'na': ['Yoyo 2']},
+           '2370': {'LI': {'wh': ['1001']},
+                    'firstline': ['2370 char 0'],
+                    'il': {'10': ['15'], '11': ['5']},
+                    'na': ['Eric']},
+           '2480': {'LI': {'wh': ['1771']},
+                    'firstline': ['2480 char 0'],
+                    'il': {'10': ['2']},
+                    'na': ['Pea Eye Parker']},
+           '3622': {'LI': {'hl': ['2259'], 'wh': ['1001']},
+                    'SL': {'eg': ['230'], 'er': ['500']},
+                    'firstline': ['3622 ship roundship-in-progress'],
+                    'na': ['Tub 1']},
+           '3984': {'LI': {'wh': ['2259']},
+                    'firstline': ['3984 char 0'],
+                    'il': {'10': ['2'], '19': ['6']},
+                    'na': ['Yoyo 5']},
+           '6940': {'LI': {'wh': ['1001']},
+                    'firstline': ['6940 char 0'],
+                    'il': {'10': ['14'], '11': ['11']},
+                    'na': ['Oleg the Loudmouth']}}
 
-    s, t = turnparser.parse_inner_locations(t.expandtabs())
-    assert s == stack
-    assert t == things
+    idint = '1001'
+    things = {}
+
+    turnparser.parse_inner_locations(idint, t.expandtabs(), things)
+    assert things == ret
 
 
 def test_parse_market_report():
@@ -1038,5 +1060,5 @@ Seen here:
                    'na': ['Ocean']}}
 
     data = {}
-    turnparser.parse_location(t, data)
+    turnparser.parse_location(t, to_int('ja1'), False, data)
     assert data == r

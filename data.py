@@ -61,20 +61,23 @@ def can_move(data, who):
         return True
 
 
-def loop_here(data, who, fogonly=False):
+def loop_here(data, where, fog=False):
     '''
     Make a list of everything here: chars, structures, sublocs
-    If fogonly, make a list of only the invisible things (chars)
+    If fog, and a province, make a list of only the visible things
     (Name similar to C code)
     '''
+    if fog and ' loc ' in data[where]['firstline'][0]:
+        kind = data[where]['firstline'][0].partition(' loc ')[2]
+
     hls = set()
-    if 'LI' in data[who]:
-        if 'hl' in data[who]['LI']:
-            for w in data[who]['LI']['hl']:
-                if fogonly and not is_char(data, w):
+    if 'LI' in data[where]:
+        if 'hl' in data[where]['LI']:
+            for w in data[where]['LI']['hl']:
+                if fog and is_char(data, w):
                     continue
                 hls.add(w)
-                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fogonly, it only applies to top
+                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fog, it only applies to top characters
     return hls
 
 
