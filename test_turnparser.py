@@ -73,8 +73,8 @@ def test_parse_wait_args():
 
 
 def test_generate_move_args():
-    test = [[['29', 5, to_int('aa02'), to_int('aa01')], ['0', '0', '10002', '0', '0', '7', '10001', '0']]]
-    for t in test:
+    tests = [[['29', '5', to_int('aa02'), to_int('aa01')], ['0', '0', '10002', '0', '0', '7', '10001', '0']]]
+    for t in tests:
         print(len(t[0]))
         assert turnparser.generate_move_args(*t[0]) == t[1]
 
@@ -84,6 +84,63 @@ def test_split_order_args():
              ['foo "bar baz"', ['foo', '"foo"']]]
     for t in tests:
         assert turnparser.split_order_args(t[0]) == t[1]
+
+
+def test_canonicalize_order():
+    tests = [['train something', 'make something'],
+             ['sneak out', 'use 639 out'],
+             ['go up', 'move up'],
+             ['north', 'move n'],
+             ['n', 'move n'],
+             ['in', 'move in']]
+    for t in tests:
+        assert turnparser.canonicalize_order(t[0]) == t[1]
+
+
+def test_fake_order():
+    # fake_order(order, start_day, remaining, last_move_dest, unit, data)
+    # uses data[unit]['LI']['wh'] for moves
+    # XXXv0 todo CH mo set to days_since_epoch + remaining for moves
+
+    tests = [[['move e', '10', '2', '10002', '1000'], {'ar': ['0', '0', '10002', '0', '0', '23', '10001', '0'],
+                                                       'cs': ['2'],
+                                                       'de': ['21'],
+                                                       'li': ['move e'],
+                                                       'pr': ['3'],
+                                                       'st': ['1'],
+                                                       'wa': ['2']}],
+             [['sail e', '10', '2', '10002', '1000'], {'ar': ['0', '0', '10002', '0', '0', '23', '10001', '0'],
+                                                       'cs': ['2'],
+                                                       'de': ['21'],
+                                                       'li': ['sail e'],
+                                                       'pr': ['4'],
+                                                       'st': ['1'],
+                                                       'wa': ['2']}],
+             [['collect 10 0 0', '29', '-1', 'x', 'x'], {'ar': ['10', '0', '0', '2', '0', '0', '0', '0'],
+                                                         'cs': ['2'],
+                                                         'de': ['2'],
+                                                         'li': ['collect 10 0 0'],
+                                                         'po': ['1'],
+                                                         'pr': ['3'],
+                                                         'st': ['1'],
+                                                         'wa': ['-1']}],
+             [['use 823 832', '29', '12', 'x', 'x'], {'ar': ['832', '0', '0', '0', '0', '0', '0', '823'],
+                                                      'cs': ['2'],
+                                                      'de': ['2'],
+                                                      'li': ['use 823 832'],
+                                                      'po': ['1'],
+                                                      'pr': ['3'],
+                                                      'st': ['1'],
+                                                      'ue': ['1'],
+                                                      'us': ['823'],
+                                                      'wa': ['12']}]]
+
+
+    data = {'1000': {'LI': {'wh': ['10001']}}}
+
+    for t in tests:
+        t[0].append(data)
+        assert turnparser.fake_order(*t[0]) == t[1]
 
 
 def test_parse_inventory():
@@ -872,7 +929,7 @@ Osswid the Destroyer [7271]
                                   '800', '1', '7', '0', '0',
                                   '860', '1', '7', '0', '0']},
                     'CM': {'hs': ['1'], 'pl': '6839'},
-                    'LI': {'wh': '4256'}}}
+                    'LI': {'wh': ['4256']}}}
     data = {}
     turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
     assert data == ret

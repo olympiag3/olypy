@@ -459,7 +459,7 @@ def parse_wait_args(order):
     return ar
 
 
-def generate_move_args(start_day, remaining, last_move_dest, location):
+def generate_move_args(start_day, remaining, last_move_dest, where):
     '''
     ar: apparent-dest apprent-dir actual-dest road dest-hidden distance orig orig-hidden
 
@@ -467,10 +467,10 @@ def generate_move_args(start_day, remaining, last_move_dest, location):
     '''
     ar = ['0', '0', '0', '0', '0', '0', '0', '0']
     ar[2] = last_move_dest
-    if remaining == -1:
-        raise ValueError('If I am moving, days remaining canot be unknown: '+str(remaining))
-    ar[5] = str(31 - int(start_day) + remaining)
-    ar[6] = location
+    if remaining == '-1':
+        raise ValueError('If I am moving, days remaining canot be unknown: '+remaining)
+    ar[5] = str(31 - int(start_day) + int(remaining))
+    ar[6] = where
     return ar
 
 
@@ -530,6 +530,19 @@ order_canon_exact = {'n': 'move n',
                      'in': 'move in',
                      'out': 'move out'}
 
+
+def canonicalize_order(order):
+    for o in order_canon:
+        if order.startswith(o):
+            order = order.replace(o, order_canon[o], 1)
+            break
+
+    if order in order_canon_exact:
+        order = order_canon_exact[order]
+
+    return order
+
+
 valid_orders = {'build': set(('poll',)),
                 'collect': set(('poll',)),
                 'explore': set(),
@@ -542,7 +555,7 @@ valid_orders = {'build': set(('poll',)),
                 'raze': set(('poll',)),
                 'repair': set(('poll',)),
                 'research': set(),
-                'sail': set(('poll', 'pri_4')),
+                'sail': set(('pri_4',)),
                 'seek': set(('poll',)),
                 'study': set(('poll',)),
                 'terrorize': set(),
@@ -550,30 +563,19 @@ valid_orders = {'build': set(('poll',)),
                 'wait': set(('poll',))}
 
 
-def fake_order(unit, order, start_day, remaining, last_move_dest, data):
-    '''
-    move / sail == use 601
-       CH mo set to days-since-epoch for the end of the move
+single_day_makes = set(('11', '19', '21', '12', '16', '20', '14', '15',
+                        '13', '22', '72', '73', '74', '75', '85'))
+single_day_collects = set(('10',))
 
-    make -- different for 1-day vs other durations, we can tell by duration
-      all make commands take args "make foo qty days"
-      copy qty to 3rd arg(c) (which overwrites days)
-      multi-day? wa set to time-to-build for the next thing - elapsed
-      single day? wa = -1 '(still executing)' -- applies to many non-make situations, too
-    '''
+
+def fake_order(order, start_day, remaining, last_move_dest, unit, data):
+    # XXXv0 todo CH mo set to days_since_epoch + remaining for moves
     ret = {'li': [order],
            'wa': [remaining],
-           'de': [31 - int(start_day)]}
+           'de': [str(31 - int(start_day))]}
 
-    for o in order_canon:
-        if order.startswith(o):
-            order = order.replace(o, order_canon[o], 1)
-            break
+    order = canonicalize_order(order)
 
-    if order in order_canon_exact:
-        order = order_canon_exact[order]
-
-    print('unit {}, order is {}'.format(unit, order))
     verb, _, rest = order.partition(' ')
     if verb not in valid_orders:
         raise ValueError('Unknown order verb in '+order)
@@ -584,13 +586,21 @@ def fake_order(unit, order, start_day, remaining, last_move_dest, data):
     if verb == 'wait':
         ar = parse_wait_args(order)
     elif verb == 'move' or verb == 'sail':
-        location = data[unit]['LO']['wh'][0]
-        ar = generate_move_args(start_day, remaining, last_move_dest, location)
+        where = data[unit]['LI']['wh'][0]
+        ar = generate_move_args(start_day, remaining, last_move_dest, where)
     else:
         ar = [to_int_safely(x) for x in split_order_args(rest)]
 
     ar += ['0', '0', '0', '0', '0', '0', '0', '0']
     ar = ar[:8]
+
+    if verb == 'collect':
+        if ar[0] in single_day_collects:
+            ar[3] = ret['de'][0]
+    if verb == 'make':
+        if ar[0] in single_day_makes:
+            ar[3] = ret['de'][0]
+        ar[2] = ar[1]  # apparently make item qty days doesn't really take a days argument
 
     if 'pri_4' in command:
         ret['pr'] = ['4']
@@ -598,16 +608,16 @@ def fake_order(unit, order, start_day, remaining, last_move_dest, data):
         ret['pr'] = ['3']
     if 'use_skill' in command:
         # for whatever reason, the skill ID goes on the end of 'ar'
-        ret['us'] = ar.pop(0)
-        ar.append(ret['us'])
+        ret['us'] = [ar.pop(0)]
+        ar.append(ret['us'][0])
     if 'use_exp' in command:
         # XXXv2 it appears that currently a bug prevents this from having an effect
         # eventually should set it to novice=1 journey=2 teacher=3 master=4 grand=5
-        ret['ue'] = 1
+        ret['ue'] = ['1']
     if 'poll' in command:
-        ret['po'] = '1'
-    ret['cs'] = '2'  # 2=RUN
-    ret['st'] = '1'  # status = TRUE
+        ret['po'] = ['1']
+    ret['cs'] = ['2']  # state 2 = RUN
+    ret['st'] = ['1']  # status = TRUE
     ret['ar'] = ar
     return ret
 
@@ -1764,7 +1774,7 @@ def parse_character(name, ident, factident, text, data):
 
     ret['LI'] = {}  # will get LI/wh eventually
     print('monkey-patching unit {} LI wh to {}'.format(ident, location))
-    ret['LI']['wh'] = location  # XXXv0 remove me, should already have been set
+    ret['LI']['wh'] = [location]  # XXXv0 remove me, should already have been set
 
     ch = {}
     ch['lo'] = [to_int(factident)]
@@ -1891,7 +1901,7 @@ def parse_location(s, data):
     return
 
 
-def parse_in_progress_orders(s, data):
+def parse_in_progress_orders(s, unit, data):
     lines = s.split('\n')
     unit = None
     for l in lines:
@@ -1917,7 +1927,7 @@ def parse_in_progress_orders(s, data):
             print('saw order {} for unit {}'.format(order, unit))
 
             if not remaining.isdigit():
-                remaining = numbers[remaining]
+                remaining = str(numbers[remaining])
             if remaining == '0':
                 remaining = '-1'
 
@@ -1931,10 +1941,10 @@ def parse_in_progress_orders(s, data):
             last_move_dest = to_int('aa01')
             m = re.search(r'(?:Flying|Travel|Sailing) to .*? \[(.*?)\] will take (?:.+) days?\.', splits[-1])
             if m:
-                last_move_dest = m.group(1)
-                print('saw last destination move of {}'.format(last_move_dest))
+                last_move_dest = to_int(m.group(1))
 
-            co = fake_order(unit, order, start_day, remaining, last_move_dest, data)
+            co = fake_order(order, start_day, remaining, last_move_dest, unit, data)
+            data[unit]['CO'] = co
 
 def parse_turn(turn, data, everything=True):
 
@@ -1993,7 +2003,7 @@ def parse_turn(turn, data, everything=True):
         name, ident, factint, s = char_sections[i]
         parse_character(name, ident, factint, s, data)
     for i in in_progress_sections:
-        parse_in_progress_orders(in_progress_sections[i], data)
+        parse_in_progress_orders(in_progress_sections[i], i, data)
 
 
 def parse_turn_from_file(f, data):
