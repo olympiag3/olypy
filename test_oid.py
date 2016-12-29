@@ -1,5 +1,5 @@
 import pytest
-from oid import to_oid, to_int, allocate_oid
+from oid import to_oid, to_int, allocate_oid, to_int_safely
 
 oid_to_int = {
     '1': 1,
@@ -44,3 +44,8 @@ def test_oid():
     assert len(oid) == 4
     assert oid[0:2].isalpha()
     assert oid[2:].isdigit()
+
+def test_safely():
+    assert to_int_safely('foo') == '0'
+    assert to_int_safely('1001') == '1001'
+    assert to_int_safely('aa01') == '10001'

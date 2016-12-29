@@ -72,6 +72,20 @@ def test_parse_wait_args():
             turnparser.parse_wait_args(order)
 
 
+def test_generate_move_args():
+    test = [[['29', 5, to_int('aa02'), to_int('aa01')], ['0', '0', '10002', '0', '0', '7', '10001', '0']]]
+    for t in test:
+        print(len(t[0]))
+        assert turnparser.generate_move_args(*t[0]) == t[1]
+
+
+def test_split_order_args():
+    tests = [['foo bar', ['foo', 'bar']],
+             ['foo "bar baz"', ['foo', '"foo"']]]
+    for t in tests:
+        assert turnparser.split_order_args(t[0]) == t[1]
+
+
 def test_parse_inventory():
     t = '''
 
@@ -858,7 +872,7 @@ Osswid the Destroyer [7271]
                                   '800', '1', '7', '0', '0',
                                   '860', '1', '7', '0', '0']},
                     'CM': {'hs': ['1'], 'pl': '6839'},
-                    'LI': {}}}
+                    'LI': {'wh': '4256'}}}
     data = {}
     turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
     assert data == ret

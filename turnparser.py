@@ -5,7 +5,7 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 import re
 import sys
 
-from oid import to_int, to_oid
+from oid import to_int, to_oid, to_int_safely
 import box
 
 global_days = {}
@@ -459,56 +459,156 @@ def parse_wait_args(order):
     return ar
 
 
-def fake_order(unit, order, start_day, remaining, data):
+def generate_move_args(start_day, remaining, last_move_dest, location):
     '''
-    Ordinary multi-day commands:
-    bribe == use 671
-    explore
-    form
-    improve
-    pillage
-    quest
-    raze
-    repair
-    research
-    seek
-    study
-    terrorize
+    ar: apparent-dest apprent-dir actual-dest road dest-hidden distance orig orig-hidden
 
-    build -- 1-day-per unless a max days is set
-    collect has lots of aliases:
-     yew = use 703 = collect 68,
-     wood = use 702 = collect 77,
-     stone = use 682 = collect 78 == quarry
-     fish = use 603 = collect 87
-     catch == use 655 == collect 51
-     recruit = collect 10
+    Right now we aren't setting all of these, just the easy ones.
+    '''
+    ar = ['0', '0', '0', '0', '0', '0', '0', '0']
+    ar[2] = last_move_dest
+    if remaining == -1:
+        raise ValueError('If I am moving, days remaining canot be unknown: '+str(remaining))
+    ar[5] = str(31 - int(start_day) + remaining)
+    ar[6] = location
+    return ar
 
-    move / fly / ride / sail == use 601
-       needs: destination, pr
+
+def split_order_args(order):
+    '''
+    Orders are allowed to have "" and '' in them. In this instance, we don't
+    care what is in the quoted parts.
+    '''
+    order = re.sub(r'".*?"', '"foo"', order)
+    order = re.sub(r"'.*?'", "'foo'", order)
+    return order.split(' ')
+
+
+order_canon = {'train': 'make',
+               'torture': 'use 637',
+               'sneak': 'use 639',
+               'breed': 'use 654',
+               'bribe': 'use 671',
+               'raise': 'use 673',
+               'rally': 'use 674',
+               'incite': 'use 675',
+               'bind': 'use 822',
+               'trance': 'use 921',
+               'wood': 'collect 77',
+               'yew': 'collect 68',
+               'mallorn': 'collect 70',
+               'opium': 'collect 93',
+               'stone': 'collect 78',
+               'quarry': 'collect 78',
+               'fish': 'collect 87',
+               'catch': 'collect 51',
+               'recruit': 'collect 10',
+               'use 702': 'collect 77',
+               'use 703': 'collect 68',
+               'use 705': 'collect 70',
+               'use 706': 'collect 93',
+               'use 682': 'collect 78',
+               'use 603': 'collect 87',
+               'use 655': 'collect 51',
+               'use 656': 'make 52',
+               'use 657': 'make 53',
+               'use 601': 'sail',
+               'use 902': 'make 18',
+               'go': 'move',
+               'fly': 'move',
+               'north': 'move n',
+               'south': 'move s',
+               'east': 'move e',
+               'west': 'move w'}
+
+order_canon_exact = {'n': 'move n',
+                     's': 'move s',
+                     'e': 'move e',
+                     'w': 'move w',
+                     'enter': 'move in',
+                     'exit': 'move out',
+                     'in': 'move in',
+                     'out': 'move out'}
+
+valid_orders = {'build': set(('poll',)),
+                'collect': set(('poll',)),
+                'explore': set(),
+                'form': set(),
+                'improve': set(('poll',)),
+                'make': set(('poll',)),
+                'move': set(),
+                'pillage': set(),
+                'quest': set(),
+                'raze': set(('poll',)),
+                'repair': set(('poll',)),
+                'research': set(),
+                'sail': set(('poll', 'pri_4')),
+                'seek': set(('poll',)),
+                'study': set(('poll',)),
+                'terrorize': set(),
+                'use': set(('poll', 'use_exp', 'use_skill')),
+                'wait': set(('poll',))}
+
+
+def fake_order(unit, order, start_day, remaining, last_move_dest, data):
+    '''
+    move / sail == use 601
        CH mo set to days-since-epoch for the end of the move
-       Need to look back in days to find actual destination, start of move
-         30: (Flying|Travel|Sailing) to Forest [(xx39)] will take (five) days.
 
     make -- different for 1-day vs other durations, we can tell by duration
       all make commands take args "make foo qty days"
       copy qty to 3rd arg(c) (which overwrites days)
-     train -- synonym for make
-
-    wait -- just needs 'li', looks like I don't have to set up args? I
-      definitely need to set 'de' properly for 'wait time N'
-
-    every non-category skill has "use", e.g. sail == use 601.
-
-    generic thing: CO ue is the skill level: novice=1 journey=2 teacher=3 master=4 grand=5
-     apparently it's a bug and this is not used if I build 2+ things
+      multi-day? wa set to time-to-build for the next thing - elapsed
+      single day? wa = -1 '(still executing)' -- applies to many non-make situations, too
     '''
-    ret = {}
+    ret = {'li': [order],
+           'wa': [remaining],
+           'de': [31 - int(start_day)]}
 
+    for o in order_canon:
+        if order.startswith(o):
+            order = order.replace(o, order_canon[o], 1)
+            break
 
-    # common to all commands
-    ret['cs'] = 2  # 2=RUN
-    ret['st'] = 1  # status = TRUE
+    if order in order_canon_exact:
+        order = order_canon_exact[order]
+
+    print('unit {}, order is {}'.format(unit, order))
+    verb, _, rest = order.partition(' ')
+    if verb not in valid_orders:
+        raise ValueError('Unknown order verb in '+order)
+    command = valid_orders[verb]
+
+    ar = []
+
+    if verb == 'wait':
+        ar = parse_wait_args(order)
+    elif verb == 'move' or verb == 'sail':
+        location = data[unit]['LO']['wh'][0]
+        ar = generate_move_args(start_day, remaining, last_move_dest, location)
+    else:
+        ar = [to_int_safely(x) for x in split_order_args(rest)]
+
+    ar += ['0', '0', '0', '0', '0', '0', '0', '0']
+    ar = ar[:8]
+
+    if 'pri_4' in command:
+        ret['pr'] = ['4']
+    else:
+        ret['pr'] = ['3']
+    if 'use_skill' in command:
+        # for whatever reason, the skill ID goes on the end of 'ar'
+        ret['us'] = ar.pop(0)
+        ar.append(ret['us'])
+    if 'use_exp' in command:
+        # XXXv2 it appears that currently a bug prevents this from having an effect
+        # eventually should set it to novice=1 journey=2 teacher=3 master=4 grand=5
+        ret['ue'] = 1
+    if 'poll' in command:
+        ret['po'] = '1'
+    ret['cs'] = '2'  # 2=RUN
+    ret['st'] = '1'  # status = TRUE
+    ret['ar'] = ar
     return ret
 
 
@@ -1605,7 +1705,7 @@ def parse_character(name, ident, factident, text, data):
         # our turn's location data has already been parsed so it's safe to add me
     else:
         concealed = 0
-        # we should already be placed in 'location' XXXv0 check it
+        # we should already be placed in 'location' from earlier in this turn report, XXXv0 check it
 
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
@@ -1663,6 +1763,8 @@ def parse_character(name, ident, factident, text, data):
         ret['tl'] = trades
 
     ret['LI'] = {}  # will get LI/wh eventually
+    print('monkey-patching unit {} LI wh to {}'.format(ident, location))
+    ret['LI']['wh'] = location  # XXXv0 remove me, should already have been set
 
     ch = {}
     ch['lo'] = [to_int(factident)]
@@ -1796,7 +1898,9 @@ def parse_in_progress_orders(s, data):
         divider = '   # > '
         if l.startswith('unit '):
             unit = l.partition(' ')[2].partition(' ')[0]
+            print('checking orders for unit {}'.format(unit))
         elif l.startswith(divider):
+            print('saw divider for unit {}'.format(unit))
             order_and_remaining = l[len(divider):]
             if '(still executing)' in order_and_remaining:
                 order = order_and_remaining.replace('(still executing)', '').lower()
@@ -1810,10 +1914,12 @@ def parse_in_progress_orders(s, data):
                 else:
                     raise ValueError('Canot parse a remaining out of '+order_and_remaining)
 
+            print('saw order {} for unit {}'.format(order, unit))
+
             if not remaining.isdigit():
                 remaining = numbers[remaining]
             if remaining == '0':
-                remaining = -1
+                remaining = '-1'
 
             # the following algo does the wrong thing for orders running more than 30 days. whatever.
             splits = global_days[unit].split(': > ')
@@ -1822,13 +1928,20 @@ def parse_in_progress_orders(s, data):
                 raise ValueError('Failed to parse an order day: '+start_day)
             start_day = int(start_day[1:])
 
-            co = fake_order(unit, order, start_day, remaining, data)
+            last_move_dest = to_int('aa01')
+            m = re.search(r'(?:Flying|Travel|Sailing) to .*? \[(.*?)\] will take (?:.+) days?\.', splits[-1])
+            if m:
+                last_move_dest = m.group(1)
+                print('saw last destination move of {}'.format(last_move_dest))
+
+            co = fake_order(unit, order, start_day, remaining, last_move_dest, data)
 
 def parse_turn(turn, data, everything=True):
 
     factint, turn_num, data = parse_turn_header(data, turn, everything)
 
     char_sections = {}
+    in_progress_sections = {}
 
     for s in split_into_sections(turn):
         while True:
@@ -1870,7 +1983,7 @@ def parse_turn(turn, data, everything=True):
             if m:
                 if not everything:
                     break
-                parse_in_progress_orders(s, data)
+                in_progress_sections[ident] = s
                 break
 
             # skip the rest: lore sheets, new players
@@ -1879,6 +1992,8 @@ def parse_turn(turn, data, everything=True):
     for i in char_sections:
         name, ident, factint, s = char_sections[i]
         parse_character(name, ident, factint, s, data)
+    for i in in_progress_sections:
+        parse_in_progress_orders(in_progress_sections[i], data)
 
 
 def parse_turn_from_file(f, data):

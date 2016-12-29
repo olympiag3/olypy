@@ -56,6 +56,14 @@ def to_oid(oid_int):
         return str(oid_int)
 
 
+def to_int_safely(oid):
+    try:
+        ret = to_int(oid)
+    except ValueError:
+        ret = '0'
+    return ret
+
+
 def to_int(oid):
     oid = str(oid)
     # re.fullmatch is python 3.4+
