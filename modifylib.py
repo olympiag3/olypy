@@ -7,6 +7,7 @@ import argparse
 from oid import to_int
 from oio import read_lib, write_lib
 from data import set_where, add_structure, add_scroll, add_potion
+import dbck
 
 parser = argparse.ArgumentParser(description='read an Olympia lib')
 
@@ -70,6 +71,12 @@ def add_potions(data):
 
 data = read_lib(args.libdir)
 
+problems = dbck.check_db(data)
+if problems:
+    raise ValueError('Pre-modification database check failed with {} errors'.format(problems))
+else:
+    print('Pre-modification database check passed.')
+
 add_scrolls(data)
 add_potions(data)
 # add_storms(data)
@@ -108,5 +115,11 @@ set_where(data, 4100, 4001)
 newlibdir = args.libdir.replace('mapgen', 'modified')
 if newlibdir == args.libdir:
     raise ValueError
+
+problems = dbck.check_db(data)
+if problems:
+    raise ValueError('Post-modification database check failed with {} errors'.format(problems))
+else:
+    print('Post-modification database check passed.')
 
 write_lib(data, newlibdir)

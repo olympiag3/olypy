@@ -2074,3 +2074,10 @@ if __name__ == '__main__':
 # 82999  wind   8012  aq99     19
 # XXXv2 walk global_days to find if it's bound
 # XXXv2 random storms on map
+
+# XXXv2 seek and contact
+
+# XXXv0 unplace / promote_children harmful when it's a ship being unplaced
+
+# XXXv0 hidden things don't move, so globally remember where they go
+
