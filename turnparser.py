@@ -702,7 +702,7 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
     elif int(ident) < 10000:
         # dead body, ok, if you raise this dead body you will be disappointed
         data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
-                       'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': unit}}
+                       'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': [unit]}}
         return
     else:
         if what in artifact_kindmap and weight == '10':
@@ -1610,8 +1610,8 @@ def analyze_garrison_list(text, data):
                 il = data[garr]['il']
 
         LI = {'wh': [where]}
-        CH = {'lo': [207], 'he': [-1], 'lk': [4], 'gu': [1], 'at': [60], 'df': [60]}
-        CM = {'dg': [1]}
+        CH = {'lo': ['207'], 'he': ['-1'], 'lk': ['4'], 'gu': ['1'], 'at': ['60'], 'df': ['60']}
+        CM = {'dg': ['1']}
         MI = {'ca': ['g'], 'gc': [castle]}
         data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
         box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
@@ -1690,6 +1690,16 @@ def resolve_fake_items(data):
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
+
+
+def resolve_regions(data):
+    '''
+    At this point all provinces are LI wh a region *string*
+    Our info about the order of regions is in regions_set and region_after
+    Use that to build an ordered list of regions
+    Create the regions
+    Change all the region strings in LI wh to integers
+    '''
 
 
 def remove_chars_and_ships(things):
@@ -1815,7 +1825,7 @@ def parse_character(name, ident, factident, text, data):
     ch['lo'] = [to_int(factident)]
     ch['he'] = [health]
     if sick:
-        ch['si'] = [1]
+        ch['si'] = ['1']
     ch['lk'] = lkind
     ch['lr'] = lrate
     if attitudes.get('neutral'):

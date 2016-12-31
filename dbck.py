@@ -48,7 +48,7 @@ def check_faction_units(data):
                 try:
                     un = data[fact]['PL']['un']
                     un.index(i)
-                except KeyError:
+                except (KeyError, ValueError):
                     print('Unit {} is in faction {} but not vice versa'.format(i, fact), file=sys.stderr)
                     problem += 1
                     continue
@@ -60,6 +60,7 @@ def check_faction_units(data):
                     lo = data[unit]['CH']['lo'][0]
                     if lo != i:
                         raise ValueError
+                        print('lo {} i {}'.format(lo, i), file=sys.stderr)
                 except (KeyError, ValueError):
                     print('Unit {} is not in faction {}'.format(unit, i), file=sys.stderr)
                     problem += 1
@@ -79,12 +80,14 @@ def check_unique_items(data):
     all_unique_items = {}
     for i in data:
         if int(i) > 399 and ' item ' in data[i]['firstline'][0]:
+            if ' item tradegood' in data[i]['firstline'][0]:
+                continue
             all_unique_items[i] = 1
             try:
                 un = None
                 un = data[i]['IT']['un'][0]
                 il = data[un]['il']
-                il.index(i)  # this might have false positive XXX
+                il.index(i)  # this might have false positive and match a qty XXX
             except (KeyError, ValueError):
                 print('Unique item {} is not in inventory of unit {}'.format(i, un), file=sys.stderr)
                 problem += 1
@@ -94,12 +97,10 @@ def check_unique_items(data):
     for i in data:
         if 'il' in data[i]:
             il = data[i]['il'].copy()
-            while True:
+            while len(il) > 0:
                 item = il.pop(0)
                 qty = int(il.pop(0))
                 all_inventory[item] = all_inventory.get(item, 0) + qty
-                if len(il) < 1:
-                    break
 
     for i in all_unique_items:
         if all_inventory[i] != 1:
