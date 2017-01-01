@@ -4,12 +4,23 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 
 import re
 import sys
+from collections import defaultdict
 
 from oid import to_int, to_oid, to_int_safely
 import box
 import data as db
 
-global_days = {}
+# holds the day-by-day action for each char
+global_days = defaultdict(set)
+
+# regions go from 58760-58999 ... and need to be in the correct order
+# this dict is a list of every region which was observed to be after key r
+# XXXv2 also get region order from parse_location_top order
+region_after = defaultdict(set)
+regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
+
+# holds the list of hidden sublocs in a province or city. no roads.
+global_hidden_stuff = defaultdict(set)
 
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
@@ -81,20 +92,6 @@ geo_inventory = {
     # and two final special things that link normal-faery and normal-undercity
     'faery hill': [],
     'sewer': [],
-}
-
-# regions go from 58760-58999 ... and need to be in the correct order
-# this dict is a list of every region which was observed to be after key r
-# XXXv2 also get region order from parse_location_top order
-region_after = {}
-regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
-
-type_to_region = {
-    'ocean': 'Great Sea',  # if in main world; ocean in Faery is in Faery region
-    'underground': 'Hades',
-    'tunnel': 'Undercity',
-    'chamber': 'Undercity',
-    'cloud': 'Cloudlands',
 }
 
 has_6_directions = set(('tunnel', 'sewer', 'chamber'))
@@ -586,8 +583,12 @@ def fake_order(order, start_day, remaining, last_move_dest, unit, data):
 
     if verb == 'wait':
         ar = parse_wait_args(order)
-    elif verb == 'move' or verb == 'sail':
+    elif verb == 'move':
         where = data[unit]['LI']['wh'][0]
+        ar = generate_move_args(start_day, remaining, last_move_dest, where)
+    elif verb == 'sail':
+        where = data[unit]['LI']['wh'][0]  # this is the ship
+        # XXXv0 where = data[where]['LI']['wh'][0]  # this is the province or port the ship is in XXXv0 def shiploc()
         ar = generate_move_args(start_day, remaining, last_move_dest, where)
     else:
         ar = [to_int_safely(x) for x in split_order_args(rest)]
@@ -846,17 +847,18 @@ def make_locations_from_routes(routes, idint, region, data):
     for r in routes:
         dest = r['destination']
         kind = r['kind']
+        myregion = r.get('region') or region  # if not specified in the route, it's the same as this location
         dir = r['dir']
         if dir in inverted_directions:
             idir = inverted_directions[dir]
         else:
             idir = -99999
-        if dest not in data:
+        if dest not in data or 'LO' not in data[dest]:  # 'LO' test is for provinces where the city autovivified it
             if kind in province_kinds:
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
                               'na': [r['name']],
                               'il': geo_inventory[kind],
-                              'LI': {'wh': [region]},
+                              'LI': {'wh': [myregion]},
                               'LO': {'pd': [0, 0, 0, 0]}}
                 if 'impassable' in r:
                     pass  # city, or mountain/sea. Make the link anyway.
@@ -872,27 +874,31 @@ def make_locations_from_routes(routes, idint, region, data):
                 prov = None
                 for r in routes:
                     if r['dir'] == dir and 'impassable' in r:
-                        prov = dest
+                        prov = r['destination']
                         break
                 if prov is None:
                     raise ValueError('subiteration could not discover province of a city route, province '+idint)
-                # the link is at the province, so don't make any LO here
+                # the link is at the province, so don't make any LO pd here
                 data[dest] = {'firstline': [dest + ' loc city'],
                               'na': [r['name']],
                               'il': geo_inventory['city'],
                               'LI': {'wh': [prov]}}
+                box.subbox_append(data, prov, 'LI', 'hl', [dest], dedup=True)
             elif kind in subloc_kinds or kind in structure_type:
                 pass  # this only exists for visions of a castle, ship etc XXXv2
         else:
             # the destination exists, but this link may not
             if kind in province_kinds:
                 if dir == 'out':
+                    # can this happen? XXXv0
                     continue
                 if dir.endswith(' road'):
                     continue  # XXXv1
                 if idir > 3:
                     if len(data[dest]['LO']['pd']) < 6:
                         data[dest]['LO']['pd'].extend((0, 0))
+                if 'LO' not in data[dest]:
+                    print('oops data dest is', data[dest])
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
                 # link is at the province level
@@ -1157,7 +1163,7 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
         elif second in route_annotations or second in subloc_kinds:
             kind, thing = parse_a_sublocation_route(parts)
             if 'hi' in thing.get('LO', {}):
-                print('Subloc {} is hidden'.format(oid))  # XXXv0 this never fires
+                print('Subloc {} is hidden'.format(oid))
         else:
             kind, thing = parse_a_character(parts)
     else:
@@ -1188,6 +1194,7 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
         # I am *above* the previous thing
         where = things[previous]['LI']['wh'][0]
         where = things[where]['LI']['wh'][0]
+
     thing['LI']['wh'] = [where]
     box.subbox_append(things, where, 'LI', 'hl', [oidint])
 
@@ -1205,7 +1212,7 @@ def parse_routes_leaving(text):
 #   West, swamp, to The Dark Lands [cv34], Teysel, 2 days <== this ocean->coast does have terrain?!
 #   South, city, to Hornmar [g02], Olbradim, 1 day
 #   South, to Swamp [ac21], Olbradim, impassable <== no terrain for city province
-#   East, underground, to Hades [rm21], hidden, 7 days
+#   East, underground, to Hades [rm21], hidden, 7 days <== no region because it's the same
 #   Up, to Sewer [z471], Grinter, hidden, 0 days
 #   Down, to Tunnel [pz40], hidden, 5 days
 
@@ -1285,6 +1292,11 @@ def parse_routes_leaving(text):
                 attr['kind'] = p.lower()
             else:
                 raise ValueError('unknown part of {} in line {}'.format(p, l))
+
+        if 'hidden' in attr:
+            print('hidden and region is', attr.get('region', 'None'))
+            if attr.get('region') is None:
+                print('    parts', parts)
 
         if 'dir' not in attr and 'special_dir' not in attr:
             # faery hill roads lack a direction to normal.
@@ -1434,12 +1446,7 @@ def analyze_regions(s, region_after):
             continue
         reg = line.rstrip()
         for r in regions:
-            if region_after.get(r) is None:
-                region_after[r] = []
-            try:
-                region_after[r].index(reg)
-            except ValueError:
-                region_after[r].append(reg)
+            region_after[r].add(reg)
         regions.add(reg)
 
 
@@ -1527,9 +1534,9 @@ def parse_turn_header(data, turn, everything):
     else:
         fast_study = 0
 
-    m = re.search(r'^Location\s+Stack\n--------\s+-----\n(.*?)\n\n', turn, re.M | re.S)
-    if m:  # does not exist in the initial turn :/
-        analyze_regions(m.group(1), region_after)
+#    m = re.search(r'^Location\s+Stack\n--------\s+-----\n(.*?)\n\n', turn, re.M | re.S)
+#    if m:  # does not exist in the initial turn :/
+#        analyze_regions(m.group(1), region_after)
 
     # this is a complete garrison list (no fog) and accurate castle info
     # all it lacks is inventory, visible or not
@@ -1615,6 +1622,7 @@ def analyze_garrison_list(text, data):
         MI = {'ca': ['g'], 'gc': [castle]}
         data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
         box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
+        box.subbox_append(data, where, 'LI', 'hl', [garr], dedup=True)
 
         # XXXv0 enable this when we are making garrisons from the location report
         # if where not in data:
@@ -1700,6 +1708,49 @@ def resolve_regions(data):
     Create the regions
     Change all the region strings in LI wh to integers
     '''
+
+    ordered_regions = []
+    while len(region_after) > 0:
+        # the next region is the one with the most afters
+        m = max([len(region_after[r]) for r in region_after])
+        maxes = []
+        [maxes.append(r) for r in region_after if len(region_after[r]) == m]
+        best = maxes[0]
+        if len(maxes) > 1:
+            for m in maxes:
+                failed = 0
+                for n in maxes:
+                    if m != n:
+                        if m in region_after[n]:
+                            failed = 1
+                if not failed:
+                    best = m
+        ordered_regions.append(best)
+        del region_after[best]
+
+    # stick anything left over on the end. (Regions that we saw a link to but never entered.)
+    for r in regions_set:
+        try:
+            ordered_regions.index(r)
+        except ValueError:
+            ordered_regions.append(r)
+            print('Left over region', r, 'stuck on end.')
+
+    region_map = {}
+    ident = 58760
+    for r in ordered_regions:
+        data[str(ident)] = {'firstline': [str(ident)+' loc region'], 'na': [r]}
+        region_map[r] = str(ident)
+        ident += 1
+
+    for k, v in data.items():
+        try:
+            wh = v['LI']['wh'][0]
+        except KeyError:
+            continue
+        if wh in region_map:
+            box.subbox_overwrite(data, k, 'LI', 'wh', [region_map[wh]])
+            box.subbox_append(data, region_map[wh], 'LI', 'hl', [k], dedup=True)  # XXXv0 this is n**2
 
 
 def remove_chars_and_ships(things):
@@ -1820,7 +1871,6 @@ def parse_character(name, ident, factident, text, data):
     ret['LI'] = {}  # will get LI/wh eventually
     print('monkey-patching unit {} LI wh to {}'.format(ident, location))
     ret['LI']['wh'] = [location]  # XXXv0 remove me, should already have been set
-
     ch = {}
     ch['lo'] = [to_int(factident)]
     ch['he'] = [health]
@@ -1881,6 +1931,10 @@ def parse_location(s, factint, everything, data):
     if idint not in data:
         data[idint] = {'firstline': [idint + ' loc ' + kind],
                        'LI': {'wh': [enclosing_int or region]}}
+        if idint == '57262':
+            print('2: just set g02 wh to', enclosing_int or region)
+        if enclosing_int:
+            box.subbox_append(data, enclosing_int, 'LI', 'hl', [idint], dedup=True)  # XXXv0 remove me when this is set properly
         if kind in geo_inventory:
             data[idint]['il'] = geo_inventory[kind]
         if kind in province_kinds:
@@ -1905,6 +1959,8 @@ def parse_location(s, factint, everything, data):
                 if r['dir'] == 'out':
                     enclosing_int = r['destination']
                     box.subbox_overwrite(data, idint, 'LI', 'wh', [enclosing_int])
+                    if idint == '57262':
+                        print('3: just set g02 wh to', enclosing_int)
                     break
 
         make_locations_from_routes(routes, idint, region, data)
@@ -1952,13 +2008,19 @@ def parse_location(s, factint, everything, data):
     for i in things:
         if 'hi' in things[i].get('LO', {}):
             box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
+            global global_hidden_stuff
+            if i not in global_hidden_stuff[idint]:
+                global_hidden_stuff[idint].add(i)
 
-    # XXXv0 do something with all this
-    # stationary things can be destroyed / unplaced / created / placed at will
-    # moving things (chars and ships) should be treated more carefully
+    # form lists of stationary stuff, old/new.
+    # destroy or unwhere missing, copy over new.
+    # unwhere everything old-and-continuing, then where everything new.
+
+    # this will leave some chars and ships unwhered. do something with them.
+
     # for i in things:
 
-    return
+    return region
 
 
 def parse_in_progress_orders(s, unit, data):
@@ -2008,6 +2070,7 @@ def parse_turn(turn, data, everything=True):
 
     char_sections = {}
     in_progress_sections = {}
+    regions = []
 
     for s in split_into_sections(turn):
         while True:
@@ -2042,7 +2105,9 @@ def parse_turn(turn, data, everything=True):
                 break
             m = re.search(r'\[.{3,6}?\].*?\n-------------', s)
             if m:
-                parse_location(s, factint, everything, data)
+                region = parse_location(s, factint, everything, data)
+                if region != 'Unknown':
+                    regions.append(region)
                 break
 
             m = re.search(r'^Order template\n------------', s)
@@ -2054,6 +2119,15 @@ def parse_turn(turn, data, everything=True):
 
             # skip the rest: lore sheets, new players
             break
+
+    region_dedup = set()
+    while len(regions) > 1:
+        r = regions.pop(0)
+        if r not in region_dedup:
+            region_dedup.add(r)
+            for r2 in regions:
+                global region_after
+                region_after[r].add(r2)
 
     for i in char_sections:
         name, ident, factint, s = char_sections[i]

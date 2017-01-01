@@ -1,4 +1,5 @@
 import pytest
+from collections import defaultdict
 
 from oid import to_int
 import turnparser
@@ -303,7 +304,6 @@ def test_parse_routes_leaving():
     West, to Swamp [cv34], 14 days
     South, city, to Hornmar [g02], Olbradim, 1 day
     South, to Swamp [ac21], Olbradim, impassable
-    South, to Ocean [ac21], Great Sea, impassable
     Out, to Forest [bg36], 1 day
     Underground, to Hades [hs70], Hades, hidden, 1 day
     Secret pass, to Forest [bw22], hidden, 8 days
@@ -345,12 +345,6 @@ def test_parse_routes_leaving():
           'kind': 'swamp',
           'name': 'Swamp',
           'region': 'Olbradim'},
-         {'destination': '10221',
-          'dir': 'south',
-          'impassable': 1,
-          'kind': 'ocean',
-          'name': 'Ocean',
-          'region': 'Great Sea'},
          {'days': '1',
           'destination': '12536',
           'dir': 'out',
@@ -389,7 +383,7 @@ def test_parse_routes_leaving():
 
     assert turnparser.parse_routes_leaving(t) == r
 
-    expected = {'10221': {'LI': {'wh': ['Camaris']},
+    expected = {'10221': {'LI': {'wh': ['Olbradim']},
                           'LO': {'pd': ['10101', 0, 0, 0]},
                           'firstline': ['10221 loc swamp'],
                           'il': ['66', '1', '96', '50', '101', '1', '274', '1'],
@@ -409,22 +403,22 @@ def test_parse_routes_leaving():
                           'firstline': ['13963 loc mountain'],
                           'il': ['78', '50', '10', '10', '96', '50', '101', '1', '275', '1'],
                           'na': ['Mountain']},
-                '15076': {'LI': {'wh': ['Camaris']},
+                '15076': {'LI': {'wh': ['Gothin']},
                           'LO': {'pd': [0, 0, 0, 0]},
                           'firstline': ['15076 loc forest'],
                           'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
                           'na': ['The Dark Lands']},
-                '15634': {'LI': {'wh': ['Camaris']},
+                '15634': {'LI': {'wh': ['Teysel']},
                           'LO': {'pd': [0, '10101', 0, 0]},
                           'firstline': ['15634 loc swamp'],
                           'il': ['66', '1', '96', '50', '101', '1', '274', '1'],
                           'na': ['The Dark Lands']},
-                '23470': {'LI': {'wh': ['Camaris']},
+                '23470': {'LI': {'wh': ['Hades']},
                           'LO': {'pd': [0, 0, 0, 0]},
                           'firstline': ['23470 loc underground'],
                           'il': ['101', '1', '96', '50'],
                           'na': ['Hades']},
-                '57262': {'LI': {'wh': ['57262']},
+                '57262': {'LI': {'wh': ['10221']},
                           'firstline': ['57262 loc city'],
                           'il': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
                           'na': ['Swamp']}}
@@ -557,8 +551,8 @@ C
 D
  E
     '''
-    ret = {'A': ['C', 'D'], 'C': ['D']}
-    region_after = {}
+    ret = {'A': set(('C', 'D')), 'C': set(('D',))}
+    region_after = defaultdict(set)
     turnparser.analyze_regions(t, region_after)
     assert region_after == ret
 
@@ -781,7 +775,9 @@ def test_analyze_garrison_list():
     t = '''  2617	aj08   10   20	 50   15   8103 4797 7271 6839	... 2527
   4514	aj09   10   20	 50   15   8103 4797 7271 6839	... 2527    '''
     data = {}
-    r = {'207': {'PL': {'un': ['2617', '4514']}},
+    r = {'10708': {'LI': {'hl': ['2617']}},
+         '10709': {'LI': {'hl': ['4514']}},
+         '207': {'PL': {'un': ['2617', '4514']}},
          '2617': {'CH': {'at': ['60'],
                          'df': ['60'],
                          'gu': ['1'],
@@ -1048,12 +1044,12 @@ Seen here:
                    'firstline': ['12423 loc forest'],
                    'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
                    'na': ['Forest']},
-         '12424': {'LI': {'wh': ['Grinter']},
+         '12424': {'LI': {'wh': ['Great Sea']},
                    'LO': {'pd': [0, 0, 0, '12423']},
                    'firstline': ['12424 loc ocean'],
                    'il': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
                    'na': ['Ocean']},
-         '12523': {'LI': {'wh': ['Grinter']},
+         '12523': {'LI': {'wh': ['Great Sea']},
                    'LO': {'pd': ['12423', 0, 0, 0]},
                    'firstline': ['12523 loc ocean'],
                    'il': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],

@@ -16,8 +16,8 @@ def check_where_here(data):
                 try:
                     hl = data[where]['LI']['hl']
                     hl.index(i)
-                except KeyError:
-                    print('Unit {} is not in here list of unit {}'.format(i, where), file=sys.stderr)
+                except (KeyError, ValueError):
+                    print('Thing {} is not in here list of thing {}'.format(i, where), file=sys.stderr)
                     problem += 1
                     continue
 
