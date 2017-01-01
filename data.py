@@ -64,8 +64,8 @@ def can_move(data, who):
 def loop_here(data, where, fog=False):
     '''
     Make a list of everything here: chars, structures, sublocs
-    If fog, and a province, make a list of only the visible things
-    (Name similar to C code)
+    If fog, make a list of only the visible things
+    (caller responsible for making sure that fog=True only for provinces)
     '''
     if fog and ' loc ' in data[where]['firstline'][0]:
         kind = data[where]['firstline'][0].partition(' loc ')[2]

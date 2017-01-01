@@ -1022,6 +1022,7 @@ Routes leaving Forest:
 
 Inner locations:
    Wildefort [h63], port city, safe haven, 1 day
+   A magical barrier surrounds Wildefort [h63].
 
 Seen here:
    Gus McCrae [2554], with five peasants, accompanied by:

@@ -853,7 +853,7 @@ def make_locations_from_routes(routes, idint, region, data):
             idir = inverted_directions[dir]
         else:
             idir = -99999
-        if dest not in data or 'LO' not in data[dest]:  # 'LO' test is for provinces where the city autovivified it
+        if dest not in data or 'il' not in data[dest]:
             if kind in province_kinds:
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
                               'na': [r['name']],
@@ -1361,6 +1361,8 @@ def parse_inner_locations(idint, text, things):
     for l in text.split('\n'):
         l = re.sub('".*?"', '""', l)  # throw out all banners
         l = l.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
+        if 'A magical barrier surrounds' in l:
+            continue
         parts = l.split(',')
         continuation = False
         if '[' not in parts[0]:
@@ -1931,8 +1933,6 @@ def parse_location(s, factint, everything, data):
     if idint not in data:
         data[idint] = {'firstline': [idint + ' loc ' + kind],
                        'LI': {'wh': [enclosing_int or region]}}
-        if idint == '57262':
-            print('2: just set g02 wh to', enclosing_int or region)
         if enclosing_int:
             box.subbox_append(data, enclosing_int, 'LI', 'hl', [idint], dedup=True)  # XXXv0 remove me when this is set properly
         if kind in geo_inventory:
@@ -2002,8 +2002,10 @@ def parse_location(s, factint, everything, data):
     if not everything:
         remove_chars_and_ships(things)
 
-    hl = things[idint].get('LI', {}).get('hl', [])
-    del things[idint]
+    if 'The province is blanketed in fog' in s and kind in province_kinds:
+        fog = True
+    else:
+        fog = False
 
     for i in things:
         if 'hi' in things[i].get('LO', {}):
@@ -2012,9 +2014,36 @@ def parse_location(s, factint, everything, data):
             if i not in global_hidden_stuff[idint]:
                 global_hidden_stuff[idint].add(i)
 
-    # form lists of stationary stuff, old/new.
-    # destroy or unwhere missing, copy over new.
+    hl = things[idint].get('LI', {}).get('hl', [])
+
+    # form lists of stuff, old/new, respecting fog
+    new = db.loop_here(things, idint, fog)
+    if idint in data:
+        old = db.loop_here(data, idint, fog)
+    else:
+        old = []
+
+    # this is a fake thing... we only care about hl (above)
+    del things[idint]
+
+    # form sets disappeard and appeared
+    old_set = set(old)
+    new_set = set(new)
+    print('Here we are for', to_oid(idint))
+    disappeared = old_set.difference(new_set)
+    if len(disappeared) > 0:
+        print(' Disappeared:', disappeared)
+    appeared = new_set.difference(old_set)
+    if len(appeared) > 0:
+        print(' Appeared:', appeared)
+    continued = old_set.intersection(new_set)
+    if len(continued) > 0:
+        print(' Continued:', continued)
+
+    # destroy(stationary) or unwhere(moving) disappeared, remembering unwhered
+    # copy over continued
     # unwhere everything old-and-continuing, then where everything new.
+    # if any hidden things in global_hidden_stuff are not present, add them on the end.
 
     # this will leave some chars and ships unwhered. do something with them.
 
