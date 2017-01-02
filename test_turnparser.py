@@ -800,9 +800,8 @@ def test_analyze_garrison_list():
                   'MI': {'ca': ['g'], 'gc': ['8103']},
                   'firstline': ['4514 char garrison'],
                   'il': ['12', '10']}}
-    turnparser.analyze_garrison_list(t, data)
+    turnparser.analyze_garrison_list(t, data, everything=True)
     assert data == r
-
 
 def test_parse_garrison_log():
     # XXXv2

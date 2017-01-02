@@ -1542,10 +1542,9 @@ def parse_turn_header(data, turn, everything):
 
     # this is a complete garrison list (no fog) and accurate castle info
     # all it lacks is inventory, visible or not
-    if everything:
-        m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
-        if m:
-            analyze_garrison_list(m.group(1), data)
+    m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
+    if m:
+        analyze_garrison_list(m.group(1), data, everything=everything)
 
     factint = to_int(fact_id)
 
@@ -1604,7 +1603,7 @@ def parse_faction(text, factint, data):
             data[factint]['ah'] = attitudes['hostile']
 
 
-def analyze_garrison_list(text, data):
+def analyze_garrison_list(text, data, everything=False):
     lines = text.split('\n')
     for l in lines:
         pieces = l.split()
@@ -1612,6 +1611,9 @@ def analyze_garrison_list(text, data):
         where = to_int(pieces[1])
         castle = to_int(pieces[6])
         firstline = garr + ' char garrison'
+
+        if not everything:
+            continue
 
         il = ['12', '10']  # if we have to fake it
         if garr in data:
@@ -1959,8 +1961,6 @@ def parse_location(s, factint, everything, data):
                 if r['dir'] == 'out':
                     enclosing_int = r['destination']
                     box.subbox_overwrite(data, idint, 'LI', 'wh', [enclosing_int])
-                    if idint == '57262':
-                        print('3: just set g02 wh to', enclosing_int)
                     break
 
         make_locations_from_routes(routes, idint, region, data)
@@ -1999,9 +1999,6 @@ def parse_location(s, factint, everything, data):
             if 'ca' in things[i].get('MI', {}):
                 box.subbox_overwrite(things, i, 'MI', 'gc', [controlling_castle])
 
-    if not everything:
-        remove_chars_and_ships(things)
-
     if 'The province is blanketed in fog' in s and kind in province_kinds:
         fog = True
     else:
@@ -2011,10 +2008,21 @@ def parse_location(s, factint, everything, data):
         if 'hi' in things[i].get('LO', {}):
             box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
             global global_hidden_stuff
-            if i not in global_hidden_stuff[idint]:
-                global_hidden_stuff[idint].add(i)
+            # idint == LI wh, hidden things have to be on province or city level
+            global_hidden_stuff[idint].add(i)
+
+    everything_hl = things[idint].get('LI', {}).get('hl', [])
+
+    if not everything:
+        remove_chars_and_ships(things)
 
     hl = things[idint].get('LI', {}).get('hl', [])
+
+    # Are we in a garrison-only view? If so, abort early
+    if ((len(hl) < 1 and
+        'Routes Leaving' not in s and
+         'No known routes leaving' not in s)):
+        return region
 
     # form lists of stuff, old/new, respecting fog
     new = db.loop_here(things, idint, fog)
@@ -2023,19 +2031,27 @@ def parse_location(s, factint, everything, data):
     else:
         old = []
 
-    # this is a fake thing... we only care about hl (above)
+    # this is a fake thing... we only care about hl (grabbed above)
     del things[idint]
 
-    # form sets disappeard and appeared
     old_set = set(old)
     new_set = set(new)
-    print('Here we are for', to_oid(idint))
+    # XXXv0 we need to add in global_hidden_stuff to new_set and hl
+
+    #print('Here we are for', to_oid(idint))
+
     disappeared = old_set.difference(new_set)
     if len(disappeared) > 0:
         print(' Disappeared:', disappeared)
+    # XXXv0
+    # do not remove any non-stationary things
+    # if controlling castle but no garrison, do not remove garrison (i.e. fog)
+    # if buildings are missing
+
     appeared = new_set.difference(old_set)
     if len(appeared) > 0:
         print(' Appeared:', appeared)
+
     continued = old_set.intersection(new_set)
     if len(continued) > 0:
         print(' Continued:', continued)
