@@ -66,13 +66,15 @@ def test_is_char_and_can_move():
 
 
 def test_loop_here():
-    data = {'1001': {'firstline': ['1001 loc forest'], 'LI': {'hl': ['1002', '1003']}},
+    data = {'1001': {'firstline': ['1001 loc forest'], 'LI': {'hl': ['1002', '1003', '1006']}},
             '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1004']}},
             '1003': {'firstline': ['1003 loc tower'], 'LI': {'hl': ['1005']}},
             '1004': {'firstline': ['1004 char 0']},
-            '1005': {'firstline': ['1005 char 0']}}
-    assert loop_here(data, '1001') == {'1002', '1003', '1004', '1005'}
-    assert loop_here(data, '1001', fog=True) == {'1003', '1005'}
+            '1005': {'firstline': ['1005 char 0']},
+            '1006': {'firstline': ['1006 loc city'], 'LI': {'hl': ['1007']}},
+            '1007': {'firstline': ['1007 char 0']}}
+    assert loop_here(data, '1001') == {'1002', '1003', '1004', '1005', '1006'}
+    assert loop_here(data, '1001', fog=True) == {'1003', '1005', '1006'}
     assert loop_here(data, '1003') == {'1005'}
 
     if loop_here(data, '1003', fog=True) == {'1005'}:

@@ -63,7 +63,7 @@ def can_move(data, who):
 
 def loop_here(data, where, fog=False):
     '''
-    Make a list of everything here: chars, structures, sublocs
+    Make a list of everything here: chars, structures, sublocs. Do not descend into big sublocs (cities)
     If fog, make a list of only the visible things
     (caller responsible for making sure that fog=True only for provinces)
     '''
@@ -77,7 +77,10 @@ def loop_here(data, where, fog=False):
                 if fog and is_char(data, w):
                     continue
                 hls.add(w)
-                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fog, it only applies to top characters
+                firstline = data[w]['firstline'][0]
+                if ' loc city' in firstline:
+                    continue
+                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fog
     return hls
 
 
