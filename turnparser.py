@@ -22,6 +22,9 @@ regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
 # holds the list of hidden sublocs in a province or city. no roads.
 global_hidden_stuff = defaultdict(set)
 
+# holds the full details of a character, from the owner's turn report
+global_character_final = {}
+
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -870,6 +873,8 @@ def make_locations_from_routes(routes, idint, region, data):
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
+                if dir == 'out':
+                    raise ValueError('Hm. This needs fixing: '+repr(data[dest]))
                 # figure out what province this city is in, there should be an impassable link
                 prov = None
                 for r in routes:
@@ -1042,6 +1047,9 @@ def parse_a_sublocation_route(parts):
 
     attr = {}
 
+    if kind in geo_inventory:
+        attr['il'] = geo_inventory[kind]
+
     for p in parts:
         p = p.strip()
         if p == '1 day':
@@ -1064,7 +1072,7 @@ def parse_a_sublocation_route(parts):
 def parse_a_character(parts):
     attr = {}
     CH = {}
-    il = {}
+    il = []
     CM = {}
     MI = {}
     for p in parts:
@@ -1080,7 +1088,7 @@ def parse_a_character(parts):
         elif p == 'garrison':
             CM['dg'] = ['1']
             MI['ca'] = ['g']
-            # controlling castle gc set elsewhere
+            CH['lo'] = ['207']
             continue
         elif p == 'on guard':
             CH['gu'] = ['1']
@@ -1114,16 +1122,16 @@ def parse_a_character(parts):
             except ValueError:
                 raise ValueError('Error parsing count in '+p+', parts is '+repr(parts))
             if '[' in item:  # a unique item
-                id = parse_an_id(item)
+                ident = parse_an_id(item)
             else:
                 if item not in item_to_inventory and item.endswith('s'):
                     if item[:-1] in item_to_inventory:
                         item = item[:-1]
                 try:
-                    id = item_to_inventory[item]
+                    ident = item_to_inventory[item]
                 except KeyError:
                     raise KeyError('invalid key with parts: '+repr(parts))
-            il[id] = [str(count)]
+            il.extend([ident, str(count)])
     if len(il) > 0:
         attr['il'] = il
     if len(CH) > 0:
@@ -1135,7 +1143,7 @@ def parse_a_character(parts):
     return 'char', attr
 
 
-def parse_a_structure_or_character(s, previous, last_depth, things):
+def parse_a_structure_or_character(s, depths, last_depth, things):
     '''
     Parse a single structure or character.
     Place in stack context.
@@ -1146,6 +1154,9 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
         s.replace('*', ' ', 1)
 
     depth = len(s) - len(s.lstrip(' '))
+    if depth % 3 != 0:
+        raise ValueError
+    depth //= 3
 
     parts = s.lstrip(' ').split(', ')  # needs the space due to 1,000+ soldiers etc
 
@@ -1172,7 +1183,10 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
         kind = 'char'
 
     if kind == 'char':
-        thing['firstline'] = [oidint + ' char 0']
+        if 'MI' in thing:
+            thing['firstline'] = [oidint + ' char garrison']
+        else:
+            thing['firstline'] = [oidint + ' char 0']
     else:
         if kind == 'galley' or kind == 'roundship':
             loc = ' ship '
@@ -1184,16 +1198,9 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
     thing['na'] = [name]
     thing['LI'] = {}
 
-    if last_depth is None or depth > last_depth:
-        # I am *under* the previous thing
-        where = previous
-    elif depth == last_depth:
-        # I am *after* the previous thing
-        where = things[previous]['LI']['wh'][0]
-    elif depth < last_depth:
-        # I am *above* the previous thing
-        where = things[previous]['LI']['wh'][0]
-        where = things[where]['LI']['wh'][0]
+    print('idint is {} and depth is {}'.format(oidint, depth))
+    where = depths[depth-1]
+    depths[depth] = oidint
 
     thing['LI']['wh'] = [where]
     box.subbox_append(things, where, 'LI', 'hl', [oidint])
@@ -1202,7 +1209,7 @@ def parse_a_structure_or_character(s, previous, last_depth, things):
 
     things[oidint] = thing
 
-    return oidint, last_depth
+    return last_depth
 
 
 def parse_routes_leaving(text):
@@ -1355,8 +1362,8 @@ def parse_inner_locations(idint, text, things):
     '''
 
     accumulation = ''
-    last_depth = None
-    previous = idint
+    last_depth = 0
+    depths = [idint, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
     for l in text.split('\n'):
         l = re.sub('".*?"', '""', l)  # throw out all banners
@@ -1382,10 +1389,10 @@ def parse_inner_locations(idint, text, things):
             accumulation += ' ' + l.lstrip(' ')
         else:
             if accumulation:
-                previous, last_depth = parse_a_structure_or_character(accumulation, previous, last_depth, things)
+                last_depth = parse_a_structure_or_character(accumulation, depths, last_depth, things)
             accumulation = l
     if accumulation:
-        _, _ = parse_a_structure_or_character(accumulation, previous, last_depth, things)
+        _ = parse_a_structure_or_character(accumulation, depths, last_depth, things)
 
     return things
 
@@ -1704,6 +1711,18 @@ def resolve_fake_items(data):
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
 
 
+def resolve_characters(data):
+    for i in global_character_final:
+        data[i] = global_character_final[i]
+
+
+def resolve_garrisons(data):
+    '''Many garrisons get created without being added to the unit list of 207.'''
+    for k, v in data.items():
+        if v.get('CH', {}).get('lo', ['None'])[0] == '207':
+            box.subbox_append(data, '207', 'PL', 'un', [k], dedup=True)
+
+
 def resolve_regions(data):
     '''
     At this point all provinces are LI wh a region *string*
@@ -1752,6 +1771,8 @@ def resolve_regions(data):
             wh = v['LI']['wh'][0]
         except KeyError:
             continue
+        except IndexError:
+            continue
         if wh in region_map:
             box.subbox_overwrite(data, k, 'LI', 'wh', [region_map[wh]])
             box.subbox_append(data, region_map[wh], 'LI', 'hl', [k], dedup=True)  # XXXv0 this is n**2
@@ -1759,12 +1780,12 @@ def resolve_regions(data):
 
 def remove_chars_and_ships(things):
     '''
-    Most of the time we are only looking at 'loc' in the turn.
+    Remove chars and ships, leaving behind locations.
     '''
     nuke = []
     for i in things:
-        if (' char ' in things[i]['firstline'][0] or
-            ' ship ' in things[i]['firstline'][0]):
+        firstline = things[i]['firstline'][0]
+        if ' char ' in firstline or ' ship ' in firstline:
             db.unset_where(things, i)
             nuke.append(i)
 
@@ -1874,7 +1895,7 @@ def parse_character(name, ident, factident, text, data):
 
     ret['LI'] = {}  # will get LI/wh eventually
     print('monkey-patching unit {} LI wh to {}'.format(ident, location))
-    ret['LI']['wh'] = [location]  # XXXv0 remove me, should already have been set
+    ret['LI']['wh'] = [stacked_under or location]  # XXXv0 remove me, should already have been set if I'm not concealed/foggy
     ch = {}
     ch['lo'] = [to_int(factident)]
     ch['he'] = [health]
@@ -1919,6 +1940,26 @@ def parse_character(name, ident, factident, text, data):
     box.subbox_append(data, factident, 'PL', 'un', ident, dedup=True)
 
 
+def compatible_boxes(one, two):
+    '''
+    move me to data.py? XXXv1
+    '''
+    fl1 = one['firstline'][0]
+    fl2 = two['firstline'][0]
+    id1, kind1, subkind1 = fl1.split(' ', maxsplit=2)
+    id2, kind2, subkind2 = fl2.split(' ', maxsplit=2)
+
+    if kind1 != kind2:
+        return False
+    if subkind1 != subkind2:
+        if '-in-progress' in subkind1 and subkind1.replace('-in-progress', '') == subkind2:
+            return True
+        if subkind2 == 'collapsed mine' and subkind1 == 'mine':
+            return True
+        return False
+    return True
+
+
 def parse_location(s, factint, everything, data):
 
     m = re.match(r'^(.*?)\n-------------', s)
@@ -1933,6 +1974,7 @@ def parse_location(s, factint, everything, data):
         kind = 'city'
 
     if idint not in data:
+        print('Initial creation of {}'.format(idint))
         data[idint] = {'firstline': [idint + ' loc ' + kind],
                        'LI': {'wh': [enclosing_int or region]}}
         if enclosing_int:
@@ -1955,7 +1997,7 @@ def parse_location(s, factint, everything, data):
     if m:
         routes = parse_routes_leaving(m.group(1))
 
-        # Fixup: sewers incorrectly claim they are enclosed by the province... actually city subloc
+        # Fixup: sewers incorrectly claim they are enclosed by the province... actually a city subloc
         if kind == 'sewer':
             for r in routes:
                 if r['dir'] == 'out':
@@ -1978,6 +2020,8 @@ def parse_location(s, factint, everything, data):
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
         market = parse_market_report(m.group(1), include=idint)
+        if (kind == 'city' or kind == 'port city') and 'il' not in data[idint]:
+            print('City {} appears to lack inventory'.format(idint))
         box.box_overwrite(data, idint, 'tl', market)
 
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
@@ -2010,11 +2054,13 @@ def parse_location(s, factint, everything, data):
             global global_hidden_stuff
             # idint == LI wh, hidden things have to be on province or city level
             global_hidden_stuff[idint].add(i)
-
-    everything_hl = things[idint].get('LI', {}).get('hl', [])
+            # is this a new hidden thing? if so copy to data
+            if i not in data:
+                data[i] = things[i]
 
     if not everything:
         remove_chars_and_ships(things)
+        # XXXv2 this also removes the garrison. hm.
 
     hl = things[idint].get('LI', {}).get('hl', [])
 
@@ -2031,39 +2077,66 @@ def parse_location(s, factint, everything, data):
     else:
         old = []
 
+    # make sure that hidden things are present... they will not be in things[]
+    for i in global_hidden_stuff.get(idint, []):
+        old.add(i)
+        new.add(i)
+        things[i] = data[i]
+
     # this is a fake thing... we only care about hl (grabbed above)
     del things[idint]
 
     old_set = set(old)
     new_set = set(new)
-    # XXXv0 we need to add in global_hidden_stuff to new_set and hl
-
-    #print('Here we are for', to_oid(idint))
 
     disappeared = old_set.difference(new_set)
     if len(disappeared) > 0:
         print(' Disappeared:', disappeared)
-    # XXXv0
-    # do not remove any non-stationary things
-    # if controlling castle but no garrison, do not remove garrison (i.e. fog)
-    # if buildings are missing
-
-    appeared = new_set.difference(old_set)
-    if len(appeared) > 0:
-        print(' Appeared:', appeared)
+        # XXXv2 fog
+        for d in disappeared:
+            firstline = data[d]['firstline'][0]
+            if ' loc ' in firstline:
+                kind = firstline.partition(' loc ')[2]
+                kind = kind.replace('-in-progress', '')
+                if kind not in structure_type:
+                    print('while analyzing {}, the stationary loc {} disappeared: {}'.format(idint, d, firstline))
+                    continue
+                print('Destroying structure {} of kind {}'.format(d, kind))
+                db.destroy_box(data, d)
+            else:
+                print('Unwhering {}'.format(firstline))
+                db.unset_where(data, d)
+                # XXXv0 don't leave these dangling?!
 
     continued = old_set.intersection(new_set)
     if len(continued) > 0:
         print(' Continued:', continued)
+        for c in continued:
+            if c in data and not compatible_boxes(data[c], things[c]):
+                fl_data = data[c]['firstline'][0]
+                fl_things = things[c]['firstline'][0]
+                print('Oh oh. data and things incompatible for continued {} and {}'.format(fl_data, fl_things))
+            data[c] = things[c]
 
-    # destroy(stationary) or unwhere(moving) disappeared, remembering unwhered
-    # copy over continued
-    # unwhere everything old-and-continuing, then where everything new.
-    # if any hidden things in global_hidden_stuff are not present, add them on the end.
+    appeared = new_set.difference(old_set)
+    if len(appeared) > 0:
+        print(' Appeared:', appeared)
+        for a in appeared:
+            if a in data and not compatible_boxes(data[a], things[a]):
+                fl_data = data[a]['firstline'][0]
+                fl_things = things[a]['firstline'][0]
+                print('Oh oh. data and things incompatible for appeared {} and {}'.format(fl_data, fl_things))
+                db.destroy_box(data, a)
+            data[a] = things[a]
 
-    # this will leave some chars and ships unwhered. do something with them.
+    # overwrite hl with the things hl
+    box.subbox_overwrite(data, idint, 'LI', 'hl', hl)
 
-    # for i in things:
+    # if any hidden things in global_hidden_stuff are not present in hl, add them on the end.
+    for i in global_hidden_stuff.get(idint, []):
+        box.subbox_append(data, idint, 'LI', 'hl', i, dedup=True)
+
+    # this will leave some chars and ships unwhered. do something with them. XXXv0
 
     return region
 
@@ -2177,6 +2250,8 @@ def parse_turn(turn, data, everything=True):
     for i in char_sections:
         name, ident, factint, s = char_sections[i]
         parse_character(name, ident, factint, s, data)
+        global global_character_final
+        global_character_final[ident] = data[ident]
     for i in in_progress_sections:
         parse_in_progress_orders(in_progress_sections[i], i, data)
 

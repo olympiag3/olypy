@@ -448,36 +448,77 @@ def test_parse_inner_locations():
 \t Yoyo 5 [3984], with two peasants, six sailors
 '''
     ret = {'1001': {'LI': {'hl': ['6940', '1771', '2370', '3622']}},
-           '1771': {'LI': {'hl': ['2480'], 'wh': ['1001']},
+           '1771': {'LI': {'hl': ['2480'], 'wh': ['1001'], 'hl': ['2480']},
                     'firstline': ['1771 char 0'],
-                    'il': {'10': ['19']},
+                    'il': ['10', '19'],
                     'na': ['Woodrow Call']},
-           '2259': {'LI': {'hl': ['3984'], 'wh': ['3622']},
+           '2259': {'LI': {'hl': ['3984'], 'wh': ['3622'], 'hl': ['3984']},
                     'firstline': ['2259 char 0'],
-                    'il': {'11': ['20']},
+                    'il': ['11', '20'],
                     'na': ['Yoyo 2']},
            '2370': {'LI': {'wh': ['1001']},
                     'firstline': ['2370 char 0'],
-                    'il': {'10': ['15'], '11': ['5']},
+                    'il': ['10', '15', '11', '5'],
                     'na': ['Eric']},
            '2480': {'LI': {'wh': ['1771']},
                     'firstline': ['2480 char 0'],
-                    'il': {'10': ['2']},
+                    'il': ['10', '2'],
                     'na': ['Pea Eye Parker']},
-           '3622': {'LI': {'hl': ['2259'], 'wh': ['1001']},
+           '3622': {'LI': {'hl': ['2259'], 'wh': ['1001'], 'hl': ['2259']},
                     'SL': {'eg': ['230'], 'er': ['500']},
                     'firstline': ['3622 ship roundship-in-progress'],
                     'na': ['Tub 1']},
            '3984': {'LI': {'wh': ['2259']},
                     'firstline': ['3984 char 0'],
-                    'il': {'10': ['2'], '19': ['6']},
+                    'il': ['10', '2', '19', '6'],
                     'na': ['Yoyo 5']},
            '6940': {'LI': {'wh': ['1001']},
                     'firstline': ['6940 char 0'],
-                    'il': {'10': ['14'], '11': ['11']},
+                    'il': ['10', '14', '11', '11'],
                     'na': ['Oleg the Loudmouth']}}
 
     idint = '1001'
+    things = {}
+
+    turnparser.parse_inner_locations(idint, t.expandtabs(), things)
+    assert things == ret
+
+    t = '''   Tub 14 [5614], roundship, 83% loaded, defense 10, owner:
+ *    Alice [1238], with three workers, six soldiers, 49 pikemen,
+      eight sailors, 46 crossbowmen, accompanied by:
+ *       Bob [8140], with 94 soldiers
+   Tub 19 [2219], roundship, 83% loaded, defense 10, 5% damaged, owner:
+ *    Carol [2437], with 100 soldiers, eight sailors, accompanied by:
+ *       Dan [1229], wielding Big Fork [z999], wearing Rugged
+         vest [d999], with 83 pikemen, four peasants
+'''
+    ret = {'1229': {'LI': {'wh': ['2437']},
+                    'firstline': ['1229 char 0'],
+                    'il': ['78999', '1', '62999', '1', '16', '83', '10', '4'],
+                    'na': ['Dan']},
+           '1238': {'LI': {'hl': ['8140'], 'wh': ['5614']},
+                    'firstline': ['1238 char 0'],
+                    'il': ['11', '3', '12', '6', '16', '49', '19', '8', '21', '46'],
+                    'na': ['Alice']},
+           '12399': {'LI': {'hl': ['5614', '2219']}},
+           '2219': {'LI': {'hl': ['2437'], 'wh': ['12399']},
+                    'SL': {'da': ['5d'], 'df': ['10']},
+                    'firstline': ['2219 ship roundship'],
+                    'na': ['Tub 19']},
+           '2437': {'LI': {'hl': ['1229'], 'wh': ['2219']},
+                    'firstline': ['2437 char 0'],
+                    'il': ['12', '100', '19', '8'],
+                    'na': ['Carol']},
+           '5614': {'LI': {'hl': ['1238'], 'wh': ['12399']},
+                    'SL': {'df': ['10']},
+                    'firstline': ['5614 ship roundship'],
+                    'na': ['Tub 14']},
+           '8140': {'LI': {'wh': ['1238']},
+                    'firstline': ['8140 char 0'],
+                    'il': ['12', '94'],
+                    'na': ['Bob']}}
+
+    idint = '12399'
     things = {}
 
     turnparser.parse_inner_locations(idint, t.expandtabs(), things)
@@ -1038,7 +1079,7 @@ Seen here:
                    'firstline': ['12422 loc forest'],
                    'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
                    'na': ['Forest']},
-         '12423': {'LI': {'wh': ['Grinter']},
+         '12423': {'LI': {'hl': ['57423'], 'wh': ['Grinter']},
                    'LO': {'pd': ['12323', '12424', '12523', '12422']},
                    'SL': {'sh': ['1']},
                    'firstline': ['12423 loc forest'],
@@ -1053,7 +1094,12 @@ Seen here:
                    'LO': {'pd': ['12423', 0, 0, 0]},
                    'firstline': ['12523 loc ocean'],
                    'il': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
-                   'na': ['Ocean']}}
+                   'na': ['Ocean']},
+         '57423': {'LI': {'wh': ['12423']},
+                   'SL': {'sh': ['1']},
+                   'firstline': ['57423 loc city'],
+                   'il': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
+                   'na': ['Wildefort']}}
 
     data = {}
     turnparser.parse_location(t, to_int('ja1'), False, data)

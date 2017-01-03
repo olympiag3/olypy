@@ -3,9 +3,14 @@ import dbck
 
 def test_check_where_here():
 
-    data = {'1001': {'LI': {'wh': ['1003']}},
-            '1002': {'LI': {'wh': ['1003']}},
-            '1003': {'LI': {'hl': ['1001', '1002']}}}
+    data = {'1001': {'firstline': ['1001 char 0'],
+                     'LI': {'wh': ['1003']}},
+            '1002': {'firstline': ['1002 loc tower'],
+                     'LI': {'wh': ['1003']}},
+            '1003': {'firstline': ['1003 loc castle-in-progress'],
+                     'LI': {'hl': ['1001', '1002'], 'wh': ['56789']}},
+            '56789': {'firstline': ['56789 loc region'],
+                      'LI': {'hl': ['1003']}}}
 
     assert dbck.check_where_here(data) == 0
 
@@ -15,7 +20,7 @@ def test_check_where_here():
 
     del data['1003']
 
-    assert dbck.check_where_here(data) == 1
+    assert dbck.check_where_here(data) == 2
 
 
 def test_check_faction_units():

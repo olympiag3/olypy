@@ -6,32 +6,52 @@ import sys
 from oid import to_oid
 
 
-def check_where_here(data):
-    "Make sure that every box that's where is here, and here is where."
+def check_firstline(data):
+    '''Make sure everything in data has a firstline'''
     problem = 0
-    for i in data:
-        if 'LI' in data[i]:
-            if 'wh' in data[i]['LI']:
-                where = data[i]['LI']['wh'][0]
+    for k, v in data.items():
+        if 'firstline' not in v:
+            print('Thing {} has no firstline'.format(k))
+            problem += 1
+    return problem
+
+
+where_things = set(('loc', 'ship', 'char'))
+
+
+def check_where_here(data):
+    '''Make sure that every box that's where is here, and here is where.
+    Does not check anything that is not where.'''
+    problem = 0
+    for k, v in data.items():
+        if 'firstline' in v and ' loc region' not in v['firstline'][0]:
+            _, kind, _ = v['firstline'][0].split(' ', maxsplit=2)
+            if kind in where_things:
+                try:
+                    where = data[k]['LI']['wh'][0]
+                except (KeyError, IndexError):
+                    print('Thing {} is not anywhere'.format(k), file=sys.stderr)
+                    problem += 1
+                    continue
                 try:
                     hl = data[where]['LI']['hl']
-                    hl.index(i)
+                    hl.index(k)
                 except (KeyError, ValueError):
-                    print('Thing {} is not in here list of thing {}'.format(i, where), file=sys.stderr)
+                    print('Thing {} is not in here list of thing {}'.format(k, where), file=sys.stderr)
                     problem += 1
                     continue
 
-    for i in data:
-        if 'LI' in data[i]:
-            if 'hl' in data[i]['LI']:
-                hl = data[i]['LI']['hl']
+    for k, v in data.items():
+        if 'LI' in v:
+            if 'hl' in v['LI']:
+                hl = v['LI']['hl']
                 for unit in hl:
                     try:
                         where = data[unit]['LI']['wh'][0]
-                        if where != i:
+                        if where != k:
                             raise ValueError
-                    except (KeyError, ValueError):
-                        print('Unit {} is in here list of unit {}, but is not there'.format(unit, i), file=sys.stderr)
+                    except (KeyError, ValueError, IndexError):
+                        print('Unit {} is in here list of unit {}, but is not there'.format(unit, k), file=sys.stderr)
                         problem += 1
                         continue
 
@@ -87,6 +107,8 @@ def check_unique_items(data):
                 un = None
                 un = data[i]['IT']['un'][0]
                 il = data[un]['il']
+                if not isinstance(il, list):
+                    print('Whoops. id', i, 'il is', il)
                 il.index(i)  # this might have false positive and match a qty XXX
             except (KeyError, ValueError):
                 print('Unique item {} is not in inventory of unit {}'.format(i, un), file=sys.stderr)
@@ -103,7 +125,7 @@ def check_unique_items(data):
                 all_inventory[item] = all_inventory.get(item, 0) + qty
 
     for i in all_unique_items:
-        if all_inventory[i] != 1:
+        if i not in all_inventory or all_inventory[i] != 1:
             print('Unique item {} does not have exactly one instance'.format(i), file=sys.stderr)
             problem += 1
             continue
@@ -135,6 +157,7 @@ def check_prisoners(data):
 
 def check_db(data):
     problems = 0
+    problems += check_firstline(data)
     problems += check_where_here(data)
     problems += check_faction_units(data)
     problems += sweep_independent_units(data)
