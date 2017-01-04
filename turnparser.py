@@ -858,11 +858,14 @@ def make_locations_from_routes(routes, idint, region, data):
             idir = -99999
         if dest not in data or 'il' not in data[dest]:
             if kind in province_kinds:
+                old_hl = data.get(dest, {}).get('LI', {}).get('hl', [])
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
                               'na': [r['name']],
                               'il': geo_inventory[kind],
                               'LI': {'wh': [myregion]},
                               'LO': {'pd': [0, 0, 0, 0]}}
+                if old_hl:
+                    box.subbox_overwrite(data, dest, 'LI', 'hl', old_hl)
                 if 'impassable' in r:
                     pass  # city, or mountain/sea. Make the link anyway.
                 if dir == 'out':
@@ -873,6 +876,8 @@ def make_locations_from_routes(routes, idint, region, data):
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
+                if dest in data:
+                    print('make locations from routes, {} lacks an il'.format(idint))
                 if dir == 'out':
                     raise ValueError('Hm. This needs fixing: '+repr(data[dest]))
                 # figure out what province this city is in, there should be an impassable link
@@ -889,6 +894,7 @@ def make_locations_from_routes(routes, idint, region, data):
                               'il': geo_inventory['city'],
                               'LI': {'wh': [prov]}}
                 box.subbox_append(data, prov, 'LI', 'hl', [dest], dedup=True)
+                print('Created a city {} from a route and hl of the province is now {}'.format(dest, data[prov]['LI']['hl']))
             elif kind in subloc_kinds or kind in structure_type:
                 pass  # this only exists for visions of a castle, ship etc XXXv2
         else:
@@ -1045,6 +1051,9 @@ def parse_a_sublocation_route(parts):
     if kind not in subloc_kinds:
         raise ValueError('invalid kind of a sublocation route, '+kind)
 
+    if 'faery' in kind:
+        print('Here I am with a {} {}'.format(kind, parts))
+
     attr = {}
 
     if kind in geo_inventory:
@@ -1052,11 +1061,13 @@ def parse_a_sublocation_route(parts):
 
     for p in parts:
         p = p.strip()
-        if p == '1 day':
-            continue
-        elif p == 'hidden':
+        if p == 'hidden' or kind == 'faery hill':  # XXXv1 faery hills don't say 'hidden' in real world, what do they look like in faery?
+            if kind == 'faery hill':
+                print('Saw a faery hill and marking it hidden')
             attr['LO'] = {}
             attr['LO']['hi'] = ['1']
+        elif p == '1 day':
+            continue
         elif p == 'safe haven':
             attr['SL'] = {}
             attr['SL']['sh'] = ['1']
@@ -1155,7 +1166,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
 
     depth = len(s) - len(s.lstrip(' '))
     if depth % 3 != 0:
-        raise ValueError
+        raise ValueError('depth was {}'.format(depth))
     depth //= 3
 
     parts = s.lstrip(' ').split(', ')  # needs the space due to 1,000+ soldiers etc
@@ -1174,7 +1185,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
         elif second in route_annotations or second in subloc_kinds:
             kind, thing = parse_a_sublocation_route(parts)
             if 'hi' in thing.get('LO', {}):
-                print('Subloc {} is hidden'.format(oid))
+                print('Subloc {} is hidden'.format(oidint))
         else:
             kind, thing = parse_a_character(parts)
     else:
@@ -1197,6 +1208,8 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
         thing['firstline'] = [oidint + loc + kind]
     thing['na'] = [name]
     thing['LI'] = {}
+    if kind == 'city':
+        thing['il'] = geo_inventory[kind]
 
     print('idint is {} and depth is {}'.format(oidint, depth))
     where = depths[depth-1]
@@ -1714,6 +1727,9 @@ def resolve_fake_items(data):
 def resolve_characters(data):
     for i in global_character_final:
         data[i] = global_character_final[i]
+        # XXXv0 need to add to hl for all wh
+        where = data[i]['LI']['wh'][0]
+        box.subbox_append(data, where, 'LI', 'hl', i, dedup=True)
 
 
 def resolve_garrisons(data):
@@ -2014,8 +2030,6 @@ def parse_location(s, factint, everything, data):
     if m:
         parse_inner_locations(idint, m.group(1), things)
         # XXXv1 beware: faery hills are inner loc of faery, faery road in normal world
-        # locations never change, however, they may be hidden to this faction
-        # all buildings are here
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -2053,8 +2067,9 @@ def parse_location(s, factint, everything, data):
             box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
             global global_hidden_stuff
             # idint == LI wh, hidden things have to be on province or city level
+            print('adding or re-adding a hidden {} in location {}'.format(i, idint))
             global_hidden_stuff[idint].add(i)
-            # is this a new hidden thing? if so copy to data
+            # is this an old hidden thing? if so copy from data
             if i not in data:
                 data[i] = things[i]
 
@@ -2062,10 +2077,10 @@ def parse_location(s, factint, everything, data):
         remove_chars_and_ships(things)
         # XXXv2 this also removes the garrison. hm.
 
-    hl = things[idint].get('LI', {}).get('hl', [])
+    thing_hl = things[idint].get('LI', {}).get('hl', [])
 
     # Are we in a garrison-only view? If so, abort early
-    if ((len(hl) < 1 and
+    if ((len(thing_hl) < 1 and
         'Routes Leaving' not in s and
          'No known routes leaving' not in s)):
         return region
@@ -2079,6 +2094,9 @@ def parse_location(s, factint, everything, data):
 
     # make sure that hidden things are present... they will not be in things[]
     for i in global_hidden_stuff.get(idint, []):
+        print('global hidden for this locale is {}'.format(global_hidden_stuff[idint]))
+        # XXXv0 now if someone builds a structure in a hidden location, we need to make
+        # it not be disappeared, need a loop_here on data[i], mark new and copy to things
         old.add(i)
         new.add(i)
         things[i] = data[i]
@@ -2116,6 +2134,15 @@ def parse_location(s, factint, everything, data):
                 fl_data = data[c]['firstline'][0]
                 fl_things = things[c]['firstline'][0]
                 print('Oh oh. data and things incompatible for continued {} and {}'.format(fl_data, fl_things))
+            # if I am outside a city, I don't see hl or tl.
+            if ' loc city' in things[c]['firstline'][0]:
+                hl = data[c].get('LI', {}).get('hl')
+                if hl is not None:
+                    things[c]['LI']['hl'] = hl
+                    print('setting hl of {} to {}'.format(c, hl))
+                tl = data[c].get('tl')
+                if tl is not None:
+                    things[c]['tl'] = tl
             data[c] = things[c]
 
     appeared = new_set.difference(old_set)
@@ -2130,7 +2157,8 @@ def parse_location(s, factint, everything, data):
             data[a] = things[a]
 
     # overwrite hl with the things hl
-    box.subbox_overwrite(data, idint, 'LI', 'hl', hl)
+    if len(thing_hl) > 0:
+        box.subbox_overwrite(data, idint, 'LI', 'hl', thing_hl)
 
     # if any hidden things in global_hidden_stuff are not present in hl, add them on the end.
     for i in global_hidden_stuff.get(idint, []):

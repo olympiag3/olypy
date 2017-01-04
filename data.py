@@ -71,12 +71,17 @@ def loop_here(data, where, fog=False):
         kind = data[where]['firstline'][0].partition(' loc ')[2]
 
     hls = set()
+    print('where is', where)
+    print('data where is', data[where])
     if 'LI' in data[where]:
         if 'hl' in data[where]['LI']:
             for w in data[where]['LI']['hl']:
                 if fog and is_char(data, w):
                     continue
                 hls.add(w)
+                print('w is', w)
+                if 'firstline' not in data[w]:
+                    print('Ack no firstline for {}'.format(w))
                 firstline = data[w]['firstline'][0]
                 if ' loc city' in firstline:
                     continue

@@ -383,7 +383,7 @@ def test_parse_routes_leaving():
 
     assert turnparser.parse_routes_leaving(t) == r
 
-    expected = {'10221': {'LI': {'wh': ['Olbradim']},
+    expected = {'10221': {'LI': {'wh': ['Olbradim'], 'hl': ['57262']},
                           'LO': {'pd': ['10101', 0, 0, 0]},
                           'firstline': ['10221 loc swamp'],
                           'il': ['66', '1', '96', '50', '101', '1', '274', '1'],
