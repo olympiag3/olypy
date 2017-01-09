@@ -11,7 +11,7 @@ def check_firstline(data):
     problem = 0
     for k, v in data.items():
         if 'firstline' not in v:
-            print('Thing {} has no firstline'.format(k))
+            print('Thing {} has no firstline'.format(k), file=sys.stderr)
             problem += 1
     return problem
 
@@ -31,6 +31,7 @@ def check_where_here(data):
                     where = data[k]['LI']['wh'][0]
                 except (KeyError, IndexError):
                     print('Thing {} is not anywhere'.format(k), file=sys.stderr)
+                    print('  ', data[k]['firstline'][0], file=sys.stderr)
                     problem += 1
                     continue
                 try:
@@ -38,6 +39,9 @@ def check_where_here(data):
                     hl.index(k)
                 except (KeyError, ValueError):
                     print('Thing {} is not in here list of thing {}'.format(k, where), file=sys.stderr)
+                    print('  ', data[k]['firstline'][0], file=sys.stderr)
+                    if where in data:
+                        print('  ', data[where]['firstline'][0], file=sys.stderr)
                     problem += 1
                     continue
 
@@ -52,6 +56,9 @@ def check_where_here(data):
                             raise ValueError
                     except (KeyError, ValueError, IndexError):
                         print('Unit {} is in here list of unit {}, but is not there'.format(unit, k), file=sys.stderr)
+                        if unit in data:
+                            print('  ', data[unit]['firstline'][0], 'LI wh', where, file=sys.stderr)
+                        print('  ', v['firstline'][0], 'LI hl', hl, file=sys.stderr)
                         problem += 1
                         continue
 
@@ -70,6 +77,7 @@ def check_faction_units(data):
                     un.index(i)
                 except (KeyError, ValueError):
                     print('Unit {} is in faction {} but not vice versa'.format(i, fact), file=sys.stderr)
+                    print('  ', data[i]['firstline'][0], file=sys.stderr)
                     problem += 1
                     continue
 
@@ -83,6 +91,10 @@ def check_faction_units(data):
                         print('lo {} i {}'.format(lo, i), file=sys.stderr)
                 except (KeyError, ValueError):
                     print('Unit {} is not in faction {}'.format(unit, i), file=sys.stderr)
+                    if unit in data:
+                        print('  ', data[unit]['firstline'][0], file=sys.stderr)
+                    else:
+                        print('  ' 'unit {} is not in data'.format(unit), file=sys.stderr)
                     problem += 1
                     continue
 
@@ -112,6 +124,9 @@ def check_unique_items(data):
                 il.index(i)  # this might have false positive and match a qty XXX
             except (KeyError, ValueError):
                 print('Unique item {} is not in inventory of unit {}'.format(i, un), file=sys.stderr)
+                print('  ', data[i]['firstline'][0], file=sys.stderr)
+                if un in data:
+                    print('  ', data[un]['firstline'][0], file=sys.stderr)
                 problem += 1
                 continue
 
@@ -127,6 +142,8 @@ def check_unique_items(data):
     for i in all_unique_items:
         if i not in all_inventory or all_inventory[i] != 1:
             print('Unique item {} does not have exactly one instance'.format(i), file=sys.stderr)
+            if i in data:
+                print('  ', data[i]['firstline'][0], file=sys.stderr)
             problem += 1
             continue
 

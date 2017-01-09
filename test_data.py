@@ -35,17 +35,17 @@ def test_unset_where():
     data = {'1001': {'LI': {'wh': ['9999']}},
             '1002': {}}
     unset_where(data, '1001')
-    assert data['1001']['LI']['wh'] == []
+    assert 'wh' not in data['1001']['LI']
     set_where(data, '1001', '1002')
     assert data['1002']['LI']['hl'] == ['1001']
     assert data['1001']['LI']['wh'] == ['1002']
     unset_where(data, '1001')
-    assert data['1001']['LI']['wh'] == []
+    assert 'wh' not in data['1001']['LI']
     assert data['1002']['LI']['hl'] == []
     set_where(data, '1001', '1002')
     data['1002']['LI']['hl'] = []  # so I'm not on the list to be removed
     unset_where(data, '1001')
-    assert data['1001']['LI']['wh'] == []
+    assert 'wh' not in data['1001']['LI']
     assert data['1002']['LI']['hl'] == []
 
     data = {'1001': {'LI': {'wh': ['9999'], 'hl': ['1002']}},

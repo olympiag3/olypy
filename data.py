@@ -32,13 +32,15 @@ def unset_where(data, who, promote_children=True):
     hl = data[who].get('LI', {}).get('hl')
 
     if len(wh):
-        data[who]['LI']['wh'] = []  # XXXv0 box.subbox_overwrite(...)
+        del data[who]['LI']['wh']
         other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
         if other_hl is not None:
             try:
                 other_hl.remove(who)
                 data[wh[0]]['LI']['hl'] = other_hl
+                print('successfully removed {} from hl'.format(who))
             except ValueError:
+                print('failed to remove {} from hl'.format(who))
                 pass
 
     if promote_children and hl is not None:
@@ -71,8 +73,8 @@ def loop_here(data, where, fog=False):
         kind = data[where]['firstline'][0].partition(' loc ')[2]
 
     hls = set()
-    print('where is', where)
-    print('data where is', data[where])
+    print('loop here where is', where)
+    print('loop here data where is', data[where])
     if 'LI' in data[where]:
         if 'hl' in data[where]['LI']:
             for w in data[where]['LI']['hl']:
@@ -84,6 +86,7 @@ def loop_here(data, where, fog=False):
                     print('Ack no firstline for {}'.format(w))
                 firstline = data[w]['firstline'][0]
                 if ' loc city' in firstline:
+                    # do not descend into cities
                     continue
                 [hls.add(x) for x in loop_here(data, w)]  # don't propagate fog
     return hls
@@ -97,6 +100,10 @@ def destroy_box(data, who, promote_children=True):
     # XXXv0 other links:
     # pledge chain - CM,pl is one-way so it needs a end-of-run fixup XXXv0
     # lord: CH,lo and previous lord CH,pl -- needs end-of-run fixup XXXv0
+    lo = data[who].get('CH', {}).get('lo', [None])[0]
+    if lo:
+        box.subbox_remove(data, lo, 'PL', 'un', who)
+
     # unique items - need to look at firstline - IT,un is where it is
     # creater of things like storms, artifacts - IM,ct
     # owner of storm - MI,sb {summoned by}
