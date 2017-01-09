@@ -4,6 +4,7 @@ Database checker, similar to the one in the C code (check.c)
 import sys
 
 from oid import to_oid
+import box
 
 
 def check_firstline(data):
@@ -42,7 +43,10 @@ def check_where_here(data):
                     print('  ', data[k]['firstline'][0], file=sys.stderr)
                     if where in data:
                         print('  ', data[where]['firstline'][0], file=sys.stderr)
-                    problem += 1
+                        box.subbox_append(data, where, 'LI', 'hl', k, dedup=True)
+                        print('   fixed up.', file=sys.stderr)
+                    else:
+                        problem += 1
                     continue
 
     for k, v in data.items():
@@ -56,11 +60,10 @@ def check_where_here(data):
                             raise ValueError
                     except (KeyError, ValueError, IndexError):
                         print('Unit {} is in here list of unit {}, but is not there'.format(unit, k), file=sys.stderr)
-                        if unit in data:
-                            print('  ', data[unit]['firstline'][0], 'LI wh', where, file=sys.stderr)
-                        print('  ', v['firstline'][0], 'LI hl', hl, file=sys.stderr)
-                        problem += 1
-                        continue
+                        if unit not in data:
+                            print('   btw unit {} does not exist'.format(unit), file=sys.stderr)
+                        box.subbox_remove(data, k, 'LI', 'hl', unit)
+                        print('   fixed.', file=sys.stderr)
 
     return problem
 
@@ -102,9 +105,30 @@ def check_faction_units(data):
 
 
 def sweep_independent_units(data):
-    '''Move any unit not in a faction to being unsworn and owned by faction 100 (independent player)'''
-    return 0
+    '''
+    Move any unit not in a faction to being unsworn and owned by faction 100 (independent player)
+    Also alter their skills and inventory.
+    '''
+    for k, v in data.items():
+        if ' char 0' in v['firstline'][0]:
+            lo = v.get('CH', {}).get('lo', [None])[0]
+            if lo is None:
+                print('sweeping unit {} into player 100'.format(k), file=sys.stderr)
+                box.subbox_overwrite(data, k, 'CH', 'lo', ['100'])
+                box.subbox_append(data, '100', 'PL', 'un', [k])
 
+                # Configure the unit
+                # this unit should only have visible 'il' so it's safe to append gold
+                # XXXv2 compute maint and give that much instead of a fixed amount
+                box.box_append(data, k, 'il', ['1', '2000'])
+                # and it should have no skills, so this is safe
+                # SFW and FTTD
+                box.subbox_append(data, k, 'CH', 'sl', ['610', '2', '21', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['611', '2', '28', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['612', '2', '28', '0', '0'])
+                # FTTD is on
+                box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
+    return 0
 
 def check_unique_items(data):
     "Make sure unique items exist on exactly one inventory list, somewhere."
@@ -120,7 +144,7 @@ def check_unique_items(data):
                 un = data[i]['IT']['un'][0]
                 il = data[un]['il']
                 if not isinstance(il, list):
-                    print('Whoops. id', i, 'il is', il)
+                    print('Whoops. id', i, 'il is', il, file=sys.stderr)
                 il.index(i)  # this might have false positive and match a qty XXX
             except (KeyError, ValueError):
                 print('Unique item {} is not in inventory of unit {}'.format(i, un), file=sys.stderr)
@@ -167,7 +191,7 @@ def check_prisoners(data):
                 if 'pr' in data[i]['CH']:
                     where = data[i]['LI']['wh'][0]
                     if ' char ' not in data[where]['firstline'][0]:
-                        print('Prisoner {} is not stacked under a character.'.format(to_oid(i)))
+                        print('Prisoner {} is not stacked; location {}'.format(to_oid(i), where), file=sys.stderr)
                         problem += 1
     return problem
 

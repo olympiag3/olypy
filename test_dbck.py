@@ -1,7 +1,9 @@
+import pytest
+
 import dbck
 
 
-def test_check_where_here():
+def test_check_where_here(capsys):
 
     data = {'1001': {'firstline': ['1001 char 0'],
                      'LI': {'wh': ['1003']}},
@@ -13,14 +15,26 @@ def test_check_where_here():
                       'LI': {'hl': ['1003']}}}
 
     assert dbck.check_where_here(data) == 0
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert err == ''
 
     del data['1002']
 
-    assert dbck.check_where_here(data) == 1
+    assert dbck.check_where_here(data) == 0
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert '1002' in err
+    assert '1003' in err
 
     del data['1003']
 
-    assert dbck.check_where_here(data) == 2
+    assert dbck.check_where_here(data) == 1
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert '56789' in err
+    assert '1003' in err
+    assert '1001' in err
 
 
 def test_check_faction_units():

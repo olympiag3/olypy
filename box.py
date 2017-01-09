@@ -108,7 +108,6 @@ def subbox_remove(data, box, subbox, key, value):
     except ValueError:
         pass
 
-
 def subbox_overwrite(data, box, subbox, key, value):
     '''
     overwrite list with a new one
@@ -116,13 +115,6 @@ def subbox_overwrite(data, box, subbox, key, value):
     box = str(box)
     subbox = str(subbox)
     key = str(key)
-
-    if box == '14507' and key == 'hl':
-        print('Here I am setting hl to', value)
-        if value is None:
-            raise ValueError
-        if isinstance(value, list) and value[0] is None:
-            raise ValueError
 
     if not isinstance(value, list):
         value = [value]

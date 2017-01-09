@@ -1218,8 +1218,11 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
     depths[depth] = oidint
 
     thing['LI']['wh'] = [where]
+    if oidint == '4797' or oidint == '7490':
+        print('Hey greg, adding {} to hl for {}'.format(oidint, where))
     box.subbox_append(things, where, 'LI', 'hl', [oidint])
-
+    if oidint == '4797' or oidint == '7490':
+        print('hey greg result is', things[where]['LI']['hl'])
     last_depth = depth
 
     things[oidint] = thing
@@ -1380,9 +1383,16 @@ def parse_inner_locations(idint, text, things):
     last_depth = 0
     depths = [idint, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
+    text = re.sub('".*?"', '""', text)  # throw out all banners
+    text = text.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
+
+    # if you're wielding two things, it is "wielding foo [bar] and baz [barf]"
+    # and a potential linebreak. Hack it so that it will parse anyway.
+    new_text = re.sub(r'\]\s+and\s', '], wielding one ', text)
+    if new_text != text:
+        text = new_text
+
     for l in text.split('\n'):
-        l = re.sub('".*?"', '""', l)  # throw out all banners
-        l = l.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
         if 'A magical barrier surrounds' in l:
             continue
         parts = l.split(',')
@@ -1598,7 +1608,12 @@ def create_garrison_player(data):
     data['207'] = {'firstline': ['207 player pl_silent'],
                    'na': ['Garrison units'],
                    'PL': {'pw': ['crusty7']}}
-    # in the real game 207 has 'uf', however, I think we can safely leave it off
+
+
+def create_independent_player(data):
+    data['100'] = {'firstline': ['207 player pl_npc'],
+                   'na': ['Independent player'],
+                   'PL': {'pw': ['crusty7']}}
 
 
 def parse_faction(text, factint, data):
@@ -1746,10 +1761,15 @@ def resolve_fake_items(data):
 
 
 def resolve_characters(data):
+    print('hey greg before resolve char and 3054 is', data['3054'])
     for tup in global_character_final:
         name, ident, factint, s = tup
         print('resolve_character {}'.format(ident))
+        if ident == '1661':
+            print('hey greg about to resolve 1661 and 3054 is', data['3054'])
         parse_character(name, ident, factint, s, data)
+        if data['3054']['LI']['wh'][0] != '1661':
+            print('hey greg BINGO1 ident is {} and 3054 is {}'.format(ident, data['3054']))
 
         try:
             where = data[ident]['LI']['wh'][0]
@@ -1757,11 +1777,17 @@ def resolve_characters(data):
             print('Whoops. Char {} is not anywhere: {}'.format(ident, data[ident]))
             raise
         box.subbox_append(data, where, 'LI', 'hl', ident, dedup=True)
+        if data['3054']['LI']['wh'][0] != '1661':
+            print('hey greg BINGO2 ident is {} and 3054 is {}'.format(ident, data['3054']))
+    print('hey greg after first loop and 3054 is', data['3054'])
 
     for tup in global_character_in_progress:
         s, ident = tup
         parse_in_progress_orders(s, ident, data)
 
+        if ident == '3054':
+            print('hey greg resolve char and 3054 was just in-progressed,', data[ident])
+    print('hey greg after second loop and 3054 is', data['3054'])
 
 def resolve_garrisons(data):
     return
@@ -1862,10 +1888,19 @@ def parse_character(name, ident, factident, text, data):
     lkind, lrate = match_line(text, 'Loyalty:', capture=r'([A-Za-z]+)-(\d+)')
     lkind = str(loyalty_kind[lkind])
 
+    # Unfortunately this only captures the first one.
+    # Only needed for fog/concealed + nobles from a non-allied faction/prisoners
+    stacked_over, = match_line(text, 'Stacked over:')
+    if stacked_over is not None:
+        stacked_over = parse_an_id(stacked_over)
+        box.subbox_append(data, ident, 'LI', 'hl', stacked_over, dedup=True)
+
     stacked_under, = match_line(text, 'Stacked under:')
     if stacked_under is not None:
         stacked_under = parse_an_id(stacked_under)
     location = stacked_under or location
+    if ident == '4797' or ident == '7490':
+        print('Hey greg location of {} is {}'.format(ident, location))
 
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
@@ -1898,6 +1933,7 @@ def parse_character(name, ident, factident, text, data):
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
 
     # XXXv2 extract full data from max aura 161 (3+158) and construct a fake auraculum if needed
+    # XXXv2 I think in v0 I am getting all auraculums made
     aura_artifacts = 0
     plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
     if plus:
@@ -1933,30 +1969,22 @@ def parse_character(name, ident, factident, text, data):
     if m:
         trades = parse_pending_trades(m.group(1))
 
-    ret = {}
+    char = {}
     iint = to_int(ident)
-    ret['firstline'] = [iint + ' char 0']
-    ret['na'] = [name]
+    char['firstline'] = [iint + ' char 0']
+    char['na'] = [name]
     if len(inventory) > 0:
-        ret['il'] = inventory
+        char['il'] = inventory
     if len(trades) > 0:
-        ret['tl'] = trades
+        char['tl'] = trades
 
-    ret['LI'] = {}
+    char['LI'] = {}
 
-    if concealed:
-        ret['LI']['wh'] = [location]
-        # XXXv0 dada location LI hl, too
-    if iint in data:
-        wh = data[iint].get('LI', {}).get('wh', [''])[0]
-        if wh != location:
-            # XXXv0 this fires for fog on last turn, so, it should become quiet
-            print('parse_character: moved unit {} LI wh from {} to {}'.format(iint, wh, location))
-        ret['LI']['wh'] = [location]
-        # XXXv0 data location LI hl, too
-    else:
-        # XXXv0 data location LI hl, too
-        pass
+    db.unset_where(data, ident, promote_children=False)
+    char['LI']['wh'] = [location]
+    hl = data.get(ident, {}).get('LI', {}).get('hl', [])
+    if len(hl):
+        char['LI']['hl'] = hl
 
     ch = {}
     ch['lo'] = [to_int(factident)]
@@ -1984,7 +2012,7 @@ def parse_character(name, ident, factident, text, data):
     ch['mi'] = [missile]
     # npc_prog ?!
     # contact XXXv2
-    ret['CH'] = ch
+    char['CH'] = ch
 
     cm = {}
     if concealed:
@@ -1992,12 +2020,13 @@ def parse_character(name, ident, factident, text, data):
     if pledged_to:
         cm['pl'] = to_int(pledged_to)
     if len(cm):
-        ret['CM'] = cm
+        char['CM'] = cm
 
-    data[to_int(ident)] = ret
+    data[to_int(ident)] = char
     box.subbox_append(data, factident, 'PL', 'un', ident, dedup=True)
-    if ident == '9917':
-        print('here we are, and 9917 is', data[ident])
+    if ident == '1661':
+        print('finished resolving 1661 and 1661 is', data[ident])
+        print('finished resolving 1661 and 3054 is', data['3054'])
 
 
 def compatible_boxes(one, two):
@@ -2198,8 +2227,16 @@ def parse_location(s, factint, everything, data):
                 print('Oh oh. data and things incompatible for continued {} and {}'.format(fl_data, fl_things))
             if ' loc city' in things[c]['firstline'][0]:
                 if c in data:
-                    # we can't see inside from outside, so, preserve what's there
+                    # we can't see inside from outside, so, preserve what's there by not overwriting it
                     real_c.discard(c)
+            # special case XXXv2 since we are processing garrisons all along, need to remove destroyed/reappeared
+            if c == '4344':
+                print('hey greg data wh {} things wh {}'.format(data[c]['LI']['wh'], things[c]['LI']['wh']))
+            if ((c in data and
+                 ' char garrison' in data[c]['firstline'][0] and
+                 data[c]['LI']['wh'] != things[c]['LI']['wh'])):
+                print('hey greg, special garrison move for', c)
+                db.unset_where(data, c)
 
     appeared = new_set.difference(old_set)
     if len(appeared) > 0:
@@ -2234,6 +2271,11 @@ def parse_location(s, factint, everything, data):
                 print('do-not-know box {} is in the right place. appending.'.format(dnk))
                 thing_hl.append(dnk)
 
+    if idint == '11436':
+        print('hey greg here is as36 and the final things is', things)
+        print('hey greg also real_c is {} and appeared is {}'.format(real_c, appeared))
+        print('hey greg thing_hl is', thing_hl)
+
     for c in real_c:
         data[c] = things[c]
     for a in appeared:
@@ -2244,6 +2286,8 @@ def parse_location(s, factint, everything, data):
     # if any hidden things in global_hidden_stuff are not present in hl, add them on the end.
     for i in global_hidden_stuff.get(idint, []):
         box.subbox_append(data, idint, 'LI', 'hl', i, dedup=True)
+    if idint == '11436':
+        print('hey greg the final hl for the province is', data[idint]['LI']['hl'])
 
     for u in real_c.union(appeared):
         if ' char garrison' in data[u]['firstline'][0]:
