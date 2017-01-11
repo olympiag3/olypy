@@ -27,7 +27,6 @@ rm -rf data/test-temporary
 mkdir data/test-temporary
 mkdir data/test-temporary/fact
 $COVERAGE ../copylib.py data/g2 data/test-temporary
-diff -u data/g2/system data/test-temporary/system # temporary to find my bug
 diff -r -q data/g2 data/test-temporary
 rm -rf data/test-temporary
 

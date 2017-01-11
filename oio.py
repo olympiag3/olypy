@@ -85,20 +85,17 @@ def write_players(data, dir, verbose=False):
 
 
 def write_system_file(data):
-    # last turn
-    # faery region
-    # Nowhere region
-    # nowhere province
+    # last turn, faery region, Nowhere region, nowhere province
+    # in the g2 dataset, there are players who quit early, so last turn is a max
     done = 0
-    lt = None
+    lt = 1
     fr = None
     nr = None
     nl = None
     for k, v in data.items():
         fl = v['firstline'][0]
-        if lt is None and ' player pl_regular' in fl:
-            lt = v['PL']['lt'][0]
-            done += 1
+        if ' player pl_regular' in fl:
+            lt = max(lt, int(v['PL']['lt'][0]))
         if fr is None and ' loc region' in fl and v['na'][0] == 'Faery':
             fr = k
             done += 1
@@ -106,10 +103,8 @@ def write_system_file(data):
             nr = k
             nl = v['LI']['hl'][0]
             done += 2
-        if done >= 4:
-            break
 
-    if done != 4:
+    if done != 3:
         raise ValueError('problem finding magic numbers in write_system_file')
 
     print('''sysclock: {} 30 3000
