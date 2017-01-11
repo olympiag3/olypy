@@ -887,8 +887,6 @@ def make_locations_from_routes(routes, idint, region, data):
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
-                if dest in data:
-                    print('make locations from routes, {} lacks an il'.format(idint))
                 if dir == 'out':
                     raise ValueError('Hm. This needs fixing: '+repr(data[dest]))
                 # figure out what province this city is in, there should be an impassable link
@@ -905,7 +903,6 @@ def make_locations_from_routes(routes, idint, region, data):
                               'il': geo_inventory['city'],
                               'LI': {'wh': [prov]}}
                 box.subbox_append(data, prov, 'LI', 'hl', [dest], dedup=True)
-                print('Created a city {} from a route and hl of the province is now {}'.format(dest, data[prov]['LI']['hl']))
             elif kind in subloc_kinds or kind in structure_type:
                 pass  # this only exists for visions of a castle, ship etc XXXv2
         else:
@@ -919,17 +916,13 @@ def make_locations_from_routes(routes, idint, region, data):
                 if idir > 3:
                     if len(data[dest]['LO']['pd']) < 6:
                         data[dest]['LO']['pd'].extend((0, 0))
-                if 'LO' not in data[dest]:
-                    print('oops data dest is', data[dest])
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
                 # link is at the province level
                 pass
 
         if 'hidden' in r and not dir.endswith(' road'):
-            print('setting LO hi for {}'.format(to_oid(dest)))
             box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
-            print('box is {}'.format(data[dest]))
 
         # XXXv2 what about roads?
 
@@ -1062,9 +1055,6 @@ def parse_a_sublocation_route(parts):
     if kind not in subloc_kinds:
         raise ValueError('invalid kind of a sublocation route, '+kind)
 
-    if 'faery' in kind:
-        print('Here I am with a {} {}'.format(kind, parts))
-
     attr = {}
 
     if kind in geo_inventory:
@@ -1073,8 +1063,6 @@ def parse_a_sublocation_route(parts):
     for p in parts:
         p = p.strip()
         if p == 'hidden' or kind == 'faery hill':  # XXXv1 faery hills don't say 'hidden' in real world, what do they look like in faery?
-            if kind == 'faery hill':
-                print('Saw a faery hill and marking it hidden')
             attr['LO'] = {}
             attr['LO']['hi'] = ['1']
         elif p == '1 day':
@@ -1203,8 +1191,6 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
             kind, thing = parse_a_structure(parts)
         elif second in route_annotations or second in subloc_kinds:
             kind, thing = parse_a_sublocation_route(parts)
-            if 'hi' in thing.get('LO', {}):
-                print('Subloc {} is hidden'.format(oidint))
         else:
             kind, thing = parse_a_character(parts)
     else:
@@ -1230,16 +1216,11 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
     if kind == 'city':
         thing['il'] = geo_inventory[kind]
 
-    print('idint is {} and depth is {}'.format(oidint, depth))
     where = depths[depth-1]
     depths[depth] = oidint
 
     thing['LI']['wh'] = [where]
-    if oidint == '4797' or oidint == '7490':
-        print('Hey greg, adding {} to hl for {}'.format(oidint, where))
     box.subbox_append(things, where, 'LI', 'hl', [oidint])
-    if oidint == '4797' or oidint == '7490':
-        print('hey greg result is', things[where]['LI']['hl'])
     last_depth = depth
 
     things[oidint] = thing
@@ -1294,8 +1275,6 @@ def parse_routes_leaving(text):
             elif p in geo_inventory:
                 attr['kind'] = p
             elif p in route_annotations:
-                if p == 'hidden':
-                    print('Route to {} is hidden'.format(to_oid(attr['destination'])))
                 attr[p] = 1
             elif '[' in p:
                 saw_loc = 1
@@ -1335,11 +1314,6 @@ def parse_routes_leaving(text):
             else:
                 raise ValueError('unknown part of {} in line {}'.format(p, l))
 
-        if 'hidden' in attr:
-            print('hidden and region is', attr.get('region', 'None'))
-            if attr.get('region') is None:
-                print('    parts', parts)
-
         if 'dir' not in attr and 'special_dir' not in attr:
             # faery hill roads lack a direction to normal.
             #  SL,lt from fairy hill to normal; SL,lf from normal to faery hill
@@ -1358,7 +1332,6 @@ def parse_routes_leaving(text):
                 # actual roads have 2 ids in 'road'
                 #  kinda like a subloc, only GA tl points to the other end, GA,rh 1 for hidden
                 #  yeah, the 2 things in 'road' don't directly refer to each other
-                print('here we are and attr special_dir is', attr['special_dir'])
                 attr['dir'] = 'road road'
 
         if 'destination' not in attr:
@@ -1701,20 +1674,8 @@ def analyze_garrison_list(text, data, everything=False):
 
     if everything:
         un = data['207']['PL']['un']
-        print('begin special garrison list scan, there are {} garrisons'.format(len(un)))
-        if '6273' in un:
-            print('I do see 6273 in un')
-        else:
-            print('I do not see 6273 in un')
-        if '6273' in data:
-            print('I do see 6273 in data')
-        else:
-            print('I do not see 6273 in data')
         for unit in un:
-            if unit == '6273':
-                print('Considering {} {}'.format(unit, data.get(unit, {})))
             if unit not in garrs and unit in data and data[unit].get('MI', {}).get('gc', [''])[0] in castles:
-                print('Special garrison list destroy of garrison {} castle {}'.format(garr, data[unit]['MI']['gc'][0]))
                 db.destroy_box(data, unit)
 
 
@@ -1791,7 +1752,6 @@ def resolve_fake_items(data):
 def resolve_characters(data):
     for tup in global_character_final:
         name, ident, factint, s = tup
-        print('resolve_character {}'.format(ident))
         parse_character(name, ident, factint, s, data)
 
         try:
@@ -1826,7 +1786,7 @@ def resolve_nowhere(region_ident, data):
                    'na': ['Nowhere'],
                    'LI': {'wh': [region_ident]}}
     box.subbox_append(data, region_ident, 'LI', 'hl', [ident], dedup=True)
-    print('hey greg nowhere region with hl is', data[region_ident])
+
     il = []
     for i in ('401', '402', '403'):
         if i not in data:
@@ -1885,7 +1845,6 @@ def resolve_regions(data):
             ordered_regions.index(r)
         except ValueError:
             ordered_regions.append(r)
-            print('Left over region', r, 'stuck on end.')
 
     region_map = {}
     ident = 58760
@@ -1917,13 +1876,11 @@ def remove_chars_and_ships(things):
         firstline = things[i]['firstline'][0]
         if ' char ' in firstline or ' ship ' in firstline:
             if things[i].get('MI', {}).get('ca', [''])[0] == 'g':
-                print('Keeping garrison {}'.format(i))
                 continue
             db.unset_where(things, i)
             nuke.append(i)
 
     for i in nuke:
-        print('Removing char/ship {}'.format(i))
         del things[i]
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
@@ -1955,8 +1912,6 @@ def parse_character(name, ident, factint, text, data):
     if stacked_under is not None:
         stacked_under = parse_an_id(stacked_under)
     location = stacked_under or location
-    if ident == '4797' or ident == '7490':
-        print('Hey greg location of {} is {}'.format(ident, location))
 
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
@@ -2015,7 +1970,6 @@ def parse_character(name, ident, factint, text, data):
         skills.extend(skills_partial)
 
     skills_list = [skills[x] for x in range(0, len(skills), 5)]
-    print('hey greg skills list is', skills_list)
     if len(skills_list):
         box.subbox_append(data, factint, 'PL', 'kn', skills_list, dedup=True)
 
@@ -2122,7 +2076,6 @@ def parse_location(s, factint, everything, data):
         kind = 'city'
 
     if idint not in data:
-        print('Initial creation of {}'.format(idint))
         data[idint] = {'firstline': [idint + ' loc ' + kind],
                        'LI': {'wh': [enclosing_int or region]}}
         if enclosing_int:
@@ -2169,17 +2122,11 @@ def parse_location(s, factint, everything, data):
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
         market = parse_market_report(m.group(1), data, include=idint)
-        if (kind == 'city' or kind == 'port city') and 'il' not in data[idint]:
-            print('City {} appears to lack inventory'.format(idint))
         box.box_overwrite(data, idint, 'tl', market)
 
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        if idint == '57579':
-            print('Velishire. s is', s)
         parse_inner_locations(idint, m.group(1), things)
-        if idint == '57579':
-            print('Velishire. things is', things)
 
     m = re.search(r'^Ships sighted:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -2193,7 +2140,6 @@ def parse_location(s, factint, everything, data):
     if controlling_castle:
         for i in things:
             if 'ca' in things[i].get('MI', {}):
-                print('Writing in a controlling castle of {} for garrison {}'.format(controlling_castle, i))
                 box.subbox_overwrite(things, i, 'MI', 'gc', [controlling_castle])
 
     if 'The province is blanketed in fog' in s and kind in province_kinds:
@@ -2206,22 +2152,18 @@ def parse_location(s, factint, everything, data):
         if 'hi' in things[i].get('LO', {}):
             box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
             global global_hidden_stuff
-            # idint == LI wh, hidden things have to be on province or city level
-            print('adding or re-adding a hidden {} in location {}'.format(i, idint))
             global_hidden_stuff[idint].add(i)
 
     if not everything:
         remove_chars_and_ships(things)
 
     data_hl = data.get(idint, {}).get('LI', {}).get('hl', [])
-    print('data hl is {}'.format(data_hl))
     thing_hl = things[idint].get('LI', {}).get('hl', [])
 
     # Are we in a garrison-only view? If so, abort early
     if ((len(thing_hl) < 1 and
         'Routes leaving ' not in s and
          'No known routes leaving' not in s)):
-        print('Garrison only view of {}, exiting location processing early'.format(idint))
         return region
 
     # form lists of stuff, old/new, respecting fog
@@ -2233,7 +2175,6 @@ def parse_location(s, factint, everything, data):
 
     # make sure that hidden things are present... they will not all be in things[] but should all be in data[]
     for i in global_hidden_stuff.get(idint, []):
-        print('global hidden for this locale is {}'.format(global_hidden_stuff[idint]))
         # XXXv0 now if someone builds a structure in a hidden location, we need to make
         # it not be disappeared, need a loop_here on data[i], mark new and copy to things
         if i not in new:
@@ -2288,12 +2229,9 @@ def parse_location(s, factint, everything, data):
                     # we can't see inside from outside, so, preserve what's there by not overwriting it
                     real_c.discard(c)
             # special case XXXv2 since we are processing garrisons all along, need to remove destroyed/reappeared
-            if c == '4344':
-                print('hey greg data wh {} things wh {}'.format(data[c]['LI']['wh'], things[c]['LI']['wh']))
             if ((c in data and
                  ' char garrison' in data[c]['firstline'][0] and
                  data[c]['LI']['wh'] != things[c]['LI']['wh'])):
-                print('hey greg, special garrison move for', c)
                 db.unset_where(data, c)
 
     appeared = new_set.difference(old_set)
@@ -2304,35 +2242,20 @@ def parse_location(s, factint, everything, data):
                 if not compatible_boxes(data[a], things[a]):
                     fl_data = data[a]['firstline'][0]
                     fl_things = things[a]['firstline'][0]
-                    print('Oh oh. data and things incompatible for appeared {} and {}'.format(fl_data, fl_things))
                     db.destroy_box(data, a)
                 else:
                     db.unset_where(data, a)
-                if a == '8412':
-                    print('here we are {} {}'.format(a, things[a]))
-                    wh = things[a]['LI']['wh'][0]
-                    print('here we are {} {}'.format(wh, things[wh]))
 
     all_fog = old.union(new)
     all_hl = set(data_hl).union(set(thing_hl))
-    print('all_fog is {}'.format(all_fog))
-    print('all_hl is {}'.format(all_hl))
     do_not_know = all_hl.difference(all_fog)
     if len(do_not_know) > 0:
-        print(' Do not know:', do_not_know)
         # all of these boxes should be at the location level. verify that.
+        print(' Do not know:', do_not_know)
         for dnk in do_not_know:
             wh = data[dnk]['LI']['wh'][0]
-            if wh != idint:
-                print('whoops. do-not-know box {} where {} but I expected {}'.format(dnk, wh, idint))
-            else:
-                print('do-not-know box {} is in the right place. appending.'.format(dnk))
+            if wh == idint:
                 thing_hl.append(dnk)
-
-    if idint == '11436':
-        print('hey greg here is as36 and the final things is', things)
-        print('hey greg also real_c is {} and appeared is {}'.format(real_c, appeared))
-        print('hey greg thing_hl is', thing_hl)
 
     for c in real_c:
         data[c] = things[c]
@@ -2344,8 +2267,6 @@ def parse_location(s, factint, everything, data):
     # if any hidden things in global_hidden_stuff are not present in hl, add them on the end.
     for i in global_hidden_stuff.get(idint, []):
         box.subbox_append(data, idint, 'LI', 'hl', i, dedup=True)
-    if idint == '11436':
-        print('hey greg the final hl for the province is', data[idint]['LI']['hl'])
 
     for u in real_c.union(appeared):
         if ' char garrison' in data[u]['firstline'][0]:
