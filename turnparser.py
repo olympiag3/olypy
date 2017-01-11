@@ -866,7 +866,7 @@ def parse_pending_trades(text):
             continue  # header lines
         qty = qty.replace(',', '')
         item = re.findall(r'\[(.*?)\]', item)
-        ret.extend((trade, item[0], qty, price, '0', '0', '0', '0'))
+        ret.extend((trade, to_int(item[0]), qty, price, '0', '0', '0', '0'))
     return ret
 
 
