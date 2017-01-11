@@ -3,7 +3,7 @@ Database checker, similar to the one in the C code (check.c)
 '''
 import sys
 
-from oid import to_oid
+from oid import to_oid, to_int
 import box
 
 
@@ -128,6 +128,19 @@ def sweep_independent_units(data):
                 box.subbox_append(data, k, 'CH', 'sl', ['612', '2', '28', '0', '0'])
                 # FTTD is on
                 box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
+                # loop through inventory and remove any unique items that don't exist
+                # example: weapons and armor
+                il = data[k]['il']
+                new_il = []
+                while len(il) > 0:
+                    item = il.pop(0)
+                    count = il.pop(0)
+                    if int(item) > 399:
+                        if item not in data:
+                            print('dropping unique item {} from independent noble {}'.format(item, k))
+                        else:
+                            new_il.extend([item, count])
+                box.box_overwrite(data, k, 'il', new_il)
     return 0
 
 def check_unique_items(data):

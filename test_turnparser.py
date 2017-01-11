@@ -269,7 +269,7 @@ def test_parse_location_top():
     ret = ['Forest', to_int('ah08'), 'forest', 0, 'Acaren', 0, 0, 0]
     assert turnparser.parse_location_top(t) == ret
     assert turnparser.regions_set == set(('Cloudlands', 'Great Sea', 'Hades', 'Undercity',
-                                          'Acaren',))
+                                          'Acaren', 'Nowhere'))
 
 
 def test_parse_a_structure():
@@ -572,9 +572,33 @@ def test_parse_market_report():
              '3', to_int('r384'), '27',  '11', '0', '0', '0', '36',
              '1',           '93', '80',  '17', '0', '0', '0', '0',
              '4',           '93', '80',  '17', '0', '0', '0', '0']
+    data = {}
+    data_out = {'64950': {'IT': {'bp': ['82'], 'pl': ['fine cloaks'], 'wt': ['80']},
+                          'firstline': ['64950 item tradegood'],
+                          'na': ['fine cloaks']},
+                '72384': {'IT': {'bp': ['11'], 'pl': ['salt'], 'wt': ['100']},
+                          'firstline': ['72384 item tradegood'],
+                          'na': ['salt']},
+                '74526': {'IT': {'bp': ['83'], 'pl': ['tea'], 'wt': ['43']},
+                          'firstline': ['74526 item tradegood'],
+                          'na': ['tea']}}
 
-    assert turnparser.parse_market_report(t) == r_all
-    assert turnparser.parse_market_report(t, include=to_int('m19')) == r_cty
+    assert turnparser.parse_market_report(t, data) == r_all
+    assert data == data_out
+
+    data = {}
+    data_out = {'64950': {'IT': {'bp': ['82'], 'pl': ['fine cloaks'], 'wt': ['80']},
+                          'firstline': ['64950 item tradegood'],
+                          'na': ['fine cloaks']},
+                '72384': {'IT': {'bp': ['11'], 'pl': ['salt'], 'wt': ['100']},
+                          'firstline': ['72384 item tradegood'],
+                          'na': ['salt']},
+                '74526': {'IT': {'bp': ['83'], 'pl': ['tea'], 'wt': ['43']},
+                          'firstline': ['74526 item tradegood'],
+                          'na': ['tea']}}
+
+    assert turnparser.parse_market_report(t, data, include=to_int('m19')) == r_cty
+    assert data == data_out
 
 
 def test_parse_seen_here():
@@ -721,9 +745,11 @@ Grinter
            '5157': {'firstline': ['5157 unform 0']},
            '52341': {'firstline': ['52341 player pl_regular'],
                      'na': ["Oleg's Olympians"],
-                     'PL': {'fs': ['200'],
+                     'PL': {'em': ['example@example.com'],
+                            'fn': ['Full Name'],
+                            'fs': ['200'],
                             'ft': ['1'],
-                            'kn': [],
+                            'kn': ['69'],
                             'lt': ['2'],
                             'np': ['11'],
                             'uf': ['8012', '6124', '4547', '5157', '3518'],
@@ -757,9 +783,11 @@ The next five nobles formed will be:  7815 1933 8012 6124 4547
     '''
     ret = {'1933': {'firstline': ['1933 unform 0']},
            '4547': {'firstline': ['4547 unform 0']},
-           '52341': {'PL': {'fs': ['200'],
+           '52341': {'PL': {'em': ['example@example.com'],
+                            'fn': ['Full Name'],
+                            'fs': ['200'],
                             'ft': ['1'],
-                            'kn': [],
+                            'kn': ['69'],
                             'lt': ['1'],
                             'np': ['18'],
                             'uf': ['7815', '1933', '8012', '6124', '4547'],
@@ -1002,7 +1030,10 @@ Osswid the Destroyer [7271]
        sell	   7	100   clay pot [95]
    
     '''
-    ret = {'50033': {'PL': {'un': ['7271']}},
+    ret = {'50033': {'PL': {'kn': ['600', '601', '602', '603', '610', '611', '612',
+                                   '613', '614', '615', '616', '617', '680', '681',
+                                   '682', '720', '721', '722', '800', '860'],
+                            'un': ['7271']}},
            '7271': {'firstline': ['7271 char 0'],
                     'na': ['Osswid the Destroyer'],
                     'il': ['1', '26834',
@@ -1020,9 +1051,9 @@ Osswid the Destroyer [7271]
                            'bp': ['0'],
                            'df': ['168'],
                            'he': ['100'],
-                           'lk': '2',
+                           'lk': ['2'],
                            'lo': ['50033'],
-                           'lr': '2',
+                           'lr': ['2'],
                            'mi': ['50'],
                            'sl': ['600', '2', '21', '0', '0',
                                   '601', '2', '14', '0', '0',
@@ -1044,7 +1075,7 @@ Osswid the Destroyer [7271]
                                   '722', '2', '14', '0', '0',
                                   '800', '1', '7', '0', '0',
                                   '860', '1', '7', '0', '0']},
-                    'CM': {'hs': ['1'], 'pl': '6839'},
+                    'CM': {'hs': ['1'], 'pl': ['6839']},
                     'LI': {'wh': ['4256']}}}
     data = {}
     turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)

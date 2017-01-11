@@ -84,46 +84,101 @@ def write_players(data, dir, verbose=False):
                     write_player(data, box, verbose=verbose)
 
 
-def read_lib(libdir):
-    data = read_oly_file(libdir+'/loc', verbose='loc')
-    data.update(read_oly_file(libdir+'/item', verbose='item'))
-    data.update(read_oly_file(libdir+'/skill', verbose='skill'))
-    data.update(read_oly_file(libdir+'/gate', verbose='gate'))
-    data.update(read_oly_file(libdir+'/road', verbose='road'))
-    data.update(read_oly_file(libdir+'/ship', verbose='ship'))
-    data.update(read_oly_file(libdir+'/unform', verbose='unform'))
-    data.update(read_oly_file(libdir+'/misc', verbose='misc'))
+def write_system_file(data):
+    # last turn
+    # faery region
+    # Nowhere region
+    # nowhere province
+    done = 0
+    lt = None
+    fr = None
+    nr = None
+    nl = None
+    for k, v in data.items():
+        fl = v['firstline'][0]
+        if lt is None and ' player pl_regular' in fl:
+            lt = v['PL']['lt'][0]
+            done += 1
+        if fr is None and ' loc region' in fl and v['na'][0] == 'Faery':
+            fr = k
+            done += 1
+        if nr is None and ' loc region' in fl and v['na'][0] == 'Nowhere':
+            nr = k
+            nl = v['LI']['hl'][0]
+            done += 2
+        if done >= 4:
+            break
 
-    data.update(read_players(libdir+'/fact', verbose=True))
+    if done != 4:
+        raise ValueError('problem finding magic numbers in write_system_file')
+
+    print('''sysclock: {} 30 3000
+indep_player=100
+gm_player=200
+skill_player=202
+from_host=foo@example.com
+reply_host=foo@example.com
+post=1
+init=1
+fr={}
+tr=0
+ur=0
+fp=0
+hr=0
+hp=0
+hl=0
+nr={}
+nl={}
+np=206
+cr=0
+cp=210
+'''.format(lt, fr, nr, nl))
+
+
+def read_lib(libdir):
+    data = read_oly_file(libdir + '/loc', verbose='loc')
+    data.update(read_oly_file(libdir + '/item', verbose='item'))
+    data.update(read_oly_file(libdir + '/skill', verbose='skill'))
+    data.update(read_oly_file(libdir + '/gate', verbose='gate'))
+    data.update(read_oly_file(libdir + '/road', verbose='road'))
+    data.update(read_oly_file(libdir + '/ship', verbose='ship'))
+    data.update(read_oly_file(libdir + '/unform', verbose='unform'))
+    data.update(read_oly_file(libdir + '/misc', verbose='misc'))
+
+    data.update(read_players(libdir + '/fact', verbose=True))
 
     return data
 
 
 def write_lib(data, libdir):
-    with open(libdir+'/loc', 'w') as f:
+    with open(libdir + '/system', 'w') as f:
+        with redirect_stdout(f):
+            write_system_file(data)
+
+    with open(libdir + '/loc', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='loc', verbose='loc')
-    with open(libdir+'/item', 'w') as f:
+    with open(libdir + '/item', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='item', verbose='item')
-    with open(libdir+'/skill', 'w') as f:
+    with open(libdir + '/skill', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='skill', verbose='skill')
-    with open(libdir+'/gate', 'w') as f:
+    with open(libdir + '/gate', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='gate', verbose='gate')
-    with open(libdir+'/road', 'w') as f:
+    with open(libdir + '/road', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='road', verbose='road')
-    with open(libdir+'/ship', 'w') as f:
+    with open(libdir + '/ship', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='ship', verbose='ship')
-    with open(libdir+'/unform', 'w') as f:
+    with open(libdir + '/unform', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='unform', verbose='unform')
 
     write_players(data, libdir, verbose=True)
 
-    with open(libdir+'/misc', 'w') as f:
+    with open(libdir + '/misc', 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, verbose='misc')  # catchall

@@ -17,7 +17,7 @@ global_days = defaultdict(set)
 # this dict is a list of every region which was observed to be after key r
 # XXXv2 also get region order from parse_location_top order
 region_after = defaultdict(set)
-regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands'))
+regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands', 'Nowhere'))
 
 # holds the list of hidden sublocs in a province or city. no roads.
 global_hidden_stuff = defaultdict(set)
@@ -692,6 +692,15 @@ def reformat_inventory(inventory):
     return ret
 
 
+def make_fake_tradegood(ident, name, weight, price, data):
+    # XXXv2 test me
+    data[ident] = {'firstline': [ident+' item tradegood'],
+                   'na': [name],
+                   'IT': {'pl': [name],  # XXXv5 whatever
+                          'wt': [weight],
+                          'bp': [price]}}
+
+
 artifact_kindmap = {'attack': 'ab', 'defense': 'db', 'missile': 'mb', 'aura': 'ba'}
 
 
@@ -1088,6 +1097,7 @@ def parse_a_character(parts):
     il = []
     CM = {}
     MI = {}
+    ident = None
     for p in parts:
         p = p.strip()
         if p in noble_ranks:
@@ -1116,9 +1126,16 @@ def parse_a_character(parts):
             continue
         elif (p in item_to_inventory or
               p.endswith('s') and p[:-1] in item_to_inventory):
-            continue  # npcs like savages, or controlled npcs like savage XXXv2
+            # npcs like savages, or controlled npcs like savage XXXv2
+            if p in item_to_inventory:
+                ident = item_to_inventory[p]
+            else:
+                ident = item_to_inventory[p[:-1]]
         elif p.startswith('number: '):
-            continue  # definitely not a controlled npc
+            # definitely not a controlled npc
+            count = p.replace('number: ', '')
+            il.extend([ident, count])
+            # XXXv0 test me
         else:
             if p.startswith('with '):
                 p = p.replace('with ', '')
@@ -1384,11 +1401,12 @@ def parse_inner_locations(idint, text, things):
     depths = [idint, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
     text = re.sub('".*?"', '""', text)  # throw out all banners
-    text = text.replace('*', ' ')  # XXXv0 don't confuse indentation parser with my characters
+    text = text.replace('*', ' ')
 
     # if you're wielding two things, it is "wielding foo [bar] and baz [barf]"
     # and a potential linebreak. Hack it so that it will parse anyway.
-    new_text = re.sub(r'\]\s+and\s', '], wielding one ', text)
+    # XXXv0 test me
+    new_text = re.sub(r'\]\s+and\s', '], wielding ', text)
     if new_text != text:
         text = new_text
 
@@ -1422,7 +1440,7 @@ def parse_inner_locations(idint, text, things):
     return things
 
 
-def parse_market_report(text, include=None):
+def parse_market_report(text, data, include=None):
     ret = []
     for line in text.split('\n'):
         pieces = line.split(maxsplit=5)
@@ -1440,8 +1458,11 @@ def parse_market_report(text, include=None):
         # if it's my noble, I'll get it in Pending trades
         # if it's not my noble, don't bother
         qty = qty.replace(',', '')
-        item = re.findall(r'\[(.*?)\]', item)
-        i = item[0]
+        m = re.search(r'(.*?)\s\[(.*?)\]', item)
+        if m:
+            name, i = m.group(1, 2)
+        else:
+            raise ValueError('Could not find name [id] for trade item in '+item)
         is_tradegood = 0
         if i[0].isalpha():
             is_tradegood = 1
@@ -1455,6 +1476,11 @@ def parse_market_report(text, include=None):
             ret.extend(('3', i, qty, price, '0', '0', '0', '36'))
         elif trade == '2':
             ret.extend(('3', i, qty, price, '0', '0', '0', '0'))
+
+        if is_tradegood:
+            db.destroy_box(data, i)
+            make_fake_tradegood(i, name, weight, price, data)
+
     # opium. I'm definintely not going to track, this, let's start
     # by having all cities buy 80 at 17 (max qty, min price)
     ret.extend(('1', '93', '80', '17', '0', '0', '0', '0'))
@@ -1584,13 +1610,15 @@ def parse_turn_header(data, turn, everything):
     if factint in data:
         kn = data[factint]['PL']['kn']
     else:
-        kn = []
+        kn = ['69']
 
     fact = {}
     fact['firstline'] = [factint + ' player pl_regular']
     fact['na'] = [fact_name]
 
     pl = {}
+    pl['fn'] = ['Full Name']
+    pl['em'] = ['example@example.com']
     pl['np'] = [nps]
     pl['fs'] = [fast_study]
     pl['ft'] = ['1']  # first turn
@@ -1611,7 +1639,7 @@ def create_garrison_player(data):
 
 
 def create_independent_player(data):
-    data['100'] = {'firstline': ['207 player pl_npc'],
+    data['100'] = {'firstline': ['100 player pl_npc'],
                    'na': ['Independent player'],
                    'PL': {'pw': ['crusty7']}}
 
@@ -1761,15 +1789,10 @@ def resolve_fake_items(data):
 
 
 def resolve_characters(data):
-    print('hey greg before resolve char and 3054 is', data['3054'])
     for tup in global_character_final:
         name, ident, factint, s = tup
         print('resolve_character {}'.format(ident))
-        if ident == '1661':
-            print('hey greg about to resolve 1661 and 3054 is', data['3054'])
         parse_character(name, ident, factint, s, data)
-        if data['3054']['LI']['wh'][0] != '1661':
-            print('hey greg BINGO1 ident is {} and 3054 is {}'.format(ident, data['3054']))
 
         try:
             where = data[ident]['LI']['wh'][0]
@@ -1777,25 +1800,56 @@ def resolve_characters(data):
             print('Whoops. Char {} is not anywhere: {}'.format(ident, data[ident]))
             raise
         box.subbox_append(data, where, 'LI', 'hl', ident, dedup=True)
-        if data['3054']['LI']['wh'][0] != '1661':
-            print('hey greg BINGO2 ident is {} and 3054 is {}'.format(ident, data['3054']))
-    print('hey greg after first loop and 3054 is', data['3054'])
 
     for tup in global_character_in_progress:
         s, ident = tup
         parse_in_progress_orders(s, ident, data)
 
-        if ident == '3054':
-            print('hey greg resolve char and 3054 was just in-progressed,', data[ident])
-    print('hey greg after second loop and 3054 is', data['3054'])
 
 def resolve_garrisons(data):
-    return
-#    '''Many garrisons get created without being added to the unit list of 207.'''
-#    for k, v in data.items():
-#        if v.get('CH', {}).get('lo', ['None'])[0] == '207':
-#            box.subbox_append(data, '207', 'PL', 'un', [k], dedup=True)
+    '''Garrisons attached to destroyed castles should become unowned'''
+    '''Many garrisons get created without being added to the unit list of 207.'''
+    for k, v in data.items():
+        gc = v.get('MI', {}).get('gc', [False])[0]
+        if gc:
+            if ' castle ' not in data.get(gc, {}).get('firstline', [''])[0]:
+                del v['MI']['gc']
 
+
+def resolve_nowhere(region_ident, data):
+    # 4 items need to be in a special nowhere province
+    ident = 46816
+    while ident in data:
+        ident += 1
+    ident = str(ident)
+    data[ident] = {'firstline': [ident + ' loc underground'],
+                   'na': ['Nowhere'],
+                   'LI': {'wh': [region_ident]}}
+    box.subbox_append(data, region_ident, 'LI', 'hl', [ident], dedup=True)
+    print('hey greg nowhere region with hl is', data[region_ident])
+    il = []
+    for i in ('401', '402', '403'):
+        if i not in data:
+            data[i] = {'firstline': [i + ' item relic']}
+        un = data[i].get('IT', {}).get('un', [False])[0]
+        if not un:
+            box.subbox_overwrite(data, i, 'IT', 'un', [ident])
+            il.extend([i, '1'])
+    if len(il) > 0:
+        box.box_overwrite(data, ident, 'il', il)
+
+    box.box_overwrite(data, '401', 'na', 'Imperial Throne')
+    box.subbox_overwrite(data, '401', 'IT', 'wt', ['500'])
+    box.subbox_overwrite(data, '401', 'IT', 'lo', ['401'])
+
+    box.box_overwrite(data, '402', 'na', 'Crown of Prosperity')
+    box.subbox_overwrite(data, '402', 'IT', 'wt', ['10'])
+    box.subbox_overwrite(data, '402', 'IT', 'lo', ['402'])
+
+    box.box_overwrite(data, '403', 'na', 'Skull of Bastresric')
+    box.subbox_overwrite(data, '403', 'IT', 'wt', ['10'])
+    box.subbox_overwrite(data, '403', 'IT', 'lo', ['403'])
+    box.subbox_overwrite(data, '403', 'IT', 'uk', ['15'])
 
 def resolve_regions(data):
     '''
@@ -1838,6 +1892,8 @@ def resolve_regions(data):
     for r in ordered_regions:
         data[str(ident)] = {'firstline': [str(ident)+' loc region'], 'na': [r]}
         region_map[r] = str(ident)
+        if r == 'Nowhere':
+            resolve_nowhere(str(ident), data)
         ident += 1
 
     for k, v in data.items():
@@ -1873,7 +1929,7 @@ def remove_chars_and_ships(things):
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
 
-def parse_character(name, ident, factident, text, data):
+def parse_character(name, ident, factint, text, data):
 
     m = re.search(r'^\s+Location:\s+(.*)\n(\s+)(.*)$', text, re.M)
     if m:
@@ -1958,6 +2014,11 @@ def parse_character(name, ident, factident, text, data):
         skills_partial = parse_partial_skills(m.group(1))
         skills.extend(skills_partial)
 
+    skills_list = [skills[x] for x in range(0, len(skills), 5)]
+    print('hey greg skills list is', skills_list)
+    if len(skills_list):
+        box.subbox_append(data, factint, 'PL', 'kn', skills_list, dedup=True)
+
     m = re.search(r'Inventory:\n(.*?)\n\n', text, re.M | re.S)
     inventory = []
     if m:
@@ -1987,12 +2048,12 @@ def parse_character(name, ident, factident, text, data):
         char['LI']['hl'] = hl
 
     ch = {}
-    ch['lo'] = [to_int(factident)]
+    ch['lo'] = [to_int(factint)]
     ch['he'] = [health]
     if sick:
         ch['si'] = ['1']
-    ch['lk'] = lkind
-    ch['lr'] = lrate
+    ch['lk'] = [lkind]
+    ch['lr'] = [lrate]
     if attitudes.get('neutral'):
         ch['an'] = attitudes['neutral']
     if attitudes.get('defend'):
@@ -2018,15 +2079,12 @@ def parse_character(name, ident, factident, text, data):
     if concealed:
         cm['hs'] = ['1']
     if pledged_to:
-        cm['pl'] = to_int(pledged_to)
+        cm['pl'] = [to_int(pledged_to)]
     if len(cm):
         char['CM'] = cm
 
     data[to_int(ident)] = char
-    box.subbox_append(data, factident, 'PL', 'un', ident, dedup=True)
-    if ident == '1661':
-        print('finished resolving 1661 and 1661 is', data[ident])
-        print('finished resolving 1661 and 3054 is', data['3054'])
+    box.subbox_append(data, factint, 'PL', 'un', ident, dedup=True)
 
 
 def compatible_boxes(one, two):
@@ -2110,7 +2168,7 @@ def parse_location(s, factint, everything, data):
 
     m = re.search(r'^Market report:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        market = parse_market_report(m.group(1), include=idint)
+        market = parse_market_report(m.group(1), data, include=idint)
         if (kind == 'city' or kind == 'port city') and 'il' not in data[idint]:
             print('City {} appears to lack inventory'.format(idint))
         box.box_overwrite(data, idint, 'tl', market)
@@ -2298,12 +2356,19 @@ def parse_location(s, factint, everything, data):
     return region
 
 
-def parse_in_progress_orders(s, unit, data):
+def parse_in_progress_orders(s, faction, data):
     lines = s.split('\n')
     unit = None
     for l in lines:
         divider = '   # > '
-        if l.startswith('unit '):
+        if l.startswith('begin '):
+            m = re.search(r'\"(.*?)\"', l)
+            if m:
+                password = m.group(1)
+                box.subbox_overwrite(data, faction, 'PL', 'pw', [password])
+            else:
+                raise ValueError('failed to parse faction password out of '+l)
+        elif l.startswith('unit '):
             unit = l.partition(' ')[2].partition(' ')[0]
         elif l.startswith(divider):
             order_and_remaining = l[len(divider):]

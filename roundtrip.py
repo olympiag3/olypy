@@ -22,6 +22,8 @@ args = parser.parse_args()
 
 if args.test:
     lines = [line for line in args.inputfile]
+    if lines[0].startswith('sysclock'):
+        exit(0)
     data = read_oly_file(lines)
     in_string = ''.join(lines)
 
@@ -41,7 +43,6 @@ if args.test:
     else:
         exit(1)
 
-# note - does not handle the order of player files!
 data = read_oly_file(args.inputfile)
 write_oly_file(data)
 args.outputfile.close()

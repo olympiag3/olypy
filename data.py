@@ -96,6 +96,8 @@ def destroy_box(data, who, promote_children=True):
     '''
     Destroy a box that's become something different.
     '''
+    if who not in data:
+        return
     unset_where(data, who, promote_children=promote_children)
     # XXXv0 other links:
     # pledge chain - CM,pl is one-way so it needs a end-of-run fixup XXXv0

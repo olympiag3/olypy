@@ -1,0 +1,44 @@
+#!/bin/sh
+
+echo "Doing a sim"
+
+LIB=157
+TURN=158
+
+NEW=lib.$LIB
+
+[ ! -f $NEW.tar.bz2 ] && echo "$NEW not found" && exit 1
+
+rm -rf lib
+tar xf $NEW.tar.bz2
+rm lib/spool/*
+cp -p player-spool/m.??? lib/spool
+
+# fixups to make the lib a valid one
+cp -r templatelib/lore lib
+cp templatelib/skill lib
+mv lib/item lib/item.suffix
+cat templatelib/item.prefix lib/item.suffix > lib/item
+rm lib/item.suffix
+
+mv lib/misc lib/misc.suffix
+cat templatelib/misc.prefix lib/misc.suffix > lib/misc
+rm lib/misc.suffix
+
+cp templatelib/fact/2?? lib/fact
+
+# random?
+if [ $* ]
+then
+  echo "random chosen"
+  head -c 16 /dev/urandom > lib/randseed
+fi
+
+./oly -e || exit $?
+./oly -rMS || exit $?
+
+#rm lib/master
+#./print_garrison.pl lib/fact/207 > garrisons-at-end
+#tar cjf lib-next.tar.gz lib
+
+./greg-rep $TURN
