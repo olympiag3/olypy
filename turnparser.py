@@ -1951,6 +1951,7 @@ def parse_character(name, ident, factint, text, data):
     # XXXv2 I think in v0 I am getting all auraculums made
     aura_artifacts = 0
     plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
+    native_aura = 0
     if plus:
         native_aura, _, aura_artifacts = plus.partition('+')
         if _ != '+':
@@ -2038,6 +2039,11 @@ def parse_character(name, ident, factint, text, data):
         cm['hs'] = ['1']
     if pledged_to:
         cm['pl'] = [to_int(pledged_to)]
+    if current_aura:
+        cm['ca'] = [str(current_aura)]
+    if maximum_aura:
+        cm['ma'] = [str(native_aura or maximum_aura)]
+        cm['im'] = ['1']
     if len(cm):
         char['CM'] = cm
 

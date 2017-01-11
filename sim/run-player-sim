@@ -35,7 +35,6 @@ then
 fi
 
 ./oly -e || exit $?
-exit 1
 ./oly -rMS || exit $?
 
 #rm lib/master

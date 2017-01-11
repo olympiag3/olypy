@@ -979,6 +979,9 @@ Osswid the Destroyer [7271]
 		   Francisco Lopez [6710]
 		   Tom [8578]
    
+   Current aura:   4
+   Maximum aura:   4
+   
    Declared attitudes:
       defend   qm9  zb1
    
@@ -1001,6 +1004,10 @@ Osswid the Destroyer [7271]
       Mining [720]
 	    Mine iron [721], apprentice
 	    Mine gold [722], apprentice
+      Scrying [840]
+	    Scry location [841], apprentice
+	    Ciphered writing of Areth-Pirn [842], apprentice
+	    Create magical barrier [845], apprentice
    
    Partially known skills:
       Magic [800], 7/28
@@ -1033,7 +1040,8 @@ Osswid the Destroyer [7271]
     '''
     ret = {'50033': {'PL': {'kn': ['600', '601', '602', '603', '610', '611', '612',
                                    '613', '614', '615', '616', '617', '680', '681',
-                                   '682', '720', '721', '722', '800', '860'],
+                                   '682', '720', '721', '722', '840', '841', '842',
+                                   '845', '800', '860'],
                             'un': ['7271']}},
            '7271': {'firstline': ['7271 char 0'],
                     'na': ['Osswid the Destroyer'],
@@ -1074,9 +1082,18 @@ Osswid the Destroyer [7271]
                                   '720', '2', '21', '0', '0',
                                   '721', '2', '14', '0', '0',
                                   '722', '2', '14', '0', '0',
+                                  '840', '2', '35', '0', '0',
+                                  '841', '2', '21', '0', '0',
+                                  '842', '2', '21', '0', '0',
+                                  '845', '2', '21', '0', '0',
                                   '800', '1', '7', '0', '0',
                                   '860', '1', '7', '0', '0']},
-                    'CM': {'hs': ['1'], 'pl': ['6839']},
+                    'CM': {'ca': ['4'],
+                           'hs': ['1'],
+                           'im': ['1'],
+                           'ma': ['4'],
+                           'hs': ['1'],
+                           'pl': ['6839']},
                     'LI': {'wh': ['4256']}}}
     data = {}
     turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
