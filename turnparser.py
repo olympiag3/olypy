@@ -1916,6 +1916,7 @@ def parse_character(name, ident, factint, text, data):
     if stacked_under is not None:
         stacked_under = parse_an_id(stacked_under)
     location = stacked_under or location
+    where = data.get(ident, {}).get('LI', {}).get('wh', [''])[0]
 
     health, = match_line(text, 'Health:')
     if 'getting worse' in health:
@@ -1933,14 +1934,23 @@ def parse_character(name, ident, factint, text, data):
     vision_protection, = match_line(text, 'Receive Vision:', capture=r'(\d+)')
 
     concealed, = match_line(text, 'use  638 1')
+    move_me = 0
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
         print('Concealed character', ident, 'is actually in location', location)
+        if where != location:
+            move_me = 1
     else:
         concealed = 0
-        wh = data.get(ident, {}).get('LI', {}).get('wh', [''])[0]
-        if wh != location:
-            print('Whoops. visible character {} is not in location {}, actually in {}'.format(ident, location, wh))
+        if where != location:
+            # this can be caused by fog
+            print('Whoops. visible character {} is out of place, char report is {}, old data is {}'.format(ident, location, where))
+            move_me = 1
+
+    if move_me:
+        db.unset_where(data, ident, promote_children=True)
+        db.set_where(data, ident, location)
+        box.subbox_append(data, location, 'LI', 'hl', [ident], dedup=True)
 
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
@@ -2002,11 +2012,10 @@ def parse_character(name, ident, factint, text, data):
 
     char['LI'] = {}
 
-    db.unset_where(data, ident, promote_children=False)
-    char['LI']['wh'] = [location]
     hl = data.get(ident, {}).get('LI', {}).get('hl', [])
     if len(hl):
         char['LI']['hl'] = hl
+    char['LI']['wh'] = [location]
 
     ch = {}
     ch['lo'] = [to_int(factint)]
