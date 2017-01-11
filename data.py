@@ -310,3 +310,19 @@ def add_potion(data, kind, im, unit, oid=None):
     data[oid]['IM'] = im
 
     box.box_append(data, unit, 'il', [oid, 1])
+
+def inventory_to_dict(il):
+    il_copy = il.copy()
+    ret = {}
+    while len(il_copy) > 0:
+        k = il_copy.pop(0)
+        ret[k] = il_copy.pop(0)
+    return ret
+
+def dict_to_inventory(d):
+    ret = []
+    keys = sorted([int(k) for k in d])
+    for k in keys:
+        k = str(k)
+        ret.extend([k, d[k]])
+    return ret

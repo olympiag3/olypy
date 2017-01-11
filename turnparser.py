@@ -57,6 +57,10 @@ structure_er = {
     'inn':       '300',
     'raft':       '45'}
 
+ship_capacity = {
+    'roundship': '25000',
+    'galley':     '5000'}
+
 geo_inventory = {
     # ordered same as mapgen.c
     'ocean': ['59', '30', '87', '50', '274', '1', '275', '1', '276', '1'],
@@ -662,7 +666,7 @@ def parse_inventory(text, unit, data):
             temp[int(ident)] = [ident, name, weight, qty, plus, what]
 
             if int(ident) > 399:
-                make_fake_item(unit, ident, name, weight, plus, what, data)
+                make_fake_item(unit, ident, name, weight, qty, plus, what, data)
             continue
 
         m = re.search(r'\s(\w.+)\s\[(.{4})\] permits study of the following skills', line)
@@ -704,7 +708,7 @@ def make_fake_tradegood(ident, name, weight, price, data):
 artifact_kindmap = {'attack': 'ab', 'defense': 'db', 'missile': 'mb', 'aura': 'ba'}
 
 
-def make_fake_item(unit, ident, name, weight, plus, what, data):
+def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
     '''
     Based on incomplete info, make a fake unique item.
     Used for things spotted in inventory.
@@ -748,9 +752,15 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
                            'IT': {'un': [unit]},  # g2 database agrees IT wt is not set
                            'IM': {'tn': ['1'], 'ti': ['33']}}  # IM ti is a lie, also needs PL un filled in
         elif int(weight) > 14:  # lightest tradegood is 15
-            data[ident] = {'firstline': [ident + ' item tradegood'],
-                           'na': [name],
-                           'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
+            weight = str(int(weight) // int(qty))
+            # switch this to make_fake_tradegood
+            # don't overwrite bp if it was set correctly elsewhere
+            if ((ident not in data or
+                 ' item tradegood' not in data[ident]['firstline'][0] or
+                 data[ident].get('IT', {}).get('wt', [''])[0] != weight)):
+                data[ident] = {'firstline': [ident + ' item tradegood'],
+                               'na': [name],
+                               'IT': {'pl': [name], 'wt': [weight], 'bp': ['100']}}
         elif weight == '1':  # probably a scroll or potion ... small chance of auraculum
             data[ident] = {'firstline': [ident + ' item 0'],  # if scroll, will eventually be 'item scroll'
                            'na': ['Fake '+name],
@@ -769,6 +779,9 @@ def make_fake_item(unit, ident, name, weight, plus, what, data):
         else:
             # in theory this might include 2/3 of auraculi, but, none of ours are 2 or 3?!
             raise ValueError('weight is '+weight)
+
+        if int(qty) > 1 and ' item tradegood' not in data[ident]['firstline'][0]:
+            raise ValueError('unique item quantity must be 1, but it is '+qty)
 
 
 def groups(iterable, n):
@@ -990,22 +1003,22 @@ The main problem here is the kind of the enclosure, which can be renamed.
     civ = 0
     safe_haven = 0
     hidden = 0
-    if len(rest) > 1:
+    if len(rest) > 0:
         for r in rest:
             if r == 'wilderness':
                 civ = 0
-                break
-            m = re.match(r'civ-(\d)', r)
-            if m:
-                civ = m.group(1)
-                break
-            if r == 'safe haven':
+            elif r.startswith('civ-'):
+                m = re.match(r'civ-(\d)', r)
+                if m:
+                    civ = int(m.group(1))
+                else:
+                    raise ValueError('error parsing a civ level out of '+r)
+            elif r == 'safe haven':
                 safe_haven = 1
-                break
-            if r == 'hidden':
+            elif r == 'hidden':
                 hidden = 1
-                break
-            raise ValueError('unknown rest in parse_location_top: {}, text is {}'.format(r, text))
+            else:
+                raise ValueError('unknown rest in parse_location_top: {}, text is {}'.format(r, text))
 
     return [loc_name, loc_int, kind, enclosing_int, region, civ, safe_haven, hidden]  # make me a thingie
 
@@ -1017,15 +1030,21 @@ def parse_a_structure(parts):
 
     attr = {}
     SL = {}
+    if kind in ship_capacity:
+        SL['ca'] = [ship_capacity[kind]]
+
     for p in parts:
         p = p.strip()
         if p.endswith('% completed'):
-            SL['er'] = [structure_er[kind]]
-            SL['eg'] = [str(int(int(structure_er[kind]) * int(p.replace('% completed', '')) / 100))]
+            p = int(p.replace('% completed', ''))
+            er = int(structure_er[kind])
+            SL['er'] = [str(er * 100)]
+            SL['eg'] = [str(er * p)]
+            SL['bm'] = [str((p//20) + 1)]
         elif p.endswith('% damaged'):
-            SL['da'] = [p.replace('% damage', '')]
+            SL['da'] = [p.replace('% damaged', '')]
         elif p.startswith('defense '):
-            SL['df'] = [p.replace('defense ', '')]
+            SL['de'] = [p.replace('defense ', '')]
         elif p.startswith('depth '):
             SL['sd'] = [int(p.replace('depth ', '')) * 3]
         elif p.startswith('level '):
@@ -1099,6 +1118,10 @@ def parse_a_character(parts):
         elif p == 'garrison':
             MI['ca'] = ['g']
             CH['lo'] = ['207']
+            CH['he'] = ['-1']
+            CH['lk'] = ['4']
+            CH['at'] = ['60']
+            CH['df'] = ['60']
             continue
         elif p == 'on guard':
             CH['gu'] = ['1']
@@ -1773,7 +1796,7 @@ def resolve_garrisons(data):
     for k, v in data.items():
         gc = v.get('MI', {}).get('gc', [False])[0]
         if gc:
-            if ' castle ' not in data.get(gc, {}).get('firstline', [''])[0]:
+            if ' loc castle' not in data.get(gc, {}).get('firstline', [''])[0]:
                 del v['MI']['gc']
 
 
@@ -1907,6 +1930,7 @@ def parse_character(name, ident, factint, text, data):
 
     # Unfortunately this only captures the first one.
     # Only needed for fog/concealed + nobles from a non-allied faction/prisoners
+    # XXXv0 capture all of this, because the full stacking is NOT visible in the turn report!
     stacked_over, = match_line(text, 'Stacked over:')
     if stacked_over is not None:
         stacked_over = parse_an_id(stacked_over)
@@ -1996,7 +2020,7 @@ def parse_character(name, ident, factint, text, data):
         inventory = parse_inventory(m.group(1), ident, data)
         inventory = reformat_inventory(inventory)
 
-    m = re.search(r'^Pending trades:\n\n(.*?)\n\s*\n', text, re.M | re.S)
+    m = re.search(r'Pending trades:\n\s*\n(.*?)\n\s*\n', text, re.M | re.S)
     trades = []
     if m:
         trades = parse_pending_trades(m.group(1))
@@ -2103,8 +2127,6 @@ def parse_location(s, factint, everything, data):
                        'LI': {'wh': [enclosing_int or region]}}
         if enclosing_int:
             box.subbox_append(data, enclosing_int, 'LI', 'hl', [idint], dedup=True)  # XXXv0 remove me when this is set properly
-        if kind in geo_inventory:
-            data[idint]['il'] = geo_inventory[kind]
         if kind in province_kinds:
             box.subbox_append(data, idint, 'LO', 'pd', [0, 0, 0, 0])
         if safe_haven:
@@ -2113,7 +2135,15 @@ def parse_location(s, factint, everything, data):
             box.subbox_overwrite(data, idint, 'LO', 'hi', ['1'])
             box.subbox_append(data, factint, 'PL', 'kn', idint, dedup=True)
 
+    # update things that change
     box.box_overwrite(data, idint, 'na', [name])
+    if kind in geo_inventory:
+        il = geo_inventory[kind]
+        il_dict = db.inventory_to_dict(il)
+        if kind in province_kinds and '96' in il_dict:
+            il_dict['96'] = str(int(il_dict['96']) * (civ+1))
+            il = db.dict_to_inventory(il_dict)
+        data[idint]['il'] = il
 
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
 
