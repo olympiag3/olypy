@@ -1930,6 +1930,8 @@ def parse_character(name, ident, factint, text, data):
 
     break_point, = match_line(text, 'Break point:', capture=r'(\d+)')
 
+    vision_protection, = match_line(text, 'Receive Vision:', capture=r'(\d+)')
+
     concealed, = match_line(text, 'use  638 1')
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
@@ -2044,6 +2046,8 @@ def parse_character(name, ident, factint, text, data):
     if maximum_aura:
         cm['ma'] = [str(native_aura or maximum_aura)]
         cm['im'] = ['1']
+    if vision_protection:
+        cm['vp'] = [str(vision_protection)]
     if len(cm):
         char['CM'] = cm
 

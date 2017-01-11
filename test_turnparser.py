@@ -1093,7 +1093,8 @@ Osswid the Destroyer [7271]
                            'im': ['1'],
                            'ma': ['4'],
                            'hs': ['1'],
-                           'pl': ['6839']},
+                           'pl': ['6839'],
+                           'vp': ['2']},
                     'LI': {'wh': ['4256']}}}
     data = {}
     turnparser.parse_character('Osswid the Destroyer', '7271', '50033', t, data)
