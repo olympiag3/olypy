@@ -71,12 +71,12 @@ for t in sorted_turns:
                 contents += line.expandtabs()
         turnparser.parse_turn(contents, data, everything=everything)
 
+turnparser.resolve_characters(data)
+turnparser.resolve_garrisons(data)
+
 c0 = time.clock()
 turnparser.resolve_fake_items(data)
 print('resolve fake items took {} seconds'.format(time.clock() - c0))
-
-turnparser.resolve_characters(data)
-turnparser.resolve_garrisons(data)
 
 c0 = time.clock()
 turnparser.resolve_regions(data)

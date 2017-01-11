@@ -1754,7 +1754,7 @@ def resolve_fake_items(data):
                                 rest = rest.strip()
                                 strength = rest.partition(' ')[0]
                                 try:
-                                    strength = int(strength)
+                                    strength = int(strength) * 2
                                 except:
                                     raise ValueError('Error parsing auraculum strength, use 881 '+rest)
                                 box.subbox_overwrite(data, item, 'IM', 'au', strength)
@@ -1891,8 +1891,6 @@ def resolve_regions(data):
             box.subbox_append(data, region_map[wh], 'LI', 'hl', [k], dedup=True)  # XXXv0 this is n**2
 
     for r in ordered_regions:
-        print('hey greg region {} is {}'.format(r, region_map[r]))
-        print('hey greg data[ident] is {}'.format(data[region_map[r]]))
         hl = data[region_map[r]].get('LI', {}).get('hl', [])
         if hl:
             data[region_map[r]]['LI']['hl'] = sorted(hl)
