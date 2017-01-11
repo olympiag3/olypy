@@ -853,7 +853,7 @@ def test_analyze_garrison_list():
                          'he': ['-1'],
                          'lk': ['4'],
                          'lo': ['207']},
-                  'CM': {'dg': ['1']},
+                  'CM': {},
                   'LI': {'wh': ['10708']},
                   'MI': {'ca': ['g'], 'gc': ['8103']},
                   'firstline': ['2617 char garrison'],
@@ -864,13 +864,14 @@ def test_analyze_garrison_list():
                          'he': ['-1'],
                          'lk': ['4'],
                          'lo': ['207']},
-                  'CM': {'dg': ['1']},
+                  'CM': {},
                   'LI': {'wh': ['10709']},
                   'MI': {'ca': ['g'], 'gc': ['8103']},
                   'firstline': ['4514 char garrison'],
                   'il': ['12', '10']}}
     turnparser.analyze_garrison_list(t, data, everything=True)
     assert data == r
+
 
 def test_parse_garrison_log():
     # XXXv2

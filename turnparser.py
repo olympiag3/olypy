@@ -1097,7 +1097,6 @@ def parse_a_character(parts):
         elif p == 'prisoner':
             CH['pr'] = ['1']
         elif p == 'garrison':
-            CM['dg'] = ['1']
             MI['ca'] = ['g']
             CH['lo'] = ['207']
             continue
@@ -1666,7 +1665,7 @@ def analyze_garrison_list(text, data, everything=False):
 
         LI = {'wh': [where]}
         CH = {'lo': ['207'], 'he': ['-1'], 'lk': ['4'], 'gu': ['1'], 'at': ['60'], 'df': ['60']}
-        CM = {'dg': ['1']}
+        CM = {}  # {'dg': ['1']} -- only for city garrisons
         MI = {'ca': ['g'], 'gc': [castle]}
         data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
         box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
@@ -1753,6 +1752,8 @@ def resolve_characters(data):
     for tup in global_character_final:
         name, ident, factint, s = tup
         parse_character(name, ident, factint, s, data)
+        if ident not in data:  # we died?
+            continue
 
         try:
             where = data[ident]['LI']['wh'][0]
@@ -1896,7 +1897,10 @@ def parse_character(name, ident, factint, text, data):
             location += ' ' + rest
         location = parse_an_id(location)
     else:
-        raise ValueError('Did not find a location for character '+name+' '+ident)
+        # this happens when you're dead
+        # XXXv2 no good way to know where the body is, so let's do nothing for now
+        return
+        #raise ValueError('Did not find a location for character '+name+' '+ident)
 
     lkind, lrate = match_line(text, 'Loyalty:', capture=r'([A-Za-z]+)-(\d+)')
     lkind = str(loyalty_kind[lkind])
@@ -2141,6 +2145,11 @@ def parse_location(s, factint, everything, data):
         for i in things:
             if 'ca' in things[i].get('MI', {}):
                 box.subbox_overwrite(things, i, 'MI', 'gc', [controlling_castle])
+    # if city garrison, set default garrison flag
+    if kind == 'city':
+        for i in things:
+            if ' char garrison' in things[i].get('firstline', [''])[0]:
+                box.subbox_overwrite(things, i, 'CM', 'dg', ['1'])
 
     if 'The province is blanketed in fog' in s and kind in province_kinds:
         fog = True

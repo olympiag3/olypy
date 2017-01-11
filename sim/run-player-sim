@@ -2,8 +2,8 @@
 
 echo "Doing a sim"
 
-LIB=157
-TURN=158
+LIB=156
+TURN=157
 
 NEW=lib.$LIB
 
@@ -35,6 +35,7 @@ then
 fi
 
 ./oly -e || exit $?
+exit 1
 ./oly -rMS || exit $?
 
 #rm lib/master
