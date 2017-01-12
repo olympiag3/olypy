@@ -13,9 +13,10 @@ import data as db
 # holds the day-by-day action for each char
 global_days = defaultdict(set)
 
-# regions go from 58760-58999 ... and need to be in the correct order
-# this dict is a list of every region which was observed to be after key r
-# XXXv2 also get region order from parse_location_top order
+# holds day-by-day action for garrisons
+global_garrison_log = {}
+
+# used to put regions in the correct order
 region_after = defaultdict(set)
 regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands', 'Nowhere'))
 
@@ -23,11 +24,8 @@ regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands', 'Nowhere'))
 global_hidden_stuff = defaultdict(set)
 
 # holds the full details of a character, from the owner's turn report
-# these are processed last
 global_character_final = []
 global_character_in_progress = []
-
-global_garrison_log = {}
 
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
@@ -532,6 +530,7 @@ order_canon = {'train': 'make',
                'use 656': 'make 52',
                'use 657': 'make 53',
                'use 601': 'sail',
+               'use 901': 'collect 31',
                'use 902': 'make 18',
                'go': 'move',
                'fly': 'move',
@@ -563,7 +562,7 @@ def canonicalize_order(order):
 
 
 valid_orders = {'build': set(('poll',)),
-                'collect': set(('poll',)),
+                'collect': set(),
                 'explore': set(),
                 'form': set(),
                 'improve': set(('poll',)),
@@ -578,13 +577,14 @@ valid_orders = {'build': set(('poll',)),
                 'seek': set(('poll',)),
                 'study': set(('poll',)),
                 'terrorize': set(),
-                'use': set(('poll', 'use_exp', 'use_skill')),
+                'use': set(('use_exp', 'use_skill')),
                 'wait': set(('poll',))}
 
 
 single_day_makes = set(('11', '19', '21', '12', '16', '20', '14', '15',
                         '13', '22', '72', '73', '74', '75', '85'))
 single_day_collects = set(('10',))
+polled_collects = set(('10', '78', '51', '77', '68', '31'))
 
 
 def fake_order(order, start_day, remaining, last_move_dest, unit, data):
@@ -617,12 +617,18 @@ def fake_order(order, start_day, remaining, last_move_dest, unit, data):
     ar += ['0', '0', '0', '0', '0', '0', '0', '0']
     ar = ar[:8]
 
+    if 'poll' in command:
+        ret['po'] = ['1']
     if verb == 'collect':
         if ar[0] in single_day_collects:
             ar[3] = ret['de'][0]
+        if ar[0] in polled_collects:
+            ret['po'] = ['1']
     if verb == 'make':
         if ar[0] in single_day_makes:
             ar[3] = ret['de'][0]
+        else:
+            del ret['po']
         ar[2] = ar[1]  # apparently make item qty days doesn't really take a days argument
 
     if 'pri_4' in command:
@@ -637,8 +643,6 @@ def fake_order(order, start_day, remaining, last_move_dest, unit, data):
         # XXXv2 it appears that currently a bug prevents this from having an effect
         # eventually should set it to novice=1 journey=2 teacher=3 master=4 grand=5
         ret['ue'] = ['1']
-    if 'poll' in command:
-        ret['po'] = ['1']
     ret['cs'] = ['2']  # state 2 = RUN
     ret['st'] = ['1']  # status = TRUE
     ret['ar'] = ar
@@ -934,7 +938,7 @@ def make_locations_from_routes(routes, idint, region, data):
             # the destination exists, but this link may not
             if kind in province_kinds:
                 if dir == 'out':
-                    # can this happen? XXXv0
+                    # raise ValueError('I do not think this can happen') -- it does XXXv0
                     continue
                 if dir.endswith(' road'):
                     continue  # XXXv1
@@ -943,7 +947,6 @@ def make_locations_from_routes(routes, idint, region, data):
                         data[dest]['LO']['pd'].extend((0, 0))
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
-                # link is at the province level
                 pass
 
         if 'hidden' in r and not dir.endswith(' road'):
@@ -1141,11 +1144,11 @@ def parse_a_character(parts):
         elif p == 'flying':
             continue
         elif p == 'priest':
-            continue  # XXXv0
+            continue  # XXXv2
         elif p == 'demon lord':
             continue  # XXXv2 a thing you can summon
         elif p in mage_ranks:
-            continue
+            continue  # XXXv2
         elif (p in item_to_inventory or
               p.endswith('s') and p[:-1] in item_to_inventory):
             # npcs like savages, or controlled npcs like savage XXXv2
