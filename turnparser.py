@@ -1780,6 +1780,8 @@ def resolve_fake_items(data):
                                         break
                                 else:
                                     raise ValueError('Could not find previous farcast to save')
+                                if data[item]['na'][0].startswith('Fake '):
+                                    data[item]['na'] = [data[item]['na'][0][5:]]
                             elif what == '881':
                                 if data[item]['na'][0].startswith('Fake '):
                                     data[item]['na'] = [data[item]['na'][0][5:]]
@@ -1795,10 +1797,12 @@ def resolve_fake_items(data):
                             else:
                                 raise ValueError('Failed to resolve unique item {} despite seeing creation'.format(oid))
 
+                            print('hey greg, resolved item', item)
                             if 'fake' in data[item]:
                                 del data[item]['fake']
 
             if 'fake' in data[item]:  # did not see it being created
+                print('hey greg, failed to resolve', item)
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
@@ -1861,19 +1865,14 @@ def resolve_garrisons(data):
     # ... (left service|deserted)  {{note! this is a bare item name, not including []}} {{set gold to 0}} {{one line per type lost}}
     # if no day 30 maint action, we are gone
 
-    print('hey greg start garrison log deathmarch')
     for g in global_garrison_log:
-        print('hey greg deathmarch for garrison', g)
         il = {'12': 10}
         turns = sorted([int(t) for t in global_garrison_log[g]])
         for t in turns:
             if 'complete_days' in global_garrison_log[g][str(t)]:
-                print('hey greg complete_days is', repr(global_garrison_log[g][str(t)]['complete_days']))
                 del global_garrison_log[g][str(t)]['complete_days']
-            print('hey greg days is', global_garrison_log[g][str(t)])
             days = sorted([int(d) for d in global_garrison_log[g][str(t)]])
             for d in days:
-                print('hey greg d is', repr(d))
                 actions = global_garrison_log[g][str(t)][str(d)]
                 for line in actions.split('\n'):
                     if line.startswith('Received '):
@@ -1882,7 +1881,6 @@ def resolve_garrisons(data):
                         if count in numbers:
                             count = numbers[count]
                         item = to_int(parse_a_short_id(line))
-                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
                         il[item] = il.setdefault(item, 0) + int(count)
                         il[item] = max(0, il[item])
                     elif ' took ' in line:
@@ -1893,14 +1891,12 @@ def resolve_garrisons(data):
                         count = count.replace(',', '')
                         if count in numbers:
                             count = numbers[count]
-                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
                         il[item] = il.setdefault(item, 0) - int(count)
                         il[item] = max(0, il[item])
                     elif ' lost ' in line:
                         _, _, what = line.partition(' lost ')
                         items = parse_several_items(what)
                         for item in items:
-                            print('hey greg for line {} got item {} count {}'.format(line, item, items[item]))
                             il[item] = il.setdefault(item, 0) - int(items[item])
                             il[item] = max(0, il[item])
                     elif ' Garrison has died ' in line:
@@ -1924,18 +1920,15 @@ def resolve_garrisons(data):
                             item = item_to_inventory[item[:-1]]
                         else:
                             raise ValueError('unknown item '+item)
-                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
                         il[item] = il.setdefault(item, 0) - int(count)
                         il[item] = max(0, il[item])
                     elif ' decomposed.' in line:
                         item = parse_an_id(line)
-                        print('hey greg for line {} got item {} count {}'.format(line, item, 1))
                         il[item] = il.setdefault(item, 0) - 1
                         il[item] = max(0, il[item])
                     #else:
                         #raise ValueError('unknown garrison log line of '+line)
         if len(il) > 0:
-            print('hey greg end of deathmarch, il is', il)
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this only hits garrisons that still exist
                 # drop anything that does not exist (e.g. scrolls/potions)
@@ -1945,11 +1938,7 @@ def resolve_garrisons(data):
                         drop.append(i)
                 for i in drop:
                     del il[i]
-                print('hey greg end of deathmarch, il is', db.dict_to_inventory(il))
                 data[g]['il'] = db.dict_to_inventory(il)
-                print('hey greg did set il of garrison', g)
-            else:
-                print('hey greg garrison {} does not exist so I did not use il'.format(g))
 
 def resolve_nowhere(region_ident, data):
     # 4 items need to be in a special nowhere province
@@ -2327,9 +2316,7 @@ def parse_location(s, factint, everything, data):
 
     m = re.search(r'^Skills taught here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        print('hey greg saw skills taught:', m.group(1))
         city_skill_list = re.findall(r'\[(\d\d\d)\]', m.group(1))
-        print('hey greg city skill list is', city_skill_list)
         box.subbox_overwrite(data, idint, 'SL', 'te', city_skill_list)
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
