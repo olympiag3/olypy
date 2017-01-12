@@ -1114,6 +1114,14 @@ Routes leaving Forest:
 Inner locations:
    Wildefort [h63], port city, safe haven, 1 day
    A magical barrier surrounds Wildefort [h63].
+   Phra Ratchawang [9900], castle, defense 80, level 6, owner:
+      Morathron [9901], earl, sorcerer, "Black raven on silver moon", with
+      727 crossbowmen, 565 elite archers, 13 riding horses, accompanied by:
+         Jaturong [9902], sorcerer, wearing Phra Ram Amulet [x528], with
+         69 pikemen, four riding horses, one hound
+         Anton [9903], wizard, with one riding horse, 38 workers,
+         143 swordsmen, 173 giant lizards
+      Chulalongkorn [9904], tower, defense 40
 
 Seen here:
    Gus McCrae [2554], with five peasants, accompanied by:
@@ -1130,7 +1138,7 @@ Seen here:
                    'firstline': ['12422 loc forest'],
                    'il': ['77', '30', '10', '10', '96', '50', '101', '1', '276', '1', '274', '1'],
                    'na': ['Forest']},
-         '12423': {'LI': {'hl': ['57423'], 'wh': ['Grinter']},
+         '12423': {'LI': {'hl': ['57423', '9900'], 'wh': ['Grinter']},
                    'LO': {'pd': ['12323', '12424', '12523', '12422']},
                    'SL': {'sh': ['1']},
                    'firstline': ['12423 loc forest'],
@@ -1151,13 +1159,21 @@ Seen here:
                    'SL': {'sh': ['1']},
                    'firstline': ['57423 loc city'],
                    'il': ['10', '10', '294', '1', '277', '5', '96', '100', '101', '1'],
-                   'na': ['Wildefort']}}
-
+                   'na': ['Wildefort']},
+         '9900': {'LI': {'hl': ['9904'], 'wh': ['12423']},
+                  'SL': {'cl': '6', 'de': ['80']},
+                  'firstline': ['9900 loc castle'],
+                  'na': ['Phra Ratchawang']},
+         '9904': {'LI': {'wh': ['9900']},
+                  'SL': {'de': ['40']},
+                  'firstline': ['9904 loc tower'],
+                  'na': ['Chulalongkorn']}}
     data = {}
     turnparser.parse_location(t, to_int('ja1'), False, data)
     assert data == r
 
     r['12423']['LI']['hl'].append('2554')
+    r['9900']['LI']['hl'] = ['9901', '9904']
     r['2554'] = {'LI': {'hl': ['6386'], 'wh': ['12423']},
                  'firstline': ['2554 char 0'],
                  'il': ['10', '5'],
@@ -1166,6 +1182,19 @@ Seen here:
                  'firstline': ['6386 char 0'],
                  'il': ['10', '1', '11', '1'],
                  'na': ['New noble']}
+    r['9901'] = {'CH': {'ra': [60]},
+                 'LI': {'hl': ['9902', '9903'], 'wh': ['9900']},
+                 'firstline': ['9901 char 0'],
+                 'il': ['21', '727', '22', '565', '52', '13'],
+                 'na': ['Morathron']}
+    r['9902'] = {'LI': {'wh': ['9901']},
+                 'firstline': ['9902 char 0'],
+                 'il': ['77528', '1', '16', '69', '52', '4', '295', '1'],
+                 'na': ['Jaturong']}
+    r['9903'] = {'LI': {'wh': ['9901']},
+                 'firstline': ['9903 char 0'],
+                 'il': ['52', '1', '11', '38', '20', '143', '282', '173'],
+                 'na': ['Anton']}
 
     turnparser.parse_location(t, to_int('ja1'), True, data)
     assert data == r
