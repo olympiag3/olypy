@@ -2319,9 +2319,18 @@ def parse_location(s, factint, everything, data):
         make_direction_routes(routes, idint, kind, data)
 
     # XXXv0 Cities rumored to be nearby:
-    # XXXv0 Skills taught here:
+    m = re.search(r'^Cities rumored to be nearby:\n(.*?)\n\n', s, re.M | re.S)
+    if m:
+        print('hey greg saw cities rumored:', m.group(1))
 
     things = {idint: {'LI': {}, 'firstline': ['fake']}}
+
+    m = re.search(r'^Skills taught here:\n(.*?)\n\n', s, re.M | re.S)
+    if m:
+        print('hey greg saw skills taught:', m.group(1))
+        city_skill_list = re.findall(r'\[(\d\d\d)\]', m.group(1))
+        print('hey greg city skill list is', city_skill_list)
+        box.subbox_overwrite(data, idint, 'SL', 'te', city_skill_list)
 
     m = re.search(r'^Inner locations:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -2636,6 +2645,3 @@ if __name__ == '__main__':
 # XXXv2 seek and contact
 
 # XXXv0 unplace / promote_children harmful when it's a ship being unplaced
-
-# XXXv0 hidden things don't move, so globally remember where they go
-
