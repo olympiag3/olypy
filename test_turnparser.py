@@ -1156,3 +1156,16 @@ Seen here:
     data = {}
     turnparser.parse_location(t, to_int('ja1'), False, data)
     assert data == r
+
+    r['12423']['LI']['hl'].append('2554')
+    r['2554'] = {'LI': {'hl': ['6386'], 'wh': ['12423']},
+                 'firstline': ['2554 char 0'],
+                 'il': ['10', '5'],
+                 'na': ['Gus McCrae']}
+    r['6386'] = {'LI': {'wh': ['2554']},
+                 'firstline': ['6386 char 0'],
+                 'il': ['10', '1', '11', '1'],
+                 'na': ['New noble']}
+
+    turnparser.parse_location(t, to_int('ja1'), True, data)
+    assert data == r
