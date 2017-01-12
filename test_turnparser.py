@@ -901,7 +901,8 @@ def test_resolve_fake_items():
                       'na': ['Magic potion'],
                       'IT': {'wt': ['3'], 'un': ['1111']},
                       'fake': 'yes'},
-            '1111': {'firstline': ['1111 char 0']}}
+            '1111': {'firstline': ['1111 char 0']},
+            '10000': {'firstline': ['10000 loc tower']}}
 
     turnparser.global_days = {'1111': '''
 01: > Use 691
@@ -918,7 +919,6 @@ def test_resolve_fake_items():
 
     turnparser.resolve_fake_items(data)
 
-    print(data['59111'])
     assert data['59111']['IM']['uk'][0] == '2'
 
     assert data['65001']['IM']['uk'][0] == '4'
@@ -927,7 +927,7 @@ def test_resolve_fake_items():
     assert data['67001']['IM']['uk'][0] == '5'
     assert data['67001']['IM']['pc'][0] == '10000'
 
-    assert data['71001']['IM']['au'][0] == '38'
+    assert data['71001']['IM']['au'][0] == '76'
     assert data['1111']['CM']['ar'][0] == '71001'
 
     del data['65002']  # this one is still fake

@@ -27,6 +27,8 @@ global_hidden_stuff = defaultdict(set)
 global_character_final = []
 global_character_in_progress = []
 
+global_garrison_log = {}
+
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -397,6 +399,16 @@ def parse_an_id(text):
     Returns the first Olympia id
     '''
     m = re.search(r'\[(.{3,6})\]', text)
+    if not m:
+        raise ValueError('failed to find an id in '+text)
+    return to_int(m.group(1))
+
+
+def parse_a_short_id(text):
+    '''
+    Returns the first Olympia id
+    '''
+    m = re.search(r'\[(.{1,6})\]', text)
     if not m:
         raise ValueError('failed to find an id in '+text)
     return to_int(m.group(1))
@@ -1701,10 +1713,29 @@ def analyze_garrison_list(text, data, everything=False):
                 db.destroy_box(data, unit)
 
 
-def parse_garrison_log(text, data):
+def parse_garrison_log(text, turn_num, data):
     # this is the daily details, not the list
-    # XXXv2 need to track all give/get for all time to get hidden contents, esp gold
-    pass
+    # XXXv0 'Garrison has died' indicates a break in the record
+
+    global global_garrison_log
+    pending_days = {}
+
+    for l in text.split('\n'):
+        m = re.match(r'([ \d]\d): (\d\d\d\d): (.*)', l)
+        if m:
+            day, garrison, rest = m.group(1, 2, 3)
+            day = day.replace(' ', '')
+            pending_days.setdefault(garrison, set()).add(day)
+            global_garrison_log.setdefault(garrison, {}).setdefault(turn_num, {})
+            complete_days = global_garrison_log[garrison][turn_num].setdefault('complete_days', set())
+            if day in complete_days:
+                continue
+            foo = global_garrison_log[garrison][turn_num].setdefault(day, '')
+            foo += rest + '\n'
+            global_garrison_log[garrison][turn_num][day] = foo
+    for g in pending_days:
+        for d in pending_days[g]:
+            global_garrison_log[g][turn_num]['complete_days'].add(d)
 
 
 potion_to_uk = {'691': '2',  # heal
@@ -1742,8 +1773,10 @@ def resolve_fake_items(data):
                                 for i in range(len(m)-2, -1, -1):
                                     what, rest = m[i]
                                     if what == '849':
-                                        rest = rest.strip()
-                                        box.subbox_overwrite(data, item, 'IM', 'pc', [to_int(rest)])
+                                        rest = to_int(rest.strip())
+                                        if rest in data:
+                                            # this is inaccurate for things that disappear and reappear
+                                            box.subbox_overwrite(data, item, 'IM', 'pc', [rest])
                                         break
                                 else:
                                     raise ValueError('Could not find previous farcast to save')
@@ -1790,15 +1823,133 @@ def resolve_characters(data):
         parse_in_progress_orders(s, ident, data)
 
 
+def parse_several_items(s):
+    items = {}
+    things = s.split(', ')
+    for t in things:
+        count, item = t.split(' ', 1)
+        count = count.replace(',', '')
+        if count in numbers:
+            count = numbers[count]
+        if item.endswith('.'):
+            item = item.replace('.', '')
+        if item in item_to_inventory:
+            item = item_to_inventory[item]
+        elif item.endswith('s') and item[:-1] in item_to_inventory:
+            item = item_to_inventory[item[:-1]]
+        items[item] = int(count)
+    return items
+
+
 def resolve_garrisons(data):
     '''Garrisons attached to destroyed castles should become unowned'''
-    '''Many garrisons get created without being added to the unit list of 207.'''
+    '''Many garrisons get created without being added to the unit list of 207. XXXv0 is this stil true?'''
     for k, v in data.items():
         gc = v.get('MI', {}).get('gc', [False])[0]
         if gc:
             if ' loc castle' not in data.get(gc, {}).get('firstline', [''])[0]:
                 del v['MI']['gc']
 
+    # resolve garrison contents
+    # Received ... [...] from ...
+    # ... [...] took ... [...] from us. {{one line per type}}
+    # Garrison [...] lost ... {{note! bare item name}} {{comma-separated list}}
+    # Garrison has died {{if everything is lost}}
+    # Garrison [...] is disbanded by ...
+    # Paid maintenance of ... gold.
+    # Maintenance costs are ... gold, can afford ... gold.
+    # ... (left service|deserted)  {{note! this is a bare item name, not including []}} {{set gold to 0}} {{one line per type lost}}
+    # if no day 30 maint action, we are gone
+
+    print('hey greg start garrison log deathmarch')
+    for g in global_garrison_log:
+        print('hey greg deathmarch for garrison', g)
+        il = {'12': 10}
+        turns = sorted([int(t) for t in global_garrison_log[g]])
+        for t in turns:
+            if 'complete_days' in global_garrison_log[g][str(t)]:
+                print('hey greg complete_days is', repr(global_garrison_log[g][str(t)]['complete_days']))
+                del global_garrison_log[g][str(t)]['complete_days']
+            print('hey greg days is', global_garrison_log[g][str(t)])
+            days = sorted([int(d) for d in global_garrison_log[g][str(t)]])
+            for d in days:
+                print('hey greg d is', repr(d))
+                actions = global_garrison_log[g][str(t)][str(d)]
+                for line in actions.split('\n'):
+                    if line.startswith('Received '):
+                        _, count, _ = line.split(' ', 2)
+                        count = count.replace(',', '')
+                        if count in numbers:
+                            count = numbers[count]
+                        item = to_int(parse_a_short_id(line))
+                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
+                        il[item] = il.setdefault(item, 0) + int(count)
+                        il[item] = max(0, il[item])
+                    elif ' took ' in line:
+                        _, _, what = line.partition(' took ')
+                        what.replace(' from us.', '')
+                        count, item = what.split(' ', 1)
+                        item = to_int(parse_a_short_id(item))
+                        count = count.replace(',', '')
+                        if count in numbers:
+                            count = numbers[count]
+                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
+                        il[item] = il.setdefault(item, 0) - int(count)
+                        il[item] = max(0, il[item])
+                    elif ' lost ' in line:
+                        _, _, what = line.partition(' lost ')
+                        items = parse_several_items(what)
+                        for item in items:
+                            print('hey greg for line {} got item {} count {}'.format(line, item, items[item]))
+                            il[item] = il.setdefault(item, 0) - int(items[item])
+                            il[item] = max(0, il[item])
+                    elif ' Garrison has died ' in line:
+                        il = {}
+                    elif ' is disbanded by ' in line:
+                        il = {}
+                    elif line.startswith('Paid maintenance of '):
+                        pass
+                    elif line.startswith('Maintenance costs are '):
+                        pass
+                    elif ' left service.' in line or ' deserted.' in line:
+                        what = line.replace(' left service.', '')
+                        what = what.replace(' deserted.', '')
+                        count, item = what.split(' ', 1)
+                        count = count.lower()
+                        if count in numbers:
+                            count = numbers[count]
+                        if item in item_to_inventory:
+                            item = item_to_inventory[item]
+                        elif item.endswith('s') and item[:-1] in item_to_inventory:
+                            item = item_to_inventory[item[:-1]]
+                        else:
+                            raise ValueError('unknown item '+item)
+                        print('hey greg for line {} got item {} count {}'.format(line, item, count))
+                        il[item] = il.setdefault(item, 0) - int(count)
+                        il[item] = max(0, il[item])
+                    elif ' decomposed.' in line:
+                        item = parse_an_id(line)
+                        print('hey greg for line {} got item {} count {}'.format(line, item, 1))
+                        il[item] = il.setdefault(item, 0) - 1
+                        il[item] = max(0, il[item])
+                    #else:
+                        #raise ValueError('unknown garrison log line of '+line)
+        if len(il) > 0:
+            print('hey greg end of deathmarch, il is', il)
+            if g in data and ' char garrison' in data[g]['firstline'][0]:
+                # this only hits garrisons that still exist
+                # drop anything that does not exist (e.g. scrolls/potions)
+                drop = []
+                for i in il:
+                    if int(i) > 399 and i not in data:
+                        drop.append(i)
+                for i in drop:
+                    del il[i]
+                print('hey greg end of deathmarch, il is', db.dict_to_inventory(il))
+                data[g]['il'] = db.dict_to_inventory(il)
+                print('hey greg did set il of garrison', g)
+            else:
+                print('hey greg garrison {} does not exist so I did not use il'.format(g))
 
 def resolve_nowhere(region_ident, data):
     # 4 items need to be in a special nowhere province
@@ -2405,9 +2556,7 @@ def parse_turn(turn, data, everything=True):
                 break
             m = re.match(r'^Garrison log\n-------------', s)
             if m:
-                if not everything:
-                    break
-                parse_garrison_log(s, data)
+                parse_garrison_log(s, turn_num, data)
                 break
             m = re.match(r'^([^\[]{1,40}) \[(.{4,6})\]\n--------------', s)
             if m:

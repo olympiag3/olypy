@@ -324,5 +324,6 @@ def dict_to_inventory(d):
     keys = sorted([int(k) for k in d])
     for k in keys:
         k = str(k)
-        ret.extend([k, d[k]])
+        if int(d[k]) > 0:
+            ret.extend([k, d[k]])
     return ret

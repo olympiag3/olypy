@@ -2,8 +2,8 @@
 
 echo "Doing a sim"
 
-LIB=156
-TURN=157
+LIB=157
+TURN=158
 
 NEW=lib.$LIB
 
@@ -38,7 +38,7 @@ fi
 ./oly -rMS || exit $?
 
 #rm lib/master
-#./print_garrison.pl lib/fact/207 > garrisons-at-end
+./print_garrison.pl lib/fact/207 > garrisons-at-end
 #tar cjf lib-next.tar.gz lib
 
 ./greg-rep $TURN
