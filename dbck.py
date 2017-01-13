@@ -138,8 +138,8 @@ def sweep_independent_units(data):
                     if int(item) > 399:
                         if item not in data:
                             print('dropping unique item {} from independent noble {}'.format(item, k))
-                        else:
-                            new_il.extend([item, count])
+                            continue
+                    new_il.extend([item, count])
                 box.box_overwrite(data, k, 'il', new_il)
     return 0
 
