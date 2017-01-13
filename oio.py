@@ -107,7 +107,10 @@ def write_system_file(data):
     if done != 3:
         raise ValueError('problem finding magic numbers in write_system_file')
 
-    print('''sysclock: {} 30 3000
+    days_per_month = 30
+    days_since_epoch = lt * days_per_month
+
+    print('''sysclock: {} {} {}
 indep_player=100
 gm_player=200
 skill_player=202
@@ -127,7 +130,7 @@ nl={}
 np=206
 cr=0
 cp=210
-'''.format(lt, fr, nr, nl))
+'''.format(lt, days_per_month, days_since_epoch, fr, nr, nl))
 
 
 def read_lib(libdir):
