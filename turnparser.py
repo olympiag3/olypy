@@ -2096,6 +2096,8 @@ def parse_character(name, ident, factint, text, data):
     else:
         sick = 0
     health = re.search(r'\d+|n/a', health).group(0)  # NPCs have health of 'n/a'
+    if health == 'n/a':
+        health = '-1'
 
     attack, defense, missile = match_line(text, 'Combat:', capture=r'attack (\d+), defense (\d+), missile (\d+)')
 
