@@ -1,4 +1,4 @@
-sysclock: 260 30 3000
+sysclock: 260 30 7800
 indep_player=100
 gm_player=200
 skill_player=202
