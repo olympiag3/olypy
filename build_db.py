@@ -71,7 +71,7 @@ for t in sorted_turns:
                 contents += line.expandtabs()
         turnparser.parse_turn(contents, data, everything=everything)
 
-turnparser.resolve_characters(data)
+turnparser.resolve_characters(data, last_turn)
 turnparser.resolve_garrisons(data)
 
 c0 = time.clock()

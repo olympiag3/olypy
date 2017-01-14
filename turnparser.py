@@ -609,8 +609,8 @@ single_day_collects = set(('10',))
 polled_collects = set(('10', '78', '51', '77', '68', '31'))
 
 
-def fake_order(order, start_day, remaining, last_move_dest, unit, data):
-    # XXXv0 todo CH mo set to days_since_epoch + remaining for moves
+def fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data):
+    # XXXv0 todo CH mo set to days_since_epoch + remaining for moves ... needs to be done for entire stack!
     ret = {'li': [order],
            'wa': [remaining],
            'de': [str(31 - int(start_day))]}
@@ -629,9 +629,13 @@ def fake_order(order, start_day, remaining, last_move_dest, unit, data):
     elif verb == 'move':
         where = data[unit]['LI']['wh'][0]
         ar = generate_move_args(start_day, remaining, last_move_dest, where)
+        ret['CHmo'] = (int(turn_num)-1) * 30 + int(start_day)
     elif verb == 'sail':
+        SLmo = (int(turn_num)-1) * 30 + int(start_day)
         where = data[unit]['LI']['wh'][0]  # this is the ship
-        # XXXv0 where = data[where]['LI']['wh'][0]  # this is the province or port the ship is in XXXv0 def shiploc()
+        box.subbox_overwrite(data, where, 'SL', 'mo', [SLmo])
+        # XXXv0 should really have where = province ship is in --- shiploc() ?
+        # XXXv0 where = data[where]['LI']['wh'][0]
         ar = generate_move_args(start_day, remaining, last_move_dest, where)
     else:
         ar = [to_int_safely(x) for x in split_order_args(rest)]
@@ -979,15 +983,19 @@ def make_locations_from_routes(routes, idint, region, data):
 
 def make_direction_routes(routes, idint, kind, data):
     '''
-    make normal direction routes
+    make normal direction routes (n,e,s,w,u,d)
+    destination already created by make_locations_from_routes
+    XXXv0 does not make backlinks
+    XXXv0 lacks city check, causing bug of ocean -> city instead of ocean -> province
     '''
     if kind == 'city' or kind == 'port city':
-        return  # cities have no directions
+        return  # cities have no directions; links are actually in the province
     for r in routes:
         dir = r['dir']
         if dir in directions:
             dest = r['destination']
-            if data[idint].get('LO', {}).get('pd') is None:  # non-province?
+            if data[idint].get('LO', {}).get('pd') is None:
+                # example: sewer to tunnel, tunnel lacks pd
                 box.subbox_overwrite(data, idint, 'LO', 'pd', [0, 0, 0, 0])
             if int(directions[dir]) > 3 and len(data[idint]['LO']['pd']) < 6:
                 data[idint]['LO']['pd'].extend((0, 0))
@@ -1835,7 +1843,7 @@ def resolve_fake_items(data):
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
 
 
-def resolve_characters(data):
+def resolve_characters(data, turn_num):
     for tup in global_character_final:
         name, ident, factint, s = tup
         parse_character(name, ident, factint, s, data)
@@ -1851,7 +1859,7 @@ def resolve_characters(data):
 
     for tup in global_character_in_progress:
         s, ident = tup
-        parse_in_progress_orders(s, ident, data)
+        parse_in_progress_orders(s, ident, turn_num, data)
 
 
 def parse_several_items(s):
@@ -2516,7 +2524,7 @@ def parse_location(s, factint, everything, data):
     return region
 
 
-def parse_in_progress_orders(s, faction, data):
+def parse_in_progress_orders(s, faction, turn_num, data):
     lines = s.split('\n')
     unit = None
     for l in lines:
@@ -2561,7 +2569,13 @@ def parse_in_progress_orders(s, faction, data):
             if m:
                 last_move_dest = to_int(m.group(1))
 
-            co = fake_order(order, start_day, remaining, last_move_dest, unit, data)
+            co = fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data)
+            if 'CHmo' in co:
+                box.subbox_overwrite(data, unit, 'CH', 'mo', co['CHmo'])
+                stack = db.loop_here(data, unit)
+                for s in stack:
+                    box.subbox_overwrite(data, s, 'CH', 'mo', co['CHmo'])
+                del co['CHmo']
             data[unit]['CO'] = co
 
 def parse_turn(turn, data, everything=True):
@@ -2661,3 +2675,4 @@ if __name__ == '__main__':
 # XXXv2 seek and contact
 
 # XXXv0 unplace / promote_children harmful when it's a ship being unplaced
+# (only if we are parsing ships and characters beyond the last turn)
