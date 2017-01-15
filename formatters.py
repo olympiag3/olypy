@@ -2,6 +2,7 @@
 Helper functions for reading/writing Olympia lib files
 '''
 
+import sys
 from functools import partial
 
 
@@ -284,6 +285,6 @@ def read_oly_file(f, verbose=False):
                 data[box][subbox][what] = pieces
 
     if verbose:
-        print('read', len(data), verbose, 'boxes.')
+        print('read', len(data), verbose, 'boxes.', file=sys.stderr)
 
     return data
