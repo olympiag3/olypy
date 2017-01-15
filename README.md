@@ -7,11 +7,11 @@ currently lives in SVN (yuck) at
 
 https://sourceforge.net/projects/olympiag3/
 
-olypy is intended to support:
+olypy supports:
 
 * Generating a game database for testing the Olympia code
 * Actual end-to-end tests of the Olympia code
-* Generating a game database from turn output to support simulations for players
+* Generating a game database from player turn output to support simulations for players
 
 ## Installing
 
@@ -19,7 +19,7 @@ Install python 3.4 or better, using pyenv or your favorite equivalent.
 
 Clone the repo.
 
-Install python modules and see if it works.
+Install dependent python modules, and see if olypy passes tests:
 
 ```
 python -m pip install -r requirements.txt
