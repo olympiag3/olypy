@@ -27,6 +27,9 @@ global_hidden_stuff = defaultdict(set)
 global_character_final = []
 global_character_in_progress = []
 
+# holds data about garrisons who dipped into gold
+global_garr_deficit = {}
+
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -1645,7 +1648,7 @@ def parse_turn_header(data, turn, everything):
     # all it lacks is inventory, visible or not
     m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
     if m:
-        analyze_garrison_list(m.group(1), data, everything=everything)
+        analyze_garrison_list(m.group(1), turn_num, data, everything=everything)
 
     factint = to_int(fact_id)
 
@@ -1711,7 +1714,7 @@ def parse_faction(text, factint, data):
             data[factint]['ah'] = attitudes['hostile']
 
 
-def analyze_garrison_list(text, data, everything=False):
+def analyze_garrison_list(text, turn_num, data, everything=False):
     lines = text.split('\n')
     castles = set()
     garrs = set()
@@ -1724,11 +1727,18 @@ def analyze_garrison_list(text, data, everything=False):
         castle = to_int(pieces[6])
         castles.add(castle)
         firstline = garr + ' char garrison'
+        cost, income, forward = pieces[3:6]
+        if int(cost) > int(income):
+            assert forward == '0'
+            deficit = int(cost) - int(income)
+            print('hey greg saw a deficit of {} for garrison {}'.format(deficit, garr))
+            global global_garr_deficit
+            global_garr_deficit.setdefault(garr, {})[turn_num] = deficit
 
         if not everything:
             continue
 
-        il = ['12', '10']  # if we have to fake it
+        il = ['12', '10']  # if we have to fake it. should never happen.
         if garr in data:
             if ' char garrison' in data[garr]['firstline'][0] and 'il' in data[garr]:
                 il = data[garr]['il']
@@ -1749,9 +1759,6 @@ def analyze_garrison_list(text, data, everything=False):
 
 
 def parse_garrison_log(text, turn_num, data):
-    # this is the daily details, not the list
-    # XXXv0 'Garrison has died' indicates a break in the record
-
     global global_garrison_log
     pending_days = {}
 
@@ -1881,24 +1888,11 @@ def parse_several_items(s):
 
 
 def resolve_garrisons(data):
-    '''Garrisons attached to destroyed castles should become unowned'''
-    '''Many garrisons get created without being added to the unit list of 207. XXXv0 is this stil true?'''
     for k, v in data.items():
         gc = v.get('MI', {}).get('gc', [False])[0]
         if gc:
             if ' loc castle' not in data.get(gc, {}).get('firstline', [''])[0]:
                 del v['MI']['gc']
-
-    # resolve garrison contents
-    # Received ... [...] from ...
-    # ... [...] took ... [...] from us. {{one line per type}}
-    # Garrison [...] lost ... {{note! bare item name}} {{comma-separated list}}
-    # Garrison has died {{if everything is lost}}
-    # Garrison [...] is disbanded by ...
-    # Paid maintenance of ... gold.
-    # Maintenance costs are ... gold, can afford ... gold.
-    # ... (left service|deserted)  {{note! this is a bare item name, not including []}} {{set gold to 0}} {{one line per type lost}}
-    # if no day 30 maint action, we are gone
 
     for g in global_garrison_log:
         il = {'12': 10}
@@ -1935,13 +1929,20 @@ def resolve_garrisons(data):
                             il[item] = il.setdefault(item, 0) - int(items[item])
                             il[item] = max(0, il[item])
                     elif ' Garrison has died ' in line:
-                        il = {}
+                        il = {'12': 10}  # but was recreated, that's why we are here
                     elif ' is disbanded by ' in line:
-                        il = {}
+                        il = {'12': 10}
                     elif line.startswith('Paid maintenance of '):
-                        pass
+                        global global_garr_deficit
+                        deficit = global_garr_deficit.get(g, {}).get(str(t), 0)
+                        if deficit:
+                            print('hey greg applied deficit of {} for garrison {}'.format(deficit, g))
+                            il['1'] = max(il.get('1', 0) - deficit, 0)
                     elif line.startswith('Maintenance costs are '):
-                        pass
+                        # there was starvation. We probably completely ran out of gold.
+                        # OK maybe 1 gold left if we are old soldiers, whatever.
+                        print('hey greg saw starvation and zeroed gold of garrison', g)
+                        il['1'] = 0
                     elif ' left service.' in line or ' deserted.' in line:
                         what = line.replace(' left service.', '')
                         what = what.replace(' deserted.', '')
