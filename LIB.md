@@ -11,14 +11,16 @@ is called a "box" by the code.
 
 A location looks like this:
 
-> 3608 loc castle
-> na Oleg's Summer Residence
-> LI
->  wh 10620
->  hl 7988 7998
-> SL
->  de 50
->  cl 6
+```
+3608 loc castle
+na Oleg's Summer Residence
+LI
+ wh 10620
+ hl 7988 7998
+SL
+ de 50
+ cl 6
+```
 
 The line "3608 loc castle" says that this is box number 3806, of the
 kind location, with a subkind of castle. It has a name. It has 2
@@ -31,16 +33,18 @@ And it has a name.
 
 The JSON version of this object is a bit easier to deal with:
 
-> {
->   "LI": {
->     "hl": [ "7988", "7998" ],
->     "wh": [ "10620" ]
->   },
->   "SL": {
->     "cl": [ "6" ],
->     "de": [ "50" ]
->   },
->   "firstline": [ "3608 loc castle" ],
->   "na": [ "Oleg's Summer Residence" ]
-> }
+```json
+{
+  "LI": {
+    "hl": [ "7988", "7998" ],
+    "wh": [ "10620" ]
+  },
+  "SL": {
+    "cl": [ "6" ],
+    "de": [ "50" ]
+  },
+  "firstline": [ "3608 loc castle" ],
+  "na": [ "Oleg's Summer Residence" ]
+}
+```
 
