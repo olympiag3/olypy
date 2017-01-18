@@ -1731,7 +1731,6 @@ def analyze_garrison_list(text, turn_num, data, everything=False):
         if int(cost) > int(income):
             assert forward == '0'
             deficit = int(cost) - int(income)
-            print('hey greg saw a deficit of {} for garrison {}'.format(deficit, garr))
             global global_garr_deficit
             global_garr_deficit.setdefault(garr, {})[turn_num] = deficit
 
@@ -1785,6 +1784,7 @@ potion_to_uk = {'691': '2',  # heal
                 '696': '3'}  # death
 
 
+# this function doesn't work if an item is produced more than once ... it'll randomly pick
 def resolve_fake_items(data):
     for item in data:
         if ' item ' in data[item]['firstline'][0] and 'fake' in data[item]:
@@ -1839,7 +1839,6 @@ def resolve_fake_items(data):
                             else:
                                 raise ValueError('Failed to resolve unique item {} despite seeing creation'.format(oid))
 
-                            print('hey greg, resolved item', item)
                             if 'fake' in data[item]:
                                 del data[item]['fake']
 
@@ -1936,12 +1935,9 @@ def resolve_garrisons(data):
                         global global_garr_deficit
                         deficit = global_garr_deficit.get(g, {}).get(str(t), 0)
                         if deficit:
-                            print('hey greg applied deficit of {} for garrison {}'.format(deficit, g))
                             il['1'] = max(il.get('1', 0) - deficit, 0)
                     elif line.startswith('Maintenance costs are '):
-                        # there was starvation. We probably completely ran out of gold.
-                        # OK maybe 1 gold left if we are old soldiers, whatever.
-                        print('hey greg saw starvation and zeroed gold of garrison', g)
+                        # starvation, ... maybe 1 gold left if we are all soldiers, whatever.
                         il['1'] = 0
                     elif ' left service.' in line or ' deserted.' in line:
                         what = line.replace(' left service.', '')
@@ -2348,7 +2344,8 @@ def parse_location(s, factint, everything, data):
     # XXXv0 Cities rumored to be nearby:
     m = re.search(r'^Cities rumored to be nearby:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        print('hey greg saw cities rumored:', m.group(1))
+        #XXXv0 print('hey greg saw cities rumored:', m.group(1))
+        pass
 
     things = {idint: {'LI': {}, 'firstline': ['fake']}}
 
