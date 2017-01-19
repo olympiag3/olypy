@@ -77,6 +77,7 @@ turnparser.resolve_garrisons(data)
 c0 = time.clock()
 turnparser.resolve_fake_items(data)
 print('resolve fake items took {} seconds'.format(time.clock() - c0))
+turnparser.resolve_bound_storms(data)
 
 c0 = time.clock()
 turnparser.resolve_regions(data)

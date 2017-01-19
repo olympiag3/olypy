@@ -1118,6 +1118,11 @@ Inner locations:
          143 swordsmen, 173 giant lizards
       Chulalongkorn [9904], tower, defense 40
 
+It is raining.
+It is windy.
+   Rain [109999], storm, strength 2
+   Wind [85687], storm, owner 8910, strength 33
+
 Seen here:
    Gus McCrae [2554], with five peasants, accompanied by:
       New noble [6386], with one peasant, one worker
@@ -1167,7 +1172,7 @@ Seen here:
     turnparser.parse_location(t, to_int('ja1'), False, data)
     assert data == r
 
-    r['12423']['LI']['hl'].append('2554')
+    r['12423']['LI']['hl'].extend(('2554', '109999', '85687'))
     r['9900']['LI']['hl'] = ['9901', '9904']
     r['2554'] = {'LI': {'hl': ['6386'], 'wh': ['12423']},
                  'firstline': ['2554 char 0'],
@@ -1190,6 +1195,11 @@ Seen here:
                  'firstline': ['9903 char 0'],
                  'il': ['52', '1', '11', '38', '20', '143', '282', '173'],
                  'na': ['Anton']}
-
+    r['85687'] = {'LI': {'wh': ['12423']},
+                  'MI': {'sb': ['8910'], 'ss': ['33']},
+                  'firstline': ['85687 storm wind']}
+    r['109999'] = {'LI': {'wh': ['12423']},
+                   'MI': {'ss': ['2']},
+                   'firstline': ['109999 storm rain']}
     turnparser.parse_location(t, to_int('ja1'), True, data)
     assert data == r

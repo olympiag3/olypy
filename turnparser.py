@@ -30,6 +30,9 @@ global_character_in_progress = []
 # holds data about garrisons who dipped into gold
 global_garr_deficit = {}
 
+# ships with bound storms
+global_bound_storms = {}
+
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -1420,6 +1423,144 @@ def parse_routes_leaving(text):
     return ret
 
 
+def find_storm_kinds(data, location):
+    ret = set()
+    boxes = db.loop_here(location)
+    for b in boxes:
+        fl = data[b]['firstline'][0]
+        if ' storm ' in fl:
+            try:
+                kind = fl.split()[2]
+                ret.add(kind)
+            except:
+                pass
+    return ret
+
+
+def make_storm(kind, strength, things, location, data, random=False, ident=None, owner=None):
+    if ident is None:
+        if not random:
+            raise ValueError('Non-random storms must specify ident')
+        for i in range(79000, 99999):
+            if i not in data and i not in things:
+                ident = i
+                break
+    ident = str(ident)
+    firstline = ident + ' storm ' + kind
+    things[ident] = {'firstline': [firstline],
+                     'LI': {'wh': [location]},
+                     'MI': {'ss': [strength]}}
+    if random:
+        things[ident]['random'] = True
+    if owner is not None:
+        things[ident]['MI']['sb'] = [owner]
+    db.set_where(things, ident, location)
+
+
+def parse_storms(location, text, things):
+    '''
+It is raining.
+It is windy.
+   Rain [109999], storm, strength 2
+   Wind [85687], storm, owner 8910, strength 33
+    '''
+    storms_present = {}
+    storm_details = {}
+    print('hey greg text is', text)
+    for m in re.finditer(r'^(?:It is raining|It is windy|The province is blanketed in fog)\.', text, re.M):
+        s = m.group(0)
+        print('hey greg found a weather header of', s)
+        if ' raining' in s:
+            storms_present['rain'] = 1
+        if ' windy' in s:
+            storms_present['wind'] = 1
+        if ' fog' in s:
+            storms_present['fog'] = 1
+    for m in re.finditer(r'^.*?, storm, .*?$', text, re.M):
+        s = m.group(0)
+        print('hey greg found a storm of', s)
+        ident = parse_an_id(s)
+        if '[' in s:
+            name = s[:s.find('[')].strip()
+        else:
+            raise ValueError('Did not find storm name in line '+s)
+        m = re.search(r'owner (\d+),', s)
+        if m:
+            owner = m.group(1)
+        else:
+            owner = None
+        m = re.search(r'strength (\d+)', s)
+        if m:
+            strength = m.group(1)
+        else:
+            raise ValueError('Did not find storm strength in line '+s)
+
+        storm_details[ident] = [name, owner, strength]
+    return storms_present, storm_details
+
+
+def resolve_storms(location, storms_present, storm_details, things, data):
+    storms_present_copy = storms_present.copy()
+
+    print('hey greg resolving storms for', location)
+    # copy over non-random storms
+    hl = data.get(location, {}).get('LI', {}).get('hl', [])
+    for here in hl:
+        if ' storm ' in data[here]['firstline'][0] and not data[here].get('random', False):
+            print('  hey greg copied over', here, data[here])
+            things[here] = data[here]
+            db.set_where(things, here, location)
+            print('  hey greg hl of {} ended as {}'.format(location, things[location]['LI']['hl']))
+            _, kind = data[here]['firstline'][0].rsplit(' ', 1)
+            if kind in storms_present:  # might be more than one
+                del storms_present[kind]
+            if here in storm_details:
+                del storm_details[here]
+
+    if len(storm_details) == 0:
+        print('  hey greg no details so I made random storms')
+        # No weather mage present. Do not make random storms if real storms are present.
+        if 'rain' in storms_present:
+            make_storm('rain', 3, things, location, data, random=True)
+        if 'wind' in storms_present:
+            make_storm('wind', 3, things, location, data, random=True)
+        if 'fog' in storms_present:
+            make_storm('fog', 3, things, location, data, random=True)
+    else:
+        # if we see any details, we see all storms. if copied, might have bound storm info.
+
+        # make random ones first, remove their kinds from storms_present
+        done = []
+        for ident, v in storm_details.items():
+            print('HHYE GREGGGGGG v is', v)
+            name, owner, strength = v
+            if owner is not None:
+                continue
+            if int(strength) > 3:
+                continue
+            kind = name.lower()  # we can trust this
+            if kind not in storms_present_copy:
+                print('hey greg storms_present_copy is', storms_present_copy)
+                raise ValueError('Location {} has a storm problem related to {}'.format(location, kind))
+            print('  hey greg made a detailed but random storm of kind', kind, 'ident', ident)
+            make_storm(kind, strength, things, location, data, ident=ident)
+            del storms_present[kind]
+            done.append(ident)
+        for d in done:
+            del storm_details[d]
+
+        # at this point we may have some owned storms left, that must be owned not by this faction.
+        # if not owned by this faction, we cannot trust the name
+        if len(storm_details) > 0:
+            print('hey greg we have {} owned storms left and {} present clues'.format(len(storm_details), len(storms_present)))
+
+        if len(storm_details) == 1 and len(storms_present) == 1:  # what luck!
+            ident = list(storm_details.keys())[0]
+            kind = list(storms_present.keys())[0]
+            name, owner, strength = storm_details[ident]
+            make_storm(kind, strength, things, location, data, ident=ident, owner=owner)
+
+
 def parse_inner_locations(idint, text, things):
     '''
    Faery hill [z777], faery hill, 1 day
@@ -1622,6 +1763,7 @@ def parse_turn_header(data, turn, everything):
     m = re.search(r'^(?:Initial Position )?Report for (.{1,30}) \[(.{3,6})\]', turn, re.M)
     fact_name = m.group(1)
     fact_id = m.group(2)
+    factint = to_int(fact_id)
 
     m = re.search(r'^Noble points:\s+(\d+) ', turn, re.M)
     nps = m.group(1)
@@ -1640,17 +1782,14 @@ def parse_turn_header(data, turn, everything):
     else:
         fast_study = 0
 
-#    m = re.search(r'^Location\s+Stack\n--------\s+-----\n(.*?)\n\n', turn, re.M | re.S)
-#    if m:  # does not exist in the initial turn :/
-#        analyze_regions(m.group(1), region_after)
-
-    # this is a complete garrison list (no fog) and accurate castle info
-    # all it lacks is inventory, visible or not
     m = re.search(r'^  garr where  men cost  tax forw castle rulers\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
     if m:
         analyze_garrison_list(m.group(1), turn_num, data, everything=everything)
 
-    factint = to_int(fact_id)
+    if everything:
+        m = re.search(r'^storm  kind  owner   loc  strength\n[\- ]+\n(.*?)\n\n', turn, re.M | re.S)
+        if m:
+            analyze_storm_list(m.group(1), factint, data)
 
     if factint in data:
         kn = data[factint]['PL']['kn']
@@ -1712,6 +1851,55 @@ def parse_faction(text, factint, data):
             data[factint]['ad'] = attitudes['defend']
         if attitudes.get('hostile'):
             data[factint]['ah'] = attitudes['hostile']
+
+
+def analyze_storm_list(text, fact, data):
+    '''
+    87999  wind   8999  ar99     32
+    '''
+    for l in text.split('\n'):
+        pieces = l.split()
+        ident, kind, owner, location, strength = pieces
+        ident = to_int(ident)
+        location = to_int(location)
+        owner = to_int(owner)
+
+        if ident in data:
+            if ' storm ' not in data[ident]['firstline'][0]:
+                db.destroy_box(data, ident)
+            else:
+                was = data[ident].get('LI', {}).get('wh', [None])[0]
+                if was != location:
+                    db.unset_where(data[ident])
+
+        firstline = ident + ' storm ' + kind
+        data[ident] = {'firstline': [firstline],
+                       'LI': {'wh': [location]},
+                       'MI': {'ss': [strength],
+                              'sb': [owner]}}
+
+        # if a random storm with our kind exists, remove it
+        here = db.loop_here(data, location)
+        for h in here:
+            if ' storm '+kind in data[h]['firstline'][0] and 'random' in data[h]:
+                db.destroy_box(data, h)
+
+        # add myself to the map
+        db.set_where(data, ident, location)
+
+        # XXXv0 bound storms to ships -- examine days
+        # Want to find the most recent ': Bound Name [id] to Name [id].'
+        # some storms might have been bound more than once :/
+        # likely that the current owner did the binding
+        if ident in global_days[owner]:
+            m = re.search(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', global_days[owner], re.M)
+            if m:
+                ship = m.group(1)
+                print('Hey greg found storm {} bound to ship {}'.format(ident, ship))
+                data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
+                # Unfortunately, the ship has not been created yet!
+                global global_bound_storms
+                global_bound_storms[ident] = ship
 
 
 def analyze_garrison_list(text, turn_num, data, everything=False):
@@ -1843,7 +2031,7 @@ def resolve_fake_items(data):
                                 del data[item]['fake']
 
             if 'fake' in data[item]:  # did not see it being created
-                print('hey greg, failed to resolve', item)
+                print('hey greg, failed to resolve fake item', item)
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
@@ -1866,6 +2054,15 @@ def resolve_characters(data, turn_num):
     for tup in global_character_in_progress:
         s, ident = tup
         parse_in_progress_orders(s, ident, turn_num, data)
+
+
+def resolve_bound_storms(data):
+    for ident, ship in global_bound_storms.items():
+        if ship in data and ' ship ' in data[ship]['firstline'][0]:
+            data[ship]['SL']['bs'] = [ident]
+            print('hey greg actually bound storm {} to ship {}'.format(ident, ship))
+        else:
+            print('hey greg failed to bind storm {} to ship {}'.format(ident, ship))
 
 
 def parse_several_items(s):
@@ -2260,6 +2457,12 @@ def parse_character(name, ident, factint, text, data):
         cm['im'] = ['1']
     if vision_protection:
         cm['vp'] = [str(vision_protection)]
+    if len(skills_list):
+        try:
+            if skills_list.index('820'):
+                cm['kw'] = ['1']
+        except ValueError:
+            pass
     if len(cm):
         char['CM'] = cm
 
@@ -2367,6 +2570,12 @@ def parse_location(s, factint, everything, data):
     m = re.search(r'^Seen here:\n(.*?)\n\n', s, re.M | re.S)
     if m:
         parse_inner_locations(idint, m.group(1), things)
+
+    if everything and kind != 'city':
+        m = re.search(r'\n\n(?:It is raining|It is windy|The province is blanketed in fog)(.*?)\n\n', s, re.M | re.S)
+        if m:
+            storms_present, storm_details = parse_storms(idint, m.group(0), things)
+            resolve_storms(idint, storms_present, storm_details, things, data)
 
     m = re.search(r'^Ships sighted:\n(.*?)\n\n', s, re.M | re.S)
     if m:
@@ -2660,17 +2869,9 @@ if __name__ == '__main__':
         with open(filename, 'r') as f:
             parse_turn_from_file(f, data)
 
-# XXXv2 storms from the location map
-# It is raining.
-#    Rain [144478], storm, strength 1
-# XXXv2 storm owner from turn
-# storm  kind  owner   loc  strength
-# -----  ----  -----  ----  --------
-# 82999  wind   8012  aq99     19
-# XXXv2 walk global_days to find if it's bound
-# XXXv2 random storms on map
-
 # XXXv2 seek and contact
+# Contacted foo
+# good until next Arrived.
 
 # XXXv0 unplace / promote_children harmful when it's a ship being unplaced
 # (only if we are parsing ships and characters beyond the last turn)

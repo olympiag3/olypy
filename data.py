@@ -28,24 +28,22 @@ def unset_where(data, who, promote_children=True):
     '''
     if data.get(who) is None:
         return
-    wh = data[who].get('LI', {}).get('wh', [])
+    wh = data[who].get('LI', {}).get('wh', [None])[0]
     hl = data[who].get('LI', {}).get('hl')
 
-    if len(wh):
+    if wh is not None:
         del data[who]['LI']['wh']
-        other_hl = data.get(wh[0], {}).get('LI', {}).get('hl')
+        other_hl = data.get(wh, {}).get('LI', {}).get('hl')
         if other_hl is not None:
             try:
                 other_hl.remove(who)
-                data[wh[0]]['LI']['hl'] = other_hl
+                data[wh]['LI']['hl'] = other_hl
             except ValueError:
                 pass
 
-    if promote_children and hl is not None:
+    if promote_children and hl is not None and wh is not None:
         for child in hl:
-            # use set_where instead?
-            box.subbox_append(data, wh[0], 'LI', 'hl', child, dedup=True)
-            data[child]['LI']['wh'] = wh
+            set_where(data, child, wh)
 
 # XXXv0 can't have an endless loop of unlink->destroy->unlink
 #    if not can_move(data, who):

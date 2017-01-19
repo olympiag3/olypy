@@ -2,8 +2,8 @@
 
 echo "Doing a sim"
 
-LIB=157
-TURN=158
+LIB=158
+TURN=159
 
 NEW=lib.$LIB
 
@@ -26,6 +26,7 @@ cat templatelib/misc.prefix lib/misc.suffix > lib/misc
 rm lib/misc.suffix
 
 cp templatelib/fact/2?? lib/fact
+./print_garrison.pl lib/fact/207 > garrisons.$LIB
 
 # random?
 if [ $* ]
@@ -38,7 +39,7 @@ fi
 ./oly -rMS || exit $?
 
 #rm lib/master
-./print_garrison.pl lib/fact/207 > garrisons-at-end
+#./print_garrison.pl lib/fact/207 > garrisons-at-end
 #tar cjf lib-next.tar.gz lib
 
 ./greg-rep $TURN
