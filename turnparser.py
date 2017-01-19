@@ -304,14 +304,14 @@ trade_map = {
     'consume': '4'
 }
 
-noble_ranks = {'lord': 10,
-               'knight': 20,
-               'baron': 30,
-               'count': 40,
-               'earl': 60,
-               'marquess': 60,
-               'duke': 70,
-               'king': 80}
+noble_ranks = {'lord': '10',
+               'knight': '20',
+               'baron': '30',
+               'count': '40',
+               'earl': '60',
+               'marquess': '60',
+               'duke': '70',
+               'king': '80'}
 
 numbers = {'one': 1,
            'two': 2,
@@ -1225,10 +1225,15 @@ def parse_a_character(parts):
                 except KeyError:
                     raise KeyError('invalid key with parts: '+repr(parts))
             il.extend([ident, str(count)])
+
+    if 'lo' not in CH:
+        CH['he'] = ['100']
+        CH['at'] = ['60']
+        CH['df'] = ['60']
+    attr['CH'] = CH
+
     if len(il) > 0:
         attr['il'] = il
-    if len(CH) > 0:
-        attr['CH'] = CH
     if len(CM) > 0:
         attr['CM'] = CM
     if len(MI) > 0:
@@ -1423,7 +1428,7 @@ def parse_routes_leaving(text):
     return ret
 
 
-def find_storm_kinds(data, location):
+def find_storm_kinds(data, location):  # testme
     ret = set()
     boxes = db.loop_here(location)
     for b in boxes:
@@ -1437,7 +1442,7 @@ def find_storm_kinds(data, location):
     return ret
 
 
-def make_storm(kind, strength, things, location, data, random=False, ident=None, owner=None):
+def make_storm(kind, strength, things, location, data, random=False, ident=None, owner=None):  # testme
     if ident is None:
         if not random:
             raise ValueError('Non-random storms must specify ident')
@@ -1853,7 +1858,7 @@ def parse_faction(text, factint, data):
             data[factint]['ah'] = attitudes['hostile']
 
 
-def analyze_storm_list(text, fact, data):
+def analyze_storm_list(text, fact, data):  # testme
     '''
     87999  wind   8999  ar99     32
     '''
@@ -1945,7 +1950,7 @@ def analyze_garrison_list(text, turn_num, data, everything=False):
                 db.destroy_box(data, unit)
 
 
-def parse_garrison_log(text, turn_num, data):
+def parse_garrison_log(text, turn_num, data):  # testme
     global global_garrison_log
     pending_days = {}
 
@@ -2065,7 +2070,7 @@ def resolve_bound_storms(data):
             print('hey greg failed to bind storm {} to ship {}'.format(ident, ship))
 
 
-def parse_several_items(s):
+def parse_several_items(s):  # testme
     items = {}
     things = s.split(', ')
     for t in things:
@@ -2204,7 +2209,8 @@ def resolve_nowhere(region_ident, data):
     box.subbox_overwrite(data, '403', 'IT', 'lo', ['403'])
     box.subbox_overwrite(data, '403', 'IT', 'uk', ['15'])
 
-def resolve_regions(data):
+
+def resolve_regions(data):  # testme
     '''
     At this point all provinces are LI wh a region *string*
     Our info about the order of regions is in regions_set and region_after
@@ -2302,9 +2308,9 @@ def parse_character(name, ident, factint, text, data):
     lkind, lrate = match_line(text, 'Loyalty:', capture=r'([A-Za-z]+)-(\d+)')
     lkind = str(loyalty_kind[lkind])
 
-    # Unfortunately this only captures the first one.
-    # Only needed for fog/concealed + nobles from a non-allied faction/prisoners
-    # XXXv0 capture all of this, because the full stacking is NOT visible in the turn report!
+    # Unfortunately this only captures the first one. Even for visible characters,
+    # the output shown in turns is incomplete and is truncated to stack depth 2.
+    # XXXv0 capture all of this
     stacked_over, = match_line(text, 'Stacked over:')
     if stacked_over is not None:
         stacked_over = parse_an_id(stacked_over)
