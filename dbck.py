@@ -3,8 +3,9 @@ Database checker, similar to the one in the C code (check.c)
 '''
 import sys
 
-from oid import to_oid, to_int
+from oid import to_oid
 import box
+import data as db
 
 
 def check_firstline(data):
@@ -130,7 +131,7 @@ def sweep_independent_units(data):
                 box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
                 # loop through inventory and remove any unique items that don't exist
                 # example: weapons and armor
-                il = data[k]['il']
+                il = v['il']
                 new_il = []
                 while len(il) > 0:
                     item = il.pop(0)
@@ -141,6 +142,34 @@ def sweep_independent_units(data):
                             continue
                     new_il.extend([item, count])
                 box.box_overwrite(data, k, 'il', new_il)
+
+    for k, v in data.items():
+        if ' char 0' in v['firstline'][0]:
+            lo = v.get('CH', {}).get('lo', [None])[0]
+            if lo == '100':
+                print('Setting behind of independent noble {}'.format(k), file=sys.stderr)
+                il = db.inventory_to_dict(v.get('il', []))
+
+                front = set(('12', '14', '15', '16', '17', '18', '20',
+                             '23', '24', '25', '26', '31', '32', '33',
+                             '34', '60', '61', '81', '271', '272',
+                             '278', '279', '280', '281', '282', '284',
+                             '285', '286', '287', '288', '289', '291',
+                             '292', '293'))
+                back = set(('13', '21', '22'))
+
+                front_sum, back_sum = 0, 0
+                for ik, iv in il.items():
+                    if ik in front:
+                        front_sum += int(iv)
+                    if ik in back:
+                        back_sum += int(iv)
+                if back_sum > front_sum:
+                    behind = '9'
+                else:
+                    behind = '0'
+                print(' ... to', behind, file=sys.stderr)
+                box.subbox_overwrite(data, k, 'CH', 'bh', [behind])
     return 0
 
 def check_unique_items(data):
