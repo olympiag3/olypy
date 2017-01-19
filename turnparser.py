@@ -1274,9 +1274,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
         else:
             kind, thing = parse_a_character(parts)
     else:
-        # it was a naked character name, no inventory
-        thing = {}
-        kind = 'char'
+        kind, thing = parse_a_character(parts)
 
     if kind == 'char':
         if 'MI' in thing:
