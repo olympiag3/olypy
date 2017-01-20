@@ -127,6 +127,9 @@ def sweep_independent_units(data):
                 box.subbox_append(data, k, 'CH', 'sl', ['610', '2', '21', '0', '0'])
                 box.subbox_append(data, k, 'CH', 'sl', ['611', '2', '28', '0', '0'])
                 box.subbox_append(data, k, 'CH', 'sl', ['612', '2', '28', '0', '0'])
+                # beastmastery and use beasts
+                box.subbox_append(data, k, 'CH', 'sl', ['650', '2', '28', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['653', '2', '28', '0', '0'])
                 # FTTD is on
                 box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
                 # loop through inventory and remove any unique items that don't exist
