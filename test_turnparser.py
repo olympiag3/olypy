@@ -431,7 +431,26 @@ def test_parse_routes_leaving():
 
 
 def test_make_storm():
-    pass
+    things = {}
+    data = {}
+
+    with pytest.raises(ValueError):
+        turnparser.make_storm('rain', '25', things, '10000', data)
+
+    turnparser.make_storm('rain', '25', things, '10000', data, ident='81234')
+    assert things == {'10000': {'LI': {'hl': ['81234']}},
+                      '81234': {'LI': {'wh': ['10000']},
+                                'MI': {'ss': ['25']},
+                                'firstline': ['81234 storm rain']}}
+    turnparser.make_storm('rain', '25', things, '10000', data, random=True)
+    assert things == {'10000': {'LI': {'hl': ['81234', '79000']}},
+                      '79000': {'LI': {'wh': ['10000']},
+                                'MI': {'ss': ['25']},
+                                'firstline': ['79000 storm rain'],
+                                'random': True},
+                      '81234': {'LI': {'wh': ['10000']},
+                                'MI': {'ss': ['25']},
+                                'firstline': ['81234 storm rain']}}
 
 
 def test_parse_inner_locations():
@@ -849,6 +868,7 @@ Unclaimed items:
 
 
 def test_analyze_storm_list():
+    # kinda painful
     pass
 
 
