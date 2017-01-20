@@ -1426,21 +1426,7 @@ def parse_routes_leaving(text):
     return ret
 
 
-def find_storm_kinds(data, location):  # testme
-    ret = set()
-    boxes = db.loop_here(location)
-    for b in boxes:
-        fl = data[b]['firstline'][0]
-        if ' storm ' in fl:
-            try:
-                kind = fl.split()[2]
-                ret.add(kind)
-            except:
-                pass
-    return ret
-
-
-def make_storm(kind, strength, things, location, data, random=False, ident=None, owner=None):  # testme
+def make_storm(kind, strength, things, location, data, random=False, ident=None, owner=None):
     if ident is None:
         if not random:
             raise ValueError('Non-random storms must specify ident')
@@ -1856,7 +1842,7 @@ def parse_faction(text, factint, data):
             data[factint]['ah'] = attitudes['hostile']
 
 
-def analyze_storm_list(text, fact, data):  # testme
+def analyze_storm_list(text, fact, data):
     '''
     87999  wind   8999  ar99     32
     '''
@@ -1948,7 +1934,7 @@ def analyze_garrison_list(text, turn_num, data, everything=False):
                 db.destroy_box(data, unit)
 
 
-def parse_garrison_log(text, turn_num, data):  # testme
+def parse_garrison_log(text, turn_num, data):
     global global_garrison_log
     pending_days = {}
 
@@ -2068,7 +2054,7 @@ def resolve_bound_storms(data):
             print('hey greg failed to bind storm {} to ship {}'.format(ident, ship))
 
 
-def parse_several_items(s):  # testme
+def parse_several_items(s):
     items = {}
     things = s.split(', ')
     for t in things:
@@ -2208,7 +2194,7 @@ def resolve_nowhere(region_ident, data):
     box.subbox_overwrite(data, '403', 'IT', 'uk', ['15'])
 
 
-def resolve_regions(data):  # testme
+def resolve_regions(data):
     '''
     At this point all provinces are LI wh a region *string*
     Our info about the order of regions is in regions_set and region_after
@@ -2219,7 +2205,7 @@ def resolve_regions(data):  # testme
 
     ordered_regions = []
     while len(region_after) > 0:
-        # the next region is the one with the most afters
+        # the next region is the one with the most afters that's not explicitly ruled out
         m = max([len(region_after[r]) for r in region_after])
         maxes = []
         [maxes.append(r) for r in region_after if len(region_after[r]) == m]

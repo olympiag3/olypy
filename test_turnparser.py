@@ -430,6 +430,10 @@ def test_parse_routes_leaving():
     assert data['10101']['LO']['pd'] == [0, 0, '10221', '15634']
 
 
+def test_make_storm():
+    pass
+
+
 def test_parse_inner_locations():
     t = '''   Oleg the Loudmouth [6940], with 14 peasants, 11 workers
    Woodrow Call [1771], with 19 peasants, accompanied by:
@@ -844,6 +848,10 @@ Unclaimed items:
     assert data['1000'] == ret
 
 
+def test_analyze_storm_list():
+    pass
+
+
 def test_analyze_garrison_list():
     t = '''  2617	aj08   10   20	 50   15   8103 4797 7271 6839	... 2527
   4514	aj09   10   20	 50   15   8103 4797 7271 6839	... 2527    '''
@@ -878,7 +886,6 @@ def test_analyze_garrison_list():
 
 
 def test_parse_garrison_log():
-    # XXXv2
     pass
 
 
@@ -938,6 +945,14 @@ def test_resolve_fake_items():
     for ident in data:
         if ' item ' in data[ident]['firstline'][0]:
             assert 'fake' not in data[ident]
+
+
+def test_parse_several_items():
+    pass
+
+
+def test_resolve_regions():
+    pass
 
 
 def test_parse_character():
