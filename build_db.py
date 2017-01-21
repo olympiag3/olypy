@@ -76,6 +76,7 @@ turnparser.resolve_fake_items(data)
 turnparser.resolve_npc_artifacts(data)
 turnparser.resolve_bound_storms(data)
 turnparser.resolve_regions(data)
+turnparser.sweep_independent_units(data)
 
 problems = dbck.check_db(data)
 print('Database check found {} problems'.format(problems))

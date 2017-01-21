@@ -2304,6 +2304,78 @@ def remove_chars_and_ships(things):
     for i in nuke:
         del things[i]
 
+
+def sweep_independent_units(data):
+    '''
+    Move any unit not in a faction to being unsworn and owned by faction 100 (independent player)
+    Also alter their skills and inventory.
+    '''
+    for k, v in data.items():
+        if ' char 0' in v['firstline'][0]:
+            lo = v.get('CH', {}).get('lo', [None])[0]
+            if lo is None:
+                print('sweeping unit {} into player 100'.format(k), file=sys.stderr)
+                box.subbox_overwrite(data, k, 'CH', 'lo', ['100'])
+                box.subbox_append(data, '100', 'PL', 'un', [k])
+
+                # Configure the unit
+                # this unit should only have visible 'il' so it's safe to append gold
+                # XXXv2 compute maint and give that much instead of a fixed amount
+                box.box_append(data, k, 'il', ['1', '2000'])
+                # and it should have no skills, so this is safe
+                # SFW and FTTD
+                box.subbox_append(data, k, 'CH', 'sl', ['610', '2', '21', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['611', '2', '28', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['612', '2', '28', '0', '0'])
+                # beastmastery and use beasts
+                box.subbox_append(data, k, 'CH', 'sl', ['650', '2', '28', '0', '0'])
+                box.subbox_append(data, k, 'CH', 'sl', ['653', '2', '28', '0', '0'])
+                # FTTD is on
+                box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
+                # loop through inventory and remove any unique items that don't exist
+                # example: weapons and armor
+                il = v['il']
+                new_il = []
+                while len(il) > 0:
+                    item = il.pop(0)
+                    count = il.pop(0)
+                    if int(item) > 399:
+                        if item not in data:
+                            print('dropping unique item {} from independent noble {}'.format(item, k))
+                            continue
+                    new_il.extend([item, count])
+                box.box_overwrite(data, k, 'il', new_il)
+
+    for k, v in data.items():
+        if ' char 0' in v['firstline'][0]:
+            lo = v.get('CH', {}).get('lo', [None])[0]
+            if lo == '100':
+                print('Setting behind of independent noble {}'.format(k), file=sys.stderr)
+                il = db.inventory_to_dict(v.get('il', []))
+
+                front = set(('12', '14', '15', '16', '17', '18', '20',
+                             '23', '24', '25', '26', '31', '32', '33',
+                             '34', '60', '61', '81', '271', '272',
+                             '278', '279', '280', '281', '282', '284',
+                             '285', '286', '287', '288', '289', '291',
+                             '292', '293'))
+                back = set(('13', '21', '22'))
+
+                front_sum, back_sum = 0, 0
+                for ik, iv in il.items():
+                    if ik in front:
+                        front_sum += int(iv)
+                    if ik in back:
+                        back_sum += int(iv)
+                if back_sum > front_sum:
+                    behind = '9'
+                else:
+                    behind = '0'
+                print(' ... to', behind, file=sys.stderr)
+                box.subbox_overwrite(data, k, 'CH', 'bh', [behind])
+    return 0
+
+
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
 
