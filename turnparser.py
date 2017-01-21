@@ -616,7 +616,6 @@ polled_collects = set(('10', '78', '51', '77', '68', '31'))
 
 
 def fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data):
-    # XXXv0 todo CH mo set to days_since_epoch + remaining for moves ... needs to be done for entire stack!
     ret = {'li': [order],
            'wa': [remaining],
            'de': [str(31 - int(start_day))]}
@@ -638,11 +637,10 @@ def fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data
         ret['CHmo'] = (int(turn_num)-1) * 30 + int(start_day)
     elif verb == 'sail':
         SLmo = (int(turn_num)-1) * 30 + int(start_day)
-        where = data[unit]['LI']['wh'][0]  # this is the ship
-        box.subbox_overwrite(data, where, 'SL', 'mo', [SLmo])
-        # XXXv0 should really have where = province ship is in --- shiploc() ?
-        # XXXv0 where = data[where]['LI']['wh'][0]
-        ar = generate_move_args(start_day, remaining, last_move_dest, where)
+        ship = data[unit]['LI']['wh'][0]
+        shiploc = data[ship]['LI']['wh'][0]
+        box.subbox_overwrite(data, ship, 'SL', 'mo', [SLmo])
+        ar = generate_move_args(start_day, remaining, last_move_dest, shiploc)
     else:
         ar = [to_int_safely(x) for x in split_order_args(rest)]
 
