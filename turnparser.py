@@ -2049,6 +2049,7 @@ def resolve_npc_artifacts(data):
             for u in units:
                 if data[u]['CH']['he'][0] == '-1':
                     kind = at_to_kind[data[u]['CH']['at'][0]]
+                    box.subbox_overwrite(data, u, 'CH', 'ni', [kind])
                     for item in npc_items[faction]:
                         if data[item].get('PL', {}).get('un') is None:
                             if kind == npc_items[faction][item]:
