@@ -1996,6 +1996,7 @@ def resolve_fake_items(data):
                                     if what == '849':
                                         rest = to_int(rest.strip())
                                         # we may not know what this thing is but make it anyway
+                                        # (this will cause dbck failures)
                                         box.subbox_overwrite(data, item, 'IM', 'pc', [rest])
                                         break
                                 else:
