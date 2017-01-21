@@ -27,7 +27,6 @@ Strategy:
 import sys
 import os
 import re
-import time
 
 import turnparser
 import oio
@@ -73,20 +72,13 @@ for t in sorted_turns:
 
 turnparser.resolve_characters(data, last_turn)
 turnparser.resolve_garrisons(data)
-
-c0 = time.clock()
 turnparser.resolve_fake_items(data)
-print('resolve fake items took {} seconds'.format(time.clock() - c0))
+# turnparser.resolve_npc_artifacts(data)
 turnparser.resolve_bound_storms(data)
-
-c0 = time.clock()
 turnparser.resolve_regions(data)
-print('resolve regions took {} seconds'.format(time.clock() - c0))
 
-c0 = time.clock()
 problems = dbck.check_db(data)
 print('Database check found {} problems'.format(problems))
-print('Check took {} seconds'.format(time.clock() - c0))
 
 oio.write_lib(data, 'lib')
 
