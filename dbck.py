@@ -216,6 +216,11 @@ def check_unique_items(data):
             problem += 1
             continue
 
+    for i in all_inventory:
+        if int(i) > 399 and i not in data:
+            print('Item {} is in inventory somewhere but is not in data'.format(i), file=sys.stderr)
+            problem += 1
+
     return problem
 
 
