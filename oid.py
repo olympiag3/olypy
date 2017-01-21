@@ -21,7 +21,7 @@ def _i(c):
 def to_oid(oid_int):
     oid_int = str(oid_int)
     if not oid_int.isdigit():
-        raise ValueError('expected an integer')
+        raise ValueError('expected an integer, got '+oid_int)
     oid_int = int(oid_int)
 
     if oid_int < 10000:  # character or item
