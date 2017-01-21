@@ -670,7 +670,7 @@ def fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data
         ret['us'] = [ar.pop(0)]
         ar.append(ret['us'][0])
     if 'use_exp' in command:
-        # XXXv2 it appears that currently a bug prevents this from having an effect
+        # it appears that currently a bug in the C code prevents this from having an effect
         # eventually should set it to novice=1 journey=2 teacher=3 master=4 grand=5
         ret['ue'] = ['1']
     ret['cs'] = ['2']  # state 2 = RUN
@@ -743,15 +743,20 @@ def reformat_inventory(inventory):
 
 
 def make_fake_tradegood(ident, name, weight, price, data):
-    # XXXv2 test me
     data[ident] = {'firstline': [ident+' item tradegood'],
                    'na': [name],
-                   'IT': {'pl': [name],  # XXXv5 whatever
+                   'IT': {'pl': [name],  # whatever
                           'wt': [weight],
                           'bp': [price]}}
 
 
 artifact_kindmap = {'attack': 'ab', 'defense': 'db', 'missile': 'mb', 'aura': 'ba'}
+
+npc_token_map = {'Crown of the Undead lord': '31',
+                 'Horn of the Savages': '32',
+                 'Banner of the Skeletons': '33',
+                 'Crown of the Barbarians': '34',
+                 'Golden idol of the Orcs': '287'}
 
 
 def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
@@ -760,25 +765,22 @@ def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
     Used for things spotted in inventory.
     '''
     if ident in set(('401', '402', '403')):
-        # created aready. transfer from old owner to me.
         old = data[ident]['IT']['un'][0]
         box.box_remove(data, old, 'il', ident)
         data[ident]['IT']['un'] = [unit]
     elif int(ident) < 10000:
-        # dead body, ok, if you raise this dead body you will be disappointed
+        # if you raise *this* dead body you will be disappointed
         data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
                        'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': [unit]}}
         return
     else:
         if what in artifact_kindmap and weight == '10':
-            # armor/weapon/aura item
             data[ident] = {'firstline': [ident + ' item artifact'],
                            'na': [name],
                            'IT': {'wt': [weight], 'un': [unit]},
                            'IM': {artifact_kindmap[what]: [plus]}}
         elif weight == '10':
-            # aura item - held by non-mage. make it 1 point.
-            # XXXv2 if it was ever held by a mage in the past, remember the value?
+            # someday: if it was ever held by a mage in the past, remember the value?
             data[ident] = {'firstline': [ident + ' item artifact'],
                            'na': [name],
                            'IT': {'wt': [weight], 'un': [unit]},
@@ -795,8 +797,10 @@ def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
         elif weight == '0':  # this is probably a bug! I hope it is not fixed
             data[ident] = {'firstline': [ident + ' item npc_token'],
                            'na': [name],
-                           'IT': {'un': [unit]},  # g2 database agrees IT wt is not set
-                           'IM': {'tn': ['1'], 'ti': ['33']}}  # IM ti is a lie, also needs PL un filled in
+                           'IT': {'un': [unit]},
+                           'IM': {'tn': ['1'], 'ti': ['33']}}
+            if name in npc_token_map:
+                data[ident]['IM']['ti'] = [npc_token_map[name]]
         elif int(weight) > 14:  # lightest tradegood is 15
             weight = str(int(weight) // int(qty))
             # switch this to make_fake_tradegood
@@ -1959,8 +1963,8 @@ potion_to_uk = {'691': '2',  # heal
                 '696': '3'}  # death
 
 
-# this function doesn't work if an item is produced more than once ... it'll randomly pick
 def resolve_fake_items(data):
+    "Mostly accurate. If an item is made and destroyed and remade, we'll pick randomly."
     for item in data:
         if ' item ' in data[item]['firstline'][0] and 'fake' in data[item]:
             oid = to_oid(item)
@@ -1991,9 +1995,8 @@ def resolve_fake_items(data):
                                     what, rest = m[i]
                                     if what == '849':
                                         rest = to_int(rest.strip())
-                                        if rest in data:
-                                            # this is inaccurate for things that disappear and reappear
-                                            box.subbox_overwrite(data, item, 'IM', 'pc', [rest])
+                                        # we may not know what this thing is but make it anyway
+                                        box.subbox_overwrite(data, item, 'IM', 'pc', [rest])
                                         break
                                 else:
                                     raise ValueError('Could not find previous farcast to save')
@@ -2022,6 +2025,36 @@ def resolve_fake_items(data):
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
+
+
+at_to_kind = {'10': '31', '1': '32', '6': '33', '2': '34', '20': '287'}
+
+
+def resolve_npc_artifacts(data):
+    npc_items = defaultdict(dict)
+    for k, v in data.items():
+        if ' item npc_token' in v['firstline'][0]:
+            kind = v['IM']['ti'][0]
+            owner = v['IT']['un'][0]
+            if ' char 0' in data[owner]['firstline'][0]:
+                faction = data[owner]['CH']['lo'][0]
+                npc_items[faction][k] = kind
+
+    # if a faction has several of a single type of npc artifact, this
+    # method will randomly assign them to units.
+    for faction, v in data.items():
+        if ' player pl_regular' in v['firstline'][0]:
+            print('')
+            units = v['PL']['un']
+            for u in units:
+                if data[u]['CH']['he'][0] == '-1':
+                    kind = at_to_kind[data[u]['CH']['at'][0]]
+                    for item in npc_items[faction]:
+                        if data[item].get('PL', {}).get('un') is None:
+                            if kind == npc_items[faction][item]:
+                                box.subbox_overwrite(data, item, 'PL', 'un', [u])
+                                box.subbox_overwrite(data, u, 'CM', 'ot', [item])
+                                break
 
 
 def resolve_characters(data, turn_num):
@@ -2347,8 +2380,6 @@ def parse_character(name, ident, factint, text, data):
     current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
     maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
 
-    # XXXv2 extract full data from max aura 161 (3+158) and construct a fake auraculum if needed
-    # XXXv2 I think in v0 I am getting all auraculums made
     aura_artifacts = 0
     plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
     native_aura = 0
@@ -2357,7 +2388,6 @@ def parse_character(name, ident, factint, text, data):
         if _ != '+':
             raise ValueError('failed parsing Max Aura plus of '+plus)
         aura_artifacts = int(aura_artifacts)
-        # XXXv0 eventually figure out if I have an auraculum & how big it is
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
@@ -2453,6 +2483,10 @@ def parse_character(name, ident, factint, text, data):
             pass
     if len(cm):
         char['CM'] = cm
+
+    if health == '-1':  # npc
+        char['firstline'] = [iint + ' char ni']
+        char['MI'] = {'ca': ['r']}
 
     data[to_int(ident)] = char
     box.subbox_append(data, factint, 'PL', 'un', ident, dedup=True)
