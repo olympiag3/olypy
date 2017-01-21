@@ -70,13 +70,7 @@ for t in sorted_turns:
                 contents += line.expandtabs()
         turnparser.parse_turn(contents, data, everything=everything)
 
-turnparser.resolve_characters(data, last_turn)
-turnparser.resolve_garrisons(data)
-turnparser.resolve_fake_items(data)
-turnparser.resolve_npc_artifacts(data)
-turnparser.resolve_bound_storms(data)
-turnparser.resolve_regions(data)
-turnparser.sweep_independent_units(data)
+turnparser.finish(data, last_turn)
 
 problems = dbck.check_db(data)
 print('Database check found {} problems'.format(problems))

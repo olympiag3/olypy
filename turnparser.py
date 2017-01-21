@@ -2952,6 +2952,15 @@ def parse_turn(turn, data, everything=True):
         global_character_in_progress.append([in_progress_sections[i], i])
 
 
+def finish(data, last_turn):
+    resolve_characters(data, last_turn)
+    resolve_garrisons(data)
+    resolve_fake_items(data)
+    resolve_npc_artifacts(data)
+    resolve_bound_storms(data)
+    resolve_regions(data)
+    sweep_independent_units(data)
+
 def parse_turn_from_file(f, data):
     turn = ''.join(line.expandtabs() for line in f)
     turn.replace('\r\n', '\n')
