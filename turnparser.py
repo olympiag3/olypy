@@ -1191,16 +1191,13 @@ def parse_a_character(parts):
             continue  # XXXv2
         elif (p in item_to_inventory or
               p.endswith('s') and p[:-1] in item_to_inventory):
-            # npcs like savages, or controlled npcs like savage XXXv2
             if p in item_to_inventory:
                 ident = item_to_inventory[p]
             else:
                 ident = item_to_inventory[p[:-1]]
         elif p.startswith('number: '):
-            # definitely not a controlled npc
             count = p.replace('number: ', '')
-            il.extend([ident, count])
-            # XXXv0 test me
+            il.extend([ident, str(int(count)-1)])
         else:
             if p.startswith('with '):
                 p = p.replace('with ', '')
