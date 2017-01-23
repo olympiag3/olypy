@@ -869,8 +869,15 @@ Unclaimed items:
 
 
 def test_analyze_storm_list():
-    # kinda painful
-    pass
+    t = "    87999  wind   8999  ar99     32"
+    data = {'11399': {'LI': {'wh': []}}}
+    r = {'11399': {'LI': {'hl': ['87999'], 'wh': []}},
+         '87999': {'LI': {'wh': ['11399']},
+                   'MI': {'sb': ['8999'], 'ss': ['32']},
+                   'firstline': ['87999 storm wind']}}
+
+    turnparser.analyze_storm_list(t, '50000', data)
+    assert data == r
 
 
 def test_analyze_garrison_list():
@@ -907,6 +914,7 @@ def test_analyze_garrison_list():
 
 
 def test_parse_garrison_log():
+    # sticks answer into global
     pass
 
 
@@ -969,10 +977,13 @@ def test_resolve_fake_items():
 
 
 def test_parse_several_items():
-    pass
+    t = "five soldiers, 11 workers"
+    r = {'11': 11, '12': 5}
+    assert turnparser.parse_several_items(t) == r
 
 
 def test_resolve_regions():
+    # lots of global action
     pass
 
 
