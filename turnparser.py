@@ -945,7 +945,7 @@ def make_locations_from_routes(routes, idint, region, data):
                 if dir == 'out':
                     continue  # subloc out routes will be created elsewhere
                 if dir.endswith(' road'):
-                    continue  # roads are annoying to make. generally they're marked hidden GA rh 1. XXXv1
+                    continue  # roads are annoying to make. generally they're marked hidden: GA rh 1. XXXv1
                 if idir > 3:
                     data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
                 data[dest]['LO']['pd'][idir] = idint
@@ -972,7 +972,7 @@ def make_locations_from_routes(routes, idint, region, data):
             # the destination exists, but this link may not
             if kind in province_kinds:
                 if dir == 'out':
-                    # raise ValueError('I do not think this can happen') -- it does XXXv0
+                    # this happens for links from cities to their provinces XXXv0
                     continue
                 if dir.endswith(' road'):
                     continue  # XXXv1
@@ -997,7 +997,9 @@ def make_direction_routes(routes, idint, kind, data):
     XXXv0 lacks city check, causing bug of ocean -> city instead of ocean -> province
     '''
     if kind == 'city' or kind == 'port city':
-        return  # cities have no directions; links are actually in the province
+        # cities have no nsew directions; links are actually in the province (marked impassable)
+        # XXXv0 cities do have up and down
+        return
     for r in routes:
         dir = r['dir']
         if dir in directions:
