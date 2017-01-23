@@ -1336,12 +1336,13 @@ def parse_routes_leaving(text):
     ret = []
     for l in text.split('\n'):
         if ',' not in l:
-            continue  # not a route
-        # XXXv0 location banner -- should match more generally?
-        if 'Notice to mortals' in l:
+            # example: A magical barrier prevents entry.
+            # XXXv0
             continue
-        if 'taking this route' in l:
+        if 'Notice to mortals' in l or 'taking this route' in l:
+            # Hades banner. I think only ships/castles can have player banners set so no need to worry
             continue
+
         parts = l.split(',')
         attr = {}
         saw_loc = 0
@@ -1553,6 +1554,8 @@ def resolve_storms(location, storms_present, storm_details, things, data):
 
 def parse_inner_locations(idint, text, things):
     '''
+    Used to parse many things: inner locs, seen here, ships present, etc.
+
    Faery hill [z777], faery hill, 1 day
    Island [g039], island, 1 day
    Wildefort [h63], port city, safe haven, 1 day
@@ -1581,13 +1584,16 @@ def parse_inner_locations(idint, text, things):
 
     # if you're wielding two things, it is "wielding foo [bar] and baz [barf]"
     # and a potential linebreak. Hack it so that it will parse anyway.
-    # XXXv0 test me
     new_text = re.sub(r'\]\s+and\s', '], wielding ', text)
     if new_text != text:
         text = new_text
 
     for l in text.split('\n'):
         if 'A magical barrier surrounds' in l:
+            where = parse_an_id(l)
+            # LO ba gets the strength. If permanent, gets -owner
+            # box.subbox_overwrite(data, where, 'LO', 'ba', ['1'])
+            # XXXv0
             continue
         parts = l.split(',')
         continuation = False
@@ -2639,10 +2645,11 @@ def parse_location(s, factint, everything, data):
         make_locations_from_routes(routes, idint, region, data)
         make_direction_routes(routes, idint, kind, data)
 
-    # XXXv0 Cities rumored to be nearby:
     m = re.search(r'^Cities rumored to be nearby:\n(.*?)\n\n', s, re.M | re.S)
     if m:
-        #XXXv0 print('hey greg saw cities rumored:', m.group(1))
+        # XXXv0 print('hey greg saw cities rumored:', m.group(1))
+        # if I want to put these on the map, I'll have to guess the region
+        # and then make sure that a later, correct region overwrites this one
         pass
 
     things = {idint: {'LI': {}, 'firstline': ['fake']}}
