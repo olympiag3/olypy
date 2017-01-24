@@ -176,7 +176,6 @@ order_canon = {'train': 'make',
                'use 901': 'collect 31',
                'use 902': 'make 18',
                'go': 'move',
-               'fly': 'move',
                'north': 'move n',
                'south': 'move s',
                'east': 'move e',
@@ -207,6 +206,7 @@ def canonicalize_order(order):
 valid_orders = {'build': set(('poll',)),
                 'collect': set(),
                 'explore': set(),
+                'fly': set(),
                 'form': set(),
                 'improve': set(('poll',)),
                 'make': set(('poll',)),
@@ -246,7 +246,7 @@ def fake_order(order, turn_num, start_day, remaining, last_move_dest, unit, data
 
     if verb == 'wait':
         ar = parse_wait_args(order)
-    elif verb == 'move':
+    elif verb == 'move' or verb == 'fly':
         where = data[unit]['LI']['wh'][0]
         ar = generate_move_args(start_day, remaining, last_move_dest, where)
         ret['CHmo'] = (int(turn_num)-1) * 30 + int(start_day)
