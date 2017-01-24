@@ -2553,7 +2553,7 @@ def parse_turn(turn, data, everything=True):
             if m:
                 if not everything:
                     break
-                in_progress_sections[ident] = s
+                in_progress_sections[factint] = s
                 break
 
             # skip the rest: lore sheets, new players
