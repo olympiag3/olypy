@@ -207,7 +207,7 @@ def check_links(data):
             elif kind == 'city':
                 pd = v.get('LO', {}).get('pd', [])
                 for dir, route in enumerate(pd):
-                    if dir < 4 and route != '0':
+                    if int(dir) < 4 and route != '0':
                         print('City {} has NESW link'.format(k), file=sys.stderr)
                         problem += 1
     return problem
