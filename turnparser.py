@@ -1787,7 +1787,7 @@ def resolve_garrisons(data):
                             count = details.numbers[count]
                         if item in details.item_to_inventory:
                             item = details.item_to_inventory[item]
-                        elif item.endswith('s') and item[:-1] in item_to_inventory:
+                        elif item.endswith('s') and item[:-1] in details.item_to_inventory:
                             item = details.item_to_inventory[item[:-1]]
                         else:
                             raise ValueError('unknown item '+item)
