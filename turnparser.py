@@ -552,7 +552,7 @@ def make_locations_from_routes(routes, idint, region, data):
                               'na': [r['name']],
                               'il': details.geo_inventory[kind],
                               'LI': {'wh': [myregion]},
-                              'LO': {'pd': [0, 0, 0, 0]}}
+                              'LO': {'pd': ['0', '0', '0', '0']}}
                 if old_hl:
                     box.subbox_overwrite(data, dest, 'LI', 'hl', old_hl)
                 if 'impassable' in r:
@@ -562,7 +562,7 @@ def make_locations_from_routes(routes, idint, region, data):
                 if dir.endswith(' road'):
                     continue  # roads are annoying to make. generally they're marked hidden: GA rh 1. XXXv1
                 if idir > 3:
-                    data[dest]['LO']['pd'] = [0, 0, 0, 0, 0, 0]
+                    data[dest]['LO']['pd'] = ['0', '0', '0', '0', '0', '0']
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
                 if dir == 'out':
@@ -593,7 +593,7 @@ def make_locations_from_routes(routes, idint, region, data):
                     continue  # XXXv1
                 if idir > 3:
                     if len(data[dest]['LO']['pd']) < 6:
-                        data[dest]['LO']['pd'].extend((0, 0))
+                        data[dest]['LO']['pd'].extend(('0', '0'))
                 data[dest]['LO']['pd'][idir] = idint
             elif kind == 'city' or kind == 'port city':
                 pass
@@ -621,9 +621,9 @@ def make_direction_routes(routes, idint, kind, data):
             dest = r['destination']
             if data[idint].get('LO', {}).get('pd') is None:
                 # example: sewer to tunnel, tunnel lacks pd
-                box.subbox_overwrite(data, idint, 'LO', 'pd', [0, 0, 0, 0])
+                box.subbox_overwrite(data, idint, 'LO', 'pd', ['0', '0', '0', '0'])
             if int(details.directions[dir]) > 3 and len(data[idint]['LO']['pd']) < 6:
-                data[idint]['LO']['pd'].extend((0, 0))
+                data[idint]['LO']['pd'].extend(('0', '0'))
             data[idint]['LO']['pd'][details.directions[dir]] = dest
 
 
@@ -1820,7 +1820,8 @@ def resolve_nowhere(region_ident, data):
     ident = str(ident)
     data[ident] = {'firstline': [ident + ' loc underground'],
                    'na': ['Nowhere'],
-                   'LI': {'wh': [region_ident]}}
+                   'LI': {'wh': [region_ident]},
+                   'LO': {'pd': ['0', '0', '0', '0', '0', '0']}}
     box.subbox_append(data, region_ident, 'LI', 'hl', [ident], dedup=True)
 
     il = []
@@ -2227,7 +2228,7 @@ def parse_location(s, factint, everything, data):
         if enclosing_int:
             box.subbox_append(data, enclosing_int, 'LI', 'hl', [idint], dedup=True)  # XXXv0 remove me when this is set properly
         if kind in details.province_kinds:
-            box.subbox_append(data, idint, 'LO', 'pd', [0, 0, 0, 0])
+            box.subbox_append(data, idint, 'LO', 'pd', ['0', '0', '0', '0'])
         if safe_haven:
             box.subbox_overwrite(data, idint, 'SL', 'sh', ['1'])
         if hidden:

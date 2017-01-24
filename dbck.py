@@ -6,6 +6,7 @@ import sys
 from oid import to_oid
 import box
 import data as db
+import details
 
 
 def check_firstline(data):
@@ -165,13 +166,49 @@ def check_moving(data):
 def check_prisoners(data):
     "Make sure prisoners are stacked under another character"
     problem = 0
-    for i in data:
-        if ' char ' in data[i]['firstline'][0]:
-            if 'CH' in data[i]:
-                if 'pr' in data[i]['CH']:
-                    where = data[i]['LI']['wh'][0]
+    for k, v in data.items():
+        if ' char ' in v['firstline'][0]:
+            if 'CH' in v:
+                if 'pr' in v['CH']:
+                    where = v['LI']['wh'][0]
                     if ' char ' not in data[where]['firstline'][0]:
-                        print('Prisoner {} is not stacked; location {}'.format(to_oid(i), where), file=sys.stderr)
+                        print('Prisoner {} is not stacked; location {}'.format(to_oid(k), where), file=sys.stderr)
+                        problem += 1
+    return problem
+
+
+def check_links(data):
+    '''
+    Regression test.
+    Make sure provinces don't link cities in LO pd.
+    Make sure cities don't have LO pd.
+    TODO: roads
+    TODO: sewers, cities
+    TODO: graveyards and faery hills
+    '''
+    problem = 0
+
+    for k, v in data.items():
+        fl = v['firstline'][0]
+        if ' loc ' in fl:
+            kind = fl.partition(' loc ')[2]
+            if kind in details.province_kinds:
+                if 'LO' not in v or 'pd' not in v['LO']:
+                    print('Province {} lacks LO pd'.format(k), file=sys.stderr)
+                    problem += 1
+                    continue
+                pd = v['LO']['pd']
+                for route in pd:
+                    if route != '0':
+                        route_fl = data[route]['firstline'][0]
+                        if route_fl.endswith(' loc city'):
+                            print('Province {} has a NESWUD link to city {}'.format(k, route), file=sys.stderr)
+                            problem += 1
+            elif kind == 'city':
+                pd = v.get('LO', {}).get('pd', [])
+                for dir, route in enumerate(pd):
+                    if dir < 4 and route != '0':
+                        print('City {} has NESW link'.format(k), file=sys.stderr)
                         problem += 1
     return problem
 
@@ -184,5 +221,6 @@ def check_db(data):
     problems += check_unique_items(data)
     problems += check_moving(data)
     problems += check_prisoners(data)
+    problems += check_links(data)
 
     return problems
