@@ -73,29 +73,29 @@ def check_where_here(data):
 def check_faction_units(data):
     "If a box is in a faction, make sure it's on the faction's unit list and vice versa."
     problem = 0
-    for i in data:
-        if 'CH' in data[i]:
-            if 'lo' in data[i]['CH']:
-                fact = data[i]['CH']['lo'][0]
+    for k, v in data.items():
+        if 'CH' in v:
+            if 'lo' in v['CH']:
+                fact = v['CH']['lo'][0]
                 try:
                     un = data[fact]['PL']['un']
-                    un.index(i)
+                    un.index(k)
                 except (KeyError, ValueError):
-                    print('Unit {} is in faction {} but not vice versa'.format(i, fact), file=sys.stderr)
-                    print('  ', data[i]['firstline'][0], file=sys.stderr)
+                    print('Unit {} is in faction {} but not vice versa'.format(k, fact), file=sys.stderr)
+                    print('  ', v['firstline'][0], file=sys.stderr)
                     problem += 1
                     continue
 
-    for i in data:
-        if ' player ' in data[i]['firstline'][0] and 'un' in data[i]['PL']:
-            for unit in data[i]['PL']['un']:
+    for k, v in data.items():
+        if ' player ' in v['firstline'][0] and 'un' in v['PL']:
+            for unit in v['PL']['un']:
                 try:
                     lo = data[unit]['CH']['lo'][0]
-                    if lo != i:
+                    if lo != k:
                         raise ValueError
-                        print('lo {} i {}'.format(lo, i), file=sys.stderr)
+                        print('lo {} i {}'.format(lo, k), file=sys.stderr)
                 except (KeyError, ValueError):
-                    print('Unit {} is not in faction {}'.format(unit, i), file=sys.stderr)
+                    print('Unit {} is not in faction {}'.format(unit, k), file=sys.stderr)
                     if unit in data:
                         print('  ', data[unit]['firstline'][0], file=sys.stderr)
                     else:
@@ -110,30 +110,30 @@ def check_unique_items(data):
     "Make sure unique items exist on exactly one inventory list, somewhere."
     problem = 0
     all_unique_items = {}
-    for i in data:
-        if int(i) > 399 and ' item ' in data[i]['firstline'][0]:
-            if ' item tradegood' in data[i]['firstline'][0]:
+    for k, v in data.items():
+        if int(k) > 399 and ' item ' in v['firstline'][0]:
+            if ' item tradegood' in v['firstline'][0]:
                 continue
-            all_unique_items[i] = 1
+            all_unique_items[k] = 1
             try:
                 un = None
-                un = data[i]['IT']['un'][0]
+                un = v['IT']['un'][0]
                 il = data[un]['il']
                 if not isinstance(il, list):
-                    print('Whoops. id', i, 'il is', il, file=sys.stderr)
-                il.index(i)  # this might have false positive and match a qty XXX
+                    print('Whoops. id', k, 'il is', il, file=sys.stderr)
+                il.index(k)  # this might have false positive and match a qty XXX
             except (KeyError, ValueError):
-                print('Unique item {} is not in inventory of unit {}'.format(i, un), file=sys.stderr)
-                print('  ', data[i]['firstline'][0], file=sys.stderr)
+                print('Unique item {} is not in inventory of unit {}'.format(k, un), file=sys.stderr)
+                print('  ', v['firstline'][0], file=sys.stderr)
                 if un in data:
                     print('  ', data[un]['firstline'][0], file=sys.stderr)
                 problem += 1
                 continue
 
     all_inventory = {}
-    for i in data:
-        if 'il' in data[i]:
-            il = data[i]['il'].copy()
+    for k, v in data.items():
+        if 'il' in v:
+            il = v['il'].copy()
             while len(il) > 0:
                 item = il.pop(0)
                 qty = int(il.pop(0))
