@@ -841,6 +841,7 @@ Admit permissions:
 
 Declared attitudes:
    defend   ad3
+            zz1
    hostile  ez0
    neutral  hv5  hx7
 
@@ -853,7 +854,7 @@ Unclaimed items:
       100  stone [78]			     10,000  
 
     '''
-    ret = {'ad': [to_int('ad3')],
+    ret = {'ad': [to_int('ad3'), to_int('zz1')],
            'ah': [to_int('ez0')],
            'am': [['4256', '52341', '50033'],
                   ['7611', '6124'],
@@ -1108,8 +1109,8 @@ Osswid the Destroyer [7271]
                            '94', '11',
                            '98', '1'],
                     'tl': ['2', '95', '100', '7', '0', '0', '0', '0'],
-                    'CH': {'ad': [to_int('qm9'), to_int('zb1')],
-                           'at': ['89'],
+                    'ad': [to_int('qm9'), to_int('zb1')],
+                    'CH': {'at': ['89'],
                            'bp': ['0'],
                            'df': ['168'],
                            'he': ['100'],

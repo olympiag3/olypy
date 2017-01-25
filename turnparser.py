@@ -2111,13 +2111,18 @@ def parse_character(name, ident, factint, text, data):
         trades = parse_pending_trades(m.group(1))
 
     char = {}
-    iint = to_int(ident)
-    char['firstline'] = [iint + ' char 0']
+    char['firstline'] = [ident + ' char 0']
     char['na'] = [name]
     if len(inventory) > 0:
         char['il'] = inventory
     if len(trades) > 0:
         char['tl'] = trades
+    if attitudes.get('neutral'):
+        char['an'] = attitudes['neutral']
+    if attitudes.get('defend'):
+        char['ad'] = attitudes['defend']
+    if attitudes.get('hostile'):
+        char['ah'] = attitudes['hostile']
 
     char['LI'] = {}
 
@@ -2133,12 +2138,6 @@ def parse_character(name, ident, factint, text, data):
         ch['si'] = ['1']
     ch['lk'] = [lkind]
     ch['lr'] = [lrate]
-    if attitudes.get('neutral'):
-        ch['an'] = attitudes['neutral']
-    if attitudes.get('defend'):
-        ch['ad'] = attitudes['defend']
-    if attitudes.get('hostile'):
-        ch['ah'] = attitudes['hostile']
     if len(skills) > 0:
         ch['sl'] = skills
     if behind != '0':
@@ -2176,10 +2175,10 @@ def parse_character(name, ident, factint, text, data):
         char['CM'] = cm
 
     if health == '-1':  # npc
-        char['firstline'] = [iint + ' char ni']
+        char['firstline'] = [ident + ' char ni']
         char['MI'] = {'ca': ['r']}
 
-    data[to_int(ident)] = char
+    data[ident] = char
     box.subbox_append(data, factint, 'PL', 'un', ident, dedup=True)
 
 
