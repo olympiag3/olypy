@@ -1439,7 +1439,8 @@ def parse_faction(text, factint, data):
     m = re.search(r'^Admit permissions:\n\n(.*?)\n\n', text, re.M | re.S)
     if m:
         admits = parse_admit(m.group(1))
-        data[factint]['am'] = admits
+        # box.subbox_overwrite(data, factint, 'PL', 'am', admits) -- can't do, subbox_overwrite assumes this is a list of strings
+        data[factint].setdefault('PL', {})['am'] = admits
 
     m = re.search(r'^Declared attitudes:\n(.*?)\n\n', text, re.M | re.S)
     if m:
@@ -1630,6 +1631,7 @@ def resolve_fake_items(data):
 
             if 'fake' in data[item]:  # did not see it being created
                 print('hey greg, failed to resolve fake item', item)
+                del data[item]['fake']
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
                     box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
@@ -1823,16 +1825,16 @@ def resolve_nowhere(region_ident, data):
 
     box.box_overwrite(data, '401', 'na', 'Imperial Throne')
     box.subbox_overwrite(data, '401', 'IT', 'wt', ['500'])
-    box.subbox_overwrite(data, '401', 'IT', 'lo', ['401'])
+    box.subbox_overwrite(data, '401', 'IM', 'lo', ['401'])
 
     box.box_overwrite(data, '402', 'na', 'Crown of Prosperity')
     box.subbox_overwrite(data, '402', 'IT', 'wt', ['10'])
-    box.subbox_overwrite(data, '402', 'IT', 'lo', ['402'])
+    box.subbox_overwrite(data, '402', 'IM', 'lo', ['402'])
 
     box.box_overwrite(data, '403', 'na', 'Skull of Bastresric')
     box.subbox_overwrite(data, '403', 'IT', 'wt', ['10'])
-    box.subbox_overwrite(data, '403', 'IT', 'lo', ['403'])
-    box.subbox_overwrite(data, '403', 'IT', 'uk', ['15'])
+    box.subbox_overwrite(data, '403', 'IM', 'lo', ['403'])
+    box.subbox_overwrite(data, '403', 'IM', 'uk', ['15'])
 
 
 def resolve_regions(data):
@@ -2563,6 +2565,16 @@ def parse_turn(turn, data, everything=True):
         global_character_in_progress.append([in_progress_sections[i], i])
 
 
+def remove_extra_keys(data):
+    '''
+    Delete any extra keys we added for processing, like 'random' for
+    random storms.
+    '''
+    for k, v in data.items():
+        if 'random' in v:
+            del v['random']
+
+
 def finish(data, last_turn):
     resolve_characters(data, last_turn)
     resolve_garrisons(data)
@@ -2571,6 +2583,7 @@ def finish(data, last_turn):
     resolve_bound_storms(data)
     resolve_regions(data)
     sweep_independent_units(data)
+    remove_extra_keys(data)
     box.canonicalize(data)
 
 

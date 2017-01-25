@@ -179,38 +179,50 @@ grand_format = [
 
 
 def print_one_thing(datum):
+    key1s_seen = set()
     for section in grand_format:
-        key = list(section.keys())[0]
-        value = section[key]
-        if datum.get(key) is None:
+        key1 = list(section.keys())[0]
+        value1 = section[key1]
+        if datum.get(key1) is None:
             continue
+        key1s_seen.add(key1)
 
-        if value == 1:
-            default_print(key, datum.get(key))
-        elif callable(value):
-            value(key, datum.get(key))
-        elif isinstance(value, list):
-            print(key)
-            for subsection in value:
+        if value1 == 1:
+            default_print(key1, datum.get(key1))
+        elif callable(value1):
+            value1(key1, datum.get(key1))
+        elif isinstance(value1, list):
+            print(key1)
+            key2s_seen = set()
+            for subsection in value1:
                 key2 = list(subsection.keys())[0]
                 value2 = subsection[key2]
-                if datum[key].get(key2) is None:
+                if datum[key1].get(key2) is None:
                     continue
+                key2s_seen.add(key2)
 
                 if value2 == 1:
-                    default_print(' '+key2, datum[key].get(key2))
+                    default_print(' '+key2, datum[key1].get(key2))
                 elif callable(value2):
-                    value2(' '+key2, datum[key].get(key2))
+                    value2(' '+key2, datum[key1].get(key2))
                 else:
-                    raise ValueError('unknown subtype')
+                    raise ValueError('unknown format value for subtype')
+            if datum[key1].keys() != key2s_seen:
+                extras = set(datum[key1].keys()).difference(key2s_seen)
+                raise KeyError('saw extra key2s, key1={} extras={} datum={}'.format(key1, extras, datum))
         else:
-            raise ValueError('unknown type')
+            raise ValueError('unknown format value for type')
     print()
+    if datum.keys() != key1s_seen:
+        extras = set(datum.keys()).difference(key1s_seen)
+        raise KeyError('saw extra key1s, extras={} datum={}'.format(extras, datum))
 
 
 def read_oly_file(f, verbose=False):
     '''
-    Unlike io.c, we gut it out :-)
+    Unlike io.c, we gut it out :-) basically we don't know the details about this file
+    format, we just GO GO GO. The copylib test & exceptions while printing make sure
+    we did the right thing here.
     '''
 
     data = {}
