@@ -2016,6 +2016,7 @@ def parse_character(name, ident, factint, text, data):
 
     # Unfortunately this only captures the first one. Even for visible characters,
     # the output shown in turns is incomplete and is truncated to stack depth 2.
+    # Fortunately, stacked over is complete. So the risk is that non-allies & prisoners will be mis-placed
     # XXXv0 capture all of this
     stacked_over, = match_line(text, 'Stacked over:')
     if stacked_over is not None:
@@ -2075,10 +2076,16 @@ def parse_character(name, ident, factint, text, data):
     plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
     native_aura = 0
     if plus:
-        native_aura, _, aura_artifacts = plus.partition('+')
-        if _ != '+':
+        native_aura, p, aura_artifacts = plus.partition('+')
+        if p != '+':
             raise ValueError('failed parsing Max Aura plus of '+plus)
         aura_artifacts = int(aura_artifacts)
+
+    project_cast, = match_line(text, 'Project cast:')
+    if project_cast is not None:
+        print('hey greg project_cast is', repr(project_cast))
+        project_cast = to_int(parse_an_id(project_cast))
+        print('hey greg found that char {} has a cast projected to {}'.format(ident, to_oid(project_cast)))
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
@@ -2163,6 +2170,8 @@ def parse_character(name, ident, factint, text, data):
     if maximum_aura:
         cm['ma'] = [str(native_aura or maximum_aura)]
         cm['im'] = ['1']
+    if project_cast:
+        cm['pc'] = [project_cast]
     if vision_protection:
         cm['vp'] = [str(vision_protection)]
     if len(skills_list):
