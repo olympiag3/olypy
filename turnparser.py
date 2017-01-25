@@ -1072,10 +1072,8 @@ It is windy.
     '''
     storms_present = {}
     storm_details = {}
-    print('hey greg text is', text)
     for m in re.finditer(r'^(?:It is raining|It is windy|The province is blanketed in fog)\.', text, re.M):
         s = m.group(0)
-        print('hey greg found a weather header of', s)
         if ' raining' in s:
             storms_present['rain'] = 1
         if ' windy' in s:
@@ -1084,7 +1082,6 @@ It is windy.
             storms_present['fog'] = 1
     for m in re.finditer(r'^.*?, storm, .*?$', text, re.M):
         s = m.group(0)
-        print('hey greg found a storm of', s)
         ident = parse_an_id(s)
         if '[' in s:
             name = s[:s.find('[')].strip()
@@ -1108,15 +1105,12 @@ It is windy.
 def resolve_storms(location, storms_present, storm_details, things, data):
     storms_present_copy = storms_present.copy()
 
-    print('hey greg resolving storms for', location)
     # copy over non-random storms
     hl = data.get(location, {}).get('LI', {}).get('hl', [])
     for here in hl:
         if ' storm ' in data[here]['firstline'][0] and not data[here].get('random', False):
-            print('  hey greg copied over', here, data[here])
             things[here] = data[here]
             db.set_where(things, here, location)
-            print('  hey greg hl of {} ended as {}'.format(location, things[location]['LI']['hl']))
             _, kind = data[here]['firstline'][0].rsplit(' ', 1)
             if kind in storms_present:  # might be more than one
                 del storms_present[kind]
@@ -1124,7 +1118,6 @@ def resolve_storms(location, storms_present, storm_details, things, data):
                 del storm_details[here]
 
     if len(storm_details) == 0:
-        print('  hey greg no details so I made random storms')
         # No weather mage present. Do not make random storms if real storms are present.
         if 'rain' in storms_present:
             make_storm('rain', 3, things, location, data, random=True)
@@ -1146,9 +1139,7 @@ def resolve_storms(location, storms_present, storm_details, things, data):
                 continue
             kind = name.lower()  # we can trust this
             if kind not in storms_present_copy:
-                print('hey greg storms_present_copy is', storms_present_copy)
                 raise ValueError('Location {} has a storm problem related to {}'.format(location, kind))
-            print('  hey greg made a detailed but random storm of kind', kind, 'ident', ident)
             make_storm(kind, strength, things, location, data, ident=ident)
             del storms_present[kind]
             done.append(ident)
@@ -1157,9 +1148,6 @@ def resolve_storms(location, storms_present, storm_details, things, data):
 
         # at this point we may have some owned storms left, that must be owned not by this faction.
         # if not owned by this faction, we cannot trust the name
-        if len(storm_details) > 0:
-            print('hey greg we have {} owned storms left and {} present clues'.format(len(storm_details), len(storms_present)))
-
         if len(storm_details) == 1 and len(storms_present) == 1:  # what luck!
             ident = list(storm_details.keys())[0]
             kind = list(storms_present.keys())[0]
@@ -1506,7 +1494,6 @@ def analyze_storm_list(text, fact, data):
             m = re.search(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', global_days[owner], re.M)
             if m:
                 ship = m.group(1)
-                print('Hey greg found storm {} bound to ship {}'.format(ident, ship))
                 data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
                 # Unfortunately, the ship has not been created yet!
                 global global_bound_storms
@@ -1702,7 +1689,6 @@ def resolve_bound_storms(data):
     for ident, ship in global_bound_storms.items():
         if ship in data and ' ship ' in data[ship]['firstline'][0]:
             data[ship]['SL']['bs'] = [ident]
-            print('hey greg actually bound storm {} to ship {}'.format(ident, ship))
         else:
             print('hey greg failed to bind storm {} to ship {}'.format(ident, ship))
 
@@ -2083,9 +2069,7 @@ def parse_character(name, ident, factint, text, data):
 
     project_cast, = match_line(text, 'Project cast:')
     if project_cast is not None:
-        print('hey greg project_cast is', repr(project_cast))
         project_cast = to_int(parse_an_id(project_cast))
-        print('hey greg found that char {} has a cast projected to {}'.format(ident, to_oid(project_cast)))
 
     m = re.search(r'Declared attitudes:\n(.*?)\n\s*\n', text, re.M | re.S)
     attitudes = {}
