@@ -28,7 +28,7 @@ mkdir data/test-temporary
 mkdir data/test-temporary/fact
 $COVERAGE ../copylib.py --problems 79 data/g2 data/test-temporary
 diff -r -q data/g2 data/test-temporary
-rm -rf data/test-temporary
+#rm -rf data/test-temporary
 
 echo
 

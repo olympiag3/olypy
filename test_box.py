@@ -1,7 +1,7 @@
 from box import uniq_f11
 from box import box_append, box_remove, box_overwrite
 from box import subbox_append, subbox_remove, subbox_overwrite
-
+from box import box_sort, subbox_sort
 
 def test_uniq_f11():
     seq = [1, 2, 3, 2]
@@ -120,3 +120,13 @@ def test_overwrite2():
     data = {'1001': {'LI': {'wh': ['10000']}}}
     subbox_overwrite(data, 1001, 'LI', 'wh', ['10001'])
     assert data == {'1001': {'LI': {'wh': ['10001']}}}
+
+def test_sorts():
+    data = {'1001': {'ah': ['3', '2', '1', '11'],
+                     'PL': {'un': ['1003', '1002', '10001', '1001']}}}
+
+    box_sort(data, '1001', 'ah')
+    assert data['1001']['ah'] == ['1', '2', '3', '11']
+
+    subbox_sort(data, '1001', 'PL', 'un')
+    assert data['1001']['PL']['un'] == ['1001', '1002', '1003', '10001']

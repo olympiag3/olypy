@@ -16,6 +16,9 @@ data = read_lib(args.inputlib)
 problems = dbck.check_db(data)
 if problems:
     print('dbck found {} problems'.format(problems))
-assert problems == args.problems
+
+if args.problems:
+    print('expected {} problems'.format(args.problems))
+    assert problems == args.problems
 
 write_lib(data, args.outputlib)

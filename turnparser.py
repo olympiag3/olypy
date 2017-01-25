@@ -1904,11 +1904,6 @@ def resolve_regions(data):
             box.subbox_overwrite(data, k, 'LI', 'wh', [region_map[wh]])
             box.subbox_append(data, region_map[wh], 'LI', 'hl', [k], dedup=True)  # XXXv0 this is n**2
 
-    for r in ordered_regions:
-        hl = data[region_map[r]].get('LI', {}).get('hl', [])
-        if hl:
-            data[region_map[r]]['LI']['hl'] = sorted(hl)
-
 
 def remove_chars_and_ships(things):
     '''
@@ -2584,6 +2579,7 @@ def finish(data, last_turn):
     resolve_bound_storms(data)
     resolve_regions(data)
     sweep_independent_units(data)
+    box.canonicalize(data)
 
 
 def parse_turn_from_file(f, data):
