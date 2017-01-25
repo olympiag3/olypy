@@ -71,7 +71,9 @@ def check_where_here(data):
 
 
 def check_faction_units(data):
-    "If a box is in a faction, make sure it's on the faction's unit list and vice versa."
+    '''
+    If a box is in a faction, make sure it's on the faction's unit list and vice versa.
+    '''
     problem = 0
     for k, v in data.items():
         if 'CH' in v:
@@ -157,10 +159,35 @@ def check_unique_items(data):
 
 def check_moving(data):
     '''
-    Make sure moving stack leaders have a running command cs=2
-    If I'm a moving non-stack-leader make sure my mo == stack leader mo
+    Make sure moving stack leaders have a running move or fly command cs=2
+    If I'm a moving non-stack-leader make sure my CH mo == stack leader CH mo
+    sailing: check SL mo of ship; character has no CH mo
     '''
-    return 0
+    problem = 0
+    stacks = {}
+
+    pass
+
+    for k, v in data.items():
+        if ' ship ' in v['firstline'][0]:
+            if v.get('SL', {}).get('mo', [False])[0]:
+                captain = v.get('LI', {}).get('hl', [None])[0]
+                if captain is None:
+                    print('Ship {} is moving but lacks a captain'.format(k), file=sys.stderr)
+                    problem += 1
+                    continue
+                CO = data[captain].get('CO', {})
+                if CO.get('cs', [None])[0] != '2' or not CO.get('li', [''])[0].lower().startswith('sail '):
+                    print('Ship {} captain {} is not sailing'.format(k, captain), file=sys.stderr)
+                    print('hey greg debug CO is', CO, file=sys.stderr)
+                    problem += 1
+                    continue
+                if data[captain]['CH'].get('mo', [None])[0]:
+                    print('Ship {} captain {} is moving, should not be'.format(k, captain), file=sys.stderr)
+                    problem += 1
+                    continue
+
+    return problem
 
 
 def check_prisoners(data):
