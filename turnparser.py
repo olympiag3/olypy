@@ -1846,24 +1846,26 @@ def resolve_regions(data):
     Change all the region strings in LI wh to integers
     '''
 
+    for r in region_after:
+        if r in region_after[r]:  # XXXv0 should I make this not happen?
+            region_after[r].remove(r)
+        if None in region_after[r]:  # XXXv0 why is this creeping in?
+            region_after[r].remove(None)
+
     ordered_regions = []
     while len(region_after) > 0:
-        # the next region is the one with the most afters that's not explicitly ruled out
-        m = max([len(region_after[r]) for r in region_after])
-        maxes = []
-        [maxes.append(r) for r in region_after if len(region_after[r]) == m]
-        best = maxes[0]
-        if len(maxes) > 1:
-            for m in maxes:
-                failed = 0
-                for n in maxes:
-                    if m != n:
-                        if m in region_after[n]:
-                            failed = 1
-                if not failed:
-                    best = m
-        ordered_regions.append(best)
-        del region_after[best]
+        superset = set()
+        for r in region_after:
+            superset = superset.union(region_after[r])
+        # the next region is the one that's not in the superset
+        remaining = set(region_after.keys())
+        winner = superset.symmetric_difference(remaining)
+        for w in winner:
+            # multiple winners, pick first
+            winner = w
+            break
+        ordered_regions.append(winner)
+        del region_after[winner]
 
     # stick anything left over on the end. (Regions that we saw a link to but never entered.)
     for r in regions_set:
