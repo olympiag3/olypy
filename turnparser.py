@@ -12,7 +12,7 @@ import data as db
 import details
 
 # holds the day-by-day action for each char
-global_days = defaultdict(set)
+global_days = {}
 
 # holds day-by-day action for garrisons
 global_garrison_log = {}
@@ -1453,6 +1453,14 @@ def parse_faction(text, factint, data):
             data[factint]['ah'] = attitudes['hostile']
 
 
+def last_storm_bind(text, ident):
+    m = re.findall(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', text, re.M)
+    if m:
+        if len(m) > 1:
+            print('hey greg, multiple binds for {}: {}'.format(ident, m))
+        return m[-1]
+
+
 def analyze_storm_list(text, fact, data):
     '''
     87999  wind   8999  ar99     32
@@ -1487,18 +1495,22 @@ def analyze_storm_list(text, fact, data):
         # add myself to the map
         db.set_where(data, ident, location)
 
-        # XXXv0 bound storms to ships -- examine days
-        # Want to find the most recent ': Bound Name [id] to Name [id].'
-        # some storms might have been bound more than once :/
-        # likely that the current owner did the binding
-        if ident in global_days[owner]:
-            m = re.search(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', global_days[owner], re.M)
-            if m:
-                ship = m.group(1)
-                data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
-                # Unfortunately, the ship has not been created yet!
-                global global_bound_storms
-                global_bound_storms[ident] = ship
+        ship = None
+        if owner in global_days and ident in global_days[owner]:
+            ship = last_storm_bind(global_days[owner], ident)
+
+        if ship is None:
+            # this is inaccurate if multiple mages have bound this storm... I'll pick randomly
+            for owner, days in global_days.items():
+                ship = last_storm_bind(days, ident)
+                if ship is not None:
+                    break
+
+        if ship is not None:
+            # ship may not have been created, so delay this until the end
+            global global_bound_storms
+            global_bound_storms[ident] = ship
+            data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
 
 
 def analyze_garrison_list(text, turn_num, data, everything=False):
