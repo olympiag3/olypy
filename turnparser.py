@@ -113,7 +113,7 @@ def parse_wait_args(order):
                 ar.append(to_int(args.pop(0)))
         if 'special' in wait_args[arg]:
             # the next thing either doesn't exist, or is a unit, or is a wait name
-            if len(args) > 0:
+            if args:
                 if args[0] not in wait_args:
                     ar.append(to_oid(args.pop(0)))
     return ar
@@ -673,22 +673,21 @@ The main problem here is the kind of the enclosure, which can be renamed.
     civ = 0
     safe_haven = 0
     hidden = 0
-    if len(rest) > 0:
-        for r in rest:
-            if r == 'wilderness':
-                civ = 0
-            elif r.startswith('civ-'):
-                m = re.match(r'civ-(\d)', r)
-                if m:
-                    civ = int(m.group(1))
-                else:
-                    raise ValueError('error parsing a civ level out of '+r)
-            elif r == 'safe haven':
-                safe_haven = 1
-            elif r == 'hidden':
-                hidden = 1
+    for r in rest:
+        if r == 'wilderness':
+            civ = 0
+        elif r.startswith('civ-'):
+            m = re.match(r'civ-(\d)', r)
+            if m:
+                civ = int(m.group(1))
             else:
-                raise ValueError('unknown rest in parse_location_top: {}, text is {}'.format(r, text))
+                raise ValueError('error parsing a civ level out of '+r)
+        elif r == 'safe haven':
+            safe_haven = 1
+        elif r == 'hidden':
+            hidden = 1
+        else:
+            raise ValueError('unknown rest in parse_location_top: {}, text is {}'.format(r, text))
 
     return [loc_name, loc_int, kind, enclosing_int, region, civ, safe_haven, hidden]  # make me a thingie
 
@@ -848,11 +847,11 @@ def parse_a_character(parts):
         CH['df'] = ['60']
     attr['CH'] = CH
 
-    if len(il) > 0:
+    if il:
         attr['il'] = il
-    if len(CM) > 0:
+    if CM:
         attr['CM'] = CM
-    if len(MI) > 0:
+    if MI:
         attr['MI'] = MI
     return 'char', attr
 
@@ -881,7 +880,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
     name, oid = m.group(1, 2)
     oidint = to_int(oid)
 
-    if len(parts) > 0:
+    if parts:
         second = parts[0].strip()
         if second in details.structure_type or second.endswith('-in-progress'):
             kind, thing = parse_a_structure(parts)
@@ -1799,7 +1798,7 @@ def resolve_garrisons(data):
                         il[item] = max(0, il[item])
                     #else:
                         #raise ValueError('unknown garrison log line of '+line)
-        if len(il) > 0:
+        if il:
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this only hits garrisons that still exist
                 # drop anything that does not exist (e.g. scrolls/potions)
@@ -1832,7 +1831,7 @@ def resolve_nowhere(region_ident, data):
         if not un:
             box.subbox_overwrite(data, i, 'IT', 'un', [ident])
             il.extend([i, '1'])
-    if len(il) > 0:
+    if il:
         box.box_overwrite(data, ident, 'il', il)
 
     box.box_overwrite(data, '401', 'na', 'Imperial Throne')
@@ -2103,7 +2102,7 @@ def parse_character(name, ident, factint, text, data):
         skills.extend(skills_partial)
 
     skills_list = [skills[x] for x in range(0, len(skills), 5)]
-    if len(skills_list):
+    if skills_list:
         box.subbox_append(data, factint, 'PL', 'kn', skills_list, dedup=True)
 
     m = re.search(r'Inventory:\n(.*?)\n\n', text, re.M | re.S)
@@ -2120,9 +2119,9 @@ def parse_character(name, ident, factint, text, data):
     char = {}
     char['firstline'] = [ident + ' char 0']
     char['na'] = [name]
-    if len(inventory) > 0:
+    if inventory:
         char['il'] = inventory
-    if len(trades) > 0:
+    if trades:
         char['tl'] = trades
     if attitudes.get('neutral'):
         char['an'] = attitudes['neutral']
@@ -2134,7 +2133,7 @@ def parse_character(name, ident, factint, text, data):
     char['LI'] = {}
 
     hl = data.get(ident, {}).get('LI', {}).get('hl', [])
-    if len(hl):
+    if hl:
         char['LI']['hl'] = hl
     char['LI']['wh'] = [location]
 
@@ -2145,7 +2144,7 @@ def parse_character(name, ident, factint, text, data):
         ch['si'] = ['1']
     ch['lk'] = [lkind]
     ch['lr'] = [lrate]
-    if len(skills) > 0:
+    if skills:
         ch['sl'] = skills
     if behind != '0':
         ch['bh'] = [behind]
@@ -2174,13 +2173,13 @@ def parse_character(name, ident, factint, text, data):
         cm['pc'] = [project_cast]
     if vision_protection:
         cm['vp'] = [str(vision_protection)]
-    if len(skills_list):
+    if skills_list:
         try:
             if skills_list.index('820'):
                 cm['kw'] = ['1']
         except ValueError:
             pass
-    if len(cm):
+    if cm:
         char['CM'] = cm
 
     if health == '-1':  # npc
@@ -2365,7 +2364,7 @@ def parse_location(s, factint, everything, data):
     new_set = set(new)
 
     disappeared = old_set.difference(new_set)
-    if len(disappeared) > 0:
+    if disappeared:
         print(' Disappeared:', disappeared)
         # XXXv2 fog
         for d in disappeared:
@@ -2393,7 +2392,7 @@ def parse_location(s, factint, everything, data):
 
     continued = old_set.intersection(new_set)
     real_c = continued.copy()
-    if len(continued) > 0:
+    if continued:
         print(' Continued:', continued)
         for c in continued:
             if c in data and not compatible_boxes(data[c], things[c]):
@@ -2411,7 +2410,7 @@ def parse_location(s, factint, everything, data):
                 db.unset_where(data, c)
 
     appeared = new_set.difference(old_set)
-    if len(appeared) > 0:
+    if appeared:
         print(' Appeared:', appeared)
         for a in appeared:
             if a in data:
@@ -2425,7 +2424,7 @@ def parse_location(s, factint, everything, data):
     all_fog = old.union(new)
     all_hl = set(data_hl).union(set(thing_hl))
     do_not_know = all_hl.difference(all_fog)
-    if len(do_not_know) > 0:
+    if do_not_know:
         # all of these boxes should be at the location level. verify that.
         print(' Do not know:', do_not_know)
         for dnk in do_not_know:
@@ -2536,7 +2535,7 @@ def parse_turn(turn, data, everything=True):
                 s, visions = remove_visions(s)
 
                 s, days = remove_days(s)
-                if len(days):
+                if days:
                     if ident not in global_days:
                         global_days[ident] = ''
                     global_days[ident] += days

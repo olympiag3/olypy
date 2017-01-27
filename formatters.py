@@ -19,7 +19,7 @@ def fixed(count, char, key, array):
         chunk = array[:count]
         print(' '.join([str(i) for i in chunk]), end='')
         array = array[count:]
-        if len(array):
+        if array:
             print(' \\\n\t', end='')
         else:
             break
@@ -31,13 +31,13 @@ def print_list(array, first, rest):
         chunk = array[:first]
         array = array[first:]
         print(' '.join([str(i) for i in chunk]), end=' ')  # yes, we want the trailing space
-        if len(array):
+        if array:
             print('\\\n\t', end='')
     while len(array) > rest:
         chunk = array[:rest]
         array = array[rest:]
         print(' '.join([str(i) for i in chunk]), end=' ')  # yes, we want the trailing space
-        if len(array):
+        if array:
             print('\\\n\t', end='')
     print(' '.join([str(i) for i in array]), end=' \n')  # yes, we want the trailing space
 
