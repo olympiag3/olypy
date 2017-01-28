@@ -21,8 +21,8 @@ clean_coverage:
 	rm -f sim/.covereage.*
 
 test_coverage: clean_coverage
-	py.test --cov-report= --cov-append --cov=olypy
-	(cd tests; COVERAGE='coverage run -a --source ../scripts,olypy' ./test.sh)
+	PYTHONPATH=. py.test --cov-report= --cov-append --cov=olypy tests
+	(cd tests; PYTHONPATH=.. COVERAGE='coverage run -a --source ../scripts,olypy' ./test.sh)
 #	(cd sim; coverage run -a --source=..,. ./run-tests.py test-inputs/nothing.yml)
 	touch sim/.coverage
 # TODO: qa
