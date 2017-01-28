@@ -2,8 +2,8 @@
 Code that manipulates the in-memory Olympia database
 '''
 
-from oid import to_int, allocate_oid
-import box
+from olypy.oid import to_int, allocate_oid
+import olypy.box as box
 
 
 def is_char(data, who):
@@ -308,20 +308,3 @@ def add_potion(data, kind, im, unit, oid=None):
     data[oid]['IM'] = im
 
     box.box_append(data, unit, 'il', [oid, 1])
-
-def inventory_to_dict(il):
-    il_copy = il.copy()
-    ret = {}
-    while len(il_copy) > 0:
-        k = il_copy.pop(0)
-        ret[k] = il_copy.pop(0)
-    return ret
-
-def dict_to_inventory(d):
-    ret = []
-    keys = sorted([int(k) for k in d])
-    for k in keys:
-        k = str(k)
-        if int(d[k]) > 0:
-            ret.extend([k, d[k]])
-    return ret

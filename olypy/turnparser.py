@@ -6,10 +6,10 @@ import re
 import sys
 from collections import defaultdict
 
-from oid import to_int, to_oid, to_int_safely
-import box
-import data as db
-import details
+from olypy.oid import to_int, to_oid, to_int_safely
+import olypy.box as box
+import olypy.data as db
+import olypy.details as details
 
 # holds the day-by-day action for each char
 global_days = {}
@@ -1808,7 +1808,7 @@ def resolve_garrisons(data):
                         drop.append(i)
                 for i in drop:
                     del il[i]
-                data[g]['il'] = db.dict_to_inventory(il)
+                data[g]['il'] = box.dict_to_inventory(il)
 
 
 def resolve_nowhere(region_ident, data):
@@ -1969,7 +1969,7 @@ def sweep_independent_units(data):
             lo = v.get('CH', {}).get('lo', [None])[0]
             if lo == '100':
                 print('Setting behind of independent noble {}'.format(k), file=sys.stderr)
-                il = db.inventory_to_dict(v.get('il', []))
+                il = box.inventory_to_dict(v.get('il', []))
 
                 front = set(('12', '14', '15', '16', '17', '18', '20',
                              '23', '24', '25', '26', '31', '32', '33',
@@ -2241,10 +2241,10 @@ def parse_location(s, factint, everything, data):
     box.box_overwrite(data, idint, 'na', [name])
     if kind in details.geo_inventory:
         il = details.geo_inventory[kind]
-        il_dict = db.inventory_to_dict(il)
+        il_dict = box.inventory_to_dict(il)
         if kind in details.province_kinds and '96' in il_dict:
             il_dict['96'] = str(int(il_dict['96']) * (civ+1))
-            il = db.dict_to_inventory(il_dict)
+            il = box.dict_to_inventory(il_dict)
         data[idint]['il'] = il
 
     controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')

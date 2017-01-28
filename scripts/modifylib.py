@@ -4,10 +4,10 @@ Modify an existing lib directory to have a lot of additional stuff
 
 import argparse
 
-from oid import to_int
-from oio import read_lib, write_lib
-from data import set_where, add_structure, add_scroll, add_potion
-import dbck
+from olypy.oid import to_int
+from olypy.oio import read_lib, write_lib
+from olypy.data import set_where, add_structure, add_scroll, add_potion
+import olypy.dbck as dbck
 
 parser = argparse.ArgumentParser(description='read an Olympia lib')
 

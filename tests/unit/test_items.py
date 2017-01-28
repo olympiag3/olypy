@@ -1,4 +1,4 @@
-from items import item, item_plural
+from olypy.items import item, item_plural
 
 
 def test_items():

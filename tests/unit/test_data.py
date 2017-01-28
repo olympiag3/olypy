@@ -1,10 +1,9 @@
 import pytest
 
-from oid import to_int
-from data import is_char, can_move, loop_here
-from data import set_where, unset_where
-from data import add_structure, add_scroll, add_potion
-from data import inventory_to_dict, dict_to_inventory
+from olypy.oid import to_int
+from olypy.data import is_char, can_move, loop_here
+from olypy.data import set_where, unset_where
+from olypy.data import add_structure, add_scroll, add_potion
 
 
 def check_where(data, unit, loc):
@@ -138,10 +137,3 @@ def test_adds():
                        'na': ['Potion of heal']},
               '1009': {'il': ['1010', '1']}}
     assert data == result
-
-
-def test_inventory_funcs():
-    il = ['1', '1000', '10', '10', '11', '1', '96', '100']
-    d = {'1': '1000', '10': '10', '11': '1', '96': '100'}
-    assert inventory_to_dict(il) == d
-    assert dict_to_inventory(d) == il

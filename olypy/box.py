@@ -3,8 +3,6 @@ Code that manipulates the in-memory version of the Olympia
 database, which is composed of boxes.
 '''
 
-import data as db
-
 
 # uniq a list, order preserving
 # see: https://www.peterbe.com/plog/uniqifiers-benchmark
@@ -174,8 +172,27 @@ def canonicalize(data):
         if ' char ' in fl:
             # in g2, wandering npcs have their guys first il, all else sorted; we sort all
             if 'il' in v:
-                il = db.inventory_to_dict(v['il'])
-                v['il'] = db.dict_to_inventory(il)
+                il = inventory_to_dict(v['il'])
+                v['il'] = dict_to_inventory(il)
             box_sort(data, k, 'an')
             box_sort(data, k, 'ad')
             box_sort(data, k, 'ah')
+
+
+def inventory_to_dict(il):
+    il_copy = il.copy()
+    ret = {}
+    while len(il_copy) > 0:
+        k = il_copy.pop(0)
+        ret[k] = il_copy.pop(0)
+    return ret
+
+
+def dict_to_inventory(d):
+    ret = []
+    keys = sorted([int(k) for k in d])
+    for k in keys:
+        k = str(k)
+        if int(d[k]) > 0:
+            ret.extend([k, d[k]])
+    return ret

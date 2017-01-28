@@ -1,5 +1,8 @@
 # Install with "python -m pip install -r requirements.txt".
 
+# used to configure game-qa-testing
+PyYAML==3.12
+
 # used to maintain this file
 pur==4.0.0
 
@@ -10,4 +13,3 @@ pytest==3.0.4
 pytest-cov==2.4.0
 pytest-sugar==0.7.1
 coveralls==1.1
-PyYAML==3.12

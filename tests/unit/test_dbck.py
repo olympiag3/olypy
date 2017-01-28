@@ -1,6 +1,4 @@
-import pytest
-
-import dbck
+import olypy.dbck as dbck
 
 
 def test_check_where_here(capsys):

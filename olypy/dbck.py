@@ -3,10 +3,9 @@ Database checker, similar to the one in the C code (check.c)
 '''
 import sys
 
-from oid import to_oid
-import box
-import data as db
-import details
+from olypy.oid import to_oid
+import olypy.box as box
+import olypy.details as details
 
 
 def check_firstline(data):

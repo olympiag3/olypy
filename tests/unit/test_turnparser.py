@@ -1,8 +1,8 @@
 import pytest
 from collections import defaultdict
 
-from oid import to_int
-import turnparser
+from olypy.oid import to_int
+import olypy.turnparser as turnparser
 
 
 def test_parse_an_id():

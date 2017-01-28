@@ -11,12 +11,12 @@ echo
 
 for f in data/g2/*
 do
-   [ -f $f ] && echo $f && $COVERAGE ../roundtrip.py --test $f
+   [ -f $f ] && echo $f && $COVERAGE ../scripts/roundtrip.py --test $f
 done
 
 for f in data/g2/fact/*
 do
-   [ -f $f ] && echo $f && $COVERAGE ../roundtrip.py --test --player $f
+   [ -f $f ] && echo $f && $COVERAGE ../scripts/roundtrip.py --test --player $f
 done
 
 echo
@@ -26,9 +26,9 @@ echo
 rm -rf data/test-temporary
 mkdir data/test-temporary
 mkdir data/test-temporary/fact
-$COVERAGE ../copylib.py --problems 79 data/g2 data/test-temporary
+$COVERAGE ../scripts/copylib.py --problems 79 data/g2 data/test-temporary
 diff -r -q data/g2 data/test-temporary
-#rm -rf data/test-temporary
+rm -rf data/test-temporary
 
 echo
 

@@ -28,9 +28,9 @@ import sys
 import os
 import re
 
-import turnparser
-import oio
-import dbck
+import olypy.turnparser as turnparser
+import olypy.oio as oio
+import olypy.dbck as dbck
 
 filelist = sys.argv[1:]
 turn_files = {}

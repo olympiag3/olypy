@@ -1,8 +1,7 @@
-import sys
 import argparse
 
-from oio import read_lib, write_lib
-import dbck
+from olypy.oio import read_lib, write_lib
+import olypy.dbck as dbck
 
 parser = argparse.ArgumentParser(description='copy an Olympia lib for QA purposes')
 parser.add_argument('inputlib', help='input Olympia lib directory')

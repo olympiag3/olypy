@@ -1,7 +1,8 @@
-from box import uniq_f11
-from box import box_append, box_remove, box_overwrite
-from box import subbox_append, subbox_remove, subbox_overwrite
-from box import box_sort, subbox_sort
+from olypy.box import uniq_f11
+from olypy.box import box_append, box_remove, box_overwrite
+from olypy.box import subbox_append, subbox_remove, subbox_overwrite
+from olypy.box import box_sort, subbox_sort
+from olypy.box import inventory_to_dict, dict_to_inventory
 
 
 def test_uniq_f11():
@@ -132,3 +133,10 @@ def test_sorts():
 
     subbox_sort(data, '1001', 'PL', 'un')
     assert data['1001']['PL']['un'] == ['1001', '1002', '1003', '10001']
+
+
+def test_inventory_funcs():
+    il = ['1', '1000', '10', '10', '11', '1', '96', '100']
+    d = {'1': '1000', '10': '10', '11': '1', '96': '100'}
+    assert inventory_to_dict(il) == d
+    assert dict_to_inventory(d) == il

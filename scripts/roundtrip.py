@@ -7,8 +7,8 @@ import argparse
 from contextlib import redirect_stdout
 from io import StringIO
 
-from formatters import read_oly_file
-from oio import write_oly_file, write_player
+from olypy.formatters import read_oly_file
+from olypy.oio import write_oly_file, write_player
 
 parser = argparse.ArgumentParser(description='roundtrip Olympia files')
 parser.add_argument('--test', action='store_true')

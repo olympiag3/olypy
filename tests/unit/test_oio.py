@@ -1,4 +1,4 @@
-from oio import write_oly_file, read_oly_file
+from olypy.oio import write_oly_file, read_oly_file
 
 '''
 This test isn't super-comprehensive; the roundtrip

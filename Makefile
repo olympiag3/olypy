@@ -1,3 +1,6 @@
+init:
+	pip install -r requirements.txt
+
 pytest:
 	py.test
 
@@ -18,10 +21,11 @@ clean_coverage:
 	rm -f sim/.covereage.*
 
 test_coverage: clean_coverage
-	py.test --cov-report= --cov-append --cov oid --cov formatters --cov oio --cov data --cov box --cov items --cov turnparser --cov dbck --cov details
-	(cd tests; COVERAGE='coverage run -a --source=..' ./test.sh)
+	py.test --cov-report= --cov-append --cov=olypy
+	(cd tests; COVERAGE='coverage run -a --source ../scripts,olypy' ./test.sh)
 #	(cd sim; coverage run -a --source=..,. ./run-tests.py test-inputs/nothing.yml)
 	touch sim/.coverage
+# TODO: qa
 	coverage combine .coverage tests/.coverage sim/.coverage
 	coverage report
 

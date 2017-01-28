@@ -1,5 +1,5 @@
 import pytest
-from oid import to_oid, to_int, allocate_oid, to_int_safely
+from olypy.oid import to_oid, to_int, allocate_oid, to_int_safely
 
 oid_to_int = {
     '1': 1,

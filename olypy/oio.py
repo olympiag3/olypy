@@ -6,8 +6,8 @@ import os
 import sys
 from contextlib import redirect_stdout
 
-from oid import to_oid
-from formatters import print_one_thing, read_oly_file
+from olypy.oid import to_oid
+from olypy.formatters import print_one_thing, read_oly_file
 
 
 def fixup_ms(data):
