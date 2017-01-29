@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from oid import to_oid, to_int
 import sys
+
+from olypy.oid import to_oid, to_int
 
 for oid in sys.argv[1:]:
     if oid.isdigit():
