@@ -38,6 +38,14 @@ packages = [
 requires = []
 test_requirements = ['pytest>=3.0.0', 'coverage', 'pytest-cov']
 
+scripts = ['scripts/box-to-json',
+           'scripts/build-player-lib',
+           'scripts/copylib',
+           'scripts/modify-qa-lib',
+           'scripts/monkeypatch',
+           'scripts/oid',
+           'scripts/roundtriplib']
+
 with open('olypy/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
@@ -60,6 +68,7 @@ setup(
     url='https://github.com/olympiag3/olypy',
     packages=packages,
     install_requires=requires,
+    scripts=scripts,
     license='Apache 2.0',
     zip_safe=True,
     classifiers=(

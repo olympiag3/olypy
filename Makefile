@@ -31,5 +31,9 @@ test_coverage: clean_coverage
 
 defaultlib:
 	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
+# TODO lore?
 	(cd qa-lib; python ../modifylib.py mapgen-lib)
 	(cd qa-lib/modified-lib; tar cjf ../../sim/defaultlib.tar.gz .)
+
+dist:
+	python ./setup.py bdist_wheel
