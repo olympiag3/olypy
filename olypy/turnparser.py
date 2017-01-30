@@ -4,8 +4,10 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 
 import re
 import sys
+import os
 from collections import defaultdict
 
+import olypy
 from olypy.oid import to_int, to_oid, to_int_safely
 import olypy.box as box
 import olypy.data as db
@@ -2600,6 +2602,29 @@ def finish(data, last_turn):
     box.canonicalize(data)
 
 
+def system_raise(cmd):
+    ret = os.system(cmd)
+    if ret != 0:
+        raise ValueError('Error executing command '+cmd)
+
+
+def final_fixups(libdir):
+    '''
+    fix up all the final stuff that's needed for a ready-to-use lib
+    '''
+    templatelib = olypy.get_template_lib()
+
+    system_raise('cp -r {}/lore/ {}/lore/'.format(templatelib, libdir))
+    system_raise('cp {}/skill {}/skill'.format(templatelib, libdir))
+    os.rename(os.path.join(libdir, 'item'), os.path.join(libdir, 'item.suffix'))
+    system_raise('cat {}/item.prefix {}/item.suffix > {}/item'.format(templatelib, libdir, libdir))
+    os.unlink(os.path.join(libdir, 'item.suffix'))
+    os.rename(os.path.join(libdir, 'misc'), os.path.join(libdir, 'misc.suffix'))
+    system_raise('cat {}/misc.prefix {}/misc.suffix > {}/misc'.format(templatelib, libdir, libdir))
+    os.unlink(os.path.join(libdir, 'misc.suffix'))
+    system_raise('cp {}/fact/2?? {}/fact'.format(templatelib, libdir))
+
+
 def parse_turn_from_file(f, data):
     turn = ''.join(line.expandtabs() for line in f)
     turn.replace('\r\n', '\n')
@@ -2619,3 +2644,5 @@ if __name__ == '__main__':
 
 # XXXv0 unplace / promote_children harmful when it's a ship being unplaced
 # (only if we are parsing ships and characters beyond the last turn)
+
+# priestly state XXXv2: prep ritual, visions previously done

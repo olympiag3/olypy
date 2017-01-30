@@ -1,27 +1,7 @@
+#!/usr/bin/env python
+
 '''
 Given a set of turn reports, build a game database.
-
-Strategy:
-
-* Group turns by turns
-
-* Moving from past to present, generate location data up to N-1
-* Generate full data from last turn only
-* In-progress orders
-
-* Harder 1
-* Think about hidden locations and routes?
-* Parse characters as I go, move and mutate them
-
-* Harder 2
-* location data from visions/scrys - pre-day-31 stuff
-* tradegoods in visions/scrys - confusing compared to day 31
-
-* Harder 3 - global knowledge
-** garrison hidden inventory
-** scroll / potion types
-** dead bodies / dead body location
-** priestly state, visions done and prep
 '''
 
 import sys
@@ -31,6 +11,17 @@ import re
 import olypy.turnparser as turnparser
 import olypy.oio as oio
 import olypy.dbck as dbck
+
+
+def looks_like_a_turn(text):
+    if 'The next NP will be received at the end of turn' not in text:
+        return False
+    if 'The next five nobles formed will be:' not in text:
+        return False
+    if 'Player-contributed press' in text and 'Rumors' in text and 'Questions, comments, to play' in text:
+        return False
+    return True
+
 
 filelist = sys.argv[1:]
 turn_files = {}
@@ -42,7 +33,7 @@ os.makedirs('lib/orders', exist_ok=False)
 for f in filelist:
     m = re.search('(\d{2,})', f)
     if not m:
-        raise ValueError('Cannot parse turn number out of file '+f)
+        continue
     t = m.groups(1)[0]
     tf = turn_files.get(t, [])
     tf.append(f)
@@ -68,7 +59,10 @@ for t in sorted_turns:
         with open(os.path.expanduser(f), 'r') as fd:
             for line in fd:
                 contents += line.expandtabs()
-        turnparser.parse_turn(contents, data, everything=everything)
+        if looks_like_a_turn(contents):
+            turnparser.parse_turn(contents, data, everything=everything)
+        else:
+            print('skipped {} because it did not look like a turn'.format(f))
 
 turnparser.finish(data, last_turn)
 
@@ -76,6 +70,7 @@ problems = dbck.check_db(data)
 print('Database check found {} problems'.format(problems))
 
 oio.write_lib(data, 'lib')
+turnparser.final_fixups('lib')
 
 # subprocess module introduced in 3.5, so don't use it yet
 tar = 'tar cjf lib.{}.tar.bz2 lib'.format(last_turn)
