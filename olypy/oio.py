@@ -97,6 +97,7 @@ def write_system_file(data):
     hp = None
     nr = None
     nl = None
+    cr = None
     for k, v in data.items():
         fl = v['firstline'][0]
         try:
@@ -118,6 +119,8 @@ def write_system_file(data):
         if nr is None and ' loc region' in fl and na == 'Nowhere':
             nr = k
             nl = v['LI']['hl'][0]
+        if cr is None and ' loc region' in fl and na == 'Cloudlands':
+            cr = k
 
     if hp is None:
         # not surprising for a player sim
@@ -146,9 +149,9 @@ hl=205
 nr={}
 nl={}
 np=206
-cr=0
+cr={}
 cp=210
-'''.format(lt, days_per_month, days_since_epoch, fr, tr, ur, hr, hp, nr, nl)
+'''.format(lt, days_per_month, days_since_epoch, fr, tr, ur, hr, hp, nr, nl, cr)
     if 'None' in system:
         raise ValueError('failed to find some stuff for system:\n' + system)
     print(system)
