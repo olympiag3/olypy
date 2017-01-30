@@ -89,32 +89,46 @@ def write_players(data, dir, verbose=False):
 
 
 def write_system_file(data):
-    # last turn, faery region, Nowhere region, nowhere province
-    # in the g2 dataset, there are players who quit early, so last turn is a max
-    done = 0
-    lt = 1
     fr = None
+    lt = 1
+    tr = None
+    ur = None
+    hr = None
+    hp = None
     nr = None
     nl = None
     for k, v in data.items():
         fl = v['firstline'][0]
+        try:
+            na = v['na'][0]
+        except KeyError:
+            na = ''
         if ' player pl_regular' in fl:
             lt = max(lt, int(v['PL']['lt'][0]))
-        if fr is None and ' loc region' in fl and v['na'][0] == 'Faery':
+        if fr is None and ' loc region' in fl and na == 'Faery':
             fr = k
-            done += 1
-        if nr is None and ' loc region' in fl and v['na'][0] == 'Nowhere':
+        if tr is None and ' loc region' in fl and na == 'Undercity':
+            tr = k
+        if ur is None and ' loc region' in fl and na == 'Subworld':
+            ur = k
+        if hr is None and ' loc region' in fl and na == 'Hades':
+            hr = k
+        if hp is None and fl.endswith(' loc pit'):  # normal pits are 'pits'
+            hp = k
+        if nr is None and ' loc region' in fl and na == 'Nowhere':
             nr = k
             nl = v['LI']['hl'][0]
-            done += 2
 
-    if done != 3:
-        raise ValueError('problem finding magic numbers in write_system_file')
+    if hp is None:
+        # not surprising for a player sim
+        # if I wanted to do this right I have to also create City of the Dead in a provinces.
+        # fake it.
+        hp = hr
 
     days_per_month = 30
     days_since_epoch = lt * days_per_month
 
-    print('''sysclock: {} {} {}
+    system = '''sysclock: {} {} {}
 indep_player=100
 gm_player=200
 skill_player=202
@@ -123,18 +137,21 @@ reply_host=foo@example.com
 post=1
 init=1
 fr={}
-tr=0
-ur=0
-fp=0
-hr=0
-hp=0
-hl=0
+tr={}
+ur={}
+fp=204
+hr={}
+hp={}
+hl=205
 nr={}
 nl={}
 np=206
 cr=0
 cp=210
-'''.format(lt, days_per_month, days_since_epoch, fr, nr, nl))
+'''.format(lt, days_per_month, days_since_epoch, fr, tr, ur, hr, hp, nr, nl)
+    if 'None' in system:
+        raise ValueError('failed to find some stuff for system:\n' + system)
+    print(system)
 
 
 def read_lib(libdir):

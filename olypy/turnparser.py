@@ -21,7 +21,7 @@ global_garrison_log = {}
 
 # used to put regions in the correct order
 region_after = defaultdict(set)
-regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands', 'Nowhere'))
+regions_set = set(('Great Sea', 'Hades', 'Undercity', 'Cloudlands', 'Nowhere', 'Subworld', 'Faery'))
 
 # holds the list of hidden sublocs in a province or city. no roads.
 global_hidden_stuff = defaultdict(set)
@@ -758,6 +758,8 @@ def parse_a_sublocation_route(parts):
             attr['LO'] = {}
             attr['LO']['hi'] = ['1']
         elif p == '1 day':
+            continue
+        elif p == '28 days':  # hades pit
             continue
         elif p == 'safe haven':
             attr['SL'] = {}
