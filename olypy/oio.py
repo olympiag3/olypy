@@ -3,6 +3,7 @@ Read and write Olympia state files.
 '''
 
 import os
+import os.path
 import sys
 from contextlib import redirect_stdout
 
@@ -67,7 +68,7 @@ def read_players(dir, verbose=False):
     files = os.listdir(dir)
     for name in files:
         if name.isdigit():
-            data = read_oly_file(dir + '/' + name, verbose='player ' + name)
+            data = read_oly_file(os.path.join(dir, name), verbose='player ' + name)
             ret.update(data)
     return ret
 
@@ -78,7 +79,10 @@ def write_players(data, dir, verbose=False):
         if data.get(box) is None:
             continue
         if ' player ' in data[box]['firstline'][0]:
-            filename = dir + '/fact/' + box
+            fact = os.path.join(dir, 'fact')
+            if not os.path.isdir(fact):
+                os.mkdir(fact)
+            filename = os.path.join(dir, 'fact', box)
             with open(filename, 'w') as f:
                 with redirect_stdout(f):
                     write_player(data, box, verbose=verbose)
@@ -134,49 +138,57 @@ cp=210
 
 
 def read_lib(libdir):
-    data = read_oly_file(libdir + '/loc', verbose='loc')
-    data.update(read_oly_file(libdir + '/item', verbose='item'))
-    data.update(read_oly_file(libdir + '/skill', verbose='skill'))
-    data.update(read_oly_file(libdir + '/gate', verbose='gate'))
-    data.update(read_oly_file(libdir + '/road', verbose='road'))
-    data.update(read_oly_file(libdir + '/ship', verbose='ship'))
-    data.update(read_oly_file(libdir + '/unform', verbose='unform'))
-    data.update(read_oly_file(libdir + '/misc', verbose='misc'))
+    if not os.path.isdir(libdir):
+        raise ValueError('libdir {} is not a directory'.format(libdir))
+    data = read_oly_file(os.path.join(libdir, 'loc'), verbose='loc')
+    data.update(read_oly_file(os.path.join(libdir, 'item'), verbose='item'))
+    data.update(read_oly_file(os.path.join(libdir, 'skill'), verbose='skill'))
+    data.update(read_oly_file(os.path.join(libdir, 'gate'), verbose='gate'))
+    data.update(read_oly_file(os.path.join(libdir, 'road'), verbose='road'))
+    data.update(read_oly_file(os.path.join(libdir, 'ship'), verbose='ship'))
+    data.update(read_oly_file(os.path.join(libdir, 'unform'), verbose='unform'))
+    data.update(read_oly_file(os.path.join(libdir, 'misc'), verbose='misc'))
 
-    data.update(read_players(libdir + '/fact', verbose=True))
+    data.update(read_players(os.path.join(libdir, 'fact'), verbose=True))
 
     return data
 
 
 def write_lib(data, libdir):
-    with open(libdir + '/system', 'w') as f:
+    if os.path.exists(libdir):
+        if not os.path.isdir(libdir):
+            raise ValueError('libdir {} is not a directory'.format(libdir))
+    else:
+        os.mkdir(libdir)
+
+    with open(os.path.join(libdir, 'system'), 'w') as f:
         with redirect_stdout(f):
             write_system_file(data)
 
-    with open(libdir + '/loc', 'w') as f:
+    with open(os.path.join(libdir, 'loc'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='loc', verbose='loc')
-    with open(libdir + '/item', 'w') as f:
+    with open(os.path.join(libdir, 'item'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='item', verbose='item')
-    with open(libdir + '/skill', 'w') as f:
+    with open(os.path.join(libdir, 'skill'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='skill', verbose='skill')
-    with open(libdir + '/gate', 'w') as f:
+    with open(os.path.join(libdir, 'gate'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='gate', verbose='gate')
-    with open(libdir + '/road', 'w') as f:
+    with open(os.path.join(libdir, 'road'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='road', verbose='road')
-    with open(libdir + '/ship', 'w') as f:
+    with open(os.path.join(libdir, 'ship'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='ship', verbose='ship')
-    with open(libdir + '/unform', 'w') as f:
+    with open(os.path.join(libdir, 'unform'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, kind='unform', verbose='unform')
 
     write_players(data, libdir, verbose=True)
 
-    with open(libdir + '/misc', 'w') as f:
+    with open(os.path.join(libdir, 'misc'), 'w') as f:
         with redirect_stdout(f):
             write_oly_file(data, verbose='misc')  # catchall
