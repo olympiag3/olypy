@@ -264,7 +264,7 @@ def test_parse_location_top():
     ret = ['Forest', to_int('ah08'), 'forest', 0, 'Acaren', 0, 0, 0]
     assert turnparser.parse_location_top(t) == ret
     assert turnparser.regions_set == set(('Cloudlands', 'Great Sea', 'Hades', 'Undercity',
-                                          'Acaren', 'Nowhere'))
+                                          'Acaren', 'Nowhere', 'Subworld', 'Faery'))
 
 
 def test_parse_a_structure():
