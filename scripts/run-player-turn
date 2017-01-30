@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+'''
+Run a simulation of player orders.
+
+Expects:
+- lib.NNN.tar.gz, the output of build-player-lib
+- spool.NNN, a directory containing orders
+- an executable for the Olympia C code plus helper scripts
+'''
+
+import os
+import sys
+
+from olypy.oid import to_oid
+
+turn = sys.argv[1]
+turn = int(turn) - 1
+
+os.system('rm -rf lib')
+os.system('tar xf lib.{}.tar.gz'.format(turn))
+os.system('cp -p spool.{}/m.* lib/spool'.format(turn))
+
+os.system('./olympia -e')
+os.system('./olympia -rMS')
+
+# iterate over all possible turn outputs in lib/save/NNN, and generate reports
+turn += 1
+names = os.listdir(os.path.join('lib', 'save', str(turn)))
+for n in names:
+    fullname = os.path.join('lib', 'save', str(turn), n)
+    print('considering processing', fullname)
+    if int(n) > 50000:
+        os.system('./g2rep {} > {}.{}'.format(fullname, to_oid(n), str(turn)))
