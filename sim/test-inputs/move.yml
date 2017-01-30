@@ -1,5 +1,5 @@
 description: test move-related things
-lib: defaultlib
+lib: qa-default-lib
 aa1 orders: |
  unit 1102  # A2 in Aachen [c18]
    # test movement delays

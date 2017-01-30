@@ -2,17 +2,13 @@
 Modify an existing lib directory to have a lot of additional stuff
 '''
 
-import argparse
+import os
 
+import olypy
 from olypy.oid import to_int
 from olypy.oio import read_lib, write_lib
 from olypy.data import set_where, add_structure, add_scroll, add_potion
 import olypy.dbck as dbck
-
-parser = argparse.ArgumentParser(description='read an Olympia lib')
-
-parser.add_argument('libdir', help='Olympia lib directory')
-args = parser.parse_args()
 
 
 def add_scrolls(data):  # this is all 20 usable letters
@@ -69,13 +65,19 @@ def add_potions(data):
                 im = {'uk': [5], 'pc': [to_int(pc)]}
                 add_potion(data, 'farcast '+pc, im, owner, oid=oid)
 
-data = read_lib(args.libdir)
+libdir = olypy.get_mapgen_lib()
+print('reading mapgen lib from', libdir)
+data = read_lib(libdir)
 
+# the mapgen lib has some added chars that have no LI wh.
 problems = dbck.check_db(data)
-if problems:
-    raise ValueError('Pre-modification database check failed with {} errors'.format(problems))
+expected = 9
+if problems != expected:
+    raise ValueError('Pre-modification database check failed with {} errors, expected {}'.format(problems, expected))
 else:
-    print('Pre-modification database check passed.')
+    print('Pre-modification database check passed with the expected {} errors'.format(expected))
+
+print('adding stuff to lib')
 
 add_scrolls(data)
 add_potions(data)
@@ -112,14 +114,31 @@ set_where(data, 4100, 4001)
 # make list of hidden stuff, make 1/2 of it randomly visible to each faction
 # (do this after you finish creating more stuff...)
 
-newlibdir = args.libdir.replace('mapgen', 'modified')
-if newlibdir == args.libdir:
-    raise ValueError
-
 problems = dbck.check_db(data)
 if problems:
     raise ValueError('Post-modification database check failed with {} errors'.format(problems))
+    pass
 else:
     print('Post-modification database check passed.')
 
-write_lib(data, newlibdir)
+outlib = 'lib'
+outlib_longname = 'qa-default-lib'     
+
+if os.path.exists(outlib):
+   raise ValueError('output directory {} already exists'.format(outlib))
+
+write_lib(data, outlib)
+
+ret = os.system('cp -r {}/lore/ {}/lore/'.format(libdir, outlib))
+if ret != 0:
+   raise ValueError('error copying lore')
+
+os.mkdir(os.path.join(outlib, 'html'))
+os.mkdir(os.path.join(outlib, 'orders'))
+os.mkdir(os.path.join(outlib, 'spool'))
+
+ret = os.system('tar czf {}.tar.gz {}'.format(outlib_longname, outlib))
+if ret != 0:
+   raise ValueError('error tarring lib')
+
+print('output lib written to ./{}.tar.gz'.format(outlib_longname))

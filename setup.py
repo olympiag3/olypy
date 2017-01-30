@@ -44,7 +44,8 @@ scripts = ['scripts/box-to-json',
            'scripts/modify-qa-lib',
            'scripts/monkeypatch',
            'scripts/oid',
-           'scripts/roundtriplib']
+           'scripts/roundtriplib',
+           'scripts/run-qa-tests']
 
 with open('olypy/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',

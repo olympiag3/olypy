@@ -1,5 +1,5 @@
 description: test ship-to-ship combat
-lib: defaultlib
+lib: qa-default-lib
 aa1 orders: |
  unit 1102  # A2 in Aachen [c18]
   claim 11 500

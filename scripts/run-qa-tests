@@ -4,20 +4,17 @@ import yaml
 import sys
 import re
 
-sys.path.append('../')
-
-from oid import to_int
+from olypy.oid import to_int
 
 def run_one_test(name, y):
-    if y.get('lib', '') != 'defaultlib':
-        raise ValueError('Sorry, defaultlib is the only supported lib atm.')
+    if y.get('lib', '') != 'qa-default-lib':
+        raise ValueError('Sorry, qa-default-lib is the only supported lib atm.')
+
     ret = os.system('rm -rf lib')
     if ret != 0:
         raise ValueError('some problem removing lib')
-    ret = os.system('mkdir -p lib')
-    if ret != 0:
-        raise ValueError('some problem creating lib')
-    ret = os.system('cd lib; tar xf ../{}.tar.gz'.format(y['lib']))
+
+    ret = os.system('tar xf {}.tar.gz'.format(y['lib']))
     if ret != 0:
         raise ValueError('some problem unpacking lib')
 
@@ -30,9 +27,13 @@ def run_one_test(name, y):
                 fd.write(y[k])
             pass_counts[f] = len(re.findall(r'^\s*assert\s+', y[k], flags=re.M))
 
+    if not os.path.isfile('./oly'):
+       raise ValueError('executable file ./oly does not exist')
+
     ret = os.system('./oly -e')
     if ret != 0:
         raise ValueError('some problem ingesting orders')
+
     ret = os.system('./oly -rMS')
     if ret != 0:
         raise ValueError('some problem running the actual sim')
