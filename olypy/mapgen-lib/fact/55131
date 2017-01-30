@@ -1,25 +1,25 @@
-53511 player pl_regular
-na Nicht Nibblers
+55131 player pl_regular
+na Troublesome Topiary
 il	1 1195
 CH
 PL
  fn Someone
- em n@example.com
+ em p@example.com
  pw xxxxxxxx
  np 20
  fs 32767
  ft 1
- lt 100
+ lt 1
  kn 69 
- un 3100
- uf 3200 3201 3202 3203 3204
+ un 4100
+ uf 4200 4201 4202 4203 4204
 CO
 
-3100 char 0
-na Nein
+4100 char 0
+na Tout
 LI
 CH
- lo 53511
+ lo 55131
  he 100
  lk 2
  lr 2

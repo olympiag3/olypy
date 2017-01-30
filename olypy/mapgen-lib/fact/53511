@@ -1,25 +1,25 @@
-51621 player pl_regular
-na Grue Goblins
+53511 player pl_regular
+na Nicht Nibblers
 il	1 1195
 CH
 PL
  fn Someone
- em g@example.com
+ em n@example.com
  pw xxxxxxxx
  np 20
  fs 32767
  ft 1
- lt 100
+ lt 1
  kn 69 
- un 2100
- uf 2200 2201 2202 2203 2204
+ un 3100
+ uf 3200 3201 3202 3203 3204
 CO
 
-2100 char 0
-na Grue
+3100 char 0
+na Nein
 LI
 CH
- lo 51621
+ lo 53511
  he 100
  lk 2
  lr 2

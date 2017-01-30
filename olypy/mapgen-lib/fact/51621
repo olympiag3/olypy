@@ -1,25 +1,25 @@
-55131 player pl_regular
-na Troublesome Topiary
+51621 player pl_regular
+na Grue Goblins
 il	1 1195
 CH
 PL
  fn Someone
- em p@example.com
+ em g@example.com
  pw xxxxxxxx
  np 20
  fs 32767
  ft 1
- lt 100
+ lt 1
  kn 69 
- un 4100
- uf 4200 4201 4202 4203 4204
+ un 2100
+ uf 2200 2201 2202 2203 2204
 CO
 
-4100 char 0
-na Tout
+2100 char 0
+na Grue
 LI
 CH
- lo 55131
+ lo 51621
  he 100
  lk 2
  lr 2
