@@ -73,7 +73,7 @@ oio.write_lib(data, 'lib')
 turnparser.final_fixups('lib')
 
 # subprocess module introduced in 3.5, so don't use it yet
-tar = 'tar cjf lib.{}.tar.bz2 lib'.format(last_turn)
+tar = 'tar czf lib.{}.tar.gz lib'.format(last_turn)
 ret = os.system(tar)
 
 if ret != 0:
