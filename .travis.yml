@@ -1,8 +1,8 @@
 language: python
 python:
-#  - "3.2" # contextlib/findall, at least
-#  - "3.3" # contextlib/findall, at least
-  - "3.4"
+#  - "3.2"
+#  - "3.3" # contextlib, re.findall
+#  - "3.4" # subprocess.run
   - "3.5"
   - "3.6"
   - "3.7-dev" # working for now

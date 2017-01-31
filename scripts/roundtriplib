@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Round-trip Olympia files, to test reading and writing
 '''

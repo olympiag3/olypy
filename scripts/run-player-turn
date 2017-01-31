@@ -11,18 +11,19 @@ Expects:
 
 import os
 import sys
+import subprocess
 
 from olypy.oid import to_oid
 
 turn = sys.argv[1]
 turn = int(turn) - 1
 
-os.system('rm -rf lib')
-os.system('tar xf lib.{}.tar.gz'.format(turn))
-os.system('cp -p spool.{}/m.* lib/spool'.format(turn))
+subprocess.run('rm -rf lib'.split(), check=True)
+subprocess.run('tar xf lib.{}.tar.gz'.format(turn).split(), check=True)
+subprocess.run('cp -p spool.{}/m.* lib/spool'.format(turn).split(), shell=True, check=True)
 
-os.system('./olympia -e')
-os.system('./olympia -rMS')
+subprocess.run('./olympia -e'.split(), check=True)
+subprocess.run('./olympia -rMS'.split(), check=True)
 
 # iterate over all possible turn outputs in lib/save/NNN, and generate reports
 turn += 1
@@ -31,4 +32,4 @@ for n in names:
     fullname = os.path.join('lib', 'save', str(turn), n)
     print('considering processing', fullname)
     if int(n) > 50000:
-        os.system('./g2rep {} > {}.{}'.format(fullname, to_oid(n), str(turn)))
+        subprocess.run('./g2rep {} > {}.{}'.format(fullname, to_oid(n), str(turn)).split(), check=True)

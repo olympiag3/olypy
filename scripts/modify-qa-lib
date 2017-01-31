@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+
 '''
 Modify an existing lib directory to have a lot of additional stuff
 '''
 
 import os
+import subprocess
 
 import olypy
 from olypy.oid import to_int
@@ -125,20 +128,16 @@ outlib = 'lib'
 outlib_longname = 'qa-default-lib'     
 
 if os.path.exists(outlib):
-   raise ValueError('output directory {} already exists'.format(outlib))
+    raise ValueError('output directory {} already exists'.format(outlib))
 
 write_lib(data, outlib)
 
-ret = os.system('cp -r {}/lore/ {}/lore/'.format(libdir, outlib))
-if ret != 0:
-   raise ValueError('error copying lore')
+subprocess.run('cp -r {}/lore/ {}/lore/'.format(libdir, outlib).split(), check=True)
 
 os.mkdir(os.path.join(outlib, 'html'))
 os.mkdir(os.path.join(outlib, 'orders'))
 os.mkdir(os.path.join(outlib, 'spool'))
 
-ret = os.system('tar czf {}.tar.gz {}'.format(outlib_longname, outlib))
-if ret != 0:
-   raise ValueError('error tarring lib')
+subprocess.run('tar czf {}.tar.gz {}'.format(outlib_longname, outlib).split(), check=True)
 
 print('output lib written to ./{}.tar.gz'.format(outlib_longname))

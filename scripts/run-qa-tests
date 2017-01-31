@@ -1,22 +1,20 @@
+#!/usr/bin/env python
 
 import os
 import yaml
 import sys
 import re
+import subprocess
 
 from olypy.oid import to_int
+
 
 def run_one_test(name, y):
     if y.get('lib', '') != 'qa-default-lib':
         raise ValueError('Sorry, qa-default-lib is the only supported lib atm.')
 
-    ret = os.system('rm -rf lib')
-    if ret != 0:
-        raise ValueError('some problem removing lib')
-
-    ret = os.system('tar xf {}.tar.gz'.format(y['lib']))
-    if ret != 0:
-        raise ValueError('some problem unpacking lib')
+    subprocess.run('rm -rf lib'.split(), check=True)
+    subprocess.run('tar xf {}.tar.gz'.format(y['lib']).split(), check=True)
 
     pass_counts = {}
     for k in y:
@@ -30,13 +28,8 @@ def run_one_test(name, y):
     if not os.path.isfile('./oly'):
        raise ValueError('executable file ./oly does not exist')
 
-    ret = os.system('./oly -e')
-    if ret != 0:
-        raise ValueError('some problem ingesting orders')
-
-    ret = os.system('./oly -rMS')
-    if ret != 0:
-        raise ValueError('some problem running the actual sim')
+    subprocess.run('./oly -e'.split(), check=True)
+    subprocess.run('./oly -rMS'.split(), check=True)
 
     expected_pass_count = 0
     actual_pass_count = 0

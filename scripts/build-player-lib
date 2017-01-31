@@ -4,37 +4,46 @@
 Given a set of turn reports, build a game database.
 '''
 
-import sys
 import os
 import re
+import subprocess
+import argparse
 
 import olypy.turnparser as turnparser
 import olypy.oio as oio
 import olypy.dbck as dbck
 
 
-def looks_like_a_turn(text):
-    if 'The next NP will be received at the end of turn' not in text:
+def looks_like_a_turn(text, t):
+    if 'turn {}\nReport for '.format(t.lstrip('0')) not in text:
         return False
-    if 'The next five nobles formed will be:' not in text:
+    if '\nThe next NP will be received at the end of turn' not in text:
+        return False
+    if '\nThe next five nobles formed will be:' not in text:
         return False
     if 'Player-contributed press' in text and 'Rumors' in text and 'Questions, comments, to play' in text:
         return False
     return True
 
+parser = argparse.ArgumentParser(description='build an olypia lib using old player turn results')
+parser.add_argument('--last-turn', type=int, default=0)
+parser.add_argument('turns', nargs='+', help='list of possible turn files')
 
-filelist = sys.argv[1:]
+args = parser.parse_args()
+
 turn_files = {}
 
 os.makedirs('lib/fact', exist_ok=False)
 os.makedirs('lib/spool', exist_ok=False)
 os.makedirs('lib/orders', exist_ok=False)
 
-for f in filelist:
+for f in args.turns:
     m = re.search('(\d{2,})', f)
     if not m:
         continue
     t = m.groups(1)[0]
+    if args.last_turn and int(t) > args.last_turn:
+        continue
     tf = turn_files.get(t, [])
     tf.append(f)
     turn_files[t] = tf
@@ -59,7 +68,7 @@ for t in sorted_turns:
         with open(os.path.expanduser(f), 'r') as fd:
             for line in fd:
                 contents += line.expandtabs()
-        if looks_like_a_turn(contents):
+        if looks_like_a_turn(contents, t):
             turnparser.parse_turn(contents, data, everything=everything)
         else:
             print('skipped {} because it did not look like a turn'.format(f))
@@ -73,8 +82,5 @@ oio.write_lib(data, 'lib')
 turnparser.final_fixups('lib')
 
 # subprocess module introduced in 3.5, so don't use it yet
-tar = 'tar czf lib.{}.tar.gz lib'.format(last_turn)
-ret = os.system(tar)
-
-if ret != 0:
-    raise ValueError('{} exited with error value {}'.format(tar, ret))
+tar = 'tar czf lib.{}.tar.gz lib'.format(last_turn).split()
+subprocess.run(tar, check=True)

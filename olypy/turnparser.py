@@ -5,7 +5,9 @@ Parse old Olympia text turns into an Olympia database, suitable for simming
 import re
 import sys
 import os
+import subprocess
 from collections import defaultdict
+import glob
 
 import olypy
 from olypy.oid import to_int, to_oid, to_int_safely
@@ -2604,27 +2606,24 @@ def finish(data, last_turn):
     box.canonicalize(data)
 
 
-def system_raise(cmd):
-    ret = os.system(cmd)
-    if ret != 0:
-        raise ValueError('Error executing command '+cmd)
-
-
 def final_fixups(libdir):
     '''
     fix up all the final stuff that's needed for a ready-to-use lib
     '''
     templatelib = olypy.get_template_lib()
 
-    system_raise('cp -r {}/lore/ {}/lore/'.format(templatelib, libdir))
-    system_raise('cp {}/skill {}/skill'.format(templatelib, libdir))
+    subprocess.run('cp -r {}/lore/ {}/lore/'.format(templatelib, libdir).split(), check=True)
+    subprocess.run('cp {}/skill {}/skill'.format(templatelib, libdir).split(), check=True)
     os.rename(os.path.join(libdir, 'item'), os.path.join(libdir, 'item.suffix'))
-    system_raise('cat {}/item.prefix {}/item.suffix > {}/item'.format(templatelib, libdir, libdir))
+    subprocess.run('cat {}/item.prefix {}/item.suffix > {}/item'.format(templatelib, libdir, libdir).split(),
+                   shell=True, check=True)
     os.unlink(os.path.join(libdir, 'item.suffix'))
     os.rename(os.path.join(libdir, 'misc'), os.path.join(libdir, 'misc.suffix'))
-    system_raise('cat {}/misc.prefix {}/misc.suffix > {}/misc'.format(templatelib, libdir, libdir))
+    subprocess.run('cat {}/misc.prefix {}/misc.suffix > {}/misc'.format(templatelib, libdir, libdir).split(),
+                   shell=True, check=True)
     os.unlink(os.path.join(libdir, 'misc.suffix'))
-    system_raise('cp {}/fact/2?? {}/fact'.format(templatelib, libdir))
+    factlist = glob.glob(templatelib + '/fact/2??')
+    subprocess.run(['cp', *factlist, libdir + '/fact'], check=True)
 
 
 def parse_turn_from_file(f, data):
