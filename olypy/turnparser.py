@@ -1136,7 +1136,6 @@ def resolve_storms(location, storms_present, storm_details, things, data):
         # make random ones first, remove their kinds from storms_present
         done = []
         for ident, v in storm_details.items():
-            print('HHYE GREGGGGGG v is', v)
             name, owner, strength = v
             if owner is not None:
                 continue
@@ -1647,7 +1646,6 @@ def resolve_fake_items(data):
                                 del data[item]['fake']
 
             if 'fake' in data[item]:  # did not see it being created
-                print('hey greg, failed to resolve fake item', item)
                 del data[item]['fake']
                 if data[item]['IT']['wt'][0] == '2':
                     # auraculum or Palantir. Guess palantir.
@@ -1671,7 +1669,6 @@ def resolve_npc_artifacts(data):
     # method will randomly assign them to units.
     for faction, v in data.items():
         if ' player pl_regular' in v['firstline'][0]:
-            print('')
             units = v['PL']['un']
             for u in units:
                 if data[u]['CH']['he'][0] == '-1':
@@ -1708,8 +1705,6 @@ def resolve_bound_storms(data):
     for ident, ship in global_bound_storms.items():
         if ship in data and ' ship ' in data[ship]['firstline'][0]:
             data[ship]['SL']['bs'] = [ident]
-        else:
-            print('hey greg failed to bind storm {} to ship {}'.format(ident, ship))
 
 
 def parse_several_items(s):
@@ -1974,7 +1969,6 @@ def sweep_independent_units(data):
         if ' char 0' in v['firstline'][0]:
             lo = v.get('CH', {}).get('lo', [None])[0]
             if lo == '100':
-                print('Setting behind of independent noble {}'.format(k), file=sys.stderr)
                 il = box.inventory_to_dict(v.get('il', []))
 
                 front = set(('12', '14', '15', '16', '17', '18', '20',
@@ -1995,7 +1989,6 @@ def sweep_independent_units(data):
                     behind = '9'
                 else:
                     behind = '0'
-                print(' ... to', behind, file=sys.stderr)
                 box.subbox_overwrite(data, k, 'CH', 'bh', [behind])
     return 0
 
@@ -2226,7 +2219,6 @@ def parse_location(s, factint, everything, data):
         return
 
     name, idint, kind, enclosing_int, region, civ, safe_haven, hidden = parse_location_top(top)
-    print('\nBegin parse of location {} {}\n'.format(idint, to_oid(idint)))
     if kind == 'port city':
         kind = 'city'
 
@@ -2325,7 +2317,6 @@ def parse_location(s, factint, everything, data):
 
     if 'The province is blanketed in fog' in s and kind in details.province_kinds:
         fog = True
-        print(' foggy')
     else:
         fog = False
 
@@ -2371,7 +2362,6 @@ def parse_location(s, factint, everything, data):
 
     disappeared = old_set.difference(new_set)
     if disappeared:
-        print(' Disappeared:', disappeared)
         # XXXv2 fog
         for d in disappeared:
             firstline = data[d]['firstline'][0]
@@ -2392,14 +2382,12 @@ def parse_location(s, factint, everything, data):
                 else:
                     print('Went to destory garrison {} but it had moved'.format(d))
             else:
-                print('Unwhering {}'.format(firstline))
                 db.unset_where(data, d)
                 # XXXv0 don't leave these dangling?!
 
     continued = old_set.intersection(new_set)
     real_c = continued.copy()
     if continued:
-        print(' Continued:', continued)
         for c in continued:
             if c in data and not compatible_boxes(data[c], things[c]):
                 fl_data = data[c]['firstline'][0]
@@ -2417,7 +2405,6 @@ def parse_location(s, factint, everything, data):
 
     appeared = new_set.difference(old_set)
     if appeared:
-        print(' Appeared:', appeared)
         for a in appeared:
             if a in data:
                 if not compatible_boxes(data[a], things[a]):
@@ -2432,7 +2419,6 @@ def parse_location(s, factint, everything, data):
     do_not_know = all_hl.difference(all_fog)
     if do_not_know:
         # all of these boxes should be at the location level. verify that.
-        print(' Do not know:', do_not_know)
         for dnk in do_not_know:
             wh = data[dnk]['LI']['wh'][0]
             if wh == idint:
@@ -2615,11 +2601,11 @@ def final_fixups(libdir):
     subprocess.run('cp -r {}/lore/ {}/lore/'.format(templatelib, libdir).split(), check=True)
     subprocess.run('cp {}/skill {}/skill'.format(templatelib, libdir).split(), check=True)
     os.rename(os.path.join(libdir, 'item'), os.path.join(libdir, 'item.suffix'))
-    subprocess.run('cat {}/item.prefix {}/item.suffix > {}/item'.format(templatelib, libdir, libdir).split(),
+    subprocess.run('cat {}/item.prefix {}/item.suffix > {}/item'.format(templatelib, libdir, libdir),
                    shell=True, check=True)
     os.unlink(os.path.join(libdir, 'item.suffix'))
     os.rename(os.path.join(libdir, 'misc'), os.path.join(libdir, 'misc.suffix'))
-    subprocess.run('cat {}/misc.prefix {}/misc.suffix > {}/misc'.format(templatelib, libdir, libdir).split(),
+    subprocess.run('cat {}/misc.prefix {}/misc.suffix > {}/misc'.format(templatelib, libdir, libdir),
                    shell=True, check=True)
     os.unlink(os.path.join(libdir, 'misc.suffix'))
     factlist = glob.glob(templatelib + '/fact/2??')
