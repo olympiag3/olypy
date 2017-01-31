@@ -27,6 +27,7 @@ def looks_like_a_turn(text, t):
 
 parser = argparse.ArgumentParser(description='build an olypia lib using old player turn results')
 parser.add_argument('--last-turn', type=int, default=0)
+parser.add_argument('--verbose', action='store_true')
 parser.add_argument('turns', nargs='+', help='list of possible turn files')
 
 args = parser.parse_args()
@@ -64,14 +65,16 @@ for t in sorted_turns:
 
     for f in turn_files[t]:
         contents = ''
-        print('\nprocessing', f, '\n')
         with open(os.path.expanduser(f), 'r') as fd:
             for line in fd:
                 contents += line.expandtabs()
         if looks_like_a_turn(contents, t):
+            if args.verbose:
+                print('\nprocessing', f, '\n')
             turnparser.parse_turn(contents, data, everything=everything)
         else:
-            print('skipped {} because it did not look like a turn'.format(f))
+            if args.verbose:
+                print('skipped {} because it did not look like a turn'.format(f))
 
 turnparser.finish(data, last_turn)
 
