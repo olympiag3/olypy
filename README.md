@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/olympiag3/olypy.svg?branch=master)](https://travis-ci.org/olympiag3/olypy) [![Coverage Status](https://coveralls.io/repos/github/olympiag3/olypy/badge.svg?branch=master)](https://coveralls.io/github/olympiag3/olypy?branch=master) [![Apache License 2.0](https://img.shields.io/github/license/olympiag3/olypy.svg)](LICENSE)
 
-olypy is a collection of code related to the game Olympia, which
-currently lives in SVN (yuck) at
+olypy is a collection of code related to the epic fantasy strategy
+game Olympia, which currently lives in SVN (yuck) at
 
 https://sourceforge.net/projects/olympiag3/
 
@@ -15,7 +15,7 @@ olypy supports:
 
 ## Installing
 
-Install python 3.4 or better, using pyenv or your favorite equivalent.
+Install python 3.5 or better, using pyenv or your favorite equivalent.
 
 Clone the repo.
 

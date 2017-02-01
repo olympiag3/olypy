@@ -1,4 +1,4 @@
-.PHONY: dist
+.PHONY: dist distclean
 
 init:
 	pip install -r requirements.txt
@@ -37,5 +37,12 @@ defaultlib:
 	(cd qa-lib; python ../modifylib.py mapgen-lib)
 	(cd qa-lib/modified-lib; tar cjf ../../sim/defaultlib.tar.gz .)
 
-dist:
+register:
+	python setup.py register -r https://pypi.python.org/pypi
+
+distclean:
+	rm dist/*
+
+dist: distclean
 	python ./setup.py bdist_wheel
+	twine upload dist/* -r pypi

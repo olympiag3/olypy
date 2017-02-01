@@ -54,8 +54,11 @@ with open('olypy/__init__.py', 'r') as fd:
 if not version:
     raise RuntimeError('Cannot find version information')
 
-with open('README.md', 'r') as f:
-    readme = f.read()
+try:
+    import pypandoc
+    description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    description = open('README.md').read()
 
 # XXX need to add data_files for all the crap that's text
 
@@ -63,7 +66,7 @@ setup(
     name='olypy',
     version=version,
     description='Python code to assist the game Olympia',
-    long_description=readme,
+    long_description=description,
     author='Greg Lindahl and others',
     author_email='lindahl@pbm.com',
     url='https://github.com/olympiag3/olypy',
