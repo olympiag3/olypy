@@ -9,11 +9,11 @@ import subprocess
 from collections import defaultdict
 import glob
 
-import olypy
-from olypy.oid import to_int, to_oid, to_int_safely
-import olypy.box as box
-import olypy.data as db
-import olypy.details as details
+from . import get_template_lib
+from .oid import to_int, to_oid, to_int_safely
+from . import box
+from . import data as db
+from . import details
 
 # holds the day-by-day action for each char
 global_days = {}
@@ -2596,7 +2596,7 @@ def final_fixups(libdir):
     '''
     fix up all the final stuff that's needed for a ready-to-use lib
     '''
-    templatelib = olypy.get_template_lib()
+    templatelib = get_template_lib()
 
     subprocess.run('cp -r {}/lore/ {}/lore/'.format(templatelib, libdir).split(), check=True)
     subprocess.run('cp {}/skill {}/skill'.format(templatelib, libdir).split(), check=True)

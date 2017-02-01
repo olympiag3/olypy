@@ -2,8 +2,8 @@
 Code that manipulates the in-memory Olympia database
 '''
 
-from olypy.oid import to_int, allocate_oid
-import olypy.box as box
+from .oid import to_int, allocate_oid
+from . import box
 
 
 def is_char(data, who):
