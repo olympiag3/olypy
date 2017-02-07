@@ -4,7 +4,7 @@ init:
 	pip install -r requirements.txt
 
 pytest:
-	py.test
+	PYTHONPATH=. py.test
 
 test: pytest
 	(cd tests; ./test.sh)
