@@ -2237,6 +2237,7 @@ def parse_location(s, factint, everything, data):
 
     # update things that change
     box.box_overwrite(data, idint, 'na', [name])
+    box.subbox_overwrite(data, idint, 'LO', 'lc', [civ])
     if kind in details.geo_inventory:
         il = details.geo_inventory[kind]
         il_dict = box.inventory_to_dict(il)
