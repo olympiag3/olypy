@@ -289,6 +289,7 @@ numbers = {'one': 1,
            'nine': 9,
            'ten': 10}
 
+# the following can be better done by parsing items from the game database
 item_to_inventory = {
     'gold': '1',
     'peasant': '10',
