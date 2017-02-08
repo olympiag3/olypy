@@ -1247,6 +1247,7 @@ def parse_market_report(text, data, include=None):
         # if it's my noble, I'll get it in Pending trades
         # if it's not my noble, don't bother
         qty = qty.replace(',', '')
+        price = price.replace(',', '')
         m = re.search(r'(.*?)\s\[(.*?)\]', item)
         if m:
             name, i = m.group(1, 2)
