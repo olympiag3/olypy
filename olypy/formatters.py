@@ -289,9 +289,7 @@ def read_oly_file(f, verbose=False):
                 am = data[box].get(subbox, {}).get('am', [])
                 am.append(pieces)  # list of lists
                 data[box][subbox]['am'] = am
-            elif what == 'ds':
-                data[box][subbox][what] = [untrimmed_line[4:].rstrip('\n')]
-            elif what == 'li':
+            elif what in set(('ds', 'li', 'pl')):
                 data[box][subbox][what] = [untrimmed_line[4:].rstrip('\n')]
             else:
                 data[box][subbox][what] = pieces
