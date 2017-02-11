@@ -2272,6 +2272,7 @@ def parse_location(s, factint, everything, data):
         # XXXv0 print('hey greg saw cities rumored:', m.group(1))
         # if I want to put these on the map, I'll have to guess the region
         # and then make sure that a later, correct region overwrites this one
+        # Diaratyh [r99], in The Dark Lands [br99] <== no province type
         pass
 
     things = {idint: {'LI': {}, 'firstline': ['fake']}}
