@@ -15,24 +15,27 @@ from olypy.formatters import read_oly_file
 from olypy.oio import write_oly_file
 
 
-def do_one(filename, order_list, data):
+def do_one(filename, order_list):
     with open(filename, 'r') as fd:
         data = read_oly_file(fd)
     os.rename(filename, filename + '.orig')
 
     for o in order_list:
-        parts = split(o)
+        parts = o.split()
         verb = parts.pop(0)
         if verb == 'delete':
             if len(parts) == 3:
+                print('parts', parts)
                 del data[parts[0]][parts[1]][parts[2]]
             else:
                 raise ValueError('unimplemented delete order')
         elif verb == 'overwrite':
             if len(parts) == 4:
-                data[parts[0]][parts[1]][parts[2]] = [parts[4]]
+                print('parts', parts)
+                print('data is', data[parts[0]])
+                data[parts[0]][parts[1]][parts[2]] = [parts[3]]
             else:
-                raise ValueError('unimplemented overwriteorder')
+                raise ValueError('unimplemented overwrite order')
         else:
             raise ValueError('unimplemented verb '+verb)
 
@@ -43,6 +46,8 @@ def do_one(filename, order_list, data):
 
 with open(sys.argv[1], 'r') as fd:
     orders = yaml.safe_load(fd)
+    print('orders are', orders)
 
-for filename, order_list in orders:
+for filename, order_list in orders.items():
+    print('doing', filename, order_list)
     do_one(filename, order_list)
