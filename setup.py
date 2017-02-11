@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import re
 import sys
 
@@ -41,6 +40,7 @@ scripts = ['scripts/box-to-json',
            'scripts/monkeypatch',
            'scripts/oid',
            'scripts/roundtriplib',
+           'scripts/run-player-turn',
            'scripts/run-qa-tests']
 
 with open('olypy/__init__.py', 'r') as fd:
