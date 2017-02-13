@@ -17,6 +17,7 @@ from . import details
 
 # holds the day-by-day action for each char
 global_days = {}
+global_visions = defaultdict(list)
 
 # holds day-by-day action for garrisons
 global_garrison_log = {}
@@ -1314,7 +1315,7 @@ def remove_visions(s):
     Remove visions from a character report.
     It's hard to figure out where a vision ends, so we do it wrong.
 
-    End is (1) different day (inaccurate) or (2) ' >' (repeat orbing)
+    End is (1) different day (inaccurate) or (2) ' >' (repeat orbing) (UNIMPLEMENTED)
     '''
     visions = []
     while True:
@@ -1341,6 +1342,19 @@ def remove_visions(s):
             break
 
     return s, visions
+
+
+def note_visions(ident, visions, data):
+    "Put list of successfully priestly visioned targets into CM vi"
+    for v in visions:
+        if ' receives a vision ' not in v:
+            continue
+        m = re.search(r'\].*\[(.{3,6})\]', v)
+        if m:
+            print('found target', m.group(1))
+            global_visions[ident].append(to_int(m.group(1)))
+            if m.group(1) == 'aq21':
+                print('ident', ident, 'aq21 vision is', v)
 
 
 def remove_days(s):
@@ -1700,6 +1714,19 @@ def resolve_characters(data, turn_num):
     for tup in global_character_in_progress:
         s, ident = tup
         parse_in_progress_orders(s, ident, turn_num, data)
+
+    for ident in global_visions:
+        # the priest might have subsequently died. this is inaccurate:
+        if ' char 0' in data.get(ident, {}).get('firstline', [''])[0]:
+            # and if these things don't exist in the database, the C code is going
+            # to delete them as it reads the database
+            # XXXv1 if they don't exist, make something up? province, city, char
+            # this really needs full turn-day tracking, as we see enemy nobles die
+            # but it would be relatively easy to do for fixed locations
+            l = [int(x) for x in global_visions[ident]]
+            s = [str(x) for x in sorted(l)]
+            box.subbox_overwrite(data, ident, 'CM', 'vi', s)
+            print('char', ident, 'has', len(global_visions[ident]), 'visions')
 
 
 def resolve_bound_storms(data):
@@ -2531,6 +2558,7 @@ def parse_turn(turn, data, everything=True):
                 # XXXv2visions need to be processed prior to *all* day 31 processing!
                 # (which, currently, is not possible without a lot of rearrangement)
                 s, visions = remove_visions(s)
+                note_visions(ident, visions, data)
 
                 s, days = remove_days(s)
                 if days:
@@ -2634,8 +2662,7 @@ if __name__ == '__main__':
 # XXXv2 seek and contact
 # Contacted foo
 # good until next Arrived.
+# alas this doesn't work when you're moving around 0-day links
 
 # XXXv0 unplace / promote_children harmful when it's a ship being unplaced
 # (only if we are parsing ships and characters beyond the last turn)
-
-# priestly state XXXv2: prep ritual, visions previously done
