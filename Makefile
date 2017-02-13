@@ -41,7 +41,7 @@ register:
 	python setup.py register -r https://pypi.python.org/pypi
 
 distclean:
-	rm dist/*
+	rm -rf dist/*
 
 dist: distclean
 	python ./setup.py --long-description | rst2html --exit-status=2 2>&1 > /dev/null
