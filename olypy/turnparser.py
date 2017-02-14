@@ -2045,11 +2045,13 @@ def parse_character(name, ident, factint, text, data):
     # Unfortunately this only captures the first one. Even for visible characters,
     # the output shown in turns is incomplete and is truncated to stack depth 2.
     # Fortunately, stacked over is complete. So the risk is that non-allies & prisoners will be mis-placed
-    # XXXv0 capture all of this
+    # XXXv0 we should unwhere/where stacked_over if we're going to where them
+    # XXXv1 capture all of the stacked-overs, not just the first
     stacked_over, = match_line(text, 'Stacked over:')
     if stacked_over is not None:
         stacked_over = parse_an_id(stacked_over)
-        box.subbox_append(data, ident, 'LI', 'hl', stacked_over, dedup=True)
+        box.subbox_append(data, ident, 'LI', 'hl', stacked_over, dedup=True)  # XXX wtf am I doing appending to data?
+        # XXX and wtf amd I doing not changing LI wh for stacked_over?!
 
     stacked_under, = match_line(text, 'Stacked under:')
     if stacked_under is not None:
@@ -2090,7 +2092,7 @@ def parse_character(name, ident, factint, text, data):
 
     if move_me:
         db.unset_where(data, ident, promote_children=True)
-        db.set_where(data, ident, location)
+        db.set_where(data, ident, location)  # XXX wtf this is overwritten later
         box.subbox_append(data, location, 'LI', 'hl', [ident], dedup=True)
 
     pledged_to, = match_line(text, 'Pledged to:')
@@ -2441,8 +2443,6 @@ def parse_location(s, factint, everything, data):
         for a in appeared:
             if a in data:
                 if not compatible_boxes(data[a], things[a]):
-                    fl_data = data[a]['firstline'][0]
-                    fl_things = things[a]['firstline'][0]
                     db.destroy_box(data, a)
                 else:
                     db.unset_where(data, a)
