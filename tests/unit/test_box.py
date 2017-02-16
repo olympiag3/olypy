@@ -42,6 +42,8 @@ def test_append_remove():
     assert data == {'1001': {'na': ['bar', 'foo']}}
     box_remove(data, 1001, 'na', 'bar')
     assert data == {'1001': {'na': ['foo']}}
+    box_remove(data, 1001, 'na', 'bar')  # twice
+    assert data == {'1001': {'na': ['foo']}}
 
     data = {}
     box_append(data, 1001, 'na', 'foo')
@@ -53,6 +55,7 @@ def test_append_remove():
     box_append(data, 1001, 'na', 'bar', dedup=True)
     assert data == {'1001': {'na': ['foo', 'bar']}}
     box_remove(data, 1001, 'na', 'foo')
+    box_remove(data, 1001, 'na', 'foo')  # twice
     box_append(data, 1001, 'na', 'foo', dedup=True)
     assert data == {'1001': {'na': ['bar', 'foo']}}
 
