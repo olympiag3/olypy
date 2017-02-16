@@ -11,9 +11,10 @@ def is_char(data, who):
         return True
 
 
-def set_where(data, who, where):
+def set_where(data, who, where, keep_children=False):
     who = to_int(who)
-    unset_where(data, who)
+    promote_children = not keep_children
+    unset_where(data, who, promote_children=promote_children)
     where = to_int(where)
     box.subbox_overwrite(data, who, 'LI', 'wh', where)
     box.subbox_append(data, where, 'LI', 'hl', who, dedup=True)

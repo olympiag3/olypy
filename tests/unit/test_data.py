@@ -30,6 +30,15 @@ def test_set_where():
     assert data['1002']['LI']['hl'] == ['1001']
     assert data['1001']['LI']['wh'] == ['1002']
 
+    data = {'1001': {'LI': {'hl': ['1002']}},
+            '1002': {'LI': {'wh': ['1001']}}}
+    set_where(data, '1001', '9999', keep_children=True)
+    assert data['1002']['LI']['wh'] == ['1001']
+    assert data['1001']['LI']['hl'] == ['1002']
+    set_where(data, '1001', '9999')
+    assert data['1002']['LI']['wh'] == ['9999']
+    assert data['1001']['LI']['hl'] == []
+
 
 def test_unset_where():
     data = {'1001': {'LI': {'wh': ['9999']}},
