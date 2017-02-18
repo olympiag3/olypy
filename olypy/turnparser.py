@@ -1476,7 +1476,7 @@ def last_storm_bind(text, ident):
     m = re.findall(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', text, re.M)
     if m:
         if len(m) > 1:
-            print('hey greg, multiple binds for {}: {}'.format(ident, m))
+            print('hey greg, multiple binds for storm {}: {}'.format(ident, m))
         return m[-1]
 
 
