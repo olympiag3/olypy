@@ -1566,9 +1566,10 @@ def analyze_garrison_list(text, turn_num, data, everything=False):
         MI = {'ca': ['g'], 'gc': [castle]}
         data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
         box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
-        box.subbox_append(data, where, 'LI', 'hl', [garr], dedup=True)
+        box.subbox_append(data, where, 'LI', 'hl', [garr], dedup=True, prepend=True)
 
     if everything:
+        # destroy old garrisons that were bound to my castle but I don't see in the latest turn
         un = data['207']['PL']['un']
         for unit in un:
             if unit not in garrs and unit in data and data[unit].get('MI', {}).get('gc', [''])[0] in castles:
@@ -1761,13 +1762,15 @@ def resolve_garrisons(data):
                 del v['MI']['gc']
 
     for g in global_garrison_log:
-        il = {'12': 10}
+        il = {}
         turns = sorted([int(t) for t in global_garrison_log[g]])
         for t in turns:
             if 'complete_days' in global_garrison_log[g][str(t)]:
                 del global_garrison_log[g][str(t)]['complete_days']
             days = sorted([int(d) for d in global_garrison_log[g][str(t)]])
             for d in days:
+                if not il:
+                    il = {'12': 10}
                 actions = global_garrison_log[g][str(t)][str(d)]
                 for line in actions.split('\n'):
                     if line.startswith('Received '):
@@ -1795,9 +1798,9 @@ def resolve_garrisons(data):
                             il[item] = il.setdefault(item, 0) - int(items[item])
                             il[item] = max(0, il[item])
                     elif ' Garrison has died ' in line:
-                        il = {'12': 10}  # but was recreated, that's why we are here
+                        il = {}
                     elif ' is disbanded by ' in line:
-                        il = {'12': 10}
+                        il = {}
                     elif line.startswith('Paid maintenance of '):
                         global global_garr_deficit
                         deficit = global_garr_deficit.get(g, {}).get(str(t), 0)
@@ -1827,6 +1830,8 @@ def resolve_garrisons(data):
                         il[item] = max(0, il[item])
                     #else:
                         #raise ValueError('unknown garrison log line of '+line)
+        if g == '2317':
+            print('hey greg 2317 il is', il)
         if il:
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this only hits garrisons that still exist
@@ -1838,6 +1843,16 @@ def resolve_garrisons(data):
                 for i in drop:
                     del il[i]
                 data[g]['il'] = box.dict_to_inventory(il)
+            elif g in data:
+                print('hey greg this should not happen! garrison has il but wrong kind:', data[g])
+            else:
+                # not in data, means it was seen to be missing by the final turn.
+                pass
+        elif g in data and ' char garrison' in data[g]['firstline'][0]:
+            # seen to be destroy/disbanded, then recycled into a garrison that is not mine. 😱
+            # alternately: disbanded on a foggy month and no one visited the province since
+            # XXXv0
+            pass
 
 
 def resolve_nowhere(region_ident, data):
