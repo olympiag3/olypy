@@ -116,6 +116,11 @@ def test_append2_remove2():
     subbox_append(data, 1001, 'LI', 'hl', 'foo', dedup=True)
     assert data == {'1001': {'LI': {'hl': ['bar', 'foo']}}}
 
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', prepend=True)
+    assert data == {'1001': {'LI': {'hl': ['foo', 'bar', 'foo']}}}
+    subbox_append(data, 1001, 'LI', 'hl', 'foo', prepend=True, dedup=True)
+    assert data == {'1001': {'LI': {'hl': ['foo', 'bar']}}}
+
 
 def test_overwrite2():
     data = {}

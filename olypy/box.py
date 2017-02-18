@@ -71,7 +71,7 @@ def box_overwrite(data, box, subbox, value):
     data[box][subbox] = value
 
 
-def subbox_append(data, box, subbox, key, value, dedup=False):
+def subbox_append(data, box, subbox, key, value, dedup=False, prepend=False):
     '''
     append value to list data[box][subbox][key], doing what's needed to initialize things
     '''
@@ -85,7 +85,12 @@ def subbox_append(data, box, subbox, key, value, dedup=False):
     data[box][subbox] = data[box].get(subbox, {})
 
     l = data[box][subbox].get(key, [])
-    [l.append(str(v)) for v in value]
+    if prepend:
+        rev = value
+        rev.reverse()
+        [l.insert(0, str(v)) for v in rev]
+    else:
+        [l.append(str(v)) for v in value]
     if dedup:
         l = uniq_f11(l)  # XXXv0 replace with if value not in l ...
     data[box][subbox][key] = l
