@@ -1,0 +1,3 @@
+recursive-include olypy/template-lib *
+recursive-include olypy/mapgen-lib *
+recursive-include tests/data *

@@ -43,12 +43,12 @@ scripts = ['scripts/box-to-json',
            'scripts/run-player-turn',
            'scripts/run-qa-tests']
 
-with open('olypy/__init__.py', 'r') as fd:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                        fd.read(), re.MULTILINE).group(1)
+#with open('olypy/__init__.py', 'r') as fd:
+#    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+#                        fd.read(), re.MULTILINE).group(1)
 
-if not version:
-    raise RuntimeError('Cannot find version information')
+#if not version:
+#    raise RuntimeError('Cannot find version information')
 
 try:
     import pypandoc
@@ -60,17 +60,20 @@ except (IOError, ImportError):
 
 setup(
     name='olypy',
-    version=version,
+    use_scm_version=True,
     description='Python code to assist the game Olympia',
     long_description=description,
     author='Greg Lindahl and others',
     author_email='lindahl@pbm.com',
     url='https://github.com/olympiag3/olypy',
     packages=packages,
+    include_package_data=True,
+    # XXX do I use MANIFEST.in? if so, what is package_data= ???
+    setup_requires=['setuptools_scm'],
     install_requires=requires,
     scripts=scripts,
     license='Apache 2.0',
-    zip_safe=True,
+    zip_safe=False,
     classifiers=(
         'Development Status :: 4 - Beta',
         'Environment :: Console',

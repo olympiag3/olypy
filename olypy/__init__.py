@@ -3,8 +3,6 @@
 import os.path
 
 __title__ = 'olypy'
-__version__ = '0.9.16'
-__build__ = 0x000916
 __author__ = 'Greg Lindahl and others'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2016-2017 Greg Lindahl and others'
