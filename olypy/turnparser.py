@@ -1514,22 +1514,8 @@ def analyze_storm_list(text, fact, data):
         # add myself to the map
         db.set_where(data, ident, location)
 
-        ship = None
-        if owner in global_days and ident in global_days[owner]:
-            ship = last_storm_bind(global_days[owner], ident)
-
-        if ship is None:
-            # this is inaccurate if multiple mages have bound this storm... I'll pick randomly
-            for owner, days in global_days.items():
-                ship = last_storm_bind(days, ident)
-                if ship is not None:
-                    break
-
-        if ship is not None:
-            # ship may not have been created, so delay this until the end
-            global global_bound_storms
-            global_bound_storms[ident] = ship
-            data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
+        global global_bound_storms
+        global_bound_storms[ident] = None
 
 
 def analyze_garrison_list(text, turn_num, data, everything=False):
@@ -1731,8 +1717,20 @@ def resolve_characters(data, turn_num):
 
 
 def resolve_bound_storms(data):
-    for ident, ship in global_bound_storms.items():
+    for ident in global_bound_storms:
+        ship = None
+        # this is inaccurate if multiple mages have bound this storm... I'll pick randomly
+        for owner, days in global_days.items():
+            if ident in days:
+                ship = last_storm_bind(days, ident)
+                if ship is not None:
+                    break
+        if ship is None:
+            continue
+
         if ship in data and ' ship ' in data[ship]['firstline'][0]:
+            print('hey greg saw a bind for storm {} to ship {}'.format(ident, ship))
+            data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
             data[ship]['SL']['bs'] = [ident]
 
 
