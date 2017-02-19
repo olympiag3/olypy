@@ -22,8 +22,8 @@ subprocess.run('rm -rf lib'.split(), check=True)
 subprocess.run('tar xf lib.{}.tar.gz'.format(turn).split(), check=True)
 subprocess.run('cp -p spool.{}/m.* lib/spool'.format(turn), shell=True, check=True)
 
-subprocess.run('./olympia -e'.split(), check=True)
-subprocess.run('./olympia -rMS'.split(), check=True)
+subprocess.run('./olympia -E'.split(), check=True)
+subprocess.run('./olympia -rS'.split(), check=True)
 
 # iterate over all possible turn outputs in lib/save/NNN, and generate reports
 turn += 1
