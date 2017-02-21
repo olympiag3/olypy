@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import re
 import sys
 
 from setuptools import setup
@@ -43,20 +42,11 @@ scripts = ['scripts/box-to-json',
            'scripts/run-player-turn',
            'scripts/run-qa-tests']
 
-#with open('olypy/__init__.py', 'r') as fd:
-#    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-#                        fd.read(), re.MULTILINE).group(1)
-
-#if not version:
-#    raise RuntimeError('Cannot find version information')
-
 try:
     import pypandoc
     description = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
     description = open('README.md').read()
-
-# XXX need to add data_files for all the crap that's text
 
 setup(
     name='olypy',
@@ -68,7 +58,6 @@ setup(
     url='https://github.com/olympiag3/olypy',
     packages=packages,
     include_package_data=True,
-    # XXX do I use MANIFEST.in? if so, what is package_data= ???
     setup_requires=['setuptools_scm'],
     install_requires=requires,
     scripts=scripts,
