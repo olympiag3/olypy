@@ -390,7 +390,7 @@ def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
         data[ident]['IT']['un'] = [unit]
     elif int(ident) < 10000:
         # if you raise *this* dead body you will be disappointed
-        data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['dead body'],
+        data[ident] = {'firstline': [ident + ' item dead body'], 'na': ['fake dead body'],
                        'IT': {'pl': ['dead bodies'], 'wt': [weight], 'un': [unit]}}
         return
     else:
