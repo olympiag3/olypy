@@ -1765,6 +1765,7 @@ def resolve_garrisons(data):
 
     for g in global_garrison_log:
         il = {}
+        disbanded = False
         turns = sorted([int(t) for t in global_garrison_log[g]])
         for t in turns:
             if 'complete_days' in global_garrison_log[g][str(t)]:
@@ -1799,10 +1800,9 @@ def resolve_garrisons(data):
                         for item in items:
                             il[item] = il.setdefault(item, 0) - int(items[item])
                             il[item] = max(0, il[item])
-                    elif ' Garrison has died ' in line:
+                    elif ' Garrison has died ' in line or ' is disbanded by ' in line:
                         il = {}
-                    elif ' is disbanded by ' in line:
-                        il = {}
+                        disbanded = True
                     elif line.startswith('Paid maintenance of '):
                         global global_garr_deficit
                         deficit = global_garr_deficit.get(g, {}).get(str(t), 0)
@@ -1832,9 +1832,15 @@ def resolve_garrisons(data):
                         il[item] = max(0, il[item])
                     #else:
                         #raise ValueError('unknown garrison log line of '+line)
-        if g == '2317':
-            print('hey greg 2317 il is', il)
-        if il:
+        if disbanded:
+            if g in data and ' char garrison' in data[g]['firstline'][0]:
+                # this may not be the same garrison... id could have been recycled.
+                # however if recycled, it must be a garrison that's not ours
+                print('hey greg destroying disbanded garrison', g)
+                db.unset_where(data, g)
+                box.subbox_remove(data, '207', 'PL', 'un', g)
+                del data[g]
+        elif il:
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this only hits garrisons that still exist
                 # drop anything that does not exist (e.g. scrolls/potions)
@@ -1850,11 +1856,6 @@ def resolve_garrisons(data):
             else:
                 # not in data, means it was seen to be missing by the final turn.
                 pass
-        elif g in data and ' char garrison' in data[g]['firstline'][0]:
-            # seen to be destroy/disbanded, then recycled into a garrison that is not mine. 😱
-            # alternately: disbanded on a foggy month and no one visited the province since
-            # XXXv0
-            pass
 
 
 def resolve_nowhere(region_ident, data):
@@ -2647,8 +2648,8 @@ def remove_extra_keys(data):
 
 
 def finish(data, last_turn):
-    resolve_characters(data, last_turn)
     resolve_garrisons(data)
+    resolve_characters(data, last_turn)
     resolve_fake_items(data)
     resolve_npc_artifacts(data)
     resolve_bound_storms(data)

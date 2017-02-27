@@ -96,6 +96,7 @@ def destroy_box(data, who, promote_children=True):
     # lord: CH,lo and previous lord CH,pl -- needs end-of-run fixup XXXv0
     lo = data[who].get('CH', {}).get('lo', [None])[0]
     if lo:
+        print('hey greg removing {} from player {}'.format(who, lo))
         box.subbox_remove(data, lo, 'PL', 'un', who)
 
     # unique items - need to look at firstline - IT,un is where it is
