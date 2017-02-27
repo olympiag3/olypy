@@ -555,7 +555,7 @@ def make_locations_from_routes(routes, idint, region, data):
                 old_hl = data.get(dest, {}).get('LI', {}).get('hl', [])
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
                               'na': [r['name']],
-                              'il': details.geo_inventory[kind],
+                              'il': details.geo_inventory[kind].copy(),
                               'LI': {'wh': [myregion]},
                               'LO': {'pd': ['0', '0', '0', '0']}}
                 if old_hl:
@@ -583,7 +583,7 @@ def make_locations_from_routes(routes, idint, region, data):
                 # the link is at the province, so don't make any LO pd here
                 data[dest] = {'firstline': [dest + ' loc city'],
                               'na': [r['name']],
-                              'il': details.geo_inventory['city'],
+                              'il': details.geo_inventory['city'].copy(),
                               'LI': {'wh': [prov]}}
                 box.subbox_append(data, prov, 'LI', 'hl', [dest], dedup=True)
             elif kind in details.subloc_kinds or kind in details.structure_type:
@@ -753,7 +753,7 @@ def parse_a_sublocation_route(parts):
     attr = {}
 
     if kind in details.geo_inventory:
-        attr['il'] = details.geo_inventory[kind]
+        attr['il'] = details.geo_inventory[kind].copy()
 
     for p in parts:
         p = p.strip()
@@ -914,7 +914,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
     thing['na'] = [name]
     thing['LI'] = {}
     if kind == 'city':
-        thing['il'] = details.geo_inventory[kind]
+        thing['il'] = details.geo_inventory[kind].copy()
 
     where = depths[depth-1]
     depths[depth] = oidint
@@ -2302,7 +2302,7 @@ def parse_location(s, factint, everything, data):
     else:
         box.subbox_overwrite(data, idint, 'LO', 'lc', [])
     if kind in details.geo_inventory:
-        il = details.geo_inventory[kind]
+        il = details.geo_inventory[kind].copy()
         il_dict = box.inventory_to_dict(il)
         if kind in details.province_kinds and '96' in il_dict:
             il_dict['96'] = str(int(il_dict['96']) * (civ+1))
