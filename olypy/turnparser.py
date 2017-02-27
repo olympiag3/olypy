@@ -757,7 +757,7 @@ def parse_a_sublocation_route(parts):
 
     for p in parts:
         p = p.strip()
-        if p == 'hidden' or kind == 'faery hill':  # XXXv1 faery hills don't say 'hidden' in real world, what do they look like in faery?
+        if p == 'hidden' or kind == 'faery hill':  # XXXv1 faery hills don't say 'hidden' in real world, but they are?
             attr['LO'] = {}
             attr['LO']['hi'] = ['1']
         elif p == '1 day':
