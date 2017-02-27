@@ -1336,8 +1336,10 @@ def remove_visions(s):
                     else:
                         break
                 s = s.replace(wholeday, '')
-                visions = [wholeday]
                 # XXXv2 further processing to split same-day orbs
+                visions.append(wholeday)
+            else:
+                raise ValueError('failed to match a clip for vision day={} kind={}'.format(day, kind))
         else:
             break
 
@@ -1353,8 +1355,6 @@ def note_visions(ident, visions, data):
         if m:
             print('found target', m.group(1))
             global_visions[ident].append(to_int(m.group(1)))
-            if m.group(1) == 'aq21':
-                print('ident', ident, 'aq21 vision is', v)
 
 
 def remove_days(s):
@@ -1703,15 +1703,19 @@ def resolve_characters(data, turn_num):
         parse_in_progress_orders(s, ident, turn_num, data)
 
     for ident in global_visions:
-        # the priest might have subsequently died. this is inaccurate:
+        # the priest might have subsequently died and been recycled XXXv2
         if ' char 0' in data.get(ident, {}).get('firstline', [''])[0]:
-            # and if these things don't exist in the database, the C code is going
-            # to delete them as it reads the database
-            # XXXv1 if they don't exist, make something up? province, city, char
-            # this really needs full turn-day tracking, as we see enemy nobles die
-            # but it would be relatively easy to do for fixed locations
             l = [int(x) for x in global_visions[ident]]
             s = [str(x) for x in sorted(l)]
+
+            for i in s:
+                if i not in data:
+                    data[i] = {'firstline': [i + ' item dead body'],
+                               'na': ['fake vision target'],
+                               'IT': {'pl': ['fake dead vision target'],
+                                      'wt': ['100'],
+                                      'un': [to_int('aa01')]}}
+                    data[to_int('aa01')]['il'].extend([i, '1'])
             box.subbox_overwrite(data, ident, 'CM', 'vi', s)
             print('char', ident, 'has', len(global_visions[ident]), 'visions')
 
