@@ -1475,9 +1475,7 @@ def parse_faction(text, factint, data):
 def last_storm_bind(text, ident):
     m = re.findall(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', text, re.M)
     if m:
-        if len(m) > 1:
-            print('hey greg, multiple binds for storm {}: {}'.format(ident, m))
-        return m[-1]
+        return m[-1]  # if multiple, return the last
 
 
 def analyze_storm_list(text, fact, data):
@@ -1733,7 +1731,6 @@ def resolve_bound_storms(data):
             continue
 
         if ship in data and ' ship ' in data[ship]['firstline'][0]:
-            print('hey greg saw a bind for storm {} to ship {}'.format(ident, ship))
             data[ident]['MI']['bs'] = [ident]  # yeah, this is a bug in the C code
             data[ship]['SL']['bs'] = [ident]
 
@@ -1836,7 +1833,6 @@ def resolve_garrisons(data):
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this may not be the same garrison... id could have been recycled.
                 # however if recycled, it must be a garrison that's not ours
-                print('hey greg destroying disbanded garrison', g)
                 db.unset_where(data, g)
                 box.subbox_remove(data, '207', 'PL', 'un', g)
                 del data[g]
@@ -2455,8 +2451,6 @@ def parse_location(s, factint, everything, data):
     real_c = continued.copy()
     if continued:
         for c in continued:
-            if c == '6787':
-                print('hey greg, I see 6787 continued', data[c], things[c])
             if c in data and not compatible_boxes(data[c], things[c]):
                 fl_data = data[c]['firstline'][0]
                 fl_things = things[c]['firstline'][0]

@@ -178,7 +178,6 @@ def check_moving(data):
                 CO = data[captain].get('CO', {})
                 if CO.get('cs', [None])[0] != '2' or not CO.get('li', [''])[0].lower().startswith('sail '):
                     print('Ship {} captain {} is not sailing'.format(k, captain), file=sys.stderr)
-                    print('hey greg debug CO is', CO, file=sys.stderr)
                     problem += 1
                     continue
                 if data[captain]['CH'].get('mo', [None])[0]:
