@@ -17,7 +17,7 @@ from . import details
 
 # holds the day-by-day action for each char
 global_days = {}
-global_visions = defaultdict(list)
+global_vision_targets = defaultdict(list)
 
 # holds day-by-day action for garrisons
 global_garrison_log = {}
@@ -1354,7 +1354,7 @@ def note_visions(ident, visions, data):
         m = re.search(r'\].*\[(.{3,6})\]', v)
         if m:
             print('found target', m.group(1))
-            global_visions[ident].append(to_int(m.group(1)))
+            global_vision_targets[ident].append(to_int(m.group(1)))
 
 
 def remove_days(s):
@@ -1700,10 +1700,12 @@ def resolve_characters(data, turn_num):
         s, ident = tup
         parse_in_progress_orders(s, ident, turn_num, data)
 
-    for ident in global_visions:
+
+def resolve_visions(data):
+    for ident in global_vision_targets:
         # the priest might have subsequently died and been recycled XXXv2
         if ' char 0' in data.get(ident, {}).get('firstline', [''])[0]:
-            l = [int(x) for x in global_visions[ident]]
+            l = [int(x) for x in global_vision_targets[ident]]
             s = [str(x) for x in sorted(l)]
 
             for i in s:
@@ -1715,7 +1717,7 @@ def resolve_characters(data, turn_num):
                                       'un': [to_int('aa01')]}}
                     data[to_int('aa01')]['il'].extend([i, '1'])
             box.subbox_overwrite(data, ident, 'CM', 'vi', s)
-            print('char', ident, 'has', len(global_visions[ident]), 'visions')
+            print('char', ident, 'has', len(global_vision_targets[ident]), 'visions')
 
 
 def resolve_bound_storms(data):
@@ -2642,12 +2644,13 @@ def remove_extra_keys(data):
 
 
 def finish(data, last_turn):
-    resolve_garrisons(data)
     resolve_characters(data, last_turn)
+    resolve_garrisons(data)
     resolve_fake_items(data)
     resolve_npc_artifacts(data)
     resolve_bound_storms(data)
     resolve_regions(data)
+    resolve_visions(data)
     sweep_independent_units(data)
     remove_extra_keys(data)
     box.canonicalize(data)
