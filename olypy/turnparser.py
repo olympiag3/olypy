@@ -2540,6 +2540,8 @@ def parse_in_progress_orders(s, faction, turn_num, data):
                 remaining = '-1'
 
             # the following algo does the wrong thing for orders running more than 30 days. whatever.
+            # (it gets the day right, but doesn't factor in the turn)
+            # (30+ day orders: study scrolls for a few categories; some moves like swamp with max penalty)
             splits = global_days[unit].split(': > ')
             start_day = splits[-2][-3:]
             if not start_day.startswith('\n'):
