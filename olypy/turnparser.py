@@ -1980,6 +1980,7 @@ def sweep_independent_units(data):
                 print('sweeping unit {} into player 100'.format(k), file=sys.stderr)
                 box.subbox_overwrite(data, k, 'CH', 'lo', ['100'])
                 box.subbox_append(data, '100', 'PL', 'un', [k])
+                box.box_overwrite(data, k, 'ad', ['100'])  # make them fight together
 
                 # Configure the unit
                 # this unit should only have visible 'il' so it's safe to append gold
