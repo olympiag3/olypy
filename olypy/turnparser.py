@@ -2113,8 +2113,8 @@ def parse_character(name, ident, factint, text, data):
     move_me = 0
     if concealed is not None and '(concealing self)' in concealed:
         concealed = 1
-        print('Concealed character', ident, 'is actually in location', location)
         if old_wh != location:
+            print('Concealed character', ident, 'is actually in location', location)
             move_me = 1
     else:
         concealed = 0
@@ -2126,6 +2126,7 @@ def parse_character(name, ident, factint, text, data):
     if move_me:
         db.set_where(data, ident, location, keep_children=True)
 
+    # XXXv2 we don't process "Pledged to us:" so any vassals won't appear
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
         pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture=r'(.*?) \[(.{4,6})\]')
@@ -2197,6 +2198,7 @@ def parse_character(name, ident, factint, text, data):
     char['LI']['wh'] = [location]
 
     ch = {}
+    # XXXv2 the existing CH/ra from the map (if same unit) isn't here in the turn :/
     ch['lo'] = [to_int(factint)]
     ch['he'] = [health]
     if sick:
