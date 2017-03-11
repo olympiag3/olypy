@@ -461,15 +461,21 @@ def groups(iterable, n):
     return zip(*[iter(iterable)]*n)
 
 
+def admit_int(part):
+    if part == 'all':
+        return 1
+    return to_int(part)
+
+
 def parse_admit(text):
     ret = []
     for line in text.split('\n'):
         parts = line.split()
         if parts:
             if parts[0] != 'admit':
-                ret[-1] += [to_int(p) for p in parts]
+                ret[-1] += [admit_int(p) for p in parts]
             else:
-                ret.append([to_int(p) for p in parts[1:]])
+                ret.append([admit_int(p) for p in parts[1:]])
     return ret
 
 
