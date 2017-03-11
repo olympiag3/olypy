@@ -881,17 +881,23 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
 
     depth = len(s) - len(s.lstrip(' '))
     if depth % 3 != 0:
-        raise ValueError('depth was {}'.format(depth))
+        raise ValueError('depth was {} for string "{}"'.format(depth, s))
     depth //= 3
 
-    parts = s.lstrip(' ').split(', ')  # needs the space due to 1,000+ soldiers etc
+    # the name of a thing might have a comma in it, but, we do know that
+    # it will have [id]\n or [id], after it. Split that off first.
 
-    first = parts.pop(0)
-    m = re.match('(.*?) \[(.{3,6})\]', first)
+    s = s.lstrip(' ')
+    m = re.match(r'(.*) \[(.{3,6})\](?:\Z|, )(.*)', s)
     if not m:
-        raise ValueError('failed to parse structure/char name in {}'.format(first))
-    name, oid = m.group(1, 2)
+        raise ValueError('failed to find an ID at the start of '+s)
+    name, oid, s = m.group(1, 2, 3)
     oidint = to_int(oid)
+
+    if len(s):
+        parts = s.split(', ')  # needs the space due to 1,000+ soldiers etc
+    else:
+        parts = []
 
     if parts:
         second = parts[0].strip()
@@ -1209,27 +1215,36 @@ def parse_inner_locations(idint, text, things):
             # box.subbox_overwrite(data, where, 'LO', 'ba', ['1'])
             # XXXv0
             continue
-        parts = l.split(',')
+
         continuation = False
-        if '[' not in parts[0]:
-            continuation = True
+
+        parts = l.split(', ')
+        aparts = accumulation.split(', ')
+        alast = aparts[-1]
+
+        if accumulation == '':
+            continuation = False
         elif accumulation.endswith(','):
             continuation = True
-        else:
-            # is it an item?
-            aparts = accumulation.split(',')
-            alast = aparts[-1]
-            if ' wearing' in alast or ' wielding' in alast:
-                if ']' not in alast:
-                    continuation = True
+        elif ((alast == 'wearing' or alast.startswith('wearing ') or
+               alast == 'wielding' or alast.startswith('wielding ')) and
+              ']' not in alast):
+            # wrapped wielded item. this fails if the name of the item has a comma in it.
+            continuation = True
+        #elif (parts[0].starts('wearing ') or parts[0].startswith('wielding ')):
+        # not going here because someone might name a noble 'wearing foo'
+        #    pass
+        elif '[' not in parts[0]:
+            # XXX fixme, noble with comma in name XXX
+            continuation = True
 
         if continuation:
-            # continuation line
             accumulation += ' ' + l.lstrip(' ')
         else:
             if accumulation:
                 last_depth = parse_a_structure_or_character(accumulation, depths, last_depth, things)
             accumulation = l
+
     if accumulation:
         _ = parse_a_structure_or_character(accumulation, depths, last_depth, things)
 
