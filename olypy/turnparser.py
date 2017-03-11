@@ -888,7 +888,7 @@ def parse_a_structure_or_character(s, depths, last_depth, things):
     # it will have [id]\n or [id], after it. Split that off first.
 
     s = s.lstrip(' ')
-    m = re.match(r'(.*) \[(.{3,6})\](?:\Z|, )(.*)', s)
+    m = re.match(r'(.*?) \[(.{3,6})\](?:\Z|, )(.*)', s)
     if not m:
         raise ValueError('failed to find an ID at the start of '+s)
     name, oid, s = m.group(1, 2, 3)
