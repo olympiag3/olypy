@@ -2084,7 +2084,7 @@ def parse_character(name, ident, factint, text, data):
     if stacked_over:
         if old_hl and stacked_over[0] != old_hl[0]:
             print('hey greg, surprised that {} was not stacked first under {}'.format(stacked_over[0], ident))
-            old_hl.insert(stacked_over[0], 0)
+            old_hl.insert(0, stacked_over[0])
             db.set_where(data, stacked_over[0], ident, keep_children=True)
 
     stacked_under, = match_line(text, 'Stacked under:')
