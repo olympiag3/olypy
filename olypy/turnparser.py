@@ -73,6 +73,19 @@ def split_into_sections(text):
     return ret[1:]  # discard header
 
 
+def looks_like_a_turn(text, turn):
+    turn = turn.lstrip('0')
+    if (('turn {}\nReport for '.format(turn) not in text and
+         'turn {}\nInitial Position Report for '.format(turn) not in text)):
+        return False
+    if '\nThe next NP will be received at the end of turn' not in text:
+        return False
+    if '\nThe next five nobles formed will be:' not in text:
+        return False
+    if 'Player-contributed press' in text and 'Rumors' in text and 'Questions, comments, to play' in text:
+        return False
+    return True
+
 wait_args = {'time': {'value': 0, 'nargs': 1},
              'day': {'value': 1, 'nargs': 1},
              'unit': {'value': 2, 'nargs': 1},

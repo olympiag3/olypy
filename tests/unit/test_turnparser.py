@@ -73,6 +73,34 @@ def test_parse_wait_args():
             turnparser.parse_wait_args(order)
 
 
+def test_looks_like_a_turn():
+    t = '''\
+Olympia G4 turn 1
+Initial Position Report for Oleg's Olympians [ja1].
+Season "Fierce winds", month 1, in the year 1.
+
+The next NP will be received at the end of turn 8.
+
+The next five nobles formed will be:  7815 1933 8012 6124 4547
+'''
+    assert turnparser.looks_like_a_turn(t, '001')
+
+    t = '''\
+Olympia G4 turn 2
+Report for Oleg's Olympians [ja1].
+Season "Snowmelt", month 2, in the year 1.
+
+The next NP will be received at the end of turn 8.
+
+The next five nobles formed will be:  7815 1933 8012 6124 4547
+'''
+    assert turnparser.looks_like_a_turn(t, '002')
+
+    # make it look like an Olympia Times
+    t += 'Player-contributed press Rumors Questions, comments, to play'
+    assert not turnparser.looks_like_a_turn(t, '002')
+
+
 def test_generate_move_args():
     tests = [[['29', '5', to_int('aa02'), to_int('aa01')], ['0', '0', '10002', '0', '0', '7', '10001', '0']]]
     for t in tests:

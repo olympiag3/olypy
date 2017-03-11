@@ -13,18 +13,6 @@ import olypy.turnparser as turnparser
 import olypy.oio as oio
 import olypy.dbck as dbck
 
-
-def looks_like_a_turn(text, t):
-    if 'turn {}\nReport for '.format(t.lstrip('0')) not in text:
-        return False
-    if '\nThe next NP will be received at the end of turn' not in text:
-        return False
-    if '\nThe next five nobles formed will be:' not in text:
-        return False
-    if 'Player-contributed press' in text and 'Rumors' in text and 'Questions, comments, to play' in text:
-        return False
-    return True
-
 parser = argparse.ArgumentParser(description='build an olypia lib using old player turn results')
 parser.add_argument('--last-turn', type=int, default=0)
 parser.add_argument('--verbose', action='store_true')
@@ -68,7 +56,7 @@ for t in sorted_turns:
         with open(os.path.expanduser(f), 'r') as fd:
             for line in fd:
                 contents += line.expandtabs()
-        if looks_like_a_turn(contents, t):
+        if turnparser.looks_like_a_turn(contents, t):
             if args.verbose:
                 print('\nprocessing', f, '\n')
             turnparser.parse_turn(contents, data, everything=everything)
