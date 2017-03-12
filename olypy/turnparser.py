@@ -1226,7 +1226,7 @@ def parse_inner_locations(idint, text, things):
     last_depth = 0
     depths = [idint, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
-    text = re.sub('".*?"', '""', text)  # throw out all banners
+    text = re.sub('".*?"', '""', text, flags=re.S)  # throw out all banners, including multi-line
     text = text.replace('*', ' ')
 
     # if you're wielding two things, it is "wielding foo [bar] and baz [barf]"
