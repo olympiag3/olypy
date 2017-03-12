@@ -1818,19 +1818,18 @@ def parse_several_items(s):
 def garrison_log_unwrap(s):
     '''
     Merge lines like:
-     5: 9609: Received three winged horses [54] from Oleg the
-     5: 9609: Loudmouth [9999].
+    Received three winged horses [54] from Oleg the
+    Loudmouth [9999].
     '''
     ret = []
     merge_next = False
     for l in s.split('\n'):
         if merge_next:
             merge_next = False
-            _, _, trimmed = l.split(':', maxsplit=2)
-            ret[-1] += trimmed
+            ret[-1] += ' ' + l
             continue
         ret.append(l)
-        if l.count('[') < 2:
+        if ('Received ' in l or ' took ' in l) and l.count('[') < 2:
             merge_next = True
     return '\n'.join(ret)
 

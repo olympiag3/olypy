@@ -1011,16 +1011,24 @@ def test_parse_several_items():
 
 def test_garrison_log_unwrap():
     t = '''\
- 5: 9609: Received three winged horses [54] from Oleg the
- 5: 9609: Loudmouth [9999].
- 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
- 5: 9609: Received three winged horses [54] from Oleg the
- 5: 9609: Loudmouth [9999].
+Received three winged horses [54] from Oleg the
+Loudmouth [9999].
+Received three winged horses [54] from Oleg the Loudmouth [9999].
+Received three winged horses [54] from Oleg the
+Loudmouth [9999].
+Oleg the Loudmouth [9999] attacks us!
+We lost!
+Garrison [4565] lost ten soldiers.
+*** Garrison has died ***
 '''
     r = '''\
- 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
- 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
- 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
+Received three winged horses [54] from Oleg the Loudmouth [9999].
+Received three winged horses [54] from Oleg the Loudmouth [9999].
+Received three winged horses [54] from Oleg the Loudmouth [9999].
+Oleg the Loudmouth [9999] attacks us!
+We lost!
+Garrison [4565] lost ten soldiers.
+*** Garrison has died ***
 '''
     assert turnparser.garrison_log_unwrap(t) == r
 
