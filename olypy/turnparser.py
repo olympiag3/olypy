@@ -402,7 +402,8 @@ def make_fake_item(unit, ident, name, weight, qty, plus, what, data):
     '''
     if ident in set(('401', '402', '403')):
         old = data[ident]['IT']['un'][0]
-        box.box_remove(data, old, 'il', ident)
+        if old:
+            box.box_remove(data, old, 'il', ident)
         data[ident]['IT']['un'] = [unit]
     elif int(ident) < 10000:
         # if you raise *this* dead body you will be disappointed
@@ -1899,7 +1900,8 @@ def resolve_garrisons(data):
 
 def create_400s(data):
     for i in ('401', '402', '403'):
-        data[i] = {'firstline': [i + ' item relic']}
+        data[i] = {'firstline': [i + ' item relic'],
+                   'IT': {'un': [False]}}
 
     box.box_overwrite(data, '401', 'na', 'Imperial Throne')
     box.subbox_overwrite(data, '401', 'IT', 'wt', ['500'])
@@ -1931,7 +1933,7 @@ def resolve_nowhere(region_ident, data):
 
     il = []
     for i in ('401', '402', '403'):
-        un = data[i].get('IT', {}).get('un', [False])[0]
+        un = data[i]['IT']['un'][0]
         if not un:
             box.subbox_overwrite(data, i, 'IT', 'un', [ident])
             il.extend([i, '1'])
