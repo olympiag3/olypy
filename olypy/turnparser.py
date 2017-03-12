@@ -1693,6 +1693,8 @@ def resolve_fake_items(data):
                                 data[item]['firstline'] = [item + ' item auraculum']
                                 rest = rest.strip()
                                 strength = rest.partition(' ')[0]
+                                if not strength.isdigit():
+                                    strength = 1  # happens when a player screws up 'use 881'
                                 try:
                                     strength = int(strength) * 2
                                 except:
