@@ -79,6 +79,8 @@ def to_int(oid):
         return str(oid)
     elif re.match(r'\A1\d\d\d\d\d\Z', oid):  # 1NNNNN
         return str(oid)
+    elif oid.isdigit():
+        return str(oid)
     else:
         raise ValueError('invalid id value: '+oid)
 
