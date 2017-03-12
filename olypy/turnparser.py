@@ -1890,6 +1890,24 @@ def resolve_garrisons(data):
                 pass
 
 
+def create_400s(data):
+    for i in ('401', '402', '403'):
+        data[i] = {'firstline': [i + ' item relic']}
+
+    box.box_overwrite(data, '401', 'na', 'Imperial Throne')
+    box.subbox_overwrite(data, '401', 'IT', 'wt', ['500'])
+    box.subbox_overwrite(data, '401', 'IM', 'lo', ['401'])
+
+    box.box_overwrite(data, '402', 'na', 'Crown of Prosperity')
+    box.subbox_overwrite(data, '402', 'IT', 'wt', ['10'])
+    box.subbox_overwrite(data, '402', 'IM', 'lo', ['402'])
+
+    box.box_overwrite(data, '403', 'na', 'Skull of Bastresric')
+    box.subbox_overwrite(data, '403', 'IT', 'wt', ['10'])
+    box.subbox_overwrite(data, '403', 'IM', 'lo', ['403'])
+    box.subbox_overwrite(data, '403', 'IM', 'uk', ['15'])
+
+
 def resolve_nowhere(region_ident, data):
     # 4 items need to be in a special nowhere province
     ident = 46816
@@ -1904,27 +1922,12 @@ def resolve_nowhere(region_ident, data):
 
     il = []
     for i in ('401', '402', '403'):
-        if i not in data:
-            data[i] = {'firstline': [i + ' item relic']}
         un = data[i].get('IT', {}).get('un', [False])[0]
         if not un:
             box.subbox_overwrite(data, i, 'IT', 'un', [ident])
             il.extend([i, '1'])
     if il:
         box.box_overwrite(data, ident, 'il', il)
-
-    box.box_overwrite(data, '401', 'na', 'Imperial Throne')
-    box.subbox_overwrite(data, '401', 'IT', 'wt', ['500'])
-    box.subbox_overwrite(data, '401', 'IM', 'lo', ['401'])
-
-    box.box_overwrite(data, '402', 'na', 'Crown of Prosperity')
-    box.subbox_overwrite(data, '402', 'IT', 'wt', ['10'])
-    box.subbox_overwrite(data, '402', 'IM', 'lo', ['402'])
-
-    box.box_overwrite(data, '403', 'na', 'Skull of Bastresric')
-    box.subbox_overwrite(data, '403', 'IT', 'wt', ['10'])
-    box.subbox_overwrite(data, '403', 'IM', 'lo', ['403'])
-    box.subbox_overwrite(data, '403', 'IM', 'uk', ['15'])
 
 
 def resolve_regions(data):
@@ -2691,7 +2694,7 @@ def finish(data, last_turn):
     resolve_characters(data, last_turn)
     resolve_garrisons(data)
     resolve_regions(data)
-    resolve_fake_items(data)  # must be post-regions
+    resolve_fake_items(data)
     resolve_npc_artifacts(data)
     resolve_bound_storms(data)
     resolve_visions(data)

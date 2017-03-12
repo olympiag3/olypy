@@ -44,6 +44,7 @@ data = {}
 
 turnparser.create_garrison_player(data)
 turnparser.create_independent_player(data)
+turnparser.create_400s(data)
 
 for t in sorted_turns:
     if t == last_turn:
