@@ -1265,8 +1265,13 @@ def parse_inner_locations(idint, text, things):
         # not going here because someone might name a noble 'wearing foo'
         #    pass
         elif '[' not in parts[0]:
-            # XXX fixme, noble with comma in name XXX
-            continuation = True
+            # noble with comma in name?
+            if ((len(parts) > 1 and
+                 not (parts[1].startswith('wielding ') or parts[1].startswith('wearing ')) and
+                 '[' in parts[1])):
+                continuation = False
+            else:
+                continuation = True
 
         if continuation:
             accumulation += ' ' + l.lstrip(' ')
