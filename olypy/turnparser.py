@@ -609,8 +609,18 @@ def make_locations_from_routes(routes, idint, region, data):
                               'il': details.geo_inventory['city'].copy(),
                               'LI': {'wh': [prov]}}
                 box.subbox_append(data, prov, 'LI', 'hl', [dest], dedup=True)
-            elif kind in details.subloc_kinds or kind in details.structure_type:
-                pass  # this only exists for visions of a castle, ship etc XXXv2
+            elif kind == 'sewer':
+                # Subworld Sewers as seen from Tunnels
+                data[dest] = {'firstline': [dest + ' loc ' + kind],
+                              'na': [r['name']],
+                              'il': details.geo_inventory[kind].copy(),
+                              'LI': {'wh': [myregion]},
+                              'LO': {'pd': ['0', '0', '0', '0', '0', '0']}}
+            elif kind in details.subloc_kinds:
+                # visions of a castle, ship etc XXXv2
+                pass
+            elif kind in details.structure_type:
+                pass
         else:
             # the destination exists, but this link may not
             if kind in details.province_kinds:
