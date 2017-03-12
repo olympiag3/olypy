@@ -574,6 +574,7 @@ def make_locations_from_routes(routes, idint, region, data):
         else:
             idir = -99999
         if dest not in data or 'il' not in data[dest]:
+            assert kind != 'unknown'
             if kind in details.province_kinds:
                 old_hl = data.get(dest, {}).get('LI', {}).get('hl', [])
                 data[dest] = {'firstline': [dest + ' loc ' + kind],
@@ -1028,13 +1029,15 @@ def parse_routes_leaving(text):
                 attr['destination'] = to_int(oid)
                 if 'kind' not in attr:
                     if name.lower() in details.geo_inventory:
+                        # XXXv2 fails if someone names a mountain Forest etc.
                         attr['kind'] = name.lower()
                     elif name == 'Hades':
                         attr['kind'] = 'underground'
                     elif '], 0 days' in l:
                         attr['kind'] = 'ship'  # only for visions of ships
                     else:
-                        raise ValueError('no kind for link {}'.format(l))
+                        # we get here when a road leads to a renamed province
+                        attr['kind'] = 'unknown'
             elif p.endswith(' day') or p.endswith(' days'):
                 m = re.match(r'(\d+) days?$', p)
                 if not m:

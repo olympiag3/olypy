@@ -313,8 +313,6 @@ def test_parse_routes_leaving():
     with pytest.raises(ValueError):
         turnparser.parse_routes_leaving('South, to Forest [badiddd], Ishdol, 2 days')
     with pytest.raises(ValueError):
-        turnparser.parse_routes_leaving('South, to Invalid [bx39], Ishdol, 2 days')
-    with pytest.raises(ValueError):
         turnparser.parse_routes_leaving('South, to Forest [bx39], Ishdol, X days')
     with pytest.raises(ValueError):
         turnparser.parse_routes_leaving('South, to Forest [bx39], Ishdol')
