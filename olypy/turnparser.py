@@ -1651,7 +1651,9 @@ def resolve_fake_items(data):
                                 box.subbox_overwrite(data, item, 'IM', 'uk', ['4'])
                             elif what == '851':  # farcast
                                 box.subbox_overwrite(data, item, 'IM', 'uk', ['5'])
-                                assert len(m) > 1
+                                if len(m) == 1:
+                                    # we did not see an earlier "use" (missing earlier turn?) so leave it fake
+                                    continue
                                 for i in range(len(m)-2, -1, -1):
                                     what, rest = m[i]
                                     if what == '849':
@@ -1661,7 +1663,9 @@ def resolve_fake_items(data):
                                         box.subbox_overwrite(data, item, 'IM', 'pc', [rest])
                                         break
                                 else:
-                                    raise ValueError('Could not find previous farcast to save')
+                                    print('no previous farcast for item {} unit {}'.format(oid, unit))
+                                    # this can happen because of missing old turns... leave it fake
+                                    continue
                                 if data[item]['na'][0].startswith('Fake '):
                                     data[item]['na'] = [data[item]['na'][0][5:]]
                             elif what == '881':
