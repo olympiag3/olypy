@@ -2289,8 +2289,13 @@ def compatible_boxes(one, two):
     '''
     move me to data.py? XXXv1
     '''
-    fl1 = one['firstline'][0]
-    fl2 = two['firstline'][0]
+    fl1 = one.get('firstline', [None])[0]
+    fl2 = two.get('firstline', [None])[0]
+
+    if fl1 is None or fl2 is None:
+        print('hey greg compatible_boxes box1 is', one)
+        print('     and compatible_boxes box2 is', two)
+
     id1, kind1, subkind1 = fl1.split(' ', maxsplit=2)
     id2, kind2, subkind2 = fl2.split(' ', maxsplit=2)
 
