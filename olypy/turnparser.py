@@ -2685,10 +2685,10 @@ def remove_extra_keys(data):
 def finish(data, last_turn):
     resolve_characters(data, last_turn)
     resolve_garrisons(data)
-    resolve_fake_items(data)
+    resolve_regions(data)
+    resolve_fake_items(data)  # must be post-regions
     resolve_npc_artifacts(data)
     resolve_bound_storms(data)
-    resolve_regions(data)
     resolve_visions(data)
     sweep_independent_units(data)
     remove_extra_keys(data)
