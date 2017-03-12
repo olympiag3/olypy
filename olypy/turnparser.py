@@ -39,6 +39,9 @@ global_garr_deficit = {}
 # ships with bound storms
 global_bound_storms = {}
 
+# the Nowhere province
+global_nowhere_province = None
+
 
 def parse_an_id(text):
     '''
@@ -1748,8 +1751,8 @@ def resolve_visions(data):
                                'na': ['fake vision target'],
                                'IT': {'pl': ['fake dead vision target'],
                                       'wt': ['100'],
-                                      'un': [to_int('aa01')]}}
-                    data[to_int('aa01')]['il'].extend([i, '1'])
+                                      'un': [global_nowhere_province]}}
+                    data[global_nowhere_province]['il'].extend([i, '1'])
             box.subbox_overwrite(data, ident, 'CM', 'vi', s)
             print('char', ident, 'has', len(global_vision_targets[ident]), 'visions')
 
@@ -1911,9 +1914,11 @@ def create_400s(data):
 def resolve_nowhere(region_ident, data):
     # 4 items need to be in a special nowhere province
     ident = 46816
-    while ident in data:
+    while str(ident) in data:
         ident += 1
     ident = str(ident)
+    global global_nowhere_province
+    global_nowhere_province = ident
     data[ident] = {'firstline': [ident + ' loc underground'],
                    'na': ['Nowhere'],
                    'LI': {'wh': [region_ident]},
