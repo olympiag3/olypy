@@ -1815,6 +1815,26 @@ def parse_several_items(s):
     return items
 
 
+def garrison_log_unwrap(s):
+    '''
+    Merge lines like:
+     5: 9609: Received three winged horses [54] from Oleg the
+     5: 9609: Loudmouth [9999].
+    '''
+    ret = []
+    merge_next = False
+    for l in s.split('\n'):
+        if merge_next:
+            merge_next = False
+            _, _, trimmed = l.split(':', maxsplit=2)
+            ret[-1] += trimmed
+            continue
+        ret.append(l)
+        if l.count('[') < 2:
+            merge_next = True
+    return '\n'.join(ret)
+
+
 def resolve_garrisons(data):
     for k, v in data.items():
         gc = v.get('MI', {}).get('gc', [False])[0]
@@ -1834,6 +1854,7 @@ def resolve_garrisons(data):
                 if not il:
                     il = {'12': 10}
                 actions = global_garrison_log[g][str(t)][str(d)]
+                actions = garrison_log_unwrap(actions)
                 for line in actions.split('\n'):
                     if line.startswith('Received '):
                         _, count, _ = line.split(' ', 2)

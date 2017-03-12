@@ -1009,6 +1009,22 @@ def test_parse_several_items():
     assert turnparser.parse_several_items(t) == r
 
 
+def test_garrison_log_unwrap():
+    t = '''\
+ 5: 9609: Received three winged horses [54] from Oleg the
+ 5: 9609: Loudmouth [9999].
+ 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
+ 5: 9609: Received three winged horses [54] from Oleg the
+ 5: 9609: Loudmouth [9999].
+'''
+    r = '''\
+ 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
+ 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
+ 5: 9609: Received three winged horses [54] from Oleg the Loudmouth [9999].
+'''
+    assert turnparser.garrison_log_unwrap(t) == r
+
+
 def test_resolve_regions():
     # lots of global action
     pass
