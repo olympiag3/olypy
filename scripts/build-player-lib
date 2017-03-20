@@ -27,6 +27,8 @@ os.makedirs('lib/spool', exist_ok=False)
 os.makedirs('lib/orders', exist_ok=False)
 
 for f in args.turns:
+    if f.endswith('.zip') or f.endswith('.gz'):
+        continue
     m = re.search('(\d{2,})', f)
     if not m:
         continue
