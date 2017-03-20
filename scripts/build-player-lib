@@ -55,8 +55,11 @@ for t in sorted_turns:
     for f in turn_files[t]:
         contents = ''
         with open(os.path.expanduser(f), 'r') as fd:
-            for line in fd:
-                contents += line.expandtabs()
+            try:
+                for line in fd:
+                    contents += line.expandtabs()
+            except UnicodeDecodeError:
+                raise UnicodeDecodeError('Unicode decode error reading file '+f)
         if turnparser.looks_like_a_turn(contents, t):
             if args.verbose:
                 print('\nprocessing', f, '\n')
