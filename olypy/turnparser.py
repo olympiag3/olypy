@@ -327,7 +327,9 @@ def parse_inventory(text, unit, data):
             if m:
                 box.subbox_overwrite(data, scroll_id, 'IM', 'ms', [m.group(2)])
             elif '???' in line:
-                continue  # leave it faked
+                # re-insert 'Fake' into the name XXXv2 get the skill category in it
+                data[scroll_id]['na'] = ['Fake ' + data[scroll_id]['na'][0]]
+                continue
             else:
                 raise ValueError('next line did not contain the scroll spell: '+line)
             continue
