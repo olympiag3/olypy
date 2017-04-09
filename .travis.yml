@@ -1,3 +1,7 @@
+#to get 14.04:
+#sudo: required
+#dist: trusty
+
 language: python
 python:
 #  - "3.2"
@@ -5,7 +9,8 @@ python:
 #  - "3.4" # subprocess.run
   - "3.5"
   - "3.6"
-  - "3.7-dev" # working for now
+  - "3.7-dev"
+  - "nightly"
 
 install: "pip install -r requirements.txt"
 
