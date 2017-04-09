@@ -31,7 +31,7 @@ names = os.listdir(os.path.join('lib', 'save', str(turn)))
 for n in names:
     fullname = os.path.join('lib', 'save', str(turn), n)
     print('considering processing', fullname)
-    if n.isdigit() and int(n) > 50000:
+    if n.isdigit() and (int(n) > 50000 or n == '100'):
         subprocess.run('./g2rep {} > {}.{}'.format(fullname, to_oid(n), str(turn)), shell=True, check=True)
 
 subprocess.run('tar czf lib-next.{}.tar.gz lib'.format(turn).split(), check=True)
