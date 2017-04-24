@@ -1937,9 +1937,10 @@ def resolve_garrisons(data):
                     del il[i]
                 data[g]['il'] = box.dict_to_inventory(il)
             elif g in data:
-                print('hey greg this should not happen! garrison has il but wrong kind:', data[g])
+                # g is no longer a garrison by the final turn. Do nothing.
+                pass
             else:
-                # not in data, means it was seen to be missing by the final turn.
+                # g was seen to be destoyed by the final turn. Do nothing.
                 pass
 
 
