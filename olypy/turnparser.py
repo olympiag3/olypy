@@ -2132,6 +2132,22 @@ def sweep_independent_units(data):
     return 0
 
 
+def fixup_nesw(data):
+    '''
+    For the rectangular parts of the map, if adjacent provinces exist
+    but don't have a link (e.g. neither was actually entered), link
+    them together.
+
+    Do for main map, faery, cloudlands, subworld.
+    Do not do for: hades, undercity.
+
+    Beware the edge of the map.
+
+    XXX test
+    '''
+    pass
+
+
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
 
@@ -2756,6 +2772,8 @@ def finish(data, last_turn):
     resolve_bound_storms(data)
     resolve_visions(data)
     sweep_independent_units(data)
+    fixup_nesw(data)
+
     remove_extra_keys(data)
     box.canonicalize(data)
 
