@@ -125,12 +125,15 @@ def parse_wait_args(order):
         arg = args.pop(0)
         if arg not in wait_args:
             raise ValueError('unknown WAIT arg of '+arg+' in order '+order)
-        ar.append(wait_args[arg]['value'])
+        value = wait_args[arg]['value']
         nargs = wait_args[arg]['nargs']
+        ar.append(value)
         for _ in range(nargs):
             if 'special' in wait_args[arg]:
                 ar.append(args.pop(0))  # flag blue
             else:
+                if len(args) == 0 and value == 4:
+                    args.append('1')  # wart in the C parser, item N Q, Q is optional on end
                 ar.append(to_int(args.pop(0)))
         if 'special' in wait_args[arg]:
             # the next thing either doesn't exist, or is a unit, or is a wait name
