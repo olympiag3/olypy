@@ -52,6 +52,7 @@ def test_parse_wait_args():
                ['wait time 7', [0, '7']],
                ['wait loc aa01', [6, '10001']],
                ['wait not day 7', [14, 1, '7']],
+               ['wait item 1', [4, '1', '1']],  # 1 arg, 2nd assumed to be '1'
                ['wait item 1 100', [4, '1', '100']],  # 2 args
                ['wait item 1 100 day 7', [4, '1', '100', 1, '7']],
                ['wait flag blue 1001', [5, 'blue', '1001']],
@@ -63,7 +64,6 @@ def test_parse_wait_args():
         assert turnparser.parse_wait_args(order) == ar
 
     raising_vectors = [['wait time', IndexError],
-                       ['wait item 1', IndexError],
                        ['wait item 1 day 3', ValueError],
                        ['wait flag blue blue day 7', ValueError],
                        ['wait loc blue', ValueError]]
