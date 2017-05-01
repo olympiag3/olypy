@@ -2644,7 +2644,7 @@ def parse_in_progress_orders(s, faction, turn_num, data):
                 order = order_and_remaining.replace('(still executing)', '').lower()
                 remaining = '0'
             else:
-                m = re.match(r'^(.*) \(executing for ([a-z0-9,]+) more days?\)', order_and_remaining)
+                m = re.match(r'^(.*) \(executing for ([a-z0-9,]+)', order_and_remaining)
                 if m:
                     order, remaining = m.group(1, 2)
                     order = order.lower()
