@@ -2584,6 +2584,11 @@ def parse_location(s, factint, everything, data):
                  ' char garrison' in data[c]['firstline'][0] and
                  data[c]['LI']['wh'] != things[c]['LI']['wh'])):
                 db.unset_where(data, c)
+            # sewers have exits which are not visible from outside
+            # graveyard/faery hill extra exits are roads, so this is just sewers
+            if c in data and ' loc sewer' in data[c]['firstline'][0]:
+                if 'pd' in data[c].get('LO', {}):
+                    box.subbox_overwrite(things, c, 'LO', 'pd', data[c]['LO']['pd'])
 
     appeared = new_set.difference(old_set)
     if appeared:
