@@ -1408,13 +1408,14 @@ def remove_visions(s):
 
 
 def note_visions(ident, visions, data):
-    "Put list of successfully priestly visioned targets into CM vi"
+    '''
+    Put list of successfully priestly visioned targets into CM vi
+    '''
     for v in visions:
         if ' receives a vision ' not in v:
             continue
-        m = re.search(r'\].*\[(.{3,6})\]', v)
+        m = re.search(r'.*?\].*?\[(.{3,6})\]', v, re.S)
         if m:
-            print('found target', m.group(1))
             global_vision_targets[ident].append(to_int(m.group(1)))
 
 
