@@ -21,6 +21,7 @@ turn = int(turn) - 1
 subprocess.run('rm -rf lib'.split(), check=True)
 subprocess.run('tar xf lib.{}.tar.gz'.format(turn).split(), check=True)
 subprocess.run('cp -p spool.{}/m.* lib/spool'.format(turn), shell=True, check=True)
+subprocess.run('rm -f lib/spool/m*~', shell=True, check=True)
 
 subprocess.run('./olympia -E'.split(), check=True)
 subprocess.run('./olympia -rS'.split(), check=True)
