@@ -78,6 +78,5 @@ print('Database check found {} problems'.format(problems))
 oio.write_lib(data, 'lib')
 turnparser.final_fixups('lib')
 
-# subprocess module introduced in 3.5, so don't use it yet
-tar = 'tar czf lib.{}.tar.gz lib'.format(last_turn).split()
+tar = 'tar cjf lib.{}.tar.gz lib'.format(last_turn).split()
 subprocess.run(tar, check=True)
