@@ -70,6 +70,8 @@ for t in sorted_turns:
             if args.verbose:
                 print('skipped {} because it did not look like a turn'.format(f))
 
+    turnparser.finish_turn(data)
+
 turnparser.finish(data, last_turn)
 
 problems = dbck.check_db(data)

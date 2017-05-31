@@ -42,6 +42,11 @@ global_bound_storms = {}
 # the Nowhere province
 global_nowhere_province = None
 
+# holds barriers spotted this turn
+global_barriers = set()
+# holds all things seen this turn, used to remove barriers when not seen
+global_locs_seen = set()
+
 
 def parse_an_id(text):
     '''
@@ -644,7 +649,6 @@ def make_locations_from_routes(routes, idint, region, data):
 
         if 'hidden' in r and not dir.endswith(' road'):
             box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
-
         # XXXv2 what about roads?
 
 
@@ -1000,10 +1004,15 @@ def parse_routes_leaving(text):
     '''
 
     ret = []
+    last_oidint = None
     for l in text.split('\n'):
         if ',' not in l:
-            # example: A magical barrier prevents entry.
-            # XXXv0
+            # example: A magical barrier prevents entry -- [id] is on previous line
+            if 'A magical barrier prevents entry.' in l:
+                # the oid that's barriered is on the previous line
+                print('hey greg saw a barrier around', to_oid(last_oidint))
+                global global_barriers
+                global_barriers.add(last_oidint)
             continue
         if 'Notice to mortals' in l or 'taking this route' in l:
             # Hades banner. I think only ships/castles can have player banners set so no need to worry
@@ -1031,7 +1040,8 @@ def parse_routes_leaving(text):
                     raise ValueError('failed to match loc in {}'.format(p))
                 name, oid = m.group(1, 2)
                 attr['name'] = name
-                attr['destination'] = to_int(oid)
+                last_oidint = to_int(oid)
+                attr['destination'] = last_oidint
                 if 'kind' not in attr:
                     if name.lower() in details.geo_inventory:
                         # XXXv2 fails if someone names a mountain Forest etc.
@@ -1092,6 +1102,11 @@ def parse_routes_leaving(text):
 
         # dir, name, kind, target, days, region(optional), annotations
         ret.append(attr)
+
+        global global_locs_seen
+        for attr in ret:
+            if 'destination' in attr:
+                global_locs_seen.add(attr['destination'])
 
     return ret
 
@@ -1243,12 +1258,15 @@ def parse_inner_locations(idint, text, things):
     if new_text != text:
         text = new_text
 
+    global global_barriers
+
     for l in text.split('\n'):
         if 'A magical barrier surrounds' in l:
+            # there might be several of these in the same area: one for province, one for city
+            # fortunately, they mention the id
             where = parse_an_id(l)
-            # LO ba gets the strength. If permanent, gets -owner
-            # box.subbox_overwrite(data, where, 'LO', 'ba', ['1'])
-            # XXXv0
+            print('hey greg barrier around', to_oid(where))
+            global_barriers.add(where)
             continue
 
         continuation = False
@@ -1748,6 +1766,34 @@ def resolve_npc_artifacts(data):
                                 box.subbox_overwrite(data, item, 'PL', 'un', [u])
                                 box.subbox_overwrite(data, u, 'CM', 'ot', [item])
                                 break
+
+
+def resolve_barriers(data):
+    '''
+    Make a barrier for every barrier seen. Remove any barriers
+    where we saw the location and did not see a barrier.
+    '''
+    global global_barriers
+    global global_locs_seen
+
+    global_locs_seen.difference_update(global_barriers)
+
+    for where in global_barriers:
+        if data[where].get('LO', {}).get('ba') is None:
+            print('hey greg, actually creating a new barrier at', to_oid(where))
+            box.subbox_overwrite(data, where, 'LO', 'ba', ['2'])
+    for where in global_locs_seen:
+        if data.get(where, {}).get('LO', {}).get('ba') is not None:
+            print('hey greg, removing a barrier not seen from', to_oid(where))
+            del data[where]['LO']['ba']
+
+    global_barriers = set()
+    global_locs_seen = set()
+
+
+def finish_turn(data):
+    # do what's needed to finish a single turn
+    resolve_barriers(data)
 
 
 def resolve_characters(data, turn_num):
@@ -2626,6 +2672,9 @@ def parse_location(s, factint, everything, data):
             box.subbox_append(data, '207', 'PL', 'un', [u], dedup=True)
 
     # this will leave some chars and ships unwhered. do something with them. XXXv0
+
+    global global_locs_seen
+    global_locs_seen.update(set(things.keys()))
 
     return region
 
