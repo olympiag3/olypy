@@ -573,7 +573,7 @@ def parse_pending_trades(text):
     return ret
 
 
-def make_locations_from_routes(routes, idint, region, data):
+def make_locations_from_routes(routes, idint, region, factint, data):
     for r in routes:
         dest = r['destination']
         kind = r['kind']
@@ -649,6 +649,8 @@ def make_locations_from_routes(routes, idint, region, data):
 
         if 'hidden' in r and not dir.endswith(' road'):
             box.subbox_overwrite(data, dest, 'LO', 'hi', ['1'])
+            box.subbox_append(data, factint, 'PL', 'kn', dest, dedup=True)
+            print('hey greg adding hidden route', to_oid(dest), 'to kn')
         # XXXv2 what about roads?
 
 
@@ -2455,9 +2457,10 @@ def parse_location(s, factint, everything, data):
             box.subbox_append(data, idint, 'LO', 'pd', ['0', '0', '0', '0'])
         if safe_haven:
             box.subbox_overwrite(data, idint, 'SL', 'sh', ['1'])
-        if hidden:
-            box.subbox_overwrite(data, idint, 'LO', 'hi', ['1'])
-            box.subbox_append(data, factint, 'PL', 'kn', idint, dedup=True)
+    if hidden:
+        box.subbox_overwrite(data, idint, 'LO', 'hi', ['1'])
+        box.subbox_append(data, factint, 'PL', 'kn', idint, dedup=True)
+        print('hey greg adding hidden location', to_oid(idint), 'to kn')
 
     # update things that change
     box.box_overwrite(data, idint, 'na', [name])
@@ -2487,7 +2490,7 @@ def parse_location(s, factint, everything, data):
                     box.subbox_overwrite(data, idint, 'LI', 'wh', [enclosing_int])
                     break
 
-        make_locations_from_routes(routes, idint, region, data)
+        make_locations_from_routes(routes, idint, region, factint, data)
         make_direction_routes(routes, idint, kind, data)
 
     m = re.search(r'^Cities rumored to be nearby:\n(.*?)\n\n', s, re.M | re.S)
@@ -2552,6 +2555,7 @@ def parse_location(s, factint, everything, data):
     for i in things:
         if 'hi' in things[i].get('LO', {}):
             box.subbox_append(data, factint, 'PL', 'kn', i, dedup=True)
+            print('hey greg adding hidden sublocation', to_oid(i), 'to kn')
             global global_hidden_stuff
             global_hidden_stuff[idint].add(i)
 
