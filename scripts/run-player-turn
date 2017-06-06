@@ -35,4 +35,4 @@ for n in names:
     if n.isdigit() and (int(n) > 50000 or n == '100'):
         subprocess.run('./g2rep {} > {}.{}'.format(fullname, to_oid(n), str(turn)), shell=True, check=True)
 
-subprocess.run('tar czf lib-next.{}.tar.gz lib'.format(turn).split(), check=True)
+subprocess.run('tar cjf lib-next.{}.tar.gz lib'.format(turn).split(), check=True)
