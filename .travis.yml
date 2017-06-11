@@ -4,13 +4,19 @@
 
 language: python
 python:
-#  - "3.2"
-#  - "3.3" # contextlib, re.findall
-#  - "3.4" # subprocess.run
-  - "3.5"
-  - "3.6"
-  - "3.7-dev"
-  - "nightly"
+#  - 3.2
+#  - 3.3 # contextlib, re.findall
+#  - 3.4 # subprocess.run
+  - 3.5
+  - 3.6
+  - 3.7-dev
+  - nightly
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - python: 3.7-dev
+  - python: nightly
 
 install: "pip install -r requirements.txt"
 
