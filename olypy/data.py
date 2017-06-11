@@ -6,6 +6,14 @@ from .oid import to_int, allocate_oid
 from . import box
 
 
+def loc_kind(data, who):
+    try:
+        _, _, kind = data[who]['firstline'][0].split(' ', 2)
+    except KeyError:
+        kind = ''
+    return kind
+
+
 def is_char(data, who):
     if ' char ' in data[who]['firstline'][0]:
         return True

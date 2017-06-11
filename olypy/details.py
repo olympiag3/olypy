@@ -10,6 +10,7 @@ route_annotations = set(('hidden', 'impassable', 'port', 'port city', 'safe have
 
 province_kinds = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean',
                      'tunnel', 'chamber', 'cloud', 'underground'))
+grid_kinds = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean', 'cloud'))  # form a grid on the map
 has_6_directions = set(('tunnel', 'sewer', 'chamber'))
 
 subloc_kinds = set(('island', 'ring of stones', 'mallorn grove', 'bog', 'cave',

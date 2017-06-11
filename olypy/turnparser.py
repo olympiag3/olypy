@@ -2187,14 +2187,47 @@ def fixup_nesw(data):
     but don't have a link (e.g. neither was actually entered), link
     them together.
 
-    Do for main map, faery, cloudlands, subworld.
-    Do not do for: hades, undercity.
+    Beware the edge of the map. There's no good way to know if the
+    map wraps, and if it does and is 100x100, then aa99 is next to
+    aa00 not ab00. Currently no rectangular section is bigger than 80x80.
+    Another oddness is that randomly picked locations (Hades) can be
+    adjacent a the rectangular map. In that case, the region is different.
 
-    Beware the edge of the map.
+    Pre-pass (not implemented)
+    * find every loc that's a square province type, and if it ends in 00,
+       see if it wraps & where. if so that's the edge of the rectangle.
+    * this is not useful in g4 because the map does not wrap in g4.
 
-    XXX test
+    Algo:
+    * for every loc that's a square province type
+    * loop over N E S W neighbors and link if compatible region
     '''
-    pass
+
+    for i in data:
+        if db.loc_kind(data, i) in details.grid_kinds:
+            pd = data[i].get('LO', {}).get('pd', [])
+            if len(pd) == 0:
+                raise ValueError('Location {} kind {} lacks a pd'.format(to_oid(i), pd))
+            if pd[0] == '0':
+                n = str(int(i) - 100)
+                if n in data and db.loc_kind(data, n) in details.grid_kinds:
+                    print('hey greg link from', to_oid(i), 'to', to_oid(n), 'is missing.')
+                    pd[0] = n
+            if pd[1] == '0':
+                e = str(int(i) + 1)
+                if e in data and db.loc_kind(data, e) in details.grid_kinds:
+                    print('hey greg link from', to_oid(i), 'to', to_oid(e), 'is missing.')
+                    pd[1] = e
+            if pd[2] == '0':
+                s = str(int(i) + 100)
+                if s in data and db.loc_kind(data, s) in details.grid_kinds:
+                    print('hey greg link from', to_oid(i), 'to', to_oid(s), 'is missing.')
+                    pd[2] = s
+            if pd[3] == '0':
+                w = str(int(i) - 1)
+                if w in data and db.loc_kind(data, w) in details.grid_kinds:
+                    print('hey greg link from', to_oid(i), 'to', to_oid(w), 'is missing.')
+                    pd[3] = w
 
 
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
