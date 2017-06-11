@@ -74,9 +74,6 @@ def loop_here(data, where, fog=False):
     If fog, make a list of only the visible things
     (caller responsible for making sure that fog=True only for provinces)
     '''
-    if fog and ' loc ' in data[where]['firstline'][0]:
-        kind = data[where]['firstline'][0].partition(' loc ')[2]
-
     hls = set()
     if 'LI' in data[where]:
         if 'hl' in data[where]['LI']:
@@ -111,6 +108,7 @@ def destroy_box(data, who, promote_children=True):
     # owner of storm - MI,sb {summoned by}
     # storm bound to a ship - ship has SL,bs ... and the storm has MI,bs=itself (?)
     del data[who]
+
 
 def upsert_box(data, newdata, who):
     '''
@@ -239,6 +237,7 @@ def data_newbox(data, oid_kind, firstline, oid=None, overwrite=False):
     data[oid] = {}
     data[oid]['firstline'] = [str(oid) + ' ' + firstline]
     return oid
+
 
 structures = {
     # in-progress: bm, er, eg ... bm runs 0..4
