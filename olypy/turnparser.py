@@ -12,7 +12,7 @@ import glob
 from . import get_template_lib
 from .oid import to_int, to_oid, to_int_safely
 from . import box
-from . import data as db
+from . import db
 from . import details
 
 # holds the day-by-day action for each char

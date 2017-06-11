@@ -1,10 +1,10 @@
 import pytest
 
 from olypy.oid import to_int
-from olypy.data import loc_kind
-from olypy.data import is_char, can_move, loop_here
-from olypy.data import set_where, unset_where
-from olypy.data import add_structure, add_scroll, add_potion
+from olypy.db import loc_kind
+from olypy.db import is_char, can_move, loop_here
+from olypy.db import set_where, unset_where
+from olypy.db import add_structure, add_scroll, add_potion
 
 
 def test_loc_kind():
