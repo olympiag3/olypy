@@ -85,7 +85,7 @@ def loop_here(data, where, fog=False):
                 if ' loc city' in firstline:
                     # do not descend into cities
                     continue
-                [hls.add(x) for x in loop_here(data, w)]  # don't propagate fog
+                [hls.add(x) for x in loop_here(data, w)]
     return hls
 
 
