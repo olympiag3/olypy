@@ -1971,6 +1971,7 @@ def resolve_garrisons(data):
             if g in data and ' char garrison' in data[g]['firstline'][0]:
                 # this may not be the same garrison... id could have been recycled.
                 # however if recycled, it must be a garrison that's not ours
+                # XXX actually this is a bug! disbanded garrisons later re-established are not getting created
                 db.unset_where(data, g)
                 box.subbox_remove(data, '207', 'PL', 'un', g)
                 del data[g]
