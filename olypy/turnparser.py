@@ -832,6 +832,8 @@ def parse_a_character(parts):
         p = p.strip()
         if p in details.noble_ranks:
             CH['ra'] = [details.noble_ranks[p]]
+        elif p == 'Emperor':
+            continue
         elif p.startswith('"') and p.endswith('"'):
             continue
         elif p == 'accompanied by:':
