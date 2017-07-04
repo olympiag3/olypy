@@ -495,6 +495,12 @@ def admit_int(part):
 
 
 def parse_admit(text):
+    '''
+    Occasionally the admit section is empty. Return early in that case.
+    '''
+    if 'Unclaimed items:' in text:
+        return []
+
     ret = []
     for line in text.split('\n'):
         parts = line.split()
