@@ -107,20 +107,35 @@ def write_system_file(data):
         if ' player pl_regular' in fl:
             lt = max(lt, int(v['PL']['lt'][0]))
         if fr is None and ' loc region' in fl and na == 'Faery':
-            fr = k
+            if v.get('LI', {}).get('hl'):
+                fr = k
+            else:
+                fr = 0
         if tr is None and ' loc region' in fl and na == 'Undercity':
-            tr = k
+            if data[k].get('LI', {}).get('hl'):
+                tr = k
+            else:
+                tr = 0
         if ur is None and ' loc region' in fl and na == 'Subworld':
-            ur = k
+            if data[k].get('LI', {}).get('hl'):
+                ur = k
+            else:
+                ur = 0
         if hr is None and ' loc region' in fl and na == 'Hades':
-            hr = k
+            if data[k].get('LI', {}).get('hl'):
+                hr = k
+            else:
+                hr = 0
         if hp is None and fl.endswith(' loc pit'):  # normal pits are 'pits'
             hp = k
         if nr is None and ' loc region' in fl and na == 'Nowhere':
             nr = k
             nl = v['LI']['hl'][0]
         if cr is None and ' loc region' in fl and na == 'Cloudlands':
-            cr = k
+            if data[k].get('LI', {}).get('hl'):
+                cr = k
+            else:
+                cr = 0
 
     if hp is None:
         # not surprising for a player sim
