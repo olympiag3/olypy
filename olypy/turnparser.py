@@ -2190,6 +2190,22 @@ def sweep_independent_units(data):
     return 0
 
 
+def doublecheck_garrisons(data):
+    '''
+    If an id was once a garrison, but we didn't see the garrison disappear,
+    and later the id becomes something different, player 207 will have a
+    dangling unit.
+
+    In theory this is better solved at the time that we overwrite the
+    garrison's box.
+    '''
+    un = data.get('207', {}).get('PL', {}).get('un', [])
+    for u in un:
+        if u not in data or ' char garrison' not in data[u]['firstline'][0]:
+            print('hey greg, dorking garrison', u)
+            box.subbox_remove(data, '207', 'PL', 'un', u)
+
+
 def fixup_nesw(data):
     '''
     For the rectangular parts of the map, if adjacent provinces exist
@@ -2873,6 +2889,7 @@ def finish(data, last_turn):
     resolve_bound_storms(data)
     resolve_visions(data)
     sweep_independent_units(data)
+    doublecheck_garrisons(data)
     fixup_nesw(data)
 
     remove_extra_keys(data)
