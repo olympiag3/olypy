@@ -4,6 +4,7 @@ gm_player=200
 skill_player=202
 from_host=foo@example.com
 reply_host=foo@example.com
+game_title=SIMULATION
 post=1
 init=1
 fr=58930

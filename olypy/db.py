@@ -107,6 +107,7 @@ def destroy_box(data, who, promote_children=True):
     # creater of things like storms, artifacts - IM,ct
     # owner of storm - MI,sb {summoned by}
     # storm bound to a ship - ship has SL,bs ... and the storm has MI,bs=itself (?)
+    # garrison -- remove from player 207 PL un
     del data[who]
 
 
