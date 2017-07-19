@@ -2837,7 +2837,7 @@ def parse_turn(turn, data, everything=True):
                     lines = days.rstrip('\n').split('\n')
                     padded_turn_num = 't{:03d}:'.format(int(turn_num))
                     lines = [padded_turn_num+l for l in lines]
-                    global_days[ident] += '\n'.join(lines)
+                    global_days[ident] += '\n'.join(lines) + '\n'
 
                 if not everything:
                     break
