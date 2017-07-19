@@ -972,16 +972,16 @@ def test_resolve_fake_items():
             '10000': {'firstline': ['10000 loc tower']}}
 
     turnparser.global_days = {'1111': '''
-01: > Use 691
-01: Created foo [a111].
-01: > Use 894
-01: Produced one foo [h001]
-01: > use 849 ab00
-01: > use 849 aa00
-01: > use 851
-01: Created foo [k001].
-01: > use 881 38
-01: Produced one foo [q001]
+t001:01: > Use 691
+t001:01: Created foo [a111].
+t001:01: > Use 894
+t001:01: Produced one foo [h001]
+t001:01: > use 849 ab00
+t001:01: > use 849 aa00
+t001:01: > use 851
+t001:01: Created foo [k001].
+t001:01: > use 881 38
+t001:01: Produced one foo [q001]
 '''}
 
     turnparser.resolve_fake_items(data)

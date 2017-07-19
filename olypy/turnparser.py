@@ -1563,7 +1563,7 @@ def parse_faction(text, factint, data):
 
 
 def last_storm_bind(text, ident):
-    m = re.findall(r'^[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', text, re.M)
+    m = re.findall(r'^t\d\d\d:[ \d]\d: Bound .*? \['+ident+r'\] to .*? \[(.*?)\]\.', text, re.M)
     if m:
         return m[-1]  # if multiple, return the last
 
@@ -1678,15 +1678,19 @@ potion_to_uk = {'691': '2',  # heal
 
 
 def resolve_fake_items(data):
-    "Mostly accurate. If an item is made and destroyed and remade, we'll pick randomly."
     for item in data:
         if ' item ' in data[item]['firstline'][0] and 'fake' in data[item]:
             oid = to_oid(item)
+            turnday_used = 't000: 0'
             for unit in global_days:
                 if oid in global_days[unit]:
-                    m = re.search(r'^[ \d]\d: (?:Created|Produced one) .*? \['+oid+r'\]\.?$', global_days[unit], re.M)
+                    m = re.search(r'^(t\d\d\d:[ \d]\d): (?:Created|Produced one) .*? \['+oid+r'\]\.?$', global_days[unit], re.M)
                     if m:
                         whole = m.group(0)
+                        turnday = m.group(1)
+                        if turnday < turnday_used:
+                            continue
+                        turnday_used = turnday
                         before, _, after = global_days[unit].partition(whole)
                         m = re.findall(r' \> use (\d+)(.*)', before, re.I)
                         if m:
@@ -2778,10 +2782,10 @@ def parse_in_progress_orders(s, faction, turn_num, data):
             # (it gets the day right, but doesn't factor in the turn)
             # (30+ day orders: study scrolls for a few categories; some moves like swamp with max penalty)
             splits = global_days[unit].split(': > ')
-            start_day = splits[-2][-3:]
+            start_day = splits[-2][-8:]
             if not start_day.startswith('\n'):
                 raise ValueError('Failed to parse an order day: '+start_day)
-            start_day = int(start_day[1:])
+            start_day = int(start_day[6:])
 
             last_move_dest = to_int('aa01')
             m = re.search(r'(?:Flying|Travel|Sailing) to .*? \[(.*?)\] will take (?:.+) days?\.', splits[-1])
@@ -2830,7 +2834,10 @@ def parse_turn(turn, data, everything=True):
                 if days:
                     if ident not in global_days:
                         global_days[ident] = ''
-                    global_days[ident] += days
+                    lines = days.rstrip('\n').split('\n')
+                    padded_turn_num = 't{:03d}:'.format(int(turn_num))
+                    lines = [padded_turn_num+l for l in lines]
+                    global_days[ident] += '\n'.join(lines)
 
                 if not everything:
                     break
