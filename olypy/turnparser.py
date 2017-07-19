@@ -1442,6 +1442,9 @@ def note_visions(ident, visions, data):
     for v in visions:
         if ' receives a vision ' not in v:
             continue
+        '''
+        This grabs the id of the target even if it's on a different line
+        '''
         m = re.search(r'.*?\].*?\[(.{3,6})\]', v, re.S)
         if m:
             global_vision_targets[ident].append(to_int(m.group(1)))
