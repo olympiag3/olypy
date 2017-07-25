@@ -1906,6 +1906,11 @@ def garrison_log_unwrap(s):
 
 
 def resolve_garrisons(data):
+    '''
+    A significant lack with this code is that it doesn't synch with
+    the visible inventory, which might be visible at day 0 or day 31 of
+    any turn.
+    '''
     for k, v in data.items():
         gc = v.get('MI', {}).get('gc', [False])[0]
         if gc:
@@ -1992,8 +1997,7 @@ def resolve_garrisons(data):
                 del data[g]
         elif il:
             if g in data and ' char garrison' in data[g]['firstline'][0]:
-                # this only hits garrisons that still exist
-                # drop anything that does not exist (e.g. scrolls/potions)
+                # drop any item that does not exist (e.g. scrolls/potions)
                 drop = []
                 for i in il:
                     if int(i) > 399 and i not in data:
