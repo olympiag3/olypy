@@ -820,7 +820,7 @@ def parse_a_sublocation_route(parts):
             attr['SL']['sh'] = ['1']
         elif p == 'owner:':
             continue
-        elif p == '""':
+        elif p.startswith('"') and p.endswith('"'):
             continue
         else:
             raise ValueError('unknown part in a sublocation route: '+p)
@@ -1259,6 +1259,7 @@ def parse_inner_locations(idint, text, things):
     last_depth = 0
     depths = [idint, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
+    # XXX this changes the length of the line, which complicates parsing!
     text = re.sub('".*?"', '""', text, flags=re.S)  # throw out all banners, including multi-line
     text = text.replace('*', ' ')
 
@@ -1269,6 +1270,7 @@ def parse_inner_locations(idint, text, things):
         text = new_text
 
     global global_barriers
+    # last_len = 80
 
     for l in text.split('\n'):
         if 'A magical barrier surrounds' in l:
@@ -1298,20 +1300,27 @@ def parse_inner_locations(idint, text, things):
         # not going here because someone might name a noble 'wearing foo'
         #    pass
         elif '[' not in parts[0]:
-            # noble with comma in name?
+            # ambiguous! could be an inventory item "five\nriding horses" or a real ending
+            # followed by a noble with comma(s) in the name
+            # noble with exactly one comma in name?
             if ((len(parts) > 1 and
                  not (parts[1].startswith('wielding ') or parts[1].startswith('wearing ')) and
                  '[' in parts[1])):
                 continuation = False
+            # elif last_len <= 60:
+            #    print('hey greg last_len 60 fired on', accumulation)
+            #    continuation = False
             else:
                 continuation = True
 
         if continuation:
             accumulation += ' ' + l.lstrip(' ')
+            # last_len = len(l)
         else:
             if accumulation:
                 last_depth = parse_a_structure_or_character(accumulation, depths, last_depth, things)
             accumulation = l
+            # last_len = 80
 
     if accumulation:
         _ = parse_a_structure_or_character(accumulation, depths, last_depth, things)
