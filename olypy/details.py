@@ -274,7 +274,7 @@ noble_ranks = {'lord': '10',
                'knight': '20',
                'baron': '30',
                'count': '40',
-               'earl': '60',
+               'earl': '50',
                'marquess': '60',
                'duke': '70',
                'king': '80'}
