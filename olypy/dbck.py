@@ -72,6 +72,7 @@ def check_where_here(data):
 def check_faction_units(data):
     '''
     If a box is in a faction, make sure it's on the faction's unit list and vice versa.
+    Also check that a pledge target exists. Fix.
     '''
     problem = 0
     for k, v in data.items():
@@ -85,7 +86,14 @@ def check_faction_units(data):
                     print('Unit {} is in faction {} but not vice versa'.format(k, fact), file=sys.stderr)
                     print('  ', v['firstline'][0], file=sys.stderr)
                     problem += 1
-                    continue
+            if 'CM' in v and 'pl' in v['CM']:
+                pledged_to = v['CM']['pl'][0]
+                print('Checking pledge of {} to {}'.format(k, pledged_to), file=sys.stderr)
+                if pledged_to not in data or ' char ' not in data[pledged_to]['firstline'][0]:
+                    print('Unit {} is pledged to {}, who does not exist or is not a char'.format(k, pledged_to), file=sys.stderr)
+                    problem += 1
+                    print('  fixing', file=sys.stderr)
+                    del v['CM']['pl']
 
     for k, v in data.items():
         if ' player ' in v['firstline'][0] and 'un' in v['PL']:
