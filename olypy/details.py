@@ -1,3 +1,4 @@
+compass_directions = set(('north', 'east', 'south', 'west'))
 directions = {'north': 0, 'east': 1, 'south': 2, 'west': 3, 'up': 4, 'down': 5}
 inverted_directions = {'north': 2, 'east': 3, 'south': 0, 'west': 1, 'up': 5, 'down': 4}
 
@@ -12,6 +13,7 @@ province_kinds = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean',
                      'tunnel', 'chamber', 'cloud', 'underground'))
 grid_kinds = set(('mountain', 'plain', 'swamp', 'forest', 'desert', 'ocean', 'cloud'))  # form a grid on the map
 has_6_directions = set(('tunnel', 'sewer', 'chamber'))
+city_kinds = set(('city', 'port city'))
 
 subloc_kinds = set(('island', 'ring of stones', 'mallorn grove', 'bog', 'cave',
                     'city', 'graveyard', 'ruins', 'battlefield', 'enchanted forest',

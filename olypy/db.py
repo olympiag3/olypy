@@ -19,6 +19,21 @@ def is_char(data, who):
         return True
 
 
+def can_move(data, who):
+    '''
+    Used for situations such as deciding to destroy or unwhere a no-longer-present box.
+    Everything but locs can move.
+    '''
+    if ' loc ' not in data[who]['firstline'][0]:
+        return True
+
+
+def is_tradegood(data, who):
+    if data[who]['firstline'][0].endswith(' item tradegood'):
+        return True
+    return False
+
+
 def set_where(data, who, where, keep_children=False):
     who = to_int(who)
     promote_children = not keep_children
@@ -59,16 +74,7 @@ def unset_where(data, who, promote_children=True):
 #        destroy_box(data, who)
 
 
-def can_move(data, who):
-    '''
-    Used for situations such as deciding to destroy or unwhere a no-longer-present box.
-    Everything but locs can move.
-    '''
-    if ' loc ' not in data[who]['firstline'][0]:
-        return True
-
-
-def loop_here(data, where, fog=False):
+def loop_here(data, where, fog=False, into_city=False):
     '''
     Make a list of everything here: chars, structures, sublocs. Do not descend into big sublocs (cities)
     If fog, make a list of only the visible things
@@ -82,7 +88,7 @@ def loop_here(data, where, fog=False):
                     continue
                 hls.add(w)
                 firstline = data[w]['firstline'][0]
-                if ' loc city' in firstline:
+                if ' loc city' in firstline and not into_city:
                     # do not descend into cities
                     continue
                 [hls.add(x) for x in loop_here(data, w)]
@@ -96,9 +102,22 @@ def destroy_box(data, who, promote_children=True):
     if who not in data:
         return
     unset_where(data, who, promote_children=promote_children)
-    # XXXv0 other links:
+
+    il = data[who].get('il', [])
+    if il:
+        il = box.inventory_to_dict(il)
+        for i in il.keys():
+            ii = int(i)
+            if ii < 300:
+                pass
+            elif ii < 500:
+                pass  # XXX put in nowhere
+            else:  # unique item or tradegood
+                if not is_tradegood(data, i):
+                    del data[i]
+
     # pledge chain - CM,pl is one-way so it needs a end-of-run fixup XXXv0
-    # lord: CH,lo and previous lord CH,pl -- needs end-of-run fixup XXXv0
+
     lo = data[who].get('CH', {}).get('lo', [None])[0]
     if lo:
         box.subbox_remove(data, lo, 'PL', 'un', who)

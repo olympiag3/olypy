@@ -2,7 +2,7 @@ import pytest
 
 from olypy.oid import to_int
 from olypy.db import loc_kind
-from olypy.db import is_char, can_move, loop_here
+from olypy.db import is_char, is_tradegood, can_move, loop_here
 from olypy.db import set_where, unset_where
 from olypy.db import add_structure, add_scroll, add_potion
 
@@ -80,6 +80,13 @@ def test_is_char_and_can_move():
     assert not can_move(data, '1001')
 
 
+def test_is_tradegood():
+    data = {'1001': {'firstline': ['1001 item tradegood']},
+            '1002': {'firstline': ['1002 char 0']}}
+    assert is_tradegood(data, '1001')
+    assert not is_tradegood(data, '1002')
+
+
 def test_loop_here():
     data = {'1001': {'firstline': ['1001 loc forest'], 'LI': {'hl': ['1002', '1003', '1006']}},
             '1002': {'firstline': ['1002 char 0'], 'LI': {'hl': ['1004']}},
@@ -90,6 +97,7 @@ def test_loop_here():
             '1007': {'firstline': ['1007 char 0']}}
     assert loop_here(data, '1001') == {'1002', '1003', '1004', '1005', '1006'}
     assert loop_here(data, '1001', fog=True) == {'1003', '1005', '1006'}
+    assert loop_here(data, '1001', into_city=True) == {'1002', '1003', '1004', '1005', '1006', '1007'}
     assert loop_here(data, '1003') == {'1005'}
 
     if loop_here(data, '1003', fog=True) == {'1005'}:

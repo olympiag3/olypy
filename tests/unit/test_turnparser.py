@@ -445,7 +445,7 @@ def test_parse_routes_leaving():
                           'na': ['Swamp']}}
 
     data = {}
-    turnparser.make_locations_from_routes(r, '10101', 'Camaris', '50033', data)
+    turnparser.make_locations_from_routes(r, '10101', 'forest', 'Camaris', '50033', data)
     assert data == expected
 
     data['10101'] = {'LI': {'wh': ['Camaris']},

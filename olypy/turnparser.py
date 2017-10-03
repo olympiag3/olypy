@@ -579,7 +579,7 @@ def parse_pending_trades(text):
     return ret
 
 
-def make_locations_from_routes(routes, idint, region, factint, data):
+def make_locations_from_routes(routes, idint, mykind, region, factint, data):
     for r in routes:
         dest = r['destination']
         kind = r['kind']
@@ -600,16 +600,22 @@ def make_locations_from_routes(routes, idint, region, factint, data):
                               'LO': {'pd': ['0', '0', '0', '0']}}
                 if old_hl:
                     box.subbox_overwrite(data, dest, 'LI', 'hl', old_hl)
+
+                # begin make backlink
                 if 'impassable' in r:
-                    pass  # city, or mountain/sea. Make the link anyway.
+                    pass  # mountain/sea. Make the link anyway.
                 if dir == 'out':
                     continue  # subloc out routes will be created elsewhere
+                if dir in details.compass_directions and mykind in details.city_kinds:
+                    continue
                 if dir.endswith(' road'):
                     continue  # roads are annoying to make. generally they're marked hidden: GA rh 1. XXXv1
                 if idir > 3:
                     data[dest]['LO']['pd'] = ['0', '0', '0', '0', '0', '0']
                 data[dest]['LO']['pd'][idir] = idint
-            elif kind == 'city' or kind == 'port city':
+                # end make backlink
+
+            elif kind in details.city_kinds:
                 if dir == 'out':
                     raise ValueError('Hm. This needs fixing: '+repr(data[dest]))
                 # figure out what province this city is in, there should be an impassable link
@@ -639,18 +645,25 @@ def make_locations_from_routes(routes, idint, region, factint, data):
             elif kind in details.structure_type:
                 pass
         else:
-            # the destination exists, but this link may not
+            # the destination already exists, but this backlink may not
             if kind in details.province_kinds:
+
+                # begin make backlink
                 if dir == 'out':
-                    # this happens for links from cities to their provinces XXXv0
+                    # this happens for links from cities to their provinces, which are implicit
+                    # roads are never 'out'
                     continue
                 if dir.endswith(' road'):
                     continue  # XXXv1
+                if dir in details.compass_directions and mykind in details.city_kinds:
+                    continue
                 if idir > 3:
                     if len(data[dest]['LO']['pd']) < 6:
                         data[dest]['LO']['pd'].extend(('0', '0'))
                 data[dest]['LO']['pd'][idir] = idint
-            elif kind == 'city' or kind == 'port city':
+                # end make backlink
+
+            elif kind in details.city_kinds:
                 pass
 
         if 'hidden' in r and not dir.endswith(' road'):
@@ -660,27 +673,35 @@ def make_locations_from_routes(routes, idint, region, factint, data):
         # XXXv2 what about roads?
 
 
-def make_direction_routes(routes, idint, kind, data):
+def make_direction_routes(routes, idint, mykind, data):
     '''
     make normal direction routes (n,e,s,w,u,d)
     destination already created by make_locations_from_routes
-    XXXv0 does not make backlinks
+    XXXv0 does not make backlinks -- currently made in make_locations_from_routes
     XXXv0 lacks city check, causing bug of ocean -> city instead of ocean -> province
     '''
-    if kind == 'city' or kind == 'port city':
+    if mykind in details.city_kinds:
         # cities have no nsew directions; links are actually in the province (marked impassable)
-        # XXXv0 cities do have up and down
+        # XXXv0 cities do have up (cloudlands) and down (?)
         return
     for r in routes:
         dir = r['dir']
+        kind = r['kind']
         if dir in details.directions:
+            if kind in details.city_kinds:
+                # cities shouldn't get nesw backlinks either
+                if dir in details.compass_directions:
+                    continue
+
+            dirint = details.directions[dir]
             dest = r['destination']
             if data[idint].get('LO', {}).get('pd') is None:
                 # example: sewer to tunnel, tunnel lacks pd
                 box.subbox_overwrite(data, idint, 'LO', 'pd', ['0', '0', '0', '0'])
-            if int(details.directions[dir]) > 3 and len(data[idint]['LO']['pd']) < 6:
+            if int(dirint) > 3 and len(data[idint]['LO']['pd']) < 6:
                 data[idint]['LO']['pd'].extend(('0', '0'))
-            data[idint]['LO']['pd'][details.directions[dir]] = dest
+
+            data[idint]['LO']['pd'][dirint] = dest
 
 
 def parse_location_top(text):
@@ -2568,7 +2589,7 @@ def parse_location(s, factint, everything, data):
                     box.subbox_overwrite(data, idint, 'LI', 'wh', [enclosing_int])
                     break
 
-        make_locations_from_routes(routes, idint, region, factint, data)
+        make_locations_from_routes(routes, idint, kind, region, factint, data)
         make_direction_routes(routes, idint, kind, data)
 
     m = re.search(r'^Cities rumored to be nearby:\n(.*?)\n\n', s, re.M | re.S)

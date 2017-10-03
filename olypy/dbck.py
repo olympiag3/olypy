@@ -225,6 +225,13 @@ def check_links(data):
                 pd = v['LO']['pd']
                 for route in pd:
                     if route != '0':
+                        if route not in data:
+                            print('Province {} has a route to {}, which does not exist'.format(k, route),
+                                  file=sys.stderr)
+                            problem += 1
+                            print('  fixing', file=sys.stderr)
+                            v['LO']['pd'] = ['0' if x == route else x for x in pd]
+                            continue
                         route_fl = data[route]['firstline'][0]
                         if route_fl.endswith(' loc city'):
                             print('Province {} has a NESWUD link to city {}'.format(k, route), file=sys.stderr)
