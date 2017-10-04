@@ -27,7 +27,7 @@ rm -rf data/test-temporary
 mkdir data/test-temporary
 mkdir data/test-temporary/fact
 
-$COVERAGE ../scripts/copylib --problems 79 data/g2 data/test-temporary
+$COVERAGE ../scripts/copylib --problems 81 data/g2 data/test-temporary
 
 diff -r -q data/g2 data/test-temporary
 rm -rf data/test-temporary

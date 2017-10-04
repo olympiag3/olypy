@@ -21,7 +21,7 @@ def check_firstline(data):
 where_things = set(('loc', 'ship', 'char'))
 
 
-def check_where_here(data):
+def check_where_here(data, fix=False):
     '''Make sure that every box that's where is here, and here is where.
     Does not check anything that is not where.'''
     problem = 0
@@ -42,10 +42,10 @@ def check_where_here(data):
                 except (KeyError, ValueError):
                     print('Thing {} is not in here list of thing {}'.format(k, where), file=sys.stderr)
                     print('  ', data[k]['firstline'][0], file=sys.stderr)
-                    if where in data:
+                    if fix and where in data:
                         print('  ', data[where]['firstline'][0], file=sys.stderr)
                         box.subbox_append(data, where, 'LI', 'hl', k, dedup=True)
-                        print('   fixed up.', file=sys.stderr)
+                        print('   fixed.', file=sys.stderr)
                     else:
                         problem += 1
                     continue
@@ -63,13 +63,16 @@ def check_where_here(data):
                         print('Unit {} is in here list of unit {}, but is not there'.format(unit, k), file=sys.stderr)
                         if unit not in data:
                             print('   btw unit {} does not exist'.format(unit), file=sys.stderr)
-                        box.subbox_remove(data, k, 'LI', 'hl', unit)
-                        print('   fixed.', file=sys.stderr)
+                        if fix:
+                            box.subbox_remove(data, k, 'LI', 'hl', unit)
+                            print('   fixed.', file=sys.stderr)
+                        else:
+                            problem += 1
 
     return problem
 
 
-def check_faction_units(data):
+def check_faction_units(data, fix=False):
     '''
     If a box is in a faction, make sure it's on the faction's unit list and vice versa.
     Also check that a pledge target exists. Fix.
@@ -88,12 +91,13 @@ def check_faction_units(data):
                     problem += 1
             if 'CM' in v and 'pl' in v['CM']:
                 pledged_to = v['CM']['pl'][0]
-                print('Checking pledge of {} to {}'.format(k, pledged_to), file=sys.stderr)
                 if pledged_to not in data or ' char ' not in data[pledged_to]['firstline'][0]:
                     print('Unit {} is pledged to {}, who does not exist or is not a char'.format(k, pledged_to), file=sys.stderr)
-                    problem += 1
-                    print('  fixing', file=sys.stderr)
-                    del v['CM']['pl']
+                    if fix:
+                        print('  fixed.', file=sys.stderr)
+                        del v['CM']['pl']
+                    else:
+                        problem += 1
 
     for k, v in data.items():
         if ' player ' in v['firstline'][0] and 'un' in v['PL']:
@@ -210,7 +214,7 @@ def check_prisoners(data):
     return problem
 
 
-def check_links(data):
+def check_links(data, fix=False):
     '''
     Regression test.
     Make sure provinces don't link cities in LO pd.
@@ -236,9 +240,11 @@ def check_links(data):
                         if route not in data:
                             print('Province {} has a route to {}, which does not exist'.format(k, route),
                                   file=sys.stderr)
-                            problem += 1
-                            print('  fixing', file=sys.stderr)
-                            v['LO']['pd'] = ['0' if x == route else x for x in pd]
+                            if fix:
+                                print('  fixed.', file=sys.stderr)
+                                v['LO']['pd'] = ['0' if x == route else x for x in pd]
+                            else:
+                                problem += 1
                             continue
                         route_fl = data[route]['firstline'][0]
                         if route_fl.endswith(' loc city'):
@@ -253,14 +259,14 @@ def check_links(data):
     return problem
 
 
-def check_db(data):
+def check_db(data, fix=False):
     problems = 0
     problems += check_firstline(data)
-    problems += check_where_here(data)
-    problems += check_faction_units(data)
+    problems += check_where_here(data, fix)
+    problems += check_faction_units(data, fix)
     problems += check_unique_items(data)
     problems += check_moving(data)
     problems += check_prisoners(data)
-    problems += check_links(data)
+    problems += check_links(data, fix)
 
     return problems

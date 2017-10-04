@@ -1,3 +1,5 @@
+import copy
+
 import olypy.dbck as dbck
 
 
@@ -12,6 +14,8 @@ def test_check_where_here(capsys):
             '56789': {'firstline': ['56789 loc region'],
                       'LI': {'hl': ['1003']}}}
 
+    data2 = copy.deepcopy(data)
+
     assert dbck.check_where_here(data) == 0
     out, err = capsys.readouterr()
     assert out == ''
@@ -19,15 +23,22 @@ def test_check_where_here(capsys):
 
     del data['1002']
 
-    assert dbck.check_where_here(data) == 0
+    assert dbck.check_where_here(data) == 1
     out, err = capsys.readouterr()
     assert out == ''
     assert '1002' in err
     assert '1003' in err
 
-    del data['1003']
+    assert dbck.check_where_here(data, fix=True) == 0
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert '1002' in err
+    assert '1003' in err
 
-    assert dbck.check_where_here(data) == 1
+    del data2['1002']
+    del data2['1003']
+
+    assert dbck.check_where_here(data2) == 2
     out, err = capsys.readouterr()
     assert out == ''
     assert '56789' in err
