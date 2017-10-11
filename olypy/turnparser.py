@@ -1671,7 +1671,8 @@ def analyze_garrison_list(text, turn_num, data, everything=False):
         CH = {'lo': ['207'], 'he': ['-1'], 'lk': ['4'], 'gu': ['1'], 'at': ['60'], 'df': ['60']}
         CM = {}  # {'dg': ['1']} -- only for city garrisons
         MI = {'ca': ['g'], 'gc': [castle]}
-        data[garr] = {'firstline': [firstline], 'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
+        data[garr] = {'firstline': [firstline], 'na': ['Garrison'],
+                      'il': il, 'LI': LI, 'CH': CH, 'CM': CM, 'MI': MI}
         box.subbox_append(data, '207', 'PL', 'un', [garr], dedup=True)
         box.subbox_append(data, where, 'LI', 'hl', [garr], dedup=True, prepend=True)
 

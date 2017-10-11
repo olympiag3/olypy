@@ -924,7 +924,8 @@ def test_analyze_garrison_list():
                   'LI': {'wh': ['10708']},
                   'MI': {'ca': ['g'], 'gc': ['8103']},
                   'firstline': ['2617 char garrison'],
-                  'il': ['12', '10']},
+                  'il': ['12', '10'],
+                  'na': ['Garrison']},
          '4514': {'CH': {'at': ['60'],
                          'df': ['60'],
                          'gu': ['1'],
@@ -935,7 +936,8 @@ def test_analyze_garrison_list():
                   'LI': {'wh': ['10709']},
                   'MI': {'ca': ['g'], 'gc': ['8103']},
                   'firstline': ['4514 char garrison'],
-                  'il': ['12', '10']}}
+                  'il': ['12', '10'],
+                  'na': ['Garrison']}}
     turnparser.analyze_garrison_list(t, '3', data, everything=True)
     assert data == r
 
