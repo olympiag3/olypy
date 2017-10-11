@@ -1153,6 +1153,7 @@ def make_storm(kind, strength, things, location, data, random=False, ident=None,
     ident = str(ident)
     firstline = ident + ' storm ' + kind
     things[ident] = {'firstline': [firstline],
+                     'na': [kind.capitalize()],
                      'LI': {'wh': [location]},
                      'MI': {'ss': [strength]}}
     if random:
@@ -1622,6 +1623,7 @@ def analyze_storm_list(text, fact, data):
 
         firstline = ident + ' storm ' + kind
         data[ident] = {'firstline': [firstline],
+                       'na': [kind.capitalize()],
                        'LI': {'wh': [location]},
                        'MI': {'ss': [strength],
                               'sb': [owner]}}

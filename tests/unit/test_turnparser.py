@@ -468,16 +468,19 @@ def test_make_storm():
     assert things == {'10000': {'LI': {'hl': ['81234']}},
                       '81234': {'LI': {'wh': ['10000']},
                                 'MI': {'ss': ['25']},
-                                'firstline': ['81234 storm rain']}}
+                                'firstline': ['81234 storm rain'],
+                                'na': ['Rain']}}
     turnparser.make_storm('rain', '25', things, '10000', data, random=True)
     assert things == {'10000': {'LI': {'hl': ['81234', '79000']}},
                       '79000': {'LI': {'wh': ['10000']},
                                 'MI': {'ss': ['25']},
                                 'firstline': ['79000 storm rain'],
+                                'na': ['Rain'],
                                 'random': True},
                       '81234': {'LI': {'wh': ['10000']},
                                 'MI': {'ss': ['25']},
-                                'firstline': ['81234 storm rain']}}
+                                'firstline': ['81234 storm rain'],
+                                'na': ['Rain']}}
 
 
 def test_parse_inner_locations():
@@ -901,7 +904,8 @@ def test_analyze_storm_list():
     r = {'11399': {'LI': {'hl': ['87999'], 'wh': []}},
          '87999': {'LI': {'wh': ['11399']},
                    'MI': {'sb': ['8999'], 'ss': ['32']},
-                   'firstline': ['87999 storm wind']}}
+                   'firstline': ['87999 storm wind'],
+                   'na': ['Wind']}}
 
     turnparser.analyze_storm_list(t, '50000', data)
     assert data == r
@@ -1311,9 +1315,11 @@ Seen here:
                  'na': ['Anton']}
     r['85687'] = {'LI': {'wh': ['12423']},
                   'MI': {'sb': ['8910'], 'ss': ['33']},
-                  'firstline': ['85687 storm wind']}
+                  'firstline': ['85687 storm wind'],
+                  'na': ['Wind']}
     r['109999'] = {'LI': {'wh': ['12423']},
                    'MI': {'ss': ['2']},
-                   'firstline': ['109999 storm rain']}
+                   'firstline': ['109999 storm rain'],
+                   'na': ['Rain']}
     turnparser.parse_location(t, to_int('ja1'), True, data)
     assert data == r

@@ -74,7 +74,7 @@ for t in sorted_turns:
 
 turnparser.finish(data, last_turn)
 
-problems = dbck.check_db(data)
+problems = dbck.check_db(data, checknames=True)
 print('Database check found {} problems'.format(problems))
 
 oio.write_lib(data, 'lib')
