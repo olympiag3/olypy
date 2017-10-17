@@ -6,6 +6,7 @@ import sys
 from .oid import to_oid
 from . import box
 from . import details
+from .formatters import grand_format
 
 
 def check_firstline(data, checknames=False):
@@ -18,6 +19,47 @@ def check_firstline(data, checknames=False):
         elif checknames and ' unform ' not in v['firstline'][0] and 'na' not in v:
             print('Thing {} has no name'.format(v['firstline']), file=sys.stderr)
             problem += 1
+    return problem
+
+
+def check_boxes(data):
+    '''
+    failing for these, which have no special formatting and sometimes have spaces
+    MI sn
+    PL fn
+    PL pw
+    PL em
+    PL ve
+    XXX to fix, change oio read to check formatters.grand_format ???
+    '''
+    problem = 0
+    for k, v in data.items():
+        for k1, v1 in v.items():
+            if k1 not in grand_format:
+                print('Thing {} has unknown section {}'.format(k, k1))
+                problem += 1
+            if isinstance(v1, list):
+                if len(v1) > 1 and grand_format[k1] == 1:
+                    print('Thing {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, v1))
+                    problem += 1
+            elif isinstance(v1, dict):
+                if not isinstance(grand_format[k1], dict):
+                    print('Thing {} {} is a dict but should not be'.format(k, k1))
+                    problem += 1
+                for k2, v2 in v1.items():
+                    if k2 not in grand_format[k1]:
+                        print('Thing {} {} has unknown section {}'.format(k, k1, k2))
+                        problem += 1
+                    if isinstance(v2, list):
+                        if len(v2) > 1 and grand_format[k1][k2] == 1:
+                            print('Thing {} {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, k2, v2))
+                            problem += 1
+                    else:
+                        print('Thing {} {} has a bad value'.format(k, k1, k2))
+                        problem += 1
+            else:
+                print('Box {} {} has bad value {}'.format(k, k1, v1))
+                problem += 1
     return problem
 
 
@@ -265,6 +307,7 @@ def check_links(data, fix=False):
 def check_db(data, fix=False, checknames=False):
     problems = 0
     problems += check_firstline(data, checknames=checknames)
+    problems += check_boxes(data)
     problems += check_where_here(data, fix)
     problems += check_faction_units(data, fix)
     problems += check_unique_items(data)

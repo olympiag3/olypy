@@ -251,6 +251,7 @@ def read_oly_file(f, verbose=False):
             if data[box].get(what) is not None:
                 raise ValueError('saw a non-continuation for an existing item')
             if what == 'na':
+                # this is a hack to get name-like things into a single item list
                 data[box][what] = [untrimmed_line[3:].rstrip('\n')]
             else:
                 data[box][what] = pieces
@@ -262,7 +263,8 @@ def read_oly_file(f, verbose=False):
                 am = data[box].get(subbox, {}).get('am', [])
                 am.append(pieces)  # list of lists
                 data[box][subbox]['am'] = am
-            elif what in set(('ds', 'li', 'pl')):
+            elif what in set(('ds', 'li', 'pl', 'sn', 'fn', 'pw', 'em', 've')):
+                # this is a hack to get name-like things into a single item list
                 data[box][subbox][what] = [untrimmed_line[4:].rstrip('\n')]
             else:
                 data[box][subbox][what] = pieces
