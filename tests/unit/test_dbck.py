@@ -3,6 +3,70 @@ import copy
 import olypy.dbck as dbck
 
 
+def test_check_firstline(capsys):
+    data = {'1001': 1}
+    assert dbck.check_firstline(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'has no firstline' in err
+
+    data = {'1001': {'asdf': 1}}
+    assert dbck.check_firstline(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'has no firstline' in err
+
+    data = {'1001': {'firstline': '1001 loc forest'}}
+    assert dbck.check_firstline(data, checknames=True) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'no name' in err
+
+
+def test_check_boxes(capsys):
+    data = {'1001': {'foo': 1}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'unknown section' in err
+
+    data = {'1001': {'na': ['list', 'of', 'stuff']}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'should have 1 entry' in err
+
+    data = {'1001': {'na': {'a': 'dict'}}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'is a dict but should not be' in err
+
+    data = {'1001': {'CH': {'foo': 1}}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'unknown section' in err
+
+    data = {'1001': {'CH': {'ni': ['list', 'of', 'stuff']}}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'multi-item list' in err
+
+    data = {'1001': {'CH': {'ni': 1}}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'a bad value' in err
+
+    data = {'1001': {'CH': 1}}
+    assert dbck.check_boxes(data) == 1
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'has bad value' in err
+
+
 def test_check_where_here(capsys):
 
     data = {'1001': {'firstline': ['1001 char 0'],
@@ -43,6 +107,13 @@ def test_check_where_here(capsys):
     assert out == ''
     assert '56789' in err
     assert '1003' in err
+    assert '1001' in err
+
+    data = {'1001': {'firstline': ['1001 loc forest']}}
+    assert dbck.check_where_here(data) == 1
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert 'is not anywhere' in err
     assert '1001' in err
 
 

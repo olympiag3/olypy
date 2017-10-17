@@ -13,7 +13,7 @@ def check_firstline(data, checknames=False):
     '''Make sure everything in data has a firstline'''
     problem = 0
     for k, v in data.items():
-        if 'firstline' not in v:
+        if not isinstance(v, dict) or 'firstline' not in v:
             print('Thing {} has no firstline'.format(k), file=sys.stderr)
             problem += 1
         elif checknames and ' unform ' not in v['firstline'][0] and 'na' not in v:
@@ -23,42 +23,36 @@ def check_firstline(data, checknames=False):
 
 
 def check_boxes(data):
-    '''
-    failing for these, which have no special formatting and sometimes have spaces
-    MI sn
-    PL fn
-    PL pw
-    PL em
-    PL ve
-    XXX to fix, change oio read to check formatters.grand_format ???
-    '''
     problem = 0
     for k, v in data.items():
         for k1, v1 in v.items():
             if k1 not in grand_format:
-                print('Thing {} has unknown section {}'.format(k, k1))
+                print('Thing {} has unknown section {}'.format(k, k1), file=sys.stderr)
                 problem += 1
-            if isinstance(v1, list):
+            elif isinstance(v1, list):
                 if len(v1) > 1 and grand_format[k1] == 1:
-                    print('Thing {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, v1))
+                    print('Thing {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, v1),
+                          file=sys.stderr)
                     problem += 1
             elif isinstance(v1, dict):
                 if not isinstance(grand_format[k1], dict):
-                    print('Thing {} {} is a dict but should not be'.format(k, k1))
+                    print('Thing {} {} is a dict but should not be'.format(k, k1), file=sys.stderr)
                     problem += 1
+                    continue
                 for k2, v2 in v1.items():
                     if k2 not in grand_format[k1]:
-                        print('Thing {} {} has unknown section {}'.format(k, k1, k2))
+                        print('Thing {} {} has unknown section {}'.format(k, k1, k2), file=sys.stderr)
                         problem += 1
-                    if isinstance(v2, list):
+                    elif isinstance(v2, list):
                         if len(v2) > 1 and grand_format[k1][k2] == 1:
-                            print('Thing {} {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, k2, v2))
+                            print('Thing {} {} {} is a multi-item list {} but should have 1 entry'.format(k, k1, k2, v2),
+                                  file=sys.stderr)
                             problem += 1
                     else:
-                        print('Thing {} {} has a bad value'.format(k, k1, k2))
+                        print('Thing {} {} has a bad value'.format(k, k1, k2), file=sys.stderr)
                         problem += 1
             else:
-                print('Box {} {} has bad value {}'.format(k, k1, v1))
+                print('Box {} {} has bad value {}'.format(k, k1, v1), file=sys.stderr)
                 problem += 1
     return problem
 

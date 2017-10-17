@@ -154,6 +154,10 @@ grand_format = OrderedDict([
                         ('pr', 1), ('if', 1)])),
 ])
 
+# these are things which are strings and not lists
+first_level_strings = set(('na',))
+second_level_strings = set(('ds', 'li', 'pl', 'sn', 'fn', 'pw', 'em', 've'))
+
 
 def print_one_thing(datum):
     key1s_seen = set()
@@ -250,8 +254,7 @@ def read_oly_file(f, verbose=False):
         if not(line.startswith('\t') or line.startswith(' ')):
             if data[box].get(what) is not None:
                 raise ValueError('saw a non-continuation for an existing item')
-            if what == 'na':
-                # this is a hack to get name-like things into a single item list
+            if what in first_level_strings:
                 data[box][what] = [untrimmed_line[3:].rstrip('\n')]
             else:
                 data[box][what] = pieces
@@ -263,8 +266,7 @@ def read_oly_file(f, verbose=False):
                 am = data[box].get(subbox, {}).get('am', [])
                 am.append(pieces)  # list of lists
                 data[box][subbox]['am'] = am
-            elif what in set(('ds', 'li', 'pl', 'sn', 'fn', 'pw', 'em', 've')):
-                # this is a hack to get name-like things into a single item list
+            elif what in second_level_strings:
                 data[box][subbox][what] = [untrimmed_line[4:].rstrip('\n')]
             else:
                 data[box][subbox][what] = pieces
