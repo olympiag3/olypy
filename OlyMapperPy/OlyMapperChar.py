@@ -1,0 +1,627 @@
+#!/usr/bin/python
+import os
+import sys
+import math
+
+from olypy.oid import to_oid
+import olypy.oio as oio
+import OlyMapperPy.OlyMapperUtilities as u
+from OlyMapperPy.OlyMapperUtilities import anchor
+import olypy.details as details
+
+
+def write_char_page_header(v,k,outf):
+    if u.return_type(v['firstline'][0]).upper() == "GARRISON":
+        name = "Garrison"
+    else:
+        name = v['na'][0]
+    outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid((k))))
+
+
+def write_char_faction(v,k,data,outf):
+    # CH/lo
+    if 'CH' in v:
+        if 'lo' in v['CH']:
+            player = data[v['CH']['lo'][0]]
+            outf.write('<tr>')
+            outf.write('<td>Faction:</td>')
+            outf.write('<td>{} [{}]</td></tr>\n'.format(player['na'][0],
+                                                        anchor(to_oid(u.return_unitid(player['firstline'][0])))))
+
+
+def write_char_rank(v,k,data,outf):
+    # CH/ra
+    if 'CH' in v:
+        if 'ra' in v['CH']:
+            outf.write('<tr>')
+            outf.write('<td>Rank:</td>')
+            outf.write('<td>{}</td></tr>\n'.format(u.xlate_rank(k)))
+
+
+def write_char_loyalty(v,k,data,outf):
+    # CH/lk
+    if 'CH' in v:
+        if 'lk' in v['CH']:
+            outf.write('<tr>')
+            outf.write('<td>Loyalty:</td>')
+            outf.write('<td>{}</td></tr>\n'.format(u.xlate_loyalty(v)))
+
+
+def write_char_stacked_under(v, k, data, outf):
+    # LI/wh
+    if 'LI' in v:
+        if 'wh' in v['LI']:
+            charu = data[v['LI']['wh'][0]]
+            # if it's not a 'char' type, then it's a location/ship
+            # and I handle that in location row
+            if 'char' in u.return_kind(charu['firstline'][0]):
+                outf.write('<tr>')
+                outf.write('<td>Stacked Under:</td>')
+                outf.write('<td>{} [{}]</td></tr>\n'.format(charu['na'][0],
+                                                            anchor(to_oid(u.return_unitid(charu['firstline'][0])))))
+
+
+def write_char_stacked_over(v, k, data, outf):
+    # LI/hl
+    if 'LI' in v:
+        if 'hl' in v['LI']:
+            over_list = v['LI']['hl']
+            stacked_over = "Stacked Over:"
+            for ov in over_list:
+                charo = data[ov]
+                outf.write('<tr>')
+                outf.write('<td>{}</td>'.format(stacked_over))
+                outf.write(
+                    '<td>{} [{}]</td></tr>\n'.format(charo['na'][0],
+                                                     anchor(to_oid(u.return_unitid(charo['firstline'][0])))))
+                stacked_over = ''
+
+
+def write_char_health(v,k,data,outf):
+    # CH/he and CH/si
+    if 'CH' in v:
+        if 'he' in v['CH']:
+            outf.write('<tr>')
+            outf.write('<td>Health:</td>')
+            if int(v['CH']['he'][0]) < 100:
+                status = ''
+                if 'si' in v['CH']:
+                    if v['CH']['si'][0] == '1':
+                        status = '(getting worse)'
+                    else:
+                        status = '(getting better)'
+                outf.write('<td>{}% {}</td></tr>\n'.format(v['CH']['he'][0], status))
+            else:
+                outf.write('<td>{}%</td></tr>\n'.format(v['CH']['he'][0]))
+
+
+def write_char_combat(v,k,data,outf):
+    # CH/at, CH/df, CH/mi
+    attack = 0
+    defense = 0
+    missile = 0
+    if 'CH' in v:
+        if 'at' in v['CH']:
+            attack = v['CH']['at'][0]
+        if 'df' in v['CH']:
+            defense = v['CH']['df'][0]
+        if 'mi' in v['CH']:
+            missile = v['CH']['mi'][0]
+    outf.write('<tr>')
+    outf.write('<td>Combat:</td>')
+    outf.write('<td>attack {}, defense {}, missile {}</td></tr>\n'.format(attack,
+                                                                          defense,
+                                                                          missile))
+    behind = int(0)
+    if 'CH' in v:
+        if 'bh' in v['CH']:
+            behind = int(v['CH']['bh'][0])
+    behind_text = ''
+    if behind > 0:
+        behind_text = '(stay behind in combat)'
+    else:
+        behind_text = '(front line in combat)'
+    outf.write('<tr>')
+    outf.write('<td>&nbsp;</td>')
+    outf.write('<td>behind {} {}</td></tr>\n'.format(behind, behind_text))
+
+
+def write_char_break_point(v, k, data, outf):
+    # CH/bp
+    break_point = int(1)
+    if 'CH' in v:
+        if 'bp' in v['CH']:
+            break_point = int(v['CH']['bp'][0])
+    if break_point == 0:
+        break_point_text = '(fight to the death)'
+    else:
+        break_point_text = ''
+    outf.write('<tr>')
+    outf.write('<td>Break Point:</td>')
+    outf.write('<td>{}% {}</td></tr>\n'.format(break_point, break_point_text))
+
+
+def write_char_vision_protection(v, k, data, outf):
+    # CM/vp
+    if 'CM' in v:
+        if 'vp' in v['CM']:
+            outf.write('<tr>')
+            outf.write('<td>Receive Vision :</td>')
+            outf.write('<td>{} protection</td></tr>\n'.format(v['CM']['vp'][0]))
+
+
+def write_char_pledged_to(v,k,data,outf):
+    # CM/pl
+    if 'CM' in v:
+        if 'pl' in v['CM']:
+            pledged_to = data[v['CM']['pl'][0]]
+            outf.write('<tr>')
+            outf.write('<td>Pledged To:</td>')
+            outf.write('<td>{} [{}]</td></tr>\n'.format(pledged_to['na'][0],
+                                                        anchor(to_oid(u.return_unitid(pledged_to['firstline'][0])))))
+
+
+def write_char_pledged_to_us(v,k,data,outf, pledge_chain):
+    # CM/pl
+    try:
+        pledge_list = pledge_chain[k]
+        if len(pledge_list) > 0:
+            pledged_text = 'Pledged To Us:'
+            for pledgee in pledge_list:
+                pledgee_rec = data[pledgee]
+                outf.write('<tr>')
+                outf.write('<td>{}</td>'.format(pledged_text))
+                pledged_text = '&nbsp;'
+                outf.write('<td>{} [{}]</td></tr>\n'.format(pledgee_rec['na'][0],
+                                                            anchor(to_oid(pledgee))))
+    finally:
+        pass
+
+
+def write_char_concealed(v,k,data,outf):
+    # CM/hs
+    # need to check if alone - lib doesn't currently show
+    if 'CM' in v:
+        if 'hs' in v['CM']:
+            if v['CM']['hs'][0] == '1':
+                outf.write('<tr>')
+                outf.write('<td>Concealed:</td>')
+                outf.write('<td>Yes</td></tr>\n')
+
+
+def write_char_aura(v,k,data,outf):
+    # CM/im, CM/ca, CM/ma, CN/ar
+    # need to check if alone - lib doesn't currently show
+    if 'CM' in v:
+        if 'im' in v['CM']:
+            if v['CM']['im'][0] == '1':
+                if 'ca' in v['CM']:
+                    outf.write('<tr>')
+                    outf.write('<td>Current Aura:</td>')
+                    outf.write('<td>{}</td></tr>\n'.format(v['CM']['ca'][0]))
+            max_aura = int(0)
+            auraculum_text = ''
+            if 'ma' in v['CM']:
+                max_aura = int(v['CM']['ma'][0])
+            if 'ar' in v['CM']:
+                auraculum = data[v['CM']['ar'][0]]
+                auraculum_amt = int(0)
+                if 'IM' in auraculum:
+                    if 'au' in auraculum['IM']:
+                        auraculum_amt = int(auraculum['IM']['au'][0])
+                outf.write('<tr>')
+                outf.write('<td>Max Aura:</td>')
+                outf.write('<td>{} ({}+{})</td></tr>\n'.format((max_aura+auraculum_amt),
+                                                               max_aura, auraculum_amt))
+            else:
+                outf.write('<tr>')
+                outf.write('<td>Max Aura:</td>')
+                outf.write('<td>{}</td></tr>\n'.format(max_aura))
+
+
+def write_char_prisoners(v,k,data,outf, prisoner_chain):
+    # CH/pr
+    try:
+        prisoner_list = prisoner_chain[k]
+        if len(prisoner_list) > 0:
+            prisoner_text = 'Prisoners:'
+            for prisoner in prisoner_list:
+                prisoner_rec = data[prisoner]
+                outf.write('<tr>')
+                outf.write('<td>{}</td>'.format(prisoner_text))
+                prisoner_text = '&nbsp;'
+                prisoner_health_text = ''
+                if 'CH' in prisoner_rec:
+                    if 'he' in prisoner_rec['CH']:
+                        prisoner_health_text = ' (health {})'.format(prisoner_rec['CH']['he'][0])
+                outf.write('<td>{} [{}]{}</td></tr>\n'.format(prisoner_rec['na'][0],
+                                                              anchor(to_oid(prisoner)),
+                                                              prisoner_health_text))
+    finally:
+        pass
+
+
+def write_char_skills_known(v,k,data,outf):
+    # CH/sl
+    if 'CH' in v:
+        if 'sl' in v['CH']:
+            skills_list = v['CH']['sl']
+            skills_iteration = int(len(skills_list) / 5)
+            if skills_iteration > 0:
+                printknown = False
+                printunknown = False
+                for skill in range(0, skills_iteration):
+                    skill_id = skills_list[skill * 5]
+                    know = skills_list[(skill * 5) + 1]
+                    days_studied = int(skills_list[(skill * 5) + 2])
+                    if know == '2':
+                        if printknown == False:
+                            outf.write('<p>Skills known:</p>\n')
+                            outf.write('<ul style="list-style-type:none">\n')
+                            printknown = True
+                        skillz = data[skill_id]
+                        outf.write('<li>')
+                        if 'rs' in skillz['SK']:
+                            req_skill = skillz['SK']['rs'][0]
+                        else:
+                            req_skill = '0'
+                        if req_skill != '0':
+                            outf.write('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
+                        outf.write('{} [{}]'.format(skillz['na'][0],
+                                                    anchor(to_oid(skill_id))))
+                        outf.write('</li>\n')
+                    if know == '1':
+                        if printunknown == False:
+                            outf.write('<p>Partially known skills:</p>\n')
+                            outf.write('<ul style="list-style-type:none">\n')
+                            printunknown = True
+                        skillz = data[skill_id]
+                        outf.write('<li>')
+                        outf.write('{} [{}], {}/{}'.format(skillz['na'][0],
+                                                           anchor(to_oid(skill_id)),
+                                                           days_studied,
+                                                           skillz['SK']['tl'][0]))
+                        outf.write('</li>\n')
+                if printknown == True or printunknown == True:
+                    outf.write('</ul>\n')
+
+
+def write_char_inventory(v,k,data,outf):
+    total_weight = int(0)
+    if 'il' in v:
+        item_list = v['il']
+        iterations = int(len(item_list) / 2)
+        if iterations > 0:
+            outf.write('<p>Inventory:</p>\n')
+            outf.write('<table>\n')
+            outf.write('<tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>\n')
+            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>\n')
+            for itm in range(0,iterations):
+                item_id = item_list[itm*2]
+                item_qty = int(item_list[(itm*2)+1])
+                outf.write('<tr>')
+                outf.write('<td style="text-align:right">{}</td>'.format(item_qty))
+                itemz = data[item_id]
+                outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz['na'][0] if item_qty == 1 else itemz['IT']['pl'][0],
+                                                                             anchor(to_oid(item_id))))
+                if 'wt' in itemz['IT']:
+                    item_weight = int(itemz['IT']['wt'][0])
+                else:
+                    item_weight = int(0)
+                outf.write('<td style="text-align:right">{}</td>'.format(item_weight * item_qty))
+                total_weight = total_weight + (item_weight * item_qty)
+                if u.return_type(v['firstline'][0]) != "garrison":
+                    outf.write('<td>')
+                    fly_capacity = int(0)
+                    if 'fc' in itemz['IT']:
+                        fly_capacity = int(itemz['IT']['fc'][0])
+                    land_capacity = int(0)
+                    if 'f\lc' in itemz['IT']:
+                        land_capacity = int(itemz['IT']['lc'][0])
+                    ride_capacity = int(0)
+                    if 'rc' in itemz['IT']:
+                        ride_capacity = int(itemz['IT']['rc'][0])
+                    if fly_capacity > 0:
+                        outf.write('fly {}'.format(fly_capacity * item_qty))
+                    elif ride_capacity > 0:
+                        outf.write('ride {}'.format(ride_capacity * item_qty))
+                    elif land_capacity > 0:
+                        outf.write('cap {}'.format(land_capacity * item_qty))
+                    if u.is_fighter(itemz, item_id) == True:
+                        attack = int(0)
+                        defense = int(0)
+                        missile = int(0)
+                        if 'at' in itemz['IT']:
+                            attack = int(itemz['IT']['at'][0])
+                        if 'df' in itemz['IT']:
+                            defense = int(itemz['IT']['df'][0])
+                        if 'mi' in itemz['IT']:
+                            missile = int(itemz['IT']['mi'][0])
+                        outf.write(' ({},{},{})'.format(attack, defense, missile))
+                    attack_bonus = int(0)
+                    defense_bonus = int(0)
+                    missile_bonus = int(0)
+                    if 'IM' in itemz:
+                        if 'ab' in itemz['IM']:
+                            attack_bonus = int(itemz['IM']['ab'][0])
+                        if 'db' in itemz['IM']:
+                            defense_bonus = int(itemz['IM']['db'][0])
+                        if 'mi' in itemz['IT']:
+                            missile_bonus = int(itemz['IM']['mb'][0])
+                    if attack_bonus > 0:
+                        outf.write('+ {} attack'.format(attack_bonus))
+                    if defense_bonus > 0:
+                        outf.write('+ {} defense'.format(defense_bonus))
+                    if missile_bonus > 0:
+                        outf.write('+ {} missile'.format(missile_bonus))
+                    if u.is_magician(v):
+                        aura_bonus = 0
+                        if 'IM' in itemz:
+                            if 'ba' in itemz['IM']:
+                                aura_bonus = int(itemz['IM']['ba'][0])
+                        if aura_bonus > 0:
+                            outf.write('+{} aura'.format(aura_bonus))
+                    outf.write('&nbsp;</td>')
+                else:
+                    outf.write('<td>&nbsp;</td>')
+                outf.write('</tr>\n')
+            if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+                outf.write('<tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>\n')
+                outf.write('<tr><td></td><td></td><td style="text-align:right">{}</td><td>&nbsp;</td></tr>\n'.format(total_weight))
+            outf.write('</table>\n')
+
+
+def write_char_capacity(v,k,data,outf):
+    animals = int(0)
+    total_weight = int(0)
+    land_cap = int(0)
+    land_weight = int(0)
+    ride_cap = int(0)
+    ride_weight = int(0)
+    fly_cap = int(0)
+    fly_weight = int(0)
+    unit_type = '10'
+    if 'CH' in v:
+        if 'ni' in v['CH']:
+            unit_type = v['CH']['ni'][0]
+    base_unit = data[unit_type]
+    item_weight = 0
+    if 'IT' in base_unit:
+        if 'wt' in base_unit['IT']:
+            item_weight = int(base_unit['IT']['wt'][0]) * 1
+    if 'IT' in base_unit:
+        if 'lc' in base_unit['IT']:
+            land_cap = land_cap + int(base_unit['IT']['lc'][0])
+        else:
+            land_weight = land_weight + item_weight
+        if 'fc' in base_unit['IT']:
+            fly_cap = fly_cap + int(base_unit['IT']['fc'][0])
+        else:
+            fly_weight = fly_weight + item_weight
+        if 'rc' in base_unit['IT']:
+            ride_cap = ride_cap + int(base_unit['IT']['rc'][0])
+        else:
+            ride_weight = ride_weight + item_weight
+    else:
+        land_weight = land_weight + item_weight
+        fly_weight = fly_weight + item_weight
+        ride_weight = ride_weight + item_weight
+    total_weight = total_weight + item_weight
+    if 'il' in v:
+        if 'IT' in base_unit:
+            if 'an' in base_unit['IT']:
+                animals = animals + 1
+        item_list = v['il']
+        iterations = int(len(item_list) / 2)
+        for itm in range(0,iterations):
+            item_id = item_list[itm * 2]
+            item_qty = int(item_list[(itm * 2) + 1])
+            try:
+                base_unit = data[item_id]
+                item_weight = 0
+                if 'IT' in base_unit:
+                    if 'wt' in base_unit['IT']:
+                        item_weight = int(base_unit['IT']['wt'][0]) * item_qty
+                if 'IT' in base_unit:
+                    if 'lc' in base_unit['IT']:
+                        land_cap = land_cap + int(base_unit['IT']['lc'][0]) * item_qty
+                    else:
+                        land_weight = land_weight + item_weight
+                    if 'fc' in base_unit['IT']:
+                        fly_cap = fly_cap + int(base_unit['IT']['fc'][0]) * item_qty
+                    else:
+                        fly_weight = fly_weight + item_weight
+                    if 'rc' in base_unit['IT']:
+                        ride_cap = ride_cap + int(base_unit['IT']['rc'][0]) * item_qty
+                    else:
+                        ride_weight = ride_weight + item_weight
+                else:
+                    land_weight = land_weight + item_weight
+                    fly_weight = fly_weight + item_weight
+                    ride_weight = ride_weight + item_weight
+                total_weight = total_weight + item_weight
+            except KeyError:
+                pass
+    outf.write('<p>Capacity: ')
+    if land_cap > 0:
+        outf.write('{}/{} land ({}%) '.format(land_weight,
+                                              land_cap,
+                                              math.floor((land_weight * 100) / land_cap)))
+    if ride_cap > 0:
+        outf.write('{}/{} ride ({}%) '.format(ride_weight,
+                                              ride_cap,
+                                              math.floor((ride_weight * 100) / ride_cap)))
+    if fly_cap > 0:
+        outf.write('{}/{} fly ({}%)'.format(fly_weight,
+                                            fly_cap,
+                                            math.floor((fly_weight * 100) / fly_cap)))
+    outf.write('</p>')
+
+
+def write_char_pending_trades(v,k,data,outf):
+    if 'tl' in v:
+        trade_list = v['tl']
+        iterations = int(len(trade_list) / 8)
+        if iterations > 0:
+            outf.write('<p>Pending Trades:</p>\n')
+            outf.write('<table>\n')
+            outf.write('<tr><td style="text-align:right">trades</td><td style="text-align:right">price</td><td style="text-align:right">qty</td><td style="text-align:left">item</td>\n')
+            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:right">-----</td><td style="text-align:right">---</td><td style="text-align:left">----</td>\n')
+            for trades in range(0, iterations):
+                try:
+                    itemz = data[trade_list[(trades*8)+1]]
+                    itemz_plural = itemz['IT']['pl'][0]
+                    itemz_name = itemz['na'][0]
+                    outf.write('<tr>')
+                    outf.write('<td style="text-align:right">{}</td>'.format('buy' if trade_list[(trades*8)+0] == '1' else 'sell'))
+                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+3]))
+                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+2]))
+                    outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz_name if int(trade_list[(trades*8)+2]) == 1 else itemz_plural, anchor(to_oid(trade_list[(trades*8)+1]))))
+                    outf.write('</tr>\n')
+                except KeyError:
+                    pass
+            outf.write('</table>\n')
+
+
+def write_char_visions_received(v,k,data,outf):
+    if 'CM' in v:
+        if 'vi' in v['CM']:
+            vision_list = v['CM']['vi']
+            # iterations = len(vision_list)
+            outf.write('<p>Visions Received:</p>\n')
+            outf.write('<table>\n')
+            vision_name = ''
+            for vision in vision_list:
+                try:
+                    visioned = data[vision]
+                    vision_name = visioned['na'][0]
+                except:
+                    vision_name = 'missing'
+                outf.write('<tr><td>{} [{}]</td></tr>\n'.format(vision_name,
+                                                                anchor(to_oid(vision))))
+            outf.write('</table>\n')
+
+
+def write_char_magic_stuff(v,k,data,outf):
+    if 'il' in v:
+        item_list = v['il']
+        iterations = int(len(item_list) / 2)
+        for items in range(0, iterations):
+            try:
+                itemz = data[item_list[items*2]]
+                item_type = u.return_type(itemz['firstline'][0])
+                if item_type == '0':
+                    if 'IM' in itemz:
+                        if 'uk' in itemz['IM']:
+                            use_key = itemz['IM']['uk'][0]
+                            if use_key == '2':
+                                outf.write('<p>Healing Potion [{}]</p>\n'.format(anchor(to_oid(item_list[items*2]))))
+                            elif use_key == '5':
+                                loc_kind = ''
+                                loc_name = ''
+                                loc_id = ''
+                                if 'IM' in itemz:
+                                    if 'pc' in itemz['IM']:
+                                        try:
+                                            location = data[itemz['IM']['pc'][0]]
+                                            loc_kind = u.return_kind(location['firstline'][0]) if u.return_kind(location['firstline'][0]) != 'loc' else 'location'
+                                            loc_name = location['na'][0]
+                                            loc_id = anchor(to_oid(u.return_unitid(location['firstline'][0])))
+                                        except KeyError:
+                                            loc_kind = 'unknown'
+                                            loc_name = 'unknown'
+                                            loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
+                                outf.write('<p>Projected Cast [{}] to {} {} [{}]</p>\n'.format(anchor(to_oid(item_list[items*2])),
+                                                                                               loc_kind,
+                                                                                               loc_name,
+                                                                                               loc_id))
+                elif item_type == 'scroll':
+                    if 'IM' in itemz:
+                        if 'ms' in itemz['IM']:
+                            skill_id = anchor(to_oid(itemz['IM']['ms'][0]))
+                            scroll_id = anchor(to_oid(item_list[items*2]))
+                            required_study = ''
+                            try:
+                                skill = data[itemz['IM']['ms'][0]]
+                                skill_name = skill['na'][0]
+                                if 'SK' in skill:
+                                    if 'rs' in skill['SK']:
+                                        try:
+                                            skill2 = data[skill['SK']['rs'][0]]
+                                            skill2_name = skill2['na'][0]
+                                        except KeyError:
+                                            skill2_name = 'unknown'
+                                        required_study = '(requires {} [{}])'.format(skill2_name,
+                                                                                     anchor(to_oid(skill['SK']['rs'][0])))
+                            except KeyError:
+                                skill_name = 'unknown'
+                            outf.write('<p>Scroll [{}] permits the study of the following skills:<br>&nbsp;&nbsp;&nbsp;{} [{}] {}</p>\n'.format(scroll_id,
+                                                                                                                                                skill_name,
+                                                                                                                                                skill_id,
+                                                                                                                                                required_study))
+            except KeyError:
+                pass
+
+
+def write_char_basic_info(v,k,data,outf, pledge_chain, prisoner_chain):
+    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+        outf.write('<table>\n')
+        write_char_rank(v,k,data,outf)
+        write_char_faction(v,k,data,outf)
+        write_char_location(data, outf, v)
+        write_char_loyalty(v, k, data, outf)
+        write_char_stacked_under(v, k, data, outf)
+        write_char_stacked_over(v, k, data, outf)
+        write_char_health(v, k, data, outf)
+        write_char_combat(v, k, data, outf)
+        write_char_break_point(v, k, data, outf)
+        write_char_vision_protection(v, k, data, outf)
+        write_char_pledged_to(v, k, data, outf)
+        write_char_pledged_to_us(v, k, data, outf, pledge_chain)
+        write_char_concealed(v, k, data, outf)
+        write_char_aura(v, k, data, outf)
+        # appear common not in lib yet
+        # write_char_appear_common(v, k, data, outf)
+        write_char_prisoners(v, k, data, outf, prisoner_chain)
+        outf.write('</table>\n')
+    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+        write_char_skills_known(v,k,data,outf)
+    write_char_inventory(v,k,data,outf)
+    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+        write_char_capacity(v,k,data,outf)
+        write_char_pending_trades(v,k,data,outf)
+        write_char_visions_received(v,k,data,outf)
+    write_char_magic_stuff(v,k,data,outf)
+
+
+def write_char_location(data, outf, v):
+    if 'LI' in v:
+        if 'wh' in v['LI']:
+            loc = data[v['LI']['wh'][0]]
+            outf.write('<tr>')
+            outf.write('<td>Where:</td><td>{} [{}]</td>'.format(loc['na'][0],
+                                                                anchor(to_oid(v['LI']['wh'][0]))))
+            outf.write('</tr>\n')
+
+
+def write_char_html(v, k, data, pledge_chain, prisoner_chain):
+    # generate char page
+    fl = v['firstline'][0]
+    #print('Char {} {} {}'.format(fl, k, to_oid(k)))
+    outf = open(to_oid(k)+'.html', 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    if u.return_type(v['firstline'][0]).upper() == "GARRISON":
+        name = "Garrison"
+    else:
+        name = v['na'][0]
+    outf.write('<TITLE>{} [{}]'.format(name, \
+               to_oid(k)))
+    outf.write('</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    write_char_page_header(v,k,outf)
+    write_char_basic_info(v,k,data,outf, pledge_chain, prisoner_chain)
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
