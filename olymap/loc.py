@@ -784,7 +784,7 @@ def write_loc_map_anchor(v, k, data, outf):
 def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain):
     write_loc_map_anchor(v, k, data, outf)
     write_loc_barrier(v, k, data, outf)
-    write_loc_shroud(v, k, data, outf)
+    write_loc_shroud(v, k, outf)
     write_loc_controlled_by(v, k, data, outf)
     write_loc_routes_out(v, k, data, outf)
     # not doing nearby cities because lib doesn't support
