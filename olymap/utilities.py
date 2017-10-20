@@ -1,10 +1,7 @@
 #!/usr/bin/python
-import os
-import operator
-import string
+
 import olypy.details as details
 from collections import defaultdict
-from olypy.oid import to_int
 from olypy.oid import to_oid
 
 
@@ -81,7 +78,7 @@ def chase_structure(k, data, level, seen_here_list):
             if 'hl' in z['LI']:
                 level = level + 1
                 for here in z['LI']['hl']:
-                   seen_here_list = chase_structure(here,data,level, seen_here_list)
+                    seen_here_list = chase_structure(here, data, level, seen_here_list)
     except KeyError:
         return seen_here_list
     return seen_here_list
@@ -157,56 +154,56 @@ def is_magician(char_record):
     return False
 
 
-def is_char(data, id):
-    if ' char ' in data[id]['firstline'][0]:
+def is_char(data, unit):
+    if ' char ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_loc(data, id):
-    if ' loc ' in data[id]['firstline'][0]:
+def is_loc(data, unit):
+    if ' loc ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_item(data, id):
-    if ' item ' in data[id]['firstline'][0]:
+def is_item(data, unit):
+    if ' item ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_ship(data, id):
-    if ' ship ' in data[id]['firstline'][0]:
+def is_ship(data, unit):
+    if ' ship ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_player(data, id):
-    if ' player ' in data[id]['firstline'][0]:
+def is_player(data, unit):
+    if ' player ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_city(data, id):
-    if 'city' in data[id]['firstline'][0]:
+def is_city(data, unit):
+    if 'city' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_skill(data, id):
-    if ' skill ' in data[id]['firstline'][0]:
+def is_skill(data, unit):
+    if ' skill ' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_garrison(data, id):
-    if 'garrison' in data[id]['firstline'][0]:
+def is_garrison(data, unit):
+    if 'garrison' in data[unit]['firstline'][0]:
         return True
     return False
 
 
-def is_castle(data, id):
-    v = data[id]
+def is_castle(data, unit):
+    v = data[unit]
     if return_type(v['firstline'][0]) == 'castle':
         return True
     return False
@@ -214,22 +211,22 @@ def is_castle(data, id):
 
 def resolve_all_pledges(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_char(data, id):
-            pl = data[id].get('CM', {}).get('pl', [None])[0]
+    for unit in data:
+        if is_char(data, unit):
+            pl = data[unit].get('CM', {}).get('pl', [None])[0]
             if pl:
-                ret[pl].append(id)
+                ret[pl].append(unit)
     return ret
 
 
 def resolve_castles(data):
-    castle_ind = ['!','@','#','%','^','*','-','+','a','b','c','d','e','f','g','h']
+    castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     ret2 = defaultdict(list)
-    for id in data:
-        if is_castle(data, id):
-            pl = data[id]
+    for unit in data:
+        if is_castle(data, unit):
+            pl = data[unit]
             if pl:
-                ret2[region(id, data)].append(id)
+                ret2[region(unit, data)].append(unit)
     ret = defaultdict(list)
     for reg in ret2:
         castle_list = ret2[reg]
@@ -242,36 +239,35 @@ def resolve_castles(data):
 
 def resolve_bound_storms(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_ship(data, id):
-            pl = data[id].get('SL', {}).get('bs', [None])[0]
+    for unit in data:
+        if is_ship(data, unit):
+            pl = data[unit].get('SL', {}).get('bs', [None])[0]
             if pl:
-                ret[pl].append(id)
+                ret[pl].append(unit)
     return ret
 
 
 def resolve_all_prisoners(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_char(data, id):
-            pl = data[id].get('CH', {}).get('pr', [None])[0]
+    for unit in data:
+        if is_char(data, unit):
+            pl = data[unit].get('CH', {}).get('pr', [None])[0]
             if pl:
-                ret[data[id].get('LI', {}).get('wh', [None])[0]].append(id)
+                ret[data[unit].get('LI', {}).get('wh', [None])[0]].append(unit)
     return ret
 
 
 def resolve_hidden_locs(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_player(data, id):
-            rec = data[id]
-            pl = data[id].get('PL', {}).get('kn', [None])
+    for unit in data:
+        if is_player(data, unit):
+            pl = data[unit].get('PL', {}).get('kn', [None])
             if pl:
                 for loc in pl:
                     try:
                         loc_rec = data[loc]
                         if return_kind(loc_rec['firstline'][0]) == 'loc':
-                            ret[loc].append(id)
+                            ret[loc].append(unit)
                     except KeyError:
                         pass
     return ret
@@ -279,51 +275,47 @@ def resolve_hidden_locs(data):
 
 def resolve_teaches(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_city(data, id):
-            rec = data[id]
-            pl=data[id].get('SL', {}).get('te', [None])
+    for unit in data:
+        if is_city(data, unit):
+            pl = data[unit].get('SL', {}).get('te', [None])
             if pl:
                 for skill in pl:
                     if skill is not None:
-                        ret[skill].append(id)
+                        ret[skill].append(unit)
     return ret
 
 
 def resolve_child_skills(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_skill(data, id):
-            rec = data[id]
-            pl=data[id].get('SK', {}).get('rs', [None])
+    for unit in data:
+        if is_skill(data, unit):
+            pl = data[unit].get('SK', {}).get('rs', [None])
             if pl:
                 for skill in pl:
-                    ret[skill].append(id)
+                    ret[skill].append(unit)
     return ret
 
 
 def resolve_garrisons(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_garrison(data, id):
-            rec = data[id]
-            pl=data[id].get('MI', {}).get('gc', [None])
+    for unit in data:
+        if is_garrison(data, unit):
+            pl = data[unit].get('MI', {}).get('gc', [None])
             if pl:
                 for skill in pl:
-                    ret[skill].append(id)
+                    ret[skill].append(unit)
     return ret
 
 
 def resolve_skills_known(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_char(data, id):
-            rec = data[id]
-            pl=data[id].get('CH', {}).get('sl', [None])
+    for unit in data:
+        if is_char(data, unit):
+            pl = data[unit].get('CH', {}).get('sl', [None])
             if pl:
                 iterations = int(len(pl) / 5)
                 for skill in range(0, iterations - 1):
-                    ret[pl[skill*5]].append(id)
+                    ret[pl[skill*5]].append(unit)
     for row in ret:
         ret[row].sort()
     return ret
@@ -331,16 +323,15 @@ def resolve_skills_known(data):
 
 def resolve_trades(data):
     ret = defaultdict(list)
-    for id in data:
-        if is_city(data, id):
-            rec = data[id]
-            pl = data[id].get('tl', [None])
+    for unit in data:
+        if is_city(data, unit):
+            pl = data[unit].get('tl', [None])
             iterations = int(len(pl) / 8)
             for goods in range(0, iterations - 1):
                 if int(pl[(goods*8) + 1]) >= 300:
-                    if int(pl[(goods * 8) + 0]) in {1,2}:
+                    if int(pl[(goods * 8) + 0]) in {1, 2}:
                         if pl[(goods*8) + 1] is not None:
-                            ret[pl[(goods*8) + 1]].append([id, pl[(goods * 8) + 0]])
+                            ret[pl[(goods*8) + 1]].append([unit, pl[(goods * 8) + 0]])
     return ret
 
 
@@ -352,9 +343,9 @@ def loc_depth(loc_type):
     elif loc_type in details.subloc_kinds:
         return 3
     # details.structure_type does not include 'in-progress' or could use it
-    elif loc_type in ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress', \
-                      'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn' \
-                      'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress' \
+    elif loc_type in ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
+                      'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn' 
+                      'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress' 
                       'collapsed mine', 'tower', 'tower-in-progress', 'sewer']:
         return 4
     return 0
@@ -362,7 +353,7 @@ def loc_depth(loc_type):
 
 def region(who, data):
     v = data[who]
-    while (int(who) > 0 and \
+    while (int(who) > 0 and
             (return_kind(v['firstline'][0]) != 'loc' or loc_depth(return_type(v['firstline'][0])) != 1)):
         v = data[v['LI']['wh'][0]]
         who = return_unitid(v['firstline'][0])
@@ -371,7 +362,7 @@ def region(who, data):
 
 def top_ruler(k, data):
     cont = True
-    while cont == True:
+    while cont:
         top_dog = k
         try:
             v = data[k]
@@ -454,7 +445,7 @@ def province_has_port_city(loc, data):
             for here in here_list:
                 try:
                     here_loc = data[here]
-                    if is_port_city(here_loc,data):
+                    if is_port_city(here_loc, data):
                         return here
                 except KeyError:
                     pass
@@ -558,7 +549,6 @@ def determine_item_use(v, data, trade_chain):
                             try:
                                 itemz = v['IM']['pc'][0]
                                 itemz_rec = data[itemz]
-                                name = ''
                                 if 'na' in v:
                                     name = v['na'][0]
                                 else:
@@ -585,22 +575,22 @@ def determine_item_use(v, data, trade_chain):
             ret = ''
             first = True
             if 'ab' in v['IM']:
-                if first == False:
+                if not first:
                     ret = ret + ', '
                 ret = ret + 'attack +' + v['IM']['ab'][0]
                 first = False
             if 'db' in v['IM']:
-                if first == False:
+                if not first:
                     ret = ret + ', '
                 ret = ret + 'defense +' + v['IM']['db'][0]
                 first = False
             if 'mb' in v['IM']:
-                if first == False:
+                if not first:
                     ret = ret + ', '
                 ret = ret + 'missile +' + v['IM']['mb'][0]
                 first = False
             if 'ba' in v['IM']:
-                if first == False:
+                if not first:
                     ret = ret + ', '
                 ret = ret + 'aura +' + v['IM']['ba'][0]
                 first = False
@@ -653,7 +643,7 @@ def determine_item_use(v, data, trade_chain):
         if len(trade_list) > 0:
             for trade in trade_list:
                 loc_rec = data[trade[0]]
-                if first != True:
+                if not first:
                     ret = ret + '<br>'
                 else:
                     first = False

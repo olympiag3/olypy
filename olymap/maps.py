@@ -1,14 +1,9 @@
 #!/usr/bin/python
-import os
-import sys
-import math
 
 from olypy.oid import to_oid
-import olypy.oio as oio
-import OlyMapperPy.OlyMapperUtilities as u
-import olypy.details as details
-from OlyMapperPy.OlyMapperUtilities import anchor
-from OlyMapperPy.OlyMapperUtilities import anchor2
+import olymap.utilities as u
+from olymap.utilities import anchor
+from olymap.utilities import anchor2
 
 
 def write_index():
@@ -142,11 +137,9 @@ def write_main_map():
 
 
 def write_main_map_leaves(data, castle_chain):
-    startingpoint = 10000
-    currentpoint = 0
     for outery in range(0,7):
         startingpoint = 10000 + (outery * 1000)
-        for outerx in range (0,7):
+        for outerx in range (0, 7):
             currentpoint = startingpoint + (outerx * 10)
             outf = open('main_map_leaf_' + u.to_oid(currentpoint) + '.html', 'w')
             outf.write('<HTML>\n')
@@ -170,13 +163,13 @@ def write_main_map_leaves(data, castle_chain):
             if currentpoint < 16000:
                 botnav = True
             y1 = (currentpoint - 10000) % 100
-            if ((y1 % 10) > 1 or (y1 / 10) > 0):
+            if (y1 % 10) > 1 or (y1 / 10) > 0:
                 leftnav = True
                 if topnav:
                     upperleftnav = True
                 if botnav:
                     lowerleftnav = True
-            if ((y1 % 10) > 1 or (y1 / 10) < 6):
+            if (y1 % 10) > 1 or (y1 / 10) < 6:
                 rightnav = True
                 if topnav:
                     upperrightnav = True
@@ -199,9 +192,9 @@ def write_main_map_leaves(data, castle_chain):
                     outf.write('<img src="grey.gif" width="20" height="20">')
                     outf.write('</a></td>\n')
                 outf.write('</tr>\n')
-            for x in range(0,20):
+            for x in range(0, 20):
                 outf.write('<tr>\n')
-                for y in range(0,20):
+                for y in range(0, 20):
                     if x == 0 and y == 0:
                         if leftnav:
                             outf.write('<td rowspan="20" class="left">')

@@ -1,20 +1,17 @@
 #!/usr/bin/python
-import os
-import sys
+
 import math
 
 from olypy.oid import to_oid
-import olypy.oio as oio
-import OlyMapperPy.OlyMapperUtilities as u
-import olypy.details as details
-from OlyMapperPy.OlyMapperUtilities import anchor
+import olymap.utilities as u
+from olymap.utilities import anchor
 
 
-def write_player_page_header(v,k,outf):
-    outf.write('<H3>{} [{}]</H3>\n'.format(v['na'][0], to_oid((k))))
+def write_player_page_header(v, k, outf):
+    outf.write('<H3>{} [{}]</H3>\n'.format(v['na'][0], to_oid(k)))
 
 
-def write_player_basic_info(v,k,data,outf):
+def write_player_basic_info(v, data, outf):
     outf.write('<table>\n')
     outf.write('<tr><td>Type</td><td>{}</td></tr>\n'.format(u.return_type(v['firstline'][0])))
     if 'PL' in v:
@@ -46,39 +43,36 @@ def write_unit_list(data, outf, v):
             for unit in range(0, columns):
                 outf.write('<tr>')
                 if (columns * 0) + unit < len(unit_list):
-                    charac = data[unit_list[(columns * 0) + unit]]
-                    name = ''
-                    if 'na' in charac:
-                        name = charac['na'][0]
+                    char = data[unit_list[(columns * 0) + unit]]
+                    if 'na' in char:
+                        name = char['na'][0]
                     else:
-                        name = u.return_type(charac['firstline'][0]).capitalize()
+                        name = u.return_type(char['firstline'][0]).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
                                                          anchor(to_oid(u.return_unitid(
-                                                         charac['firstline'][0])))))
+                                                         char['firstline'][0])))))
                 else:
                     outf.write('<td></td>')
                 if (columns * 1) + unit < len(unit_list):
-                    charac = data[unit_list[(columns * 1) + unit]]
-                    name = ''
-                    if 'na' in charac:
-                        name = charac['na'][0]
+                    char = data[unit_list[(columns * 1) + unit]]
+                    if 'na' in char:
+                        name = char['na'][0]
                     else:
-                        name = u.return_type(charac['firstline'][0]).capitalize()
+                        name = u.return_type(char['firstline'][0]).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
                                                          anchor(to_oid(u.return_unitid(
-                                                         charac['firstline'][0])))))
+                                                         char['firstline'][0])))))
                 else:
                     outf.write('<td></td><td></td>')
                 if (columns * 2) + unit < len(unit_list):
-                    charac = data[unit_list[(columns * 2) + unit]]
-                    name = ''
-                    if 'na' in charac:
-                        name = charac['na'][0]
+                    char = data[unit_list[(columns * 2) + unit]]
+                    if 'na' in char:
+                        name = char['na'][0]
                     else:
-                        name = u.return_type(charac['firstline'][0]).capitalize()
+                        name = u.return_type(char['firstline'][0]).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
                                                          anchor(to_oid(u.return_unitid(
-                                                         charac['firstline'][0])))))
+                                                         char['firstline'][0])))))
                 else:
                     outf.write('<td></td><td></td>')
                 outf.write('</tr>\n')
@@ -99,19 +93,17 @@ def write_full_name(outf, v):
 
 def write_player_html(v, k, data):
     # generate player page
-    fl = v['firstline'][0]
-    #print('player {} {} {}'.format(fl, k, to_oid(k)))
     outf = open(to_oid(k)+'.html', 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]
-    outf.write('<TITLE>{} [{}]'.format(name, \
+    outf.write('<TITLE>{} [{}]'.format(name, 
                to_oid(k)))
     outf.write('</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
-    write_player_page_header(v,k,outf)
-    write_player_basic_info(v,k,data,outf)
+    write_player_page_header(v, k, outf)
+    write_player_basic_info(v, data, outf)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()

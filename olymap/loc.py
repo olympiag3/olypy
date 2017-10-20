@@ -1,17 +1,15 @@
 #!/usr/bin/python
-import os
-import sys
+
 import math
 
 from olypy.oid import to_oid
-import olypy.oio as oio
-import OlyMapperPy.OlyMapperUtilities as u
-from OlyMapperPy.OlyMapperUtilities import anchor
-from OlyMapperPy.OlyMapperUtilities import anchor2
+import olymap.utilities as u
+from olymap.utilities import anchor
+from olymap.utilities import anchor2
 import olypy.details as details
 from operator import itemgetter
 
-pd_directions = {0: 'North', 1 : 'East', 2: 'South', 3 : 'West', 4 : 'Up', 5: 'Down'}
+pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
 
 def write_loc_page_header(v, k, data, outf):
@@ -50,7 +48,7 @@ def write_loc_page_header(v, k, data, outf):
     outf.write('</H3>\n')
 
 
-def write_loc_shroud(v, k, data, outf):
+def write_loc_shroud(v, k, outf):
     if 'LO' in v:
         if 'sh' in v['LO']:
             if int(v['LO']['sh'][0]) > 0:

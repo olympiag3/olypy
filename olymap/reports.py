@@ -1,13 +1,9 @@
 #!/usr/bin/python
-import os
-import sys
 import math
 
 from olypy.oid import to_oid
-import olypy.oio as oio
-import OlyMapperPy.OlyMapperUtilities as u
-import olypy.details as details
-from OlyMapperPy.OlyMapperUtilities import anchor
+import olymap.utilities as u
+from olymap.utilities import anchor
 
 
 def ship_report(data):
@@ -20,12 +16,12 @@ def ship_report(data):
     outf.write('<H3>Olympia Master Ship Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th><th>Load</th><th>Storm (Strength)</th></tr>\n')
-    for id in data:
-        if u.is_ship(data, id):
-            ship_rec = data[id]
+    for unit in data:
+        if u.is_ship(data, unit):
+            ship_rec = data[unit]
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(ship_rec['na'][0],
-                                                 anchor(to_oid(id))))
+                                                 anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(u.return_type(ship_rec['firstline'][0])))
             captain = '&nbsp;'
             if 'LI' in ship_rec:
@@ -56,7 +52,7 @@ def ship_report(data):
                 damaged = 0
             seen_here_list = []
             level = 0
-            seen_here_list = u.chase_structure(id, data, level, seen_here_list)
+            seen_here_list = u.chase_structure(unit, data, level, seen_here_list)
             list_length = len(seen_here_list)
             if list_length > 1:
                 for un in seen_here_list[1:]:
@@ -109,12 +105,12 @@ def item_report(data, trade_chain):
     outf.write('<H3>Olympia Master Item Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th><th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th><th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>\n')
-    for id in data:
-        if u.is_item(data, id):
-            item_rec = data[id]
+    for unit in data:
+        if u.is_item(data, unit):
+            item_rec = data[unit]
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
-                                                 anchor(to_oid(id))))
+                                                 anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(u.return_type(item_rec['firstline'][0])))
             weight = ''
             if 'IT' in item_rec:
@@ -156,7 +152,6 @@ def item_report(data, trade_chain):
                 if 'un' in item_rec['IT']:
                     who_has = item_rec['IT']['un'][0]
                     who_rec = data[who_has]
-                    name = ''
                     if 'na' in who_rec:
                         name = who_rec['na'][0]
                     else:
@@ -181,12 +176,12 @@ def player_report(data):
     outf.write('<H3>Olympia Master Player Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Player</th><th>Name</th><th>Type</th><th># Units</th></tr>\n')
-    for id in data:
-        if u.is_player(data, id):
-            player_rec = data[id]
+    for unit in data:
+        if u.is_player(data, unit):
+            player_rec = data[unit]
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(player_rec['na'][0],
-                                                 anchor(to_oid(id))))
+                                                 anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(player_rec['na'][0]))
             outf.write('<td>{}</td>'.format(u.return_type(player_rec['firstline'][0])))
             count = '0'
@@ -211,14 +206,14 @@ def healing_potion_report(data):
     outf.write('<H3>Olympia Master Healing Potion Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th><th>Location</th></tr>\n')
-    for id in data:
-        if u.is_item(data, id):
-            itemz = data[id]
+    for unit in data:
+        if u.is_item(data, unit):
+            itemz = data[unit]
             if 'IM' in itemz:
                 if 'uk' in itemz['IM']:
                     if itemz['IM']['uk'][0] == '2':
                         outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(id))))
+                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
                         if 'IT' in itemz:
                             if 'un' in itemz['IT']:
                                 unit = data[itemz['IT']['un'][0]]
@@ -253,14 +248,14 @@ def orb_report(data):
     outf.write('<H3>Olympia Master Orb Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th></tr>\n')
-    for id in data:
-        if u.is_item(data, id):
-            itemz = data[id]
+    for unit in data:
+        if u.is_item(data, unit):
+            itemz = data[unit]
             if 'IM' in itemz:
                 if 'uk' in itemz['IM']:
                     if itemz['IM']['uk'][0] == '9':
                         outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(id))))
+                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
                         if 'IT' in itemz:
                             if 'un' in itemz['IT']:
                                 charac = data[itemz['IT']['un'][0]]
@@ -287,14 +282,14 @@ def projected_cast_potion_report(data):
     outf.write('<H3>Olympia Master Projected Cast Potion Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th><th>Target</th></tr>\n')
-    for id in data:
-        if u.is_item(data, id):
-            itemz = data[id]
+    for unit in data:
+        if u.is_item(data, unit):
+            itemz = data[unit]
             if 'IM' in itemz:
                 if 'uk' in itemz['IM']:
                     if itemz['IM']['uk'][0] == '5':
                         outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(id))))
+                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
                         if 'IT' in itemz:
                             if 'un' in itemz['IT']:
                                 charac = data[itemz['IT']['un'][0]]
@@ -334,19 +329,18 @@ def location_report(data):
     outf.write('<H3>Olympia Master Location Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Location</th><th>Type</th><th>Region</th></tr>\n')
-    for id in data:
-        if u.is_loc(data, id):
-            loc = data[id]
-            name = ''
+    for unit in data:
+        if u.is_loc(data, unit):
+            loc = data[unit]
             if 'na' in loc:
                 name = loc['na'][0]
             else:
                 name = u.return_type(loc['firstline'][0]).capitalize()
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(name,
-                                                 anchor(to_oid(id))))
+                                                 anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(u.return_type(loc['firstline'][0])))
-            region = u.region(id, data)
+            region = u.region(unit, data)
             region_rec = data[region]
             outf.write('<td>{} [{}]</td>'.format(region_rec['na'][0],
                                                  anchor(to_oid(region))))
@@ -368,16 +362,16 @@ def skill_xref_report(data, teaches_chain):
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Skill</th><th>Location</th><th>Region</th></tr>\n')
     skill_list = sorted(list(teaches_chain))
-    for id in skill_list:
-        city_list = teaches_chain[id]
-        if len(city_list) > 0 and id is not None:
-            skill_rec = data[id]
+    for unit in skill_list:
+        city_list = teaches_chain[unit]
+        if len(city_list) > 0 and unit is not None:
+            skill_rec = data[unit]
             for city in city_list:
                 loc = data[city]
                 where_rec = data[loc['LI']['wh'][0]]
                 outf.write('<tr>')
                 outf.write('<td>{} [{}]</td>'.format(skill_rec['na'][0],
-                                                     anchor(to_oid(id))))
+                                                     anchor(to_oid(unit))))
                 outf.write('<td>{} [{}], {} [{}]</td>'.format(loc['na'][0],
                                                               anchor(to_oid(city)),
                                                               where_rec['na'][0],
@@ -404,10 +398,10 @@ def trade_report(data, trade_chain):
     outf.write('<table border="1" style="border-collapse: collapse">\n')
     outf.write('<tr><th>Item</th><th>Seller</th><th>Buyer</th><th>Sell Region</th><th>Buy Region</th></tr>\n')
     trade_list = sorted(list(trade_chain))
-    for id in trade_list:
-        city_list = trade_chain[id]
-        if len(city_list) > 0 and id is not None:
-            item_rec = data[id]
+    for unit in trade_list:
+        city_list = trade_chain[unit]
+        if len(city_list) > 0 and unit is not None:
+            item_rec = data[unit]
             buy_literal = ''
             sell_literal = ''
             buy_reg_literal = ''
@@ -430,7 +424,7 @@ def trade_report(data, trade_chain):
                     sell_reg_literal = sell_reg_literal + reg_rec['na'][0] + ' [' + anchor(to_oid(u.region(city[0], data))) + ']'
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
-                                                 anchor(to_oid(id))))
+                                                 anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(sell_literal))
             outf.write('<td>{}</td>'.format(buy_literal))
             outf.write('<td>{}</td>'.format(sell_reg_literal))

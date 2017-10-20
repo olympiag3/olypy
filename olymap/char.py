@@ -1,24 +1,20 @@
 #!/usr/bin/python
-import os
-import sys
 import math
 
 from olypy.oid import to_oid
-import olypy.oio as oio
-import OlyMapperPy.OlyMapperUtilities as u
-from OlyMapperPy.OlyMapperUtilities import anchor
-import olypy.details as details
+import olymap.utilities as u
+from olymap.utilities import anchor
 
 
-def write_char_page_header(v,k,outf):
+def write_char_page_header(v, k, outf):
     if u.return_type(v['firstline'][0]).upper() == "GARRISON":
         name = "Garrison"
     else:
         name = v['na'][0]
-    outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid((k))))
+    outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid(k)))
 
 
-def write_char_faction(v,k,data,outf):
+def write_char_faction(v, data, outf):
     # CH/lo
     if 'CH' in v:
         if 'lo' in v['CH']:
@@ -29,7 +25,7 @@ def write_char_faction(v,k,data,outf):
                                                         anchor(to_oid(u.return_unitid(player['firstline'][0])))))
 
 
-def write_char_rank(v,k,data,outf):
+def write_char_rank(v, k, outf):
     # CH/ra
     if 'CH' in v:
         if 'ra' in v['CH']:
@@ -38,7 +34,7 @@ def write_char_rank(v,k,data,outf):
             outf.write('<td>{}</td></tr>\n'.format(u.xlate_rank(k)))
 
 
-def write_char_loyalty(v,k,data,outf):
+def write_char_loyalty(v, outf):
     # CH/lk
     if 'CH' in v:
         if 'lk' in v['CH']:
@@ -47,7 +43,7 @@ def write_char_loyalty(v,k,data,outf):
             outf.write('<td>{}</td></tr>\n'.format(u.xlate_loyalty(v)))
 
 
-def write_char_stacked_under(v, k, data, outf):
+def write_char_stacked_under(v, data, outf):
     # LI/wh
     if 'LI' in v:
         if 'wh' in v['LI']:
@@ -61,7 +57,7 @@ def write_char_stacked_under(v, k, data, outf):
                                                             anchor(to_oid(u.return_unitid(charu['firstline'][0])))))
 
 
-def write_char_stacked_over(v, k, data, outf):
+def write_char_stacked_over(v, data, outf):
     # LI/hl
     if 'LI' in v:
         if 'hl' in v['LI']:
@@ -77,7 +73,7 @@ def write_char_stacked_over(v, k, data, outf):
                 stacked_over = ''
 
 
-def write_char_health(v,k,data,outf):
+def write_char_health(v, outf):
     # CH/he and CH/si
     if 'CH' in v:
         if 'he' in v['CH']:
@@ -95,7 +91,7 @@ def write_char_health(v,k,data,outf):
                 outf.write('<td>{}%</td></tr>\n'.format(v['CH']['he'][0]))
 
 
-def write_char_combat(v,k,data,outf):
+def write_char_combat(v, outf):
     # CH/at, CH/df, CH/mi
     attack = 0
     defense = 0
@@ -116,7 +112,6 @@ def write_char_combat(v,k,data,outf):
     if 'CH' in v:
         if 'bh' in v['CH']:
             behind = int(v['CH']['bh'][0])
-    behind_text = ''
     if behind > 0:
         behind_text = '(stay behind in combat)'
     else:
@@ -126,7 +121,7 @@ def write_char_combat(v,k,data,outf):
     outf.write('<td>behind {} {}</td></tr>\n'.format(behind, behind_text))
 
 
-def write_char_break_point(v, k, data, outf):
+def write_char_break_point(v, outf):
     # CH/bp
     break_point = int(1)
     if 'CH' in v:
@@ -141,7 +136,7 @@ def write_char_break_point(v, k, data, outf):
     outf.write('<td>{}% {}</td></tr>\n'.format(break_point, break_point_text))
 
 
-def write_char_vision_protection(v, k, data, outf):
+def write_char_vision_protection(v, outf):
     # CM/vp
     if 'CM' in v:
         if 'vp' in v['CM']:
@@ -150,7 +145,7 @@ def write_char_vision_protection(v, k, data, outf):
             outf.write('<td>{} protection</td></tr>\n'.format(v['CM']['vp'][0]))
 
 
-def write_char_pledged_to(v,k,data,outf):
+def write_char_pledged_to(v, data, outf):
     # CM/pl
     if 'CM' in v:
         if 'pl' in v['CM']:
@@ -161,7 +156,7 @@ def write_char_pledged_to(v,k,data,outf):
                                                         anchor(to_oid(u.return_unitid(pledged_to['firstline'][0])))))
 
 
-def write_char_pledged_to_us(v,k,data,outf, pledge_chain):
+def write_char_pledged_to_us(k, data, outf, pledge_chain):
     # CM/pl
     try:
         pledge_list = pledge_chain[k]
@@ -178,7 +173,7 @@ def write_char_pledged_to_us(v,k,data,outf, pledge_chain):
         pass
 
 
-def write_char_concealed(v,k,data,outf):
+def write_char_concealed(v, outf):
     # CM/hs
     # need to check if alone - lib doesn't currently show
     if 'CM' in v:
@@ -189,7 +184,7 @@ def write_char_concealed(v,k,data,outf):
                 outf.write('<td>Yes</td></tr>\n')
 
 
-def write_char_aura(v,k,data,outf):
+def write_char_aura(v, data, outf):
     # CM/im, CM/ca, CM/ma, CN/ar
     # need to check if alone - lib doesn't currently show
     if 'CM' in v:
@@ -200,7 +195,6 @@ def write_char_aura(v,k,data,outf):
                     outf.write('<td>Current Aura:</td>')
                     outf.write('<td>{}</td></tr>\n'.format(v['CM']['ca'][0]))
             max_aura = int(0)
-            auraculum_text = ''
             if 'ma' in v['CM']:
                 max_aura = int(v['CM']['ma'][0])
             if 'ar' in v['CM']:
@@ -219,7 +213,7 @@ def write_char_aura(v,k,data,outf):
                 outf.write('<td>{}</td></tr>\n'.format(max_aura))
 
 
-def write_char_prisoners(v,k,data,outf, prisoner_chain):
+def write_char_prisoners(k, data, outf, prisoner_chain):
     # CH/pr
     try:
         prisoner_list = prisoner_chain[k]
@@ -241,7 +235,7 @@ def write_char_prisoners(v,k,data,outf, prisoner_chain):
         pass
 
 
-def write_char_skills_known(v,k,data,outf):
+def write_char_skills_known(v, data, outf):
     # CH/sl
     if 'CH' in v:
         if 'sl' in v['CH']:
@@ -255,7 +249,7 @@ def write_char_skills_known(v,k,data,outf):
                     know = skills_list[(skill * 5) + 1]
                     days_studied = int(skills_list[(skill * 5) + 2])
                     if know == '2':
-                        if printknown == False:
+                        if not printknown:
                             outf.write('<p>Skills known:</p>\n')
                             outf.write('<ul style="list-style-type:none">\n')
                             printknown = True
@@ -271,7 +265,7 @@ def write_char_skills_known(v,k,data,outf):
                                                     anchor(to_oid(skill_id))))
                         outf.write('</li>\n')
                     if know == '1':
-                        if printunknown == False:
+                        if not printunknown:
                             outf.write('<p>Partially known skills:</p>\n')
                             outf.write('<ul style="list-style-type:none">\n')
                             printunknown = True
@@ -282,11 +276,11 @@ def write_char_skills_known(v,k,data,outf):
                                                            days_studied,
                                                            skillz['SK']['tl'][0]))
                         outf.write('</li>\n')
-                if printknown == True or printunknown == True:
+                if printknown or printunknown:
                     outf.write('</ul>\n')
 
 
-def write_char_inventory(v,k,data,outf):
+def write_char_inventory(v, data, outf):
     total_weight = int(0)
     if 'il' in v:
         item_list = v['il']
@@ -296,7 +290,7 @@ def write_char_inventory(v,k,data,outf):
             outf.write('<table>\n')
             outf.write('<tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>\n')
             outf.write('<tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>\n')
-            for itm in range(0,iterations):
+            for itm in range(0, iterations):
                 item_id = item_list[itm*2]
                 item_qty = int(item_list[(itm*2)+1])
                 outf.write('<tr>')
@@ -327,7 +321,7 @@ def write_char_inventory(v,k,data,outf):
                         outf.write('ride {}'.format(ride_capacity * item_qty))
                     elif land_capacity > 0:
                         outf.write('cap {}'.format(land_capacity * item_qty))
-                    if u.is_fighter(itemz, item_id) == True:
+                    if u.is_fighter(itemz, item_id):
                         attack = int(0)
                         defense = int(0)
                         missile = int(0)
@@ -371,8 +365,8 @@ def write_char_inventory(v,k,data,outf):
             outf.write('</table>\n')
 
 
-def write_char_capacity(v,k,data,outf):
-    animals = int(0)
+def write_char_capacity(v, data, outf):
+    # animals = int(0)
     total_weight = int(0)
     land_cap = int(0)
     land_weight = int(0)
@@ -408,12 +402,13 @@ def write_char_capacity(v,k,data,outf):
         ride_weight = ride_weight + item_weight
     total_weight = total_weight + item_weight
     if 'il' in v:
-        if 'IT' in base_unit:
-            if 'an' in base_unit['IT']:
-                animals = animals + 1
+        # not used for now
+        # if 'IT' in base_unit:
+        #    if 'an' in base_unit['IT']:
+        #        animals = animals + 1
         item_list = v['il']
         iterations = int(len(item_list) / 2)
-        for itm in range(0,iterations):
+        for itm in range(0, iterations):
             item_id = item_list[itm * 2]
             item_qty = int(item_list[(itm * 2) + 1])
             try:
@@ -458,7 +453,7 @@ def write_char_capacity(v,k,data,outf):
     outf.write('</p>')
 
 
-def write_char_pending_trades(v,k,data,outf):
+def write_char_pending_trades(v, data, outf):
     if 'tl' in v:
         trade_list = v['tl']
         iterations = int(len(trade_list) / 8)
@@ -483,26 +478,25 @@ def write_char_pending_trades(v,k,data,outf):
             outf.write('</table>\n')
 
 
-def write_char_visions_received(v,k,data,outf):
+def write_char_visions_received(v, data, outf):
     if 'CM' in v:
         if 'vi' in v['CM']:
             vision_list = v['CM']['vi']
             # iterations = len(vision_list)
             outf.write('<p>Visions Received:</p>\n')
             outf.write('<table>\n')
-            vision_name = ''
             for vision in vision_list:
                 try:
                     visioned = data[vision]
                     vision_name = visioned['na'][0]
-                except:
+                except KeyError:
                     vision_name = 'missing'
                 outf.write('<tr><td>{} [{}]</td></tr>\n'.format(vision_name,
                                                                 anchor(to_oid(vision))))
             outf.write('</table>\n')
 
 
-def write_char_magic_stuff(v,k,data,outf):
+def write_char_magic_stuff(v, data, outf):
     if 'il' in v:
         item_list = v['il']
         iterations = int(len(item_list) / 2)
@@ -563,35 +557,35 @@ def write_char_magic_stuff(v,k,data,outf):
                 pass
 
 
-def write_char_basic_info(v,k,data,outf, pledge_chain, prisoner_chain):
+def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain):
     if u.return_type(v['firstline'][0]).upper() != "GARRISON":
         outf.write('<table>\n')
-        write_char_rank(v,k,data,outf)
-        write_char_faction(v,k,data,outf)
+        write_char_rank(v, k, outf)
+        write_char_faction(v, data, outf)
         write_char_location(data, outf, v)
-        write_char_loyalty(v, k, data, outf)
-        write_char_stacked_under(v, k, data, outf)
-        write_char_stacked_over(v, k, data, outf)
-        write_char_health(v, k, data, outf)
-        write_char_combat(v, k, data, outf)
-        write_char_break_point(v, k, data, outf)
-        write_char_vision_protection(v, k, data, outf)
-        write_char_pledged_to(v, k, data, outf)
-        write_char_pledged_to_us(v, k, data, outf, pledge_chain)
-        write_char_concealed(v, k, data, outf)
-        write_char_aura(v, k, data, outf)
+        write_char_loyalty(v, outf)
+        write_char_stacked_under(v, data, outf)
+        write_char_stacked_over(v, data, outf)
+        write_char_health(v, outf)
+        write_char_combat(v, outf)
+        write_char_break_point(v, outf)
+        write_char_vision_protection(v, outf)
+        write_char_pledged_to(v, data, outf)
+        write_char_pledged_to_us(k, data, outf, pledge_chain)
+        write_char_concealed(v, outf)
+        write_char_aura(v, data, outf)
         # appear common not in lib yet
         # write_char_appear_common(v, k, data, outf)
-        write_char_prisoners(v, k, data, outf, prisoner_chain)
+        write_char_prisoners(k, data, outf, prisoner_chain)
         outf.write('</table>\n')
     if u.return_type(v['firstline'][0]).upper() != "GARRISON":
-        write_char_skills_known(v,k,data,outf)
-    write_char_inventory(v,k,data,outf)
+        write_char_skills_known(v, data, outf)
+    write_char_inventory(v, data, outf)
     if u.return_type(v['firstline'][0]).upper() != "GARRISON":
-        write_char_capacity(v,k,data,outf)
-        write_char_pending_trades(v,k,data,outf)
-        write_char_visions_received(v,k,data,outf)
-    write_char_magic_stuff(v,k,data,outf)
+        write_char_capacity(v, data, outf)
+        write_char_pending_trades(v, data, outf)
+        write_char_visions_received(v, data, outf)
+    write_char_magic_stuff(v, data, outf)
 
 
 def write_char_location(data, outf, v):
@@ -606,8 +600,6 @@ def write_char_location(data, outf, v):
 
 def write_char_html(v, k, data, pledge_chain, prisoner_chain):
     # generate char page
-    fl = v['firstline'][0]
-    #print('Char {} {} {}'.format(fl, k, to_oid(k)))
     outf = open(to_oid(k)+'.html', 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
@@ -615,13 +607,13 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain):
         name = "Garrison"
     else:
         name = v['na'][0]
-    outf.write('<TITLE>{} [{}]'.format(name, \
+    outf.write('<TITLE>{} [{}]'.format(name,
                to_oid(k)))
     outf.write('</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
-    write_char_page_header(v,k,outf)
-    write_char_basic_info(v,k,data,outf, pledge_chain, prisoner_chain)
+    write_char_page_header(v, k, outf)
+    write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
