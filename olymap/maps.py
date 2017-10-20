@@ -137,7 +137,7 @@ def write_main_map():
 
 
 def write_main_map_leaves(data, castle_chain):
-    for outery in range(0,7):
+    for outery in range (0, 7):
         startingpoint = 10000 + (outery * 1000)
         for outerx in range (0, 7):
             currentpoint = startingpoint + (outerx * 10)

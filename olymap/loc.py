@@ -56,7 +56,7 @@ def write_loc_shroud(v, k, outf):
                                                                                   anchor(to_oid(k))))
 
 
-def write_loc_barrier(v, k, data, outf):
+def write_loc_barrier(v, k, outf):
     if 'LO' in v:
         if 'ba' in v['LO']:
             if int(v['LO']['ba'][0]) > 0:
@@ -64,7 +64,7 @@ def write_loc_barrier(v, k, data, outf):
                                                                                  anchor(to_oid(k))))
 
 
-def write_loc_controlled_by(v, k, data, outf):
+def write_loc_controlled_by(v, data, outf):
     if 'LI' in v:
         if 'hl' in v['LI']:
             here_list = v['LI']['hl']
@@ -123,7 +123,7 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
         if u.is_port_city(dest_loc, data) == False:
             dest_loc = data[u.province_has_port_city(dest_loc, data)]
         dest_loc_host = data[dest_loc['LI']['wh'][0]]
-        outf.write('<li>{}, port city, to {} [{}]' \
+        outf.write('<li>{}, port city, to {} [{}]'
                    .format(direction,
                            dest_loc['na'][0],
                            anchor(to_oid(u.return_unitid(dest_loc['firstline'][0])))))
@@ -185,24 +185,28 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
         outf.write('</li>\n')
 
 
-def write_province_destinations(v,f,data,outf):
+def write_province_destinations(v, data, outf):
     outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
     outf.write('<ul>\n')
     pd_list = v['LO']['pd']
     i = int(0)
     for pd in pd_list:
         if int(pd) != 0:
-            write_province_destination(v,data[pd],pd_directions[i],data,outf)
+            write_province_destination(v,
+                                       data[pd],
+                                       pd_directions[i],
+                                       data,
+                                       outf)
         i = i + 1
     outf.write('</ul>\n')
 
 
-def write_loc_routes_out(v, k, data, outf):
+def write_loc_routes_out(v, data, outf):
     if 'city' not in u.return_type(v['firstline'][0]):
         if 'LO' in v:
             if 'pd' in v['LO']:
                 if len(v['LO']['pd']) > 0:
-                    write_province_destinations(v, k, data, outf)
+                    write_province_destinations(v, data, outf)
     else:
         outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
         outf.write('<ul>\n')
@@ -218,7 +222,7 @@ def write_loc_routes_out(v, k, data, outf):
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc['firstline'][0])
                         out_distance = u.calc_exit_distance(v, pd_loc)
-                        outf.write('<li>{}, to {} [{}], {}, {} {}</li>\n' \
+                        outf.write('<li>{}, to {} [{}], {}, {} {}</li>\n'
                                    .format(pd_directions[i],
                                            pd_name,
                                            anchor(to_oid(pd_loc_id)),
@@ -229,7 +233,7 @@ def write_loc_routes_out(v, k, data, outf):
                     pass
                 i = i + 1
         out_distance = u.calc_exit_distance(v, host_prov)
-        outf.write('<li>Out, to {} [{}], {} {}</li>\n' \
+        outf.write('<li>Out, to {} [{}], {} {}</li>\n'
                    .format(host_prov['na'][0],
                            anchor(to_oid(u.return_unitid(host_prov['firstline'][0]))),
                            out_distance,
@@ -237,7 +241,7 @@ def write_loc_routes_out(v, k, data, outf):
         outf.write('</ul>\n')
 
 
-def write_structure_basic_info(v, k, data, outf):
+def write_structure_basic_info(v, outf):
     try:
         defense = int(v['SL']['de'][0])
     except KeyError:
@@ -265,23 +269,23 @@ def write_structure_basic_info(v, k, data, outf):
     if defense > 0 or damage > 0 or effort_given < effort_required:
         outf.write('<table>\n')
         if effort_given < effort_required:
-            outf.write('<tr><td>Percent Complete:</td><td>{}%</td></tr>\n' \
+            outf.write('<tr><td>Percent Complete:</td><td>{}%</td></tr>\n'
                        .format(int(effort_given / effort_required) * 100))
         if defense > 0:
-            outf.write('<tr><td>Defense:</td><td>{}</td></tr>\n' \
+            outf.write('<tr><td>Defense:</td><td>{}</td></tr>\n'
                        .format(defense))
-        outf.write('<tr><td>Damage:</td><td>{}%</td></tr>\n' \
+        outf.write('<tr><td>Damage:</td><td>{}%</td></tr>\n'
                    .format(damage))
         if depth > 0:
-            outf.write('<tr><td>Level:</td><td>{}</td></tr>\n' \
+            outf.write('<tr><td>Level:</td><td>{}</td></tr>\n'
                        .format(int(depth / 3)))
         if u.return_type(v['firstline'][0]) == 'castle':
-            outf.write('<tr><td>Level:</td><td>{}</td></tr>\n' \
+            outf.write('<tr><td>Level:</td><td>{}</td></tr>\n'
                        .format(level))
         outf.write('</table>\n')
 
 
-def write_loc_skills_report(v, k, data, outf):
+def write_loc_skills_report(v, data, outf):
     if 'SL' in v:
         if 'te' in v['SL']:
             skills_list = v['SL']['te']
@@ -289,7 +293,7 @@ def write_loc_skills_report(v, k, data, outf):
                 outf.write('<H4> Skills taught here:</H4>\n')
                 outf.write('<ul>\n')
                 for skill in skills_list:
-                    outf.write('<li>{} [{}]</li>\n' \
+                    outf.write('<li>{} [{}]</li>\n'
                                 .format(data[skill]['na'][0],
                                         anchor(to_oid(skill))))
                 outf.write('</ul>\n')
@@ -306,7 +310,7 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
         # city trades
         iterations = int(len(trade_list) / 8)
         for trade in range(0, iterations):
-            if trade_list[(trade * 8) + 0] in {'1','2'}:
+            if trade_list[(trade * 8) + 0] in {'1', '2'}:
                 city_trade_list.append([trade_list[(trade * 8) + 0],
                                         trade_list[(trade * 8) + 1],
                                         k,
@@ -338,14 +342,14 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                                                             trade_list[(trade * 8) + 2],
                                                             trade_list[(trade * 8) + 3]])
     if len(city_trade_list) > 0:
-        sorted_list = sorted(city_trade_list, key=itemgetter(0,1,2))
+        sorted_list = sorted(city_trade_list, key=itemgetter(0, 1, 2))
         outf.write('<H4>Market Report:</H4>\n')
         outf.write('<table border="1" cellpadding="5">\n')
         outf.write('<tr>')
         outf.write('<th>trade</th><th>who</th><th>price</th><th>qty</th><th>wt/ea</th><th>item</th><th>recip who</th><th>recip price</th><th>recip qty</th>\n')
         outf.write('</tr>\n')
         for trade in sorted_list:
-            if trade[0] in {'1','2'}:
+            if trade[0] in {'1', '2'}:
                 trade_kind = 'buy' if trade[0] == '1' else 'sell'
                 item_rec = data[trade[1]]
                 trade_item = anchor(to_oid(trade[1]))
@@ -399,7 +403,7 @@ def write_characters(v, k, data, outf):
         name = v['na'][0]
     outf.write('{} [{}]'.format(name,
                                 anchor(to_oid(k))))
-    if u.xlate_loyalty(v) not in {'Undefined','Npc'}:
+    if u.xlate_loyalty(v) not in {'Undefined', 'Npc'}:
         outf.write(' ({}'.format(u.xlate_loyalty(v)))
         if 'CH' in v:
             if 'sl' in v['CH']:
@@ -430,7 +434,7 @@ def write_characters(v, k, data, outf):
     if u.is_priest(v):
         outf.write(', priest')
     if u.is_magician(v):
-        if u.xlate_magetype(v) not in {'','undefined'}:
+        if u.xlate_magetype(v) not in {'', 'undefined'}:
             outf.write(', {}'.format(u.xlate_magetype(v)))
     if 'CH' in v:
         if 'gu' in v['CH']:
@@ -542,7 +546,6 @@ def write_ships(v, k, data, outf):
     if 'SL' in v:
         if 'bs' in v['SL']:
             storm = data[v['SL']['bs'][0]]
-            name = ''
             if 'na' in storm:
                 name = storm['na'][0]
             else:
@@ -585,9 +588,8 @@ def write_ships(v, k, data, outf):
                 outf.write('</ul>\n')
 
 
-def write_storms(v, k, data, outf):
+def write_storms(v, k, outf):
     outf.write('<li>\n')
-    name = ''
     if 'na' in v:
         name = v['na'][0]
     else:
@@ -601,7 +603,7 @@ def write_storms(v, k, data, outf):
     outf.write('</li>\n')
 
 
-def write_inner_locs(v, k, data, outf, here_list):
+def write_inner_locs(v, data, outf, here_list):
     outf.write('<ul>\n')
     for here in here_list:
         here_rec = data[here]
@@ -611,7 +613,7 @@ def write_inner_locs(v, k, data, outf, here_list):
     outf.write('</ul>\n')
 
 
-def write_seen_here(v, k, data, outf, here_list):
+def write_seen_here(data, outf, here_list):
     outf.write('<ul>\n')
     for here in here_list:
         here_rec = data[here]
@@ -620,7 +622,7 @@ def write_seen_here(v, k, data, outf, here_list):
     outf.write('</ul>\n')
 
 
-def write_ships_docked(v, k, data, outf, here_list):
+def write_ships_docked(data, outf, here_list):
     outf.write('<ul>\n')
     for here in here_list:
         here_rec = data[here]
@@ -629,16 +631,16 @@ def write_ships_docked(v, k, data, outf, here_list):
     outf.write('</ul>\n')
 
 
-def write_storms_here(v, k, data, outf, here_list):
+def write_storms_here(data, outf, here_list):
     outf.write('<ul>\n')
     for here in here_list:
         here_rec = data[here]
         if u.return_kind(here_rec['firstline'][0]) == 'storm':
-            write_storms(here_rec, here, data, outf)
+            write_storms(here_rec, here, outf)
     outf.write('</ul>\n')
 
 
-def write_here_list(v, k, data, outf):
+def write_here_list(v, data, outf):
     try:
         here_list = v['LI']['hl']
     except KeyError:
@@ -659,23 +661,23 @@ def write_here_list(v, k, data, outf):
             storms_here = True
     if print_inner:
         outf.write('<H4>Inner Locations:</H4>\n')
-        write_inner_locs(v, k, data, outf, here_list)
+        write_inner_locs(v, data, outf, here_list)
     if seen_here:
         outf.write('<H4>Seen Here:</H4>\n')
-        write_seen_here(v, k, data, outf, here_list)
+        write_seen_here(data, outf, here_list)
     if ships_docked:
         outf.write('<H4>{}:</H4>\n'.format('Ships docked' if u.return_type(v['firstline'][0]) != 'ocean' else 'Ships sighted'))
-        write_ships_docked(v, k, data, outf, here_list)
+        write_ships_docked(data, outf, here_list)
     if storms_here:
         outf.write('<H4>Storms Here:</H4>\n')
-        write_storms_here(v, k, data, outf, here_list)
+        write_storms_here(data, outf, here_list)
 
 
 def write_hidden_access(v, k, data, outf, hidden_chain):
     if 'LO' in v:
         if 'hi' in v['LO']:
             if v['LO']['hi'][0] == '1' or \
-                    u.region(k, data) in {'faery','hades'}:
+                    u.region(k, data) in {'faery', 'hades'}:
                 # PL/kn
                 try:
                     hidden_list = hidden_chain[k]
@@ -783,15 +785,15 @@ def write_loc_map_anchor(v, k, data, outf):
 
 def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain):
     write_loc_map_anchor(v, k, data, outf)
-    write_loc_barrier(v, k, data, outf)
+    write_loc_barrier(v, k, outf)
     write_loc_shroud(v, k, outf)
-    write_loc_controlled_by(v, k, data, outf)
-    write_loc_routes_out(v, k, data, outf)
+    write_loc_controlled_by(v, data, outf)
+    write_loc_routes_out(v, data, outf)
     # not doing nearby cities because lib doesn't support
-    write_structure_basic_info(v, k, data, outf)
-    write_loc_skills_report(v, k, data, outf)
+    write_structure_basic_info(v, outf)
+    write_loc_skills_report(v, data, outf)
     write_loc_market_report(v, k, data, outf, trade_chain)
-    write_here_list(v, k, data, outf)
+    write_here_list(v, data, outf)
     write_hidden_access(v, k, data, outf, hidden_chain)
     write_garrisons(v, k, data, outf, garrisons_chain)
     write_loc_map_anchor(v, k, data, outf)
@@ -799,8 +801,6 @@ def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_
 
 def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain):
     # generate loc page
-    fl = v['firstline'][0]
-    # print('loc {} {} {}'.format(fl, k, to_oid(k)))
     outf = open(to_oid(k)+'.html', 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
