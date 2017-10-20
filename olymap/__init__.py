@@ -24,59 +24,64 @@ def make_map(inlib):
     else:
         raise ValueError('Must specify the name of the lib directory')
 
-    print('Loading common stuff')
-    pledge_chain = u.resolve_all_pledges(data)
-    prisoner_chain = u.resolve_all_prisoners(data)
-    hidden_chain = u.resolve_hidden_locs(data)
-    storm_chain = u.resolve_bound_storms(data)
-    teaches_chain = u.resolve_teaches(data)
-    child_skills_chain = u.resolve_child_skills(data)
-    skills_known_chain = u.resolve_skills_known(data)
-    garrisons_chain = u.resolve_garrisons(data)
-    trade_chain = u.resolve_trades(data)
-    castle_chain = u.resolve_castles(data)
+    chains = resolve_chains(data)
+    write_box_pages(data, chains)
+    write_reports(data, chains)
+    write_maps(data, chains)
+
+
+def resolve_chains(data):
+    print('Making chains')
+    chains = {}
+    chains['pledges'] = u.resolve_all_pledges(data)
+    chains['prisoners'] = u.resolve_all_prisoners(data)
+    chains['hidden'] = u.resolve_hidden_locs(data)
+    chains['storms'] = u.resolve_bound_storms(data)
+    chains['teaches'] = u.resolve_teaches(data)
+    chains['child_skills'] = u.resolve_child_skills(data)
+    chains['skills_knowns'] = u.resolve_skills_known(data)
+    chains['garrisons'] = u.resolve_garrisons(data)
+    chains['trades'] = u.resolve_trades(data)
+    chains['castles'] = u.resolve_castles(data)
+    return chains
+
+
+def write_box_pages(data, chains):
     print('Writing box pages')
     for k, v in data.items():
-        # if int(k) < 300:
-        #     continue
         fl = v['firstline'][0]
         if u.return_kind(fl) == "loc":
-            # generate location page
-            loc.write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain)
+            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'], chains['trades'])
         elif u.return_kind(fl) == "char":
-            # generate char page
-            char.write_char_html(v, k, data, pledge_chain, prisoner_chain)
+            char.write_char_html(v, k, data, chains['pledges'], chains['prisoners'])
         elif u.return_kind(fl) == "player":
-            # generate player page
             player.write_player_html(v, k, data)
         elif u.return_kind(fl) == "item":
-            # generate item page
-            itm.write_item_html(v, k, data, trade_chain)
+            itm.write_item_html(v, k, data, chains['trades'])
         elif u.return_kind(fl) == "ship":
-            # generate ship page
             ship.write_ship_html(v, k, data)
         elif u.return_kind(fl) == "skill":
-            # generate skill page
-            # print('Skill {} {} {}'.format(fl, k, to_oid(k)))
-            skill.write_skill_html(v, k, data, teaches_chain, child_skills_chain, skills_known_chain)
+            skill.write_skill_html(v, k, data, chains['teaches'], chains['child_skills'], chains['skills_knowns'])
             pass
         elif u.return_kind(fl) == "storm":
-            # generate storm page
-            storm.write_storm_html(v, k, data, storm_chain)
-    #
-    # write reports
-    #
+            storm.write_storm_html(v, k, data, chains['storms'])
+
+
+def write_reports(data, chains):
     print('Writing reports')
     reports.ship_report(data)
     reports.player_report(data)
-    reports.item_report(data, trade_chain)
+    reports.item_report(data, chains['trades'])
     reports.healing_potion_report(data)
     reports.orb_report(data)
     reports.projected_cast_potion_report(data)
     reports.location_report(data)
-    reports.skill_xref_report(data, teaches_chain)
-    reports.trade_report(data, trade_chain)
+    reports.skill_xref_report(data, chains['teaches'])
+    reports.trade_report(data, chains['trades'])
+
+
+def write_maps(data, chains):
     print('Writing Maps')
     maps.write_index()
     maps.write_main_map()
-    maps.write_main_map_leaves(data, castle_chain)
+    maps.write_main_map_leaves(data, chains['castles'])
