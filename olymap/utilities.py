@@ -315,8 +315,8 @@ def loc_depth(loc_type):
         return 3
     # details.structure_type does not include 'in-progress' or could use it
     elif loc_type in ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
-                      'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn' 
-                      'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress' 
+                      'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn',
+                      'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress',
                       'collapsed mine', 'tower', 'tower-in-progress', 'sewer']:
         return 4
     return 0
