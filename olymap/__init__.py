@@ -50,20 +50,20 @@ def write_box_pages(data, chains):
     print('Writing box pages')
     for k, v in data.items():
         fl = v['firstline'][0]
-        if u.return_kind(fl) == "loc":
+        if u.return_kind(fl) == 'loc':
             loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'], chains['trades'])
-        elif u.return_kind(fl) == "char":
+        elif u.return_kind(fl) == 'char':
             char.write_char_html(v, k, data, chains['pledges'], chains['prisoners'])
-        elif u.return_kind(fl) == "player":
+        elif u.return_kind(fl) == 'player':
             player.write_player_html(v, k, data)
-        elif u.return_kind(fl) == "item":
+        elif u.return_kind(fl) == 'item':
             itm.write_item_html(v, k, data, chains['trades'])
-        elif u.return_kind(fl) == "ship":
+        elif u.return_kind(fl) == 'ship':
             ship.write_ship_html(v, k, data)
-        elif u.return_kind(fl) == "skill":
+        elif u.return_kind(fl) == 'skill':
             skill.write_skill_html(v, k, data, chains['teaches'], chains['child_skills'], chains['skills_knowns'])
             pass
-        elif u.return_kind(fl) == "storm":
+        elif u.return_kind(fl) == 'storm':
             storm.write_storm_html(v, k, data, chains['storms'])
 
 
