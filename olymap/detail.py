@@ -16,3 +16,11 @@ long_type_to_display_type = {'poppy field': 'p.field',
                              'enchanted forest': 'e.forst',
                              'collapsed mine': 'c.mine'}
 
+rank_num_string = {'10': 'lord',
+                   '20': 'knight',
+                   '30': 'baron',
+                   '40': 'count',
+                   '50': 'earl',
+                   '60': 'marquess',
+                   '70': 'duke',
+                   '80': 'king'}

@@ -4,6 +4,7 @@ import olypy.details as details
 from collections import defaultdict
 from olypy.oid import to_oid
 from olymap.detail import long_type_to_display_type
+from olymap.detail import rank_num_string
 
 
 def return_type(firstline):
@@ -56,27 +57,14 @@ def chase_structure(k, data, level, seen_here_list):
 
 
 def xlate_rank(k):
-    rank = 'Undefined'
     if 'CH' in k:
         if 'ra' in k['CH']:
             # could be a dict, but doing this for now because
             # rank can be a range??
-            if k['CH']['ra'][0] == '10':
-                rank = 'lord'
-            elif k['CH']['ra'][0] == '20':
-                    rank = 'knight'
-            elif k['CH']['ra'][0] == '30':
-                    rank = 'baron'
-            elif k['CH']['ra'][0] == '40':
-                    rank = 'count'
-            elif k['CH']['ra'][0] == '50':
-                    rank = 'earl'
-            elif k['CH']['ra'][0] == '60':
-                    rank = 'marquess'
-            elif k['CH']['ra'][0] == '70':
-                    rank = 'duke'
-            elif k['CH']['ra'][0] == '80':
-                    rank = 'king'
+            try:
+                rank = rank_num_string[k['CH']['ra'][0]]
+            except KeyError:
+                rank = 'Undefined'
     return rank
 
 
