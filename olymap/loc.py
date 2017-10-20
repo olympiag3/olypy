@@ -19,7 +19,7 @@ def write_loc_page_header(v, k, data, outf):
     outf.write(', {}'.format(loc_type))
     if u.return_type(v['firstline'][0]) != 'region':
         outf.write(', in')
-        if 'city' in loc_type:
+        if loc_type == 'city':
             outf.write(' province ')
         try:
             loc2 = data[v['LI']['wh'][0]]
@@ -83,7 +83,7 @@ def write_loc_controlled_by(v, data, outf):
                                     dest_type = u.return_type(dest_loc['firstline'][0])
                                     outf.write('{} [{}], {}'.format(dest_name, dest_id, dest_type))
                                     dest_type2 = u.return_type(dest_loc2['firstline'][0])
-                                    if 'city' not in dest_type2:
+                                    if dest_type2 != 'city':
                                         dest_name2 = dest_loc2['na'][0]
                                         dest_id2 = anchor(to_oid(u.return_unitid(dest_loc2['firstline'][0])))
                                         outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
@@ -202,7 +202,7 @@ def write_province_destinations(v, data, outf):
 
 
 def write_loc_routes_out(v, data, outf):
-    if 'city' not in u.return_type(v['firstline'][0]):
+    if u.return_type(v['firstline'][0]) != 'city':
         if 'LO' in v:
             if 'pd' in v['LO']:
                 if len(v['LO']['pd']) > 0:
@@ -212,13 +212,13 @@ def write_loc_routes_out(v, data, outf):
         outf.write('<ul>\n')
         host_prov = data[v['LI']['wh'][0]]
         # If city is in a mountain, can't move from city to ocean
-        if 'mountain' not in u.return_type(host_prov['firstline'][0]):
+        if u.return_type(host_prov['firstline'][0]) != 'mountain':
             dest_loc_list = host_prov['LO']['pd']
             i = int(0)
             for pd in dest_loc_list:
                 try:
                     pd_loc = data[pd]
-                    if 'ocean' in u.return_type(pd_loc['firstline'][0]):
+                    if u.return_type(pd_loc['firstline'][0]) != 'ocean':
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc['firstline'][0])
                         out_distance = u.calc_exit_distance(v, pd_loc)

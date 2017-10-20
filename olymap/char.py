@@ -50,7 +50,7 @@ def write_char_stacked_under(v, data, outf):
             charu = data[v['LI']['wh'][0]]
             # if it's not a 'char' type, then it's a location/ship
             # and I handle that in location row
-            if 'char' in u.return_kind(charu['firstline'][0]):
+            if u.return_kind(charu['firstline'][0]) == 'char':
                 outf.write('<tr>')
                 outf.write('<td>Stacked Under:</td>')
                 outf.write('<td>{} [{}]</td></tr>\n'.format(charu['na'][0],
@@ -310,7 +310,7 @@ def write_char_inventory(v, data, outf):
                     if 'fc' in itemz['IT']:
                         fly_capacity = int(itemz['IT']['fc'][0])
                     land_capacity = int(0)
-                    if 'f\lc' in itemz['IT']:
+                    if 'lc' in itemz['IT']:
                         land_capacity = int(itemz['IT']['lc'][0])
                     ride_capacity = int(0)
                     if 'rc' in itemz['IT']:

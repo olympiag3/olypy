@@ -250,7 +250,7 @@ def write_main_map_leaves(data, castle_chain):
                                         if int(here) >= 56760 and int(here) <= 78999:
                                             count = count + 1
                                             here_rec = data[here]
-                                            if 'city' in u.return_type(here_rec['firstline'][0]):
+                                            if u.return_type(here_rec['firstline'][0]) != 'city':
                                                 city = here_rec
                                             elif u.return_type(here_rec['firstline'][0]) == 'graveyard':
                                                 graveyard = here_rec
@@ -274,7 +274,7 @@ def write_main_map_leaves(data, castle_chain):
                                         outf.write('<br />many')
                                     else:
                                         if loc2 != '':
-                                            if 'city' in u.return_type(loc2['firstline'][0]) or u.return_type(loc2['firstline'][0]) == 'graveyard':
+                                            if u.return_type(loc2['firstline'][0]) == 'city' or u.return_type(loc2['firstline'][0]) == 'graveyard':
                                                 outf.write('<br />')
                                                 outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2['firstline'][0])),
                                                                                u.return_short_type(loc2['firstline'][0]))))
@@ -292,7 +292,7 @@ def write_main_map_leaves(data, castle_chain):
                                         else:
                                             outf.write('<br />&nbsp;')
                                     if loc1 != '':
-                                        if 'city' in u.return_type(loc1['firstline'][0]) or u.return_type(loc1['firstline'][0]) == 'graveyard':
+                                        if u.return_type(loc1['firstline'][0]) == 'city' or u.return_type(loc1['firstline'][0]) == 'graveyard':
                                             outf.write('<br />')
                                             outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1['firstline'][0])),
                                                                            u.return_short_type(loc1['firstline'][0]))))
@@ -378,6 +378,6 @@ def count_stuff(v, data):
                     if 'lo' in unit['CH']:
                         if unit['CH']['lo'][0] == '100':
                             enemy_found = True
-            elif 'ship' in u.return_kind(unit['firstline'][0]):
+            elif u.return_kind(unit['firstline'][0]) == 'ship':
                 ships_found = True
     return nbr_men, enemy_found, ships_found

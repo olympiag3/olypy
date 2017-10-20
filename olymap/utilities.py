@@ -126,56 +126,55 @@ def is_magician(char_record):
 
 
 def is_char(data, unit):
-    if ' char ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'char':
         return True
     return False
 
 
 def is_loc(data, unit):
-    if ' loc ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'loc':
         return True
     return False
 
 
 def is_item(data, unit):
-    if ' item ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'item':
         return True
     return False
 
 
 def is_ship(data, unit):
-    if ' ship ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'ship':
         return True
     return False
 
 
 def is_player(data, unit):
-    if ' player ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'player':
         return True
     return False
 
 
 def is_city(data, unit):
-    if 'city' in data[unit]['firstline'][0]:
+    if return_type(data[unit]['firstline'][0]) == 'city':
         return True
     return False
 
 
 def is_skill(data, unit):
-    if ' skill ' in data[unit]['firstline'][0]:
+    if return_kind(data[unit]['firstline'][0]) == 'skill':
         return True
     return False
 
 
 def is_garrison(data, unit):
-    if 'garrison' in data[unit]['firstline'][0]:
+    if return_type(data[unit]['firstline'][0]) == 'garrison':
         return True
     return False
 
 
 def is_castle(data, unit):
-    v = data[unit]
-    if return_type(v['firstline'][0]) == 'castle':
+    if return_type(data[unit]['firstline'][0]) == 'castle':
         return True
     return False
 
@@ -395,7 +394,7 @@ def calc_exit_distance(loc1, loc2):
 
 
 def is_port_city(loc, data):
-    if 'city' not in return_type(loc['firstline'][0]):
+    if return_type(loc['firstline'][0]) != 'city':
         return False
     province = data[loc['LI']['wh'][0]]
     if return_type(province['firstline'][0]) == 'mountain':

@@ -57,7 +57,7 @@ def ship_report(data):
             if list_length > 1:
                 for un in seen_here_list[1:]:
                     char = data[un[0]]
-                    if 'char' in u.return_kind(char['firstline'][0]):
+                    if u.return_kind(char['firstline'][0]) == 'char':
                         unit_type = '10'
                         if 'CH' in char:
                             if 'ni' in char['CH']:
