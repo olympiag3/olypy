@@ -205,7 +205,7 @@ def write_main_map_leaves(data, castle_chain):
                     try:
                         loc_rec = data[cell]
                         outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
-                                                                     u.return_type(loc_rec['firstline'][0])))
+                                                                     u.return_type(loc_rec)))
 
                         if barrier(loc_rec):
                             outf.write(' style="border: 2px solid purple" ')
@@ -232,7 +232,7 @@ def write_main_map_leaves(data, castle_chain):
                                 here_list = loc_rec['LI']['hl']
                                 for garr in here_list:
                                     garr_rec = data[garr]
-                                    if u.return_type(garr_rec['firstline'][0]) == 'garrison':
+                                    if u.return_type(garr_rec) == 'garrison':
                                         if 'MI' in garr_rec:
                                             if 'gc' in garr_rec['MI']:
                                                 castle_id = garr_rec['MI']['gc'][0]
@@ -250,13 +250,13 @@ def write_main_map_leaves(data, castle_chain):
                                         if int(here) >= 56760 and int(here) <= 78999:
                                             count = count + 1
                                             here_rec = data[here]
-                                            if u.return_type(here_rec['firstline'][0]) != 'city':
+                                            if u.return_type(here_rec) != 'city':
                                                 city = here_rec
-                                            elif u.return_type(here_rec['firstline'][0]) == 'graveyard':
+                                            elif u.return_type(here_rec) == 'graveyard':
                                                 graveyard = here_rec
-                                            elif loc1 == '' and u.return_kind(here_rec['firstline'][0]) == 'loc':
+                                            elif loc1 == '' and u.return_kind(here_rec) == 'loc':
                                                 loc1 = here_rec
-                                            elif loc2 == '' and u.return_kind(here_rec['firstline'][0]) == 'loc':
+                                            elif loc2 == '' and u.return_kind(here_rec) == 'loc':
                                                 loc2 = here_rec
                                     if city != '':
                                         if loc2 == '':
@@ -274,17 +274,17 @@ def write_main_map_leaves(data, castle_chain):
                                         outf.write('<br />many')
                                     else:
                                         if loc2 != '':
-                                            if u.return_type(loc2['firstline'][0]) == 'city' or u.return_type(loc2['firstline'][0]) == 'graveyard':
+                                            if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
                                                 outf.write('<br />')
-                                                outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2['firstline'][0])),
-                                                                               u.return_short_type(loc2['firstline'][0]))))
+                                                outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
+                                                                               u.return_short_type(loc2))))
                                             else:
                                                 outf.write('<br />')
                                                 if 'LO' in loc2:
                                                     if 'hi' in loc2['LO']:
                                                         if loc2['LO']['hi'][0] == '1':
                                                             outf.write('<i>')
-                                                outf.write(u.return_short_type(loc2['firstline'][0]))
+                                                outf.write(u.return_short_type(loc2))
                                                 if 'LO' in loc2:
                                                     if 'hi' in loc2['LO']:
                                                         if loc2['LO']['hi'][0] == '1':
@@ -292,17 +292,17 @@ def write_main_map_leaves(data, castle_chain):
                                         else:
                                             outf.write('<br />&nbsp;')
                                     if loc1 != '':
-                                        if u.return_type(loc1['firstline'][0]) == 'city' or u.return_type(loc1['firstline'][0]) == 'graveyard':
+                                        if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
                                             outf.write('<br />')
-                                            outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1['firstline'][0])),
-                                                                           u.return_short_type(loc1['firstline'][0]))))
+                                            outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
+                                                                           u.return_short_type(loc1))))
                                         else:
                                             outf.write('<br />')
                                             if 'LO' in loc1:
                                                 if 'hi' in loc1['LO']:
                                                     if loc1['LO']['hi'][0] == '1':
                                                         outf.write('<i>')
-                                            outf.write(u.return_short_type(loc1['firstline'][0]))
+                                            outf.write(u.return_short_type(loc1))
                                             if 'LO' in loc1:
                                                 if 'hi' in loc1['LO']:
                                                     if loc1['LO']['hi'][0] == '1':
@@ -358,13 +358,13 @@ def count_stuff(v, data):
     ships_found = False
     seen_here_list = []
     level = 0
-    k = u.return_unitid(v['firstline'][0])
+    k = u.return_unitid(v)
     seen_here_list = u.chase_structure(k, data, level, seen_here_list)
     list_length = len(seen_here_list)
     if list_length > 1:
         for un in seen_here_list[1:]:
             unit = data[un[0]]
-            if 'char' in u.return_kind(unit['firstline'][0]):
+            if 'char' in u.return_kind(unit):
                 if'il' in unit:
                     item_list = unit['il']
                     iterations = int(len(item_list) / 2)
@@ -378,6 +378,6 @@ def count_stuff(v, data):
                     if 'lo' in unit['CH']:
                         if unit['CH']['lo'][0] == '100':
                             enemy_found = True
-            elif u.return_kind(unit['firstline'][0]) == 'ship':
+            elif u.return_kind(unit) == 'ship':
                 ships_found = True
     return nbr_men, enemy_found, ships_found

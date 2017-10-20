@@ -7,7 +7,7 @@ from olymap.utilities import anchor
 
 
 def write_ship_page_header(v, k, outf):
-    outf.write('<H3>{} [{}], {}</H3>\n'.format(v['na'][0], to_oid(k), u.return_type(u.return_firstline(v))))
+    outf.write('<H3>{} [{}], {}</H3>\n'.format(v['na'][0], to_oid(k), u.return_type(v)))
 
 
 def write_ship_location(v, data, outf):
@@ -19,7 +19,7 @@ def write_ship_location(v, data, outf):
 
 
 def write_ship_pct_complete(v, outf):
-    if 'in-progress' in u.return_type(v['firstline'][0]):
+    if 'in-progress' in u.return_type(v):
         outf.write('<tr>')
         outf.write('<td>Percent Complete:</td>')
         outf.write('<td>{}%</td></tr>\n'.format((int(v['SL']['eg'][0]) / int(v['SL']['er'][0]))*100))
@@ -45,7 +45,7 @@ def calc_pct_loaded(data, k, v):
     if list_length > 1:
         for un in seen_here_list[1:]:
             char = data[un[0]]
-            if u.return_kind(char['firstline'][0]) == 'char':
+            if u.return_kind(char) == 'char':
                 unit_type = '10'
                 if 'CH' in char:
                     if 'ni' in char['CH']:
@@ -102,7 +102,7 @@ def write_ship_owner(v, data, outf):
         outf.write('<tr>')
         outf.write('<td>Owner:</td>')
         outf.write('<td>{} [{}]</td></tr>\n'.format(char['na'][0],
-                                                    anchor(to_oid(u.return_unitid(char['firstline'][0])))))
+                                                    anchor(to_oid(u.return_unitid(char)))))
     else:
         outf.write('<tr>')
         outf.write('<td>Owner:</td>')
@@ -123,7 +123,7 @@ def write_ship_seen_here(k, data, outf):
             outf.write('<td>{}</td>'.format(label1))
             outf.write('<td>{} {} [{}]</td></tr>\n'.format('.'*depth,
                                                            char['na'][0],
-                                                           anchor(to_oid(u.return_unitid(char['firstline'][0])))))
+                                                           anchor(to_oid(u.return_unitid(char)))))
             label1 = '&nbsp;'
 
 
@@ -137,7 +137,7 @@ def write_ship_bound_storm(v, data, outf):
         if 'na' in bound_storm_rec:
             name = bound_storm_rec['na'][0]
         else:
-            name = u.return_type(bound_storm_rec['firstline'][0]).capitalize()
+            name = u.return_type(bound_storm_rec).capitalize()
         outf.write('<tr>')
         outf.write('<td>Bound Storm:</td>')
         outf.write('<td>{} [{}] (Strength: {})</td></tr>\n'.format(name,
@@ -160,12 +160,11 @@ def write_ship_basic_info(v, k, data, outf):
 
 def write_ship_html(v, k, data):
     # generate ship page
-    fl = v['firstline'][0]
     outf = open(to_oid(k)+'.html', 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>{} [{}], {}'.format(v['na'][0],
-               to_oid(k), u.return_type(fl)))
+               to_oid(k), u.return_type(v)))
     outf.write('</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')

@@ -22,7 +22,7 @@ def ship_report(data):
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(ship_rec['na'][0],
                                                  anchor(to_oid(unit))))
-            outf.write('<td>{}</td>'.format(u.return_type(ship_rec['firstline'][0])))
+            outf.write('<td>{}</td>'.format(u.return_type(ship_rec)))
             captain = '&nbsp;'
             if 'LI' in ship_rec:
                 if 'hl' in ship_rec['LI']:
@@ -36,7 +36,7 @@ def ship_report(data):
             if 'LI' in ship_rec:
                 if 'wh' in ship_rec['LI']:
                     where_rec = data[ship_rec['LI']['wh'][0]]
-                    location = where_rec['na'][0] + ' [' + anchor(to_oid(u.return_unitid(where_rec['firstline'][0]))) + ']'
+                    location = where_rec['na'][0] + ' [' + anchor(to_oid(u.return_unitid(where_rec))) + ']'
             outf.write('<td>{}</td>'.format(location))
             if 'SL' in ship_rec:
                 if 'da' in ship_rec['SL']:
@@ -57,7 +57,7 @@ def ship_report(data):
             if list_length > 1:
                 for un in seen_here_list[1:]:
                     char = data[un[0]]
-                    if u.return_kind(char['firstline'][0]) == 'char':
+                    if u.return_kind(char) == 'char':
                         unit_type = '10'
                         if 'CH' in char:
                             if 'ni' in char['CH']:
@@ -86,7 +86,7 @@ def ship_report(data):
             if 'SL' in ship_rec:
                 if 'bs' in ship_rec['SL']:
                     storm_rec = data[ship_rec['SL']['bs'][0]]
-                    storm = u.return_type(storm_rec['firstline'][0]) + ' [' + anchor(to_oid(u.return_unitid(storm_rec['firstline'][0]))) + '] (' + storm_rec['MI']['ss'][0] + ')'
+                    storm = u.return_type(storm_rec) + ' [' + anchor(to_oid(u.return_unitid(storm_rec))) + '] (' + storm_rec['MI']['ss'][0] + ')'
             outf.write('<td>{}</td>'.format(storm))
             outf.write('</tr>\n')
     outf.write('</table>\n')
@@ -111,7 +111,7 @@ def item_report(data, trade_chain):
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
                                                  anchor(to_oid(unit))))
-            outf.write('<td>{}</td>'.format(u.return_type(item_rec['firstline'][0])))
+            outf.write('<td>{}</td>'.format(u.return_type(item_rec)))
             weight = ''
             if 'IT' in item_rec:
                 if 'wt' in item_rec['IT']:
@@ -155,7 +155,7 @@ def item_report(data, trade_chain):
                     if 'na' in who_rec:
                         name = who_rec['na'][0]
                     else:
-                        name = u.return_type(who_rec['firstline'][0]).capitalize()
+                        name = u.return_type(who_rec).capitalize()
                     who_has = name + ' [' + anchor(to_oid(who_has)) + ']'
             outf.write('<td>{}</td>'.format(who_has))
             outf.write('<td>{}</td>'.format(u.determine_item_use(item_rec, data, trade_chain)))
@@ -183,7 +183,7 @@ def player_report(data):
             outf.write('<td>{} [{}]</td>'.format(player_rec['na'][0],
                                                  anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(player_rec['na'][0]))
-            outf.write('<td>{}</td>'.format(u.return_type(player_rec['firstline'][0])))
+            outf.write('<td>{}</td>'.format(u.return_type(player_rec)))
             count = '0'
             if 'PL' in player_rec:
                 if 'un' in player_rec['PL']:
@@ -217,11 +217,11 @@ def healing_potion_report(data):
                         if 'IT' in itemz:
                             if 'un' in itemz['IT']:
                                 unit = data[itemz['IT']['un'][0]]
-                                if u.return_kind(unit['firstline'][0]) == 'char':
+                                if u.return_kind(unit) == 'char':
                                     charac = data[itemz['IT']['un'][0]]
                                     outf.write('<td>{} [{}]</td><td>&nbsp;</td>'.format(charac['na'][0],
                                                                                         anchor(to_oid(itemz['IT']['un'][0]))))
-                                elif u.return_kind(unit['firstline'][0]) == 'loc':
+                                elif u.return_kind(unit) == 'loc':
                                     loc = data[itemz['IT']['un'][0]]
                                     outf.write('<td>&nbsp;</td><td>{} [{}]</td>'.format(loc['na'][0],
                                                                                         anchor(to_oid(itemz['IT']['un'][0]))))
@@ -303,7 +303,7 @@ def projected_cast_potion_report(data):
                             if 'pc' in itemz['IM']:
                                 try:
                                     loc = data[itemz['IM']['pc'][0]]
-                                    outf.write('<td>{} {} [{}]</td>'.format(u.return_kind(loc['firstline'][0]),
+                                    outf.write('<td>{} {} [{}]</td>'.format(u.return_kind(loc),
                                                                             loc['na'][0],
                                                                             anchor(to_oid(itemz['IM']['pc'][0]))))
                                 except KeyError:
@@ -335,11 +335,11 @@ def location_report(data):
             if 'na' in loc:
                 name = loc['na'][0]
             else:
-                name = u.return_type(loc['firstline'][0]).capitalize()
+                name = u.return_type(loc).capitalize()
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(name,
                                                  anchor(to_oid(unit))))
-            outf.write('<td>{}</td>'.format(u.return_type(loc['firstline'][0])))
+            outf.write('<td>{}</td>'.format(u.return_type(loc)))
             region = u.region(unit, data)
             region_rec = data[region]
             outf.write('<td>{} [{}]</td>'.format(region_rec['na'][0],

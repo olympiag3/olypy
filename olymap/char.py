@@ -7,8 +7,8 @@ from olymap.utilities import anchor
 
 
 def write_char_page_header(v, k, outf):
-    if u.return_type(v['firstline'][0]).upper() == "GARRISON":
-        name = "Garrison"
+    if u.return_type(v) == 'garrison':
+        name = 'Garrison'
     else:
         name = v['na'][0]
     outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid(k)))
@@ -22,7 +22,7 @@ def write_char_faction(v, data, outf):
             outf.write('<tr>')
             outf.write('<td>Faction:</td>')
             outf.write('<td>{} [{}]</td></tr>\n'.format(player['na'][0],
-                                                        anchor(to_oid(u.return_unitid(player['firstline'][0])))))
+                                                        anchor(to_oid(u.return_unitid(player)))))
 
 
 def write_char_rank(v, k, outf):
@@ -50,11 +50,11 @@ def write_char_stacked_under(v, data, outf):
             charu = data[v['LI']['wh'][0]]
             # if it's not a 'char' type, then it's a location/ship
             # and I handle that in location row
-            if u.return_kind(charu['firstline'][0]) == 'char':
+            if u.return_kind(charu) == 'char':
                 outf.write('<tr>')
                 outf.write('<td>Stacked Under:</td>')
                 outf.write('<td>{} [{}]</td></tr>\n'.format(charu['na'][0],
-                                                            anchor(to_oid(u.return_unitid(charu['firstline'][0])))))
+                                                            anchor(to_oid(u.return_unitid(charu)))))
 
 
 def write_char_stacked_over(v, data, outf):
@@ -62,14 +62,14 @@ def write_char_stacked_over(v, data, outf):
     if 'LI' in v:
         if 'hl' in v['LI']:
             over_list = v['LI']['hl']
-            stacked_over = "Stacked Over:"
+            stacked_over = 'Stacked Over:'
             for ov in over_list:
                 charo = data[ov]
                 outf.write('<tr>')
                 outf.write('<td>{}</td>'.format(stacked_over))
                 outf.write(
                     '<td>{} [{}]</td></tr>\n'.format(charo['na'][0],
-                                                     anchor(to_oid(u.return_unitid(charo['firstline'][0])))))
+                                                     anchor(to_oid(u.return_unitid(charo)))))
                 stacked_over = ''
 
 
@@ -153,7 +153,7 @@ def write_char_pledged_to(v, data, outf):
             outf.write('<tr>')
             outf.write('<td>Pledged To:</td>')
             outf.write('<td>{} [{}]</td></tr>\n'.format(pledged_to['na'][0],
-                                                        anchor(to_oid(u.return_unitid(pledged_to['firstline'][0])))))
+                                                        anchor(to_oid(u.return_unitid(pledged_to)))))
 
 
 def write_char_pledged_to_us(k, data, outf, pledge_chain):
@@ -304,7 +304,7 @@ def write_char_inventory(v, data, outf):
                     item_weight = int(0)
                 outf.write('<td style="text-align:right">{}</td>'.format(item_weight * item_qty))
                 total_weight = total_weight + (item_weight * item_qty)
-                if u.return_type(v['firstline'][0]) != "garrison":
+                if u.return_type(v) != "garrison":
                     outf.write('<td>')
                     fly_capacity = int(0)
                     if 'fc' in itemz['IT']:
@@ -359,7 +359,7 @@ def write_char_inventory(v, data, outf):
                 else:
                     outf.write('<td>&nbsp;</td>')
                 outf.write('</tr>\n')
-            if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+            if u.return_type(v) != 'garrison':
                 outf.write('<tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>\n')
                 outf.write('<tr><td></td><td></td><td style="text-align:right">{}</td><td>&nbsp;</td></tr>\n'.format(total_weight))
             outf.write('</table>\n')
@@ -503,7 +503,7 @@ def write_char_magic_stuff(v, data, outf):
         for items in range(0, iterations):
             try:
                 itemz = data[item_list[items*2]]
-                item_type = u.return_type(itemz['firstline'][0])
+                item_type = u.return_type(itemz)
                 if item_type == '0':
                     if 'IM' in itemz:
                         if 'uk' in itemz['IM']:
@@ -518,9 +518,9 @@ def write_char_magic_stuff(v, data, outf):
                                     if 'pc' in itemz['IM']:
                                         try:
                                             location = data[itemz['IM']['pc'][0]]
-                                            loc_kind = u.return_kind(location['firstline'][0]) if u.return_kind(location['firstline'][0]) != 'loc' else 'location'
+                                            loc_kind = u.return_kind(location) if u.return_kind(location) != 'loc' else 'location'
                                             loc_name = location['na'][0]
-                                            loc_id = anchor(to_oid(u.return_unitid(location['firstline'][0])))
+                                            loc_id = anchor(to_oid(u.return_unitid(location)))
                                         except KeyError:
                                             loc_kind = 'unknown'
                                             loc_name = 'unknown'
@@ -558,7 +558,7 @@ def write_char_magic_stuff(v, data, outf):
 
 
 def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain):
-    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+    if u.return_type(v) != 'garrison':
         outf.write('<table>\n')
         write_char_rank(v, k, outf)
         write_char_faction(v, data, outf)
@@ -578,10 +578,10 @@ def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain):
         # write_char_appear_common(v, k, data, outf)
         write_char_prisoners(k, data, outf, prisoner_chain)
         outf.write('</table>\n')
-    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+    if u.return_type(v) != 'garrison':
         write_char_skills_known(v, data, outf)
     write_char_inventory(v, data, outf)
-    if u.return_type(v['firstline'][0]).upper() != "GARRISON":
+    if u.return_type(v) != 'garrison':
         write_char_capacity(v, data, outf)
         write_char_pending_trades(v, data, outf)
         write_char_visions_received(v, data, outf)
@@ -603,8 +603,8 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain):
     outf = open(to_oid(k)+'.html', 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
-    if u.return_type(v['firstline'][0]).upper() == "GARRISON":
-        name = "Garrison"
+    if u.return_type(v) == 'garrison':
+        name = 'Garrison'
     else:
         name = v['na'][0]
     outf.write('<TITLE>{} [{}]'.format(name,

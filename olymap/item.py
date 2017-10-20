@@ -12,8 +12,8 @@ def write_item_page_header(v, k, outf):
 def write_item_basic_info(v, k, data, outf, trade_chain):
     outf.write('<table>\n')
     outf.write('<tr><td></td><td></td></tr>\n')
-    if u.return_type(v['firstline'][0]) != '0':
-        outf.write('<tr><td>Type:</td><td>{}</td></tr>\n'.format(u.return_type(v['firstline'][0])))
+    if u.return_type(v) != '0':
+        outf.write('<tr><td>Type:</td><td>{}</td></tr>\n'.format(u.return_type(v)))
     if 'IM' in v:
         if 'ab' in v['IM']:
             outf.write('<tr><td>Attack Bonus:</td><td>{}</td></tr>\n'.format(v['IM']['ab'][0]))
@@ -68,7 +68,7 @@ def write_item_basic_info(v, k, data, outf, trade_chain):
             charac = data[v['PL']['un'][0]]
             outf.write('<tr><td>Dead Body Of:</td><td>{} [{}]</td></tr>\n'.format(charac['na'][0],
                                                                                   v['PL']['un'][0]))
-    if u.return_type(v['firstline'][0]) == 'tradegood':
+    if u.return_type(v) == 'tradegood':
         trade_list = trade_chain[k]
         if len(trade_list) > 0:
             outf.write('<tr><td valign="top">Traded in:</td><td>')

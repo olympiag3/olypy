@@ -7,14 +7,16 @@ from olymap.detail import long_type_to_display_type
 from olymap.detail import rank_num_string
 
 
-def return_type(firstline):
+def return_type(box):
     # return 3rd argument of firstlist
+    firstline = return_firstline(box)
     _, _, type = firstline.split(' ', maxsplit=2)
     return type
 
 
-def return_short_type(firstline):
+def return_short_type(box):
     # return 3rd argument of firstlist
+    firstline = return_firstline(box)
     _, _, type = firstline.split(' ', maxsplit=2)
     try:
         short_type = long_type_to_display_type[type]
@@ -23,29 +25,31 @@ def return_short_type(firstline):
     return short_type
 
 
-def return_kind(firstline):
+def return_kind(box):
     # return 2nd argument of firstlist
+    firstline = return_firstline(box)
     _, kind, _ = firstline.split(' ', maxsplit=2)
     return kind
 
 
-def return_unitid(firstline):
+def return_unitid(box):
     # return 1st argument of firstlist
+    firstline = return_firstline(box)
     unitid, _, _ = firstline.split(' ', maxsplit=2)
     return unitid
 
 
-def return_firstline(v):
+def return_firstline(box):
     # return firstlist from lib entry
     # firstline
-    firstline = v['firstline'][0]
+    firstline = box['firstline'][0]
     return firstline
 
 
 def chase_structure(k, data, level, seen_here_list):
     try:
         z = data[k]
-        seen_here_list.append((return_unitid(z['firstline'][0]), level))
+        seen_here_list.append((return_unitid(z), level))
         if 'LI' in z:
             if 'hl' in z['LI']:
                 level = level + 1
@@ -114,55 +118,55 @@ def is_magician(char_record):
 
 
 def is_char(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'char':
+    if return_kind(data[unit]) == 'char':
         return True
     return False
 
 
 def is_loc(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'loc':
+    if return_kind(data[unit]) == 'loc':
         return True
     return False
 
 
 def is_item(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'item':
+    if return_kind(data[unit]) == 'item':
         return True
     return False
 
 
 def is_ship(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'ship':
+    if return_kind(data[unit]) == 'ship':
         return True
     return False
 
 
 def is_player(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'player':
+    if return_kind(data[unit]) == 'player':
         return True
     return False
 
 
 def is_city(data, unit):
-    if return_type(data[unit]['firstline'][0]) == 'city':
+    if return_type(data[unit]) == 'city':
         return True
     return False
 
 
 def is_skill(data, unit):
-    if return_kind(data[unit]['firstline'][0]) == 'skill':
+    if return_kind(data[unit]) == 'skill':
         return True
     return False
 
 
 def is_garrison(data, unit):
-    if return_type(data[unit]['firstline'][0]) == 'garrison':
+    if return_type(data[unit]) == 'garrison':
         return True
     return False
 
 
 def is_castle(data, unit):
-    if return_type(data[unit]['firstline'][0]) == 'castle':
+    if return_type(data[unit]) == 'castle':
         return True
     return False
 
@@ -224,7 +228,7 @@ def resolve_hidden_locs(data):
                 for loc in pl:
                     try:
                         loc_rec = data[loc]
-                        if return_kind(loc_rec['firstline'][0]) == 'loc':
+                        if return_kind(loc_rec) == 'loc':
                             ret[loc].append(unit)
                     except KeyError:
                         pass
@@ -294,7 +298,7 @@ def resolve_trades(data):
 
 
 def loc_depth(loc_type):
-    if loc_type == "region":
+    if loc_type == 'region':
         return 1
     elif loc_type in details.province_kinds:
         return 2
@@ -312,9 +316,9 @@ def loc_depth(loc_type):
 def region(who, data):
     v = data[who]
     while (int(who) > 0 and
-            (return_kind(v['firstline'][0]) != 'loc' or loc_depth(return_type(v['firstline'][0])) != 1)):
+            (return_kind(v) != 'loc' or loc_depth(return_type(v)) != 1)):
         v = data[v['LI']['wh'][0]]
-        who = return_unitid(v['firstline'][0])
+        who = return_unitid(v)
     return who
 
 
@@ -337,61 +341,61 @@ def top_ruler(k, data):
 
 
 def calc_exit_distance(loc1, loc2):
-    if return_type(loc1['firstline'][0]) == 'pit' or return_type(loc2['firstline'][0]) == 'pit':
+    if return_type(loc1) == 'pit' or return_type(loc2) == 'pit':
         return 28
-    if loc_depth(return_type(loc1['firstline'][0])) > loc_depth(return_type(loc2['firstline'][0])):
+    if loc_depth(return_type(loc1)) > loc_depth(return_type(loc2)):
         tmp = loc1
         loc1 = loc2
         loc2 = tmp
-    w_d = loc_depth(return_type(loc1['firstline'][0]))
-    d_d = loc_depth(return_type(loc2['firstline'][0]))
+    w_d = loc_depth(return_type(loc1))
+    d_d = loc_depth(return_type(loc2))
     if d_d == 4:
         return 0
     if d_d == 3:
         return 1
-    if return_type(loc1['firstline'][0]) == 'ocean' and \
-        return_type(loc2['firstline'][0]) != 'ocean':
+    if return_type(loc1) == 'ocean' and \
+        return_type(loc2) != 'ocean':
         return 2
-    if return_type(loc1['firstline'][0]) != 'ocean' and \
-        return_type(loc2['firstline'][0]) == 'ocean':
+    if return_type(loc1) != 'ocean' and \
+        return_type(loc2) == 'ocean':
         return 2
     #
     # skipping province logic for now
     #
-    if return_type(loc2['firstline'][0]) == 'ocean':
+    if return_type(loc2) == 'ocean':
         return 3
-    elif return_type(loc2['firstline'][0]) == 'mountain':
+    elif return_type(loc2) == 'mountain':
         return 10
-    elif return_type(loc2['firstline'][0]) == 'forest':
+    elif return_type(loc2) == 'forest':
         return 8
-    elif return_type(loc2['firstline'][0]) == 'swamp':
+    elif return_type(loc2) == 'swamp':
         return 14
-    elif return_type(loc2['firstline'][0]) == 'desert':
+    elif return_type(loc2) == 'desert':
         return 8
-    elif return_type(loc2['firstline'][0]) == 'plain':
+    elif return_type(loc2) == 'plain':
         return 7
-    elif return_type(loc2['firstline'][0]) == 'underground':
+    elif return_type(loc2) == 'underground':
         return 7
-    elif return_type(loc2['firstline'][0]) == 'cloud':
+    elif return_type(loc2) == 'cloud':
         return 7
-    elif return_type(loc2['firstline'][0]) == 'tunnel':
+    elif return_type(loc2) == 'tunnel':
         return 5
-    elif return_type(loc2['firstline'][0]) == 'chamber':
+    elif return_type(loc2) == 'chamber':
         return 5
     return 0
 
 
 def is_port_city(loc, data):
-    if return_type(loc['firstline'][0]) != 'city':
+    if return_type(loc) != 'city':
         return False
     province = data[loc['LI']['wh'][0]]
-    if return_type(province['firstline'][0]) == 'mountain':
+    if return_type(province) == 'mountain':
         return False
     province_list = province['LO']['pd']
     for pd in province_list:
         if int(pd) > 0:
             dest_loc = data[pd]
-            if return_type(dest_loc['firstline'][0]) == 'ocean':
+            if return_type(dest_loc) == 'ocean':
                 return True
     return False
 
@@ -488,7 +492,7 @@ def xlate_use_key(k):
 
 def determine_item_use(v, data, trade_chain):
     ret = ''
-    if return_type(v['firstline'][0]) == '0':
+    if return_type(v) == '0':
         if 'IM' in v:
             if 'uk' in v['IM']:
                 use_key = v['IM']['uk'][0]
@@ -510,8 +514,8 @@ def determine_item_use(v, data, trade_chain):
                                 if 'na' in v:
                                     name = v['na'][0]
                                 else:
-                                    name = return_type(itemz_rec['firstline'][0]).capitalize()
-                                ret = ret + return_kind(itemz_rec['firstline'][0]) +\
+                                    name = return_type(itemz_rec).capitalize()
+                                ret = ret + return_kind(itemz_rec) +\
                                       ' ' + name + ' [' +\
                                     anchor(to_oid(itemz)) + ']'
                             except KeyError:
@@ -528,7 +532,7 @@ def determine_item_use(v, data, trade_chain):
                     ret = 'elf stone'
                 elif use_key == '9':
                     ret = 'orb'
-    elif return_type(v['firstline'][0]) == 'artifact':
+    elif return_type(v) == 'artifact':
         if 'IM' in v:
             ret = ''
             first = True
@@ -554,7 +558,7 @@ def determine_item_use(v, data, trade_chain):
                 first = False
         else:
             ret = 'unknown'
-    elif return_type(v['firstline'][0]) == 'dead body':
+    elif return_type(v) == 'dead body':
         if 'PL' in v:
             if 'un' in v['PL']:
                 charac = v['PL']['un'][0]
@@ -564,7 +568,7 @@ def determine_item_use(v, data, trade_chain):
                 ret = 'unknown dead guy'
         else:
             ret = 'unknown dead guy'
-    elif return_type(v['firstline'][0]) == 'npc_token':
+    elif return_type(v) == 'npc_token':
         ret = 'controls: '
         if 'PL' in v:
             if 'un' in v['PL']:
@@ -575,7 +579,7 @@ def determine_item_use(v, data, trade_chain):
                 ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
-    elif return_type(v['firstline'][0]) == 'auraculum':
+    elif return_type(v) == 'auraculum':
         ret = 'aura: '
         if 'IM' in v:
             if 'au' in v['IM']:
@@ -584,7 +588,7 @@ def determine_item_use(v, data, trade_chain):
                 ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
-    elif return_type(v['firstline'][0]) == 'scroll':
+    elif return_type(v) == 'scroll':
         ret = 'study: '
         if 'IM' in v:
             if 'ms' in v['IM']:
@@ -595,8 +599,8 @@ def determine_item_use(v, data, trade_chain):
                 ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
-    elif return_type(v['firstline'][0]) == 'tradegood':
-        trade_list = trade_chain[return_unitid(v['firstline'][0])]
+    elif return_type(v) == 'tradegood':
+        trade_list = trade_chain[return_unitid(v)]
         first = True
         if len(trade_list) > 0:
             for trade in trade_list:

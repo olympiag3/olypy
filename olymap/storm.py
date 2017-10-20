@@ -9,7 +9,7 @@ def write_storm_page_header(v, k, outf):
     if 'na' in v:
         name = v['na'][0]
     else:
-        name = u.return_type(v['firstline'][0]).capitalize()
+        name = u.return_type(v).capitalize()
     outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid(k)))
 
 
@@ -43,7 +43,7 @@ def write_where(data, outf, v):
 
 def write_type(outf, v):
     outf.write('<tr><td>Type: </td><td>{}</td></tr>\n'
-               .format(u.return_type(v['firstline'][0])))
+               .format(u.return_type(v)))
 
 
 def write_storm_html(v, k, data, storm_chain):
@@ -54,7 +54,7 @@ def write_storm_html(v, k, data, storm_chain):
     if 'na' in v:
         name = v['na'][0]
     else:
-        name = u.return_type(v['firstline'][0]).capitalize()
+        name = u.return_type(v).capitalize()
     outf.write('<TITLE>{} [{}]'.format(name,
                to_oid(k)))
     outf.write('</TITLE>\n')

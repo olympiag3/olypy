@@ -13,7 +13,7 @@ def write_player_page_header(v, k, outf):
 
 def write_player_basic_info(v, data, outf):
     outf.write('<table>\n')
-    outf.write('<tr><td>Type</td><td>{}</td></tr>\n'.format(u.return_type(v['firstline'][0])))
+    outf.write('<tr><td>Type</td><td>{}</td></tr>\n'.format(u.return_type(v)))
     if 'PL' in v:
         if 'em' in v['PL']:
             outf.write('<tr><td>Email Address:</td><td>{}</td></tr>\n'.format(v['PL']['em'][0]))
@@ -47,10 +47,9 @@ def write_unit_list(data, outf, v):
                     if 'na' in char:
                         name = char['na'][0]
                     else:
-                        name = u.return_type(char['firstline'][0]).capitalize()
+                        name = u.return_type(char).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(
-                                                         char['firstline'][0])))))
+                                                         anchor(to_oid(u.return_unitid(char)))))
                 else:
                     outf.write('<td></td>')
                 if (columns * 1) + unit < len(unit_list):
@@ -58,10 +57,9 @@ def write_unit_list(data, outf, v):
                     if 'na' in char:
                         name = char['na'][0]
                     else:
-                        name = u.return_type(char['firstline'][0]).capitalize()
+                        name = u.return_type(char).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(
-                                                         char['firstline'][0])))))
+                                                         anchor(to_oid(u.return_unitid(char)))))
                 else:
                     outf.write('<td></td><td></td>')
                 if (columns * 2) + unit < len(unit_list):
@@ -69,10 +67,9 @@ def write_unit_list(data, outf, v):
                     if 'na' in char:
                         name = char['na'][0]
                     else:
-                        name = u.return_type(char['firstline'][0]).capitalize()
+                        name = u.return_type(char).capitalize()
                     outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(
-                                                         char['firstline'][0])))))
+                                                         anchor(to_oid(u.return_unitid(char)))))
                 else:
                     outf.write('<td></td><td></td>')
                 outf.write('</tr>\n')

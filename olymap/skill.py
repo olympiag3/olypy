@@ -17,7 +17,7 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
             skill = data[v['SK']['rs'][0]]
             outf.write('<tr><td>Skill Required:</td><td>{} [{}]</td></tr>\n'\
                       .format(skill['na'][0],
-                              anchor(u.return_unitid(skill['firstline'][0]))))
+                              anchor(u.return_unitid(skill))))
         if 'tl' in v['SK']:
             outf.write('<tr><td>Time to Learn:</td><td>{}</td></tr>\n'.format(v['SK']['tl'][0]))
     char_list = skills_known_chain[k]
@@ -31,21 +31,21 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
                 char_rec = data[char_list[(columns*0) + charac]]
                 outf.write('<td>{} [{}]</td>'
                           .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             if (columns*1) + charac < len(char_list):
                 char_rec = data[char_list[(columns*1) + charac]]
                 outf.write('<td>{} [{}]</td>'
                            .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             if (columns*2) + charac < len(char_list):
                 char_rec = data[char_list[(columns*2) + charac]]
                 outf.write('<td>{} [{}]</td>'
                            .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             outf.write('</tr>\n')
@@ -62,21 +62,21 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
                 skill_rec = data[child_list[(columns*0) + skill]]
                 outf.write('<td>{} [{}]</td>'
                            .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td><')
             if (columns*1) + skill < len(child_list):
                 skill_rec = data[child_list[(columns*1) + skill]]
                 outf.write('<td>{} [{}]</td>'
                            .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td>')
             if (columns*2) + skill < len(child_list):
                 skill_rec = data[child_list[(columns*2) + skill]]
                 outf.write('<td>{} [{}]</td>'
                            .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec['firstline'][0])))))
+                                   anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td>')
             outf.write('</tr>\n')
@@ -88,13 +88,13 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
         for loc in skill_list:
             loc_rec = data[loc]
             where_rec = data[loc_rec['LI']['wh'][0]]
-            region = data[u.region(u.return_unitid(where_rec['firstline'][0]), data)]
+            region = data[u.region(u.return_unitid(where_rec), data)]
             outf.write('<tr><td>{}</td><td>{} [{}], {} [{}], in {}</td></tr>\n'
                        .format(skill_literal,
                                loc_rec['na'][0],
-                               anchor(to_oid(u.return_unitid(loc_rec['firstline'][0]))),
+                               anchor(to_oid(u.return_unitid(loc_rec))),
                                where_rec['na'][0],
-                               anchor(to_oid(u.return_unitid(where_rec['firstline'][0]))),
+                               anchor(to_oid(u.return_unitid(where_rec))),
                                region['na'][0]))
             skill_literal = ''
     outf.write('</table>\n')
