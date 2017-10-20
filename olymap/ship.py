@@ -26,6 +26,13 @@ def write_ship_pct_complete(v, outf):
 
 
 def write_ship_pct_loaded(v, k, data, outf):
+    pct_loaded = calc_pct_loaded(data, k, v)
+    outf.write('<tr>')
+    outf.write('<td>Percent Loaded:</td>')
+    outf.write('<td>{}%</td></tr>\n'.format(pct_loaded))
+
+
+def calc_pct_loaded(data, k, v):
     total_weight = 0
     try:
         damaged = int(v['SL']['da'][0])
@@ -52,19 +59,17 @@ def write_ship_pct_loaded(v, k, data, outf):
                     item_list = char['il']
                     iterations = int(len(item_list) / 2)
                     for itm in range(0, iterations):
-                        itemz = data[item_list[itm*2]]
+                        itemz = data[item_list[itm * 2]]
                         try:
                             item_weight = int(itemz['IT']['wt'][0])
                         except KeyError:
                             item_weight = int(0)
-                        qty = int(item_list[(itm*2)+1])
+                        qty = int(item_list[(itm * 2) + 1])
                         total_weight = total_weight + int(qty * item_weight)
     ship_capacity = int(v['SL']['ca'][0])
-    actual_capacity = int(ship_capacity - ((ship_capacity * damaged)/100))
-    pct_loaded = math.floor((total_weight*100)/actual_capacity)
-    outf.write('<tr>')
-    outf.write('<td>Percent Loaded:</td>')
-    outf.write('<td>{}%</td></tr>\n'.format(pct_loaded))
+    actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
+    pct_loaded = math.floor((total_weight * 100) / actual_capacity)
+    return pct_loaded
 
 
 def write_ship_defense(v, outf):
