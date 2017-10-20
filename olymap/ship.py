@@ -74,9 +74,9 @@ def calc_pct_loaded(data, k, v):
 
 def write_ship_defense(v, outf):
     try:
-        defense = int(v['SL']['de'][0])
+        defense = v['SL']['de'][0]
     except KeyError:
-        defense = 0
+        defense = '0'
     outf.write('<tr>')
     outf.write('<td>Defense:</td>')
     outf.write('<td>{}</td></tr>\n'.format(defense))
@@ -84,9 +84,9 @@ def write_ship_defense(v, outf):
 
 def write_ship_damaged(v, outf):
     try:
-        damaged = int(v['SL']['da'][0])
+        damaged = v['SL']['da'][0]
     except KeyError:
-        damaged = 0
+        damaged = '0'
     outf.write('<tr>')
     outf.write('<td>Damaged:</td>')
     outf.write('<td>{}%</td></tr>\n'.format(damaged))

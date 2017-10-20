@@ -52,7 +52,7 @@ def write_loc_page_header(v, k, data, outf):
 def write_loc_shroud(v, k, outf):
     if 'LO' in v:
         if 'sh' in v['LO']:
-            if int(v['LO']['sh'][0]) > 0:
+            if v['LO']['sh'][0] != '0':
                 outf.write('<p>A magical barrier surrounds {} [{}].</p>\n'.format(v['na'][0],
                                                                                   anchor(to_oid(k))))
 
@@ -60,7 +60,7 @@ def write_loc_shroud(v, k, outf):
 def write_loc_barrier(v, k, outf):
     if 'LO' in v:
         if 'ba' in v['LO']:
-            if int(v['LO']['ba'][0]) > 0:
+            if v['LO']['ba'][0] != '0':
                 outf.write('<p>A magical shroud surrounds {} [{}].</p>\n'.format(v['na'][0],
                                                                                  anchor(to_oid(k))))
 
@@ -75,7 +75,7 @@ def write_loc_controlled_by(v, data, outf):
                         charac = data[loc]
                         if 'MI' in charac:
                             if 'gc' in charac['MI']:
-                                if int(charac['MI']['gc'][0]) != 0:
+                                if charac['MI']['gc'][0] != '0':
                                     dest_loc = data[charac['MI']['gc'][0]]
                                     dest_loc2 = data[dest_loc['LI']['wh'][0]]
                                     outf.write('<p>Province controlled by ')
@@ -132,11 +132,11 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_key = u.return_unitid(dest_loc)
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
-        barrier = int(0)
+        barrier = '0'
         if 'LO' in dest_loc:
             if 'ba' in dest_loc['LO']:
-                barrier = int(dest_loc['LO']['ba'][0])
-        if barrier > 0:
+                barrier = dest_loc['LO']['ba'][0]
+        if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         else:
             out_distance = u.calc_exit_distance(loc, dest_loc)
@@ -151,11 +151,11 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_key = u.return_unitid(dest_loc_host)
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
-        barrier = int(0)
+        barrier = '0'
         if 'LO' in dest_loc_host:
             if 'ba' in dest_loc_host['LO']:
-                barrier = int(dest_loc_host['LO']['ba'][0])
-        if barrier > 0:
+                barrier = dest_loc_host['LO']['ba'][0]
+        if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         else:
             outf.write(', impassable')
@@ -171,11 +171,11 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_key = u.return_unitid(dest_loc)
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
-        barrier = int(0)
+        barrier = '0'
         if 'LO' in dest_loc:
             if 'ba' in dest_loc['LO']:
-                barrier = int(dest_loc['LO']['ba'][0])
-        if barrier > 0:
+                barrier = dest_loc['LO']['ba'][0]
+        if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         elif u.return_type(loc) == 'ocean' and u.return_type(dest_loc) == 'mountain':
             outf.write(', impassable')
@@ -192,7 +192,7 @@ def write_province_destinations(v, data, outf):
     pd_list = v['LO']['pd']
     i = int(0)
     for pd in pd_list:
-        if int(pd) != 0:
+        if pd != '0':
             write_province_destination(v,
                                        data[pd],
                                        pd_directions[i],
@@ -244,42 +244,42 @@ def write_loc_routes_out(v, data, outf):
 
 def write_structure_basic_info(v, outf):
     try:
-        defense = int(v['SL']['de'][0])
+        defense = v['SL']['de'][0]
     except KeyError:
-        defense = 0
+        defense = '0'
     try:
-        damage = int(v['SL']['dea'][0])
+        damage = v['SL']['dea'][0]
     except KeyError:
-        damage = 0
+        damage = '0'
     try:
-        effort_given = int(v['SL']['eg'][0])
+        effort_given = v['SL']['eg'][0]
     except KeyError:
-        effort_given = 0
+        effort_given = '0'
     try:
-        effort_required = int(v['SL']['er'][0])
+        effort_required = v['SL']['er'][0]
     except KeyError:
-        effort_required = 0
+        effort_required = '0'
     try:
-        depth = int(v['SL']['sd'][0])
+        depth = v['SL']['sd'][0]
     except KeyError:
-        depth = 0
+        depth = '0'
     try:
-        level = int(v['SL']['cl'][0])
+        level = v['SL']['cl'][0]
     except KeyError:
-        level = 0
-    if defense > 0 or damage > 0 or effort_given < effort_required:
+        level = '0'
+    if defense != '0' or damage != '0' or int(effort_given) < int(effort_required):
         outf.write('<table>\n')
         if effort_given < effort_required:
             outf.write('<tr><td>Percent Complete:</td><td>{}%</td></tr>\n'
-                       .format(int(effort_given / effort_required) * 100))
-        if defense > 0:
+                       .format(int(int(effort_given) / int(effort_required)) * 100))
+        if defense != '0':
             outf.write('<tr><td>Defense:</td><td>{}</td></tr>\n'
                        .format(defense))
         outf.write('<tr><td>Damage:</td><td>{}%</td></tr>\n'
                    .format(damage))
-        if depth > 0:
+        if depth != '0':
             outf.write('<tr><td>Level:</td><td>{}</td></tr>\n'
-                       .format(int(depth / 3)))
+                       .format(int(int(depth) / 3)))
         if u.return_type(v) == 'castle':
             outf.write('<tr><td>Level:</td><td>{}</td></tr>\n'
                        .format(level))
@@ -489,12 +489,12 @@ def write_sub_locs(loc, sub_loc, k, data, outf):
     if 'castle' in u.return_type(sub_loc):
         if 'SL' in sub_loc:
             if 'cl' in sub_loc['SL']:
-                if int(sub_loc['SL']['cl'][0]) > 0:
+                if sub_loc['SL']['cl'][0] != '0':
                     outf.write(', level {}'.format(sub_loc['SL']['cl'][0]))
     if 'mine' in u.return_type(sub_loc):
         if 'SL' in sub_loc:
             if 'sd' in sub_loc['SL']:
-                if int(sub_loc['SL']['sd'][0]) > 0:
+                if sub_loc['SL']['sd'][0] != '0':
                     outf.write(', level {}'.format(int(sub_loc['SL']['sd'][0]) / 3))
     if 'SL' in sub_loc:
         if 'eg' and 'er' in sub_loc['SL']:

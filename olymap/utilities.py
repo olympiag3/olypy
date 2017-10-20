@@ -95,16 +95,16 @@ def xlate_loyalty(v):
 
 
 def is_fighter(item_record, item_id):
-    attack = int(0)
-    defense = int(0)
-    missile = int(0)
+    attack = ''
+    defense = ''
+    missile = ''
     if 'at' in item_record['IT']:
-        attack = int(item_record['IT']['at'][0])
+        attack = item_record['IT']['at'][0]
     if 'df' in item_record['IT']:
-        defense = int(item_record['IT']['df'][0])
+        defense = item_record['IT']['df'][0]
     if 'mi' in item_record['IT']:
-        missile = int(item_record['IT']['mi'][0])
-    if attack > 0 or defense > 0 or missile > 0 or item_id == '18':
+        missile = item_record['IT']['mi'][0]
+    if attack != '' or defense != '' or missile != '' or item_id == '18':
         return True
     return False
 
@@ -291,7 +291,7 @@ def resolve_trades(data):
             iterations = int(len(pl) / 8)
             for goods in range(0, iterations - 1):
                 if int(pl[(goods*8) + 1]) >= 300:
-                    if int(pl[(goods * 8) + 0]) in {1, 2}:
+                    if pl[(goods * 8) + 0] in {'1', '2'}:
                         if pl[(goods*8) + 1] is not None:
                             ret[pl[(goods*8) + 1]].append([unit, pl[(goods * 8) + 0]])
     return ret
@@ -418,7 +418,7 @@ def is_priest(v):
     if 'CH' in v:
         if 'sl' in v['CH']:
             skills_list = v['CH']['sl']
-            if int(len(skills_list)) > 0:
+            if len(skills_list) > 0:
                 iterations = int(len(skills_list) / 5)
                 for skill in range(0, iterations - 1):
                     if skills_list[skill * 5] == '750':

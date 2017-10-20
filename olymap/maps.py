@@ -220,12 +220,12 @@ def write_main_map_leaves(data, castle_chain):
                         outf.write('>')
                         if 'LO' in loc_rec:
                             if 'lc' in loc_rec['LO']:
-                                if int(loc_rec['LO']['lc'][0]) > 0:
+                                if loc_rec['LO']['lc'][0] != '0':
                                     outf.write('<b>')
                         outf.write('{}'.format(anchor(to_oid(cell))))
                         if 'LO' in loc_rec:
                             if 'lc' in loc_rec['LO']:
-                                if int(loc_rec['LO']['lc'][0]) > 0:
+                                if loc_rec['LO']['lc'][0] != '0':
                                     outf.write('</b>')
                         if 'LI' in loc_rec:
                             if 'hl' in loc_rec['LI']:

@@ -108,11 +108,11 @@ def write_char_combat(v, outf):
     outf.write('<td>attack {}, defense {}, missile {}</td></tr>\n'.format(attack,
                                                                           defense,
                                                                           missile))
-    behind = int(0)
+    behind = '0'
     if 'CH' in v:
         if 'bh' in v['CH']:
-            behind = int(v['CH']['bh'][0])
-    if behind > 0:
+            behind = v['CH']['bh'][0]
+    if behind != '0':
         behind_text = '(stay behind in combat)'
     else:
         behind_text = '(front line in combat)'
@@ -123,11 +123,11 @@ def write_char_combat(v, outf):
 
 def write_char_break_point(v, outf):
     # CH/bp
-    break_point = int(1)
+    break_point = '1'
     if 'CH' in v:
         if 'bp' in v['CH']:
-            break_point = int(v['CH']['bp'][0])
-    if break_point == 0:
+            break_point = v['CH']['bp'][0]
+    if break_point == '0':
         break_point_text = '(fight to the death)'
     else:
         break_point_text = ''
@@ -194,18 +194,18 @@ def write_char_aura(v, data, outf):
                     outf.write('<tr>')
                     outf.write('<td>Current Aura:</td>')
                     outf.write('<td>{}</td></tr>\n'.format(v['CM']['ca'][0]))
-            max_aura = int(0)
+            max_aura = '0'
             if 'ma' in v['CM']:
-                max_aura = int(v['CM']['ma'][0])
+                max_aura = v['CM']['ma'][0]
             if 'ar' in v['CM']:
                 auraculum = data[v['CM']['ar'][0]]
-                auraculum_amt = int(0)
+                auraculum_amt = '0'
                 if 'IM' in auraculum:
                     if 'au' in auraculum['IM']:
-                        auraculum_amt = int(auraculum['IM']['au'][0])
+                        auraculum_amt = auraculum['IM']['au'][0]
                 outf.write('<tr>')
                 outf.write('<td>Max Aura:</td>')
-                outf.write('<td>{} ({}+{})</td></tr>\n'.format((max_aura+auraculum_amt),
+                outf.write('<td>{} ({}+{})</td></tr>\n'.format((int(max_aura) + int(auraculum_amt)),
                                                                max_aura, auraculum_amt))
             else:
                 outf.write('<tr>')
@@ -247,7 +247,7 @@ def write_char_skills_known(v, data, outf):
                 for skill in range(0, skills_iteration):
                     skill_id = skills_list[skill * 5]
                     know = skills_list[(skill * 5) + 1]
-                    days_studied = int(skills_list[(skill * 5) + 2])
+                    days_studied = skills_list[(skill * 5) + 2]
                     if know == '2':
                         if not printknown:
                             outf.write('<p>Skills known:</p>\n')
