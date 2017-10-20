@@ -3,6 +3,7 @@
 import olypy.details as details
 from collections import defaultdict
 from olypy.oid import to_oid
+from olymap.detail import long_type_to_display_type
 
 
 def return_type(firstline):
@@ -14,39 +15,9 @@ def return_type(firstline):
 def return_short_type(firstline):
     # return 3rd argument of firstlist
     _, _, type = firstline.split(' ', maxsplit=2)
-    if 'poppy ' in type:
-        short_type = type.replace('poppy ', 'p.')
-    elif 'sacred grove' in type:
-        short_type = type.replace('sacred grove', 's.grov')
-    elif 'rocky ' in type:
-        short_type = type.replace('rocky ', 'r.')
-    elif 'battlefield' in type:
-        short_type = type.replace('battlefield', 'btfd.')
-    elif 'graveyard' in type:
-        short_type = type.replace('graveyard', 'gvyd.')
-    elif 'port ' in type:
-        short_type = type.replace('port ', 'p.')
-    elif 'yew grove' in type:
-        short_type = type.replace('yew grove', 'yew')
-    elif 'pasture' in type:
-        short_type = type.replace('pasture', 'past.')
-    elif 'circle of ' in type:
-        short_type = type.replace('circle of ', 'c.')
-    elif 'ring of ' in type:
-        short_type = type.replace('ring of ', 'r.')
-    elif 'sand ' in type:
-        short_type = type.replace('sand ', 's.')
-    elif 'mallorn grove' in type:
-        short_type = type.replace('mallorn grove', 'm.grov')
-    elif 'faery ' in type:
-        short_type = type.replace('faery ', 'f.')
-    elif 'enchanted forest' in type:
-        short_type = type.replace('enchanted forest', 'e.forst')
-    elif 'collapsed ' in type:
-        short_type = type.replace('collapsed ', '')
-    elif '-in-progress' in type:
-        short_type = type.replace('-in-progress', '')
-    else:
+    try:
+        short_type = long_type_to_display_type[type]
+    except KeyError:
         short_type = type
     return short_type
 
