@@ -24,3 +24,14 @@ rank_num_string = {'10': 'lord',
                    '60': 'marquess',
                    '70': 'duke',
                    '80': 'king'}
+
+castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+loc_types = ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
+             'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn',
+             'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress',
+             'collapsed mine', 'tower', 'tower-in-progress', 'sewer']
+
+use_key = {'1': 'Death Potion', '2': 'Healing Potion', '3': 'Slave Potion',
+           '4': 'Palantir', '5': 'Projected Cast', '6': 'Quick Cast Potion',
+           '7': 'Drum', '8': 'Elf Stone', '9': 'Orb'}

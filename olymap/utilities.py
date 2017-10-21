@@ -5,6 +5,9 @@ from collections import defaultdict
 from olypy.oid import to_oid
 from olymap.detail import long_type_to_display_type
 from olymap.detail import rank_num_string
+from olymap.detail import castle_ind
+from olymap.detail import loc_types
+from olymap.detail import use_key
 
 
 def return_type(box):
@@ -182,7 +185,6 @@ def resolve_all_pledges(data):
 
 
 def resolve_castles(data):
-    castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     ret2 = defaultdict(list)
     for unit in data:
         if is_castle(data, unit):
@@ -305,10 +307,7 @@ def loc_depth(loc_type):
     elif loc_type in details.subloc_kinds:
         return 3
     # details.structure_type does not include 'in-progress' or could use it
-    elif loc_type in ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
-                      'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn',
-                      'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress',
-                      'collapsed mine', 'tower', 'tower-in-progress', 'sewer']:
+    elif loc_type in loc_types:
         return 4
     return 0
 
@@ -468,25 +467,10 @@ def anchor2(k, text):
 
 
 def xlate_use_key(k):
-    ret = 'undefined'
-    if k == '1':
-        ret = 'Death Potion'
-    elif k == '2':
-        ret = 'Healing Potion'
-    elif k == '3':
-        ret = 'Slave Potion'
-    elif k == '4':
-        ret = 'Palantir'
-    elif k == '5':
-        ret = 'Projected Cast'
-    elif k == '6':
-        ret = 'Quick Cast Potion'
-    elif k == '7':
-        ret = 'Drum'
-    elif k == '8':
-        ret = 'Elf Stone'
-    elif k == '9':
-        ret = 'Orb'
+    try:
+        ret = use_key[k]
+    except KeyError:
+        ret = 'undefined'
     return ret
 
 
@@ -496,15 +480,8 @@ def determine_item_use(v, data, trade_chain):
         if 'IM' in v:
             if 'uk' in v['IM']:
                 use_key = v['IM']['uk'][0]
-                if use_key == '1':
-                    ret = 'death potion'
-                elif use_key == '2':
-                    ret = 'healing potion'
-                elif use_key == '3':
-                    ret = 'slave potion'
-                elif use_key == '4':
-                    ret = 'palantir'
-                elif use_key == '5':
+                ret = xlate_use_key(use_key)
+                if use_key == '5':
                     ret = "projected cast: "
                     if 'IM' in v:
                         if 'pc' in v['IM']:
@@ -524,14 +501,6 @@ def determine_item_use(v, data, trade_chain):
                             ret = ret + 'unknown target'
                     else:
                         ret = ret + 'unknown target'
-                elif use_key == '6':
-                    ret = 'quick cast potion'
-                elif use_key == '7':
-                    ret = 'drum'
-                elif use_key == '8':
-                    ret = 'elf stone'
-                elif use_key == '9':
-                    ret = 'orb'
     elif return_type(v) == 'artifact':
         if 'IM' in v:
             ret = ''

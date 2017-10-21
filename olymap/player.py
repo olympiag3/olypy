@@ -91,7 +91,7 @@ def write_full_name(outf, v):
 
 def write_player_html(v, k, data, outdir):
     # generate player page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

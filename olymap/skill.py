@@ -103,7 +103,7 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
 
 def write_skill_html(v, k, data, teaches_chain, child_skills_chain, skills_known_chain, outdir):
     # generate skill page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

@@ -92,7 +92,7 @@ def write_item_basic_info(v, k, data, outf, trade_chain):
 
 def write_item_html(v, k, data, trade_chain, outdir):
     # generate item page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

@@ -801,7 +801,7 @@ def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_
 
 def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir):
     # generate loc page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

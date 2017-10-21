@@ -49,7 +49,7 @@ def write_type(outf, v):
 
 def write_storm_html(v, k, data, storm_chain, outdir):
     # generate storm page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(oid_storm(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     if 'na' in v:

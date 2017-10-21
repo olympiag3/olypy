@@ -601,7 +601,7 @@ def write_char_location(data, outf, v):
 
 def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir):
     # generate char page
-    outf = open(pathlib.Path(outdir).joinpath((k)+'.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k)+'.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     if u.return_type(v) == 'garrison':

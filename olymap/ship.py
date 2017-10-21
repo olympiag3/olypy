@@ -161,7 +161,7 @@ def write_ship_basic_info(v, k, data, outf):
 
 def write_ship_html(v, k, data, outdir):
     # generate ship page
-    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>{} [{}], {}'.format(v['na'][0],
