@@ -4,10 +4,11 @@ from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
 from olymap.utilities import anchor2
+import pathlib
 
 
-def write_index():
-    outf = open('index.html', 'w')
+def write_index(outdir):
+    outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Mapper Tool</TITLE>\n')
@@ -70,8 +71,8 @@ def write_index():
     outf.close()
 
 
-def write_main_map():
-    outf = open('main_map.html', 'w')
+def write_main_map(outdir):
+    outf = open(pathlib.Path(outdir).joinpath('main_map.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Main Map</TITLE>\n')
@@ -136,12 +137,13 @@ def write_main_map():
     outf.close()
 
 
-def write_main_map_leaves(data, castle_chain):
+def write_main_map_leaves(data, castle_chain, outdir):
     for outery in range (0, 7):
         startingpoint = 10000 + (outery * 1000)
         for outerx in range (0, 7):
             currentpoint = startingpoint + (outerx * 10)
             outf = open('main_map_leaf_' + u.to_oid(currentpoint) + '.html', 'w')
+            outf = open(pathlib.Path(outdir).joinpath('main_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
             outf.write('<HTML>\n')
             outf.write('<HEAD>\n')
             outf.write('<TITLE>Main Map Leaf {}</TITLE>\n'.format(to_oid(currentpoint)))

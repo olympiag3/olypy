@@ -3,6 +3,7 @@
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
+import pathlib
 
 
 def write_item_page_header(v, k, outf):
@@ -89,9 +90,9 @@ def write_item_basic_info(v, k, data, outf, trade_chain):
     outf.write('</table>\n')
 
 
-def write_item_html(v, k, data, trade_chain):
+def write_item_html(v, k, data, trade_chain, outdir):
     # generate item page
-    outf = open(to_oid(k)+'.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

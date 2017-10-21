@@ -4,6 +4,7 @@
 #
 
 import os
+import pathlib
 
 import olypy.oio as oio
 import olymap.utilities as u
@@ -18,16 +19,28 @@ import olymap.reports as reports
 import olymap.maps as maps
 
 
-def make_map(inlib):
+def make_map(inlib, outdir):
     if os.path.isdir(inlib):
         data = oio.read_lib(inlib)
     else:
         raise ValueError('Must specify the name of the lib directory')
 
+    if outdir == '':
+        # non specified sp will go in current directory
+        print('No outdir specified')
+    else:
+        if os.path.isdir(outdir):
+            # path specified and exists
+            print('Outdir exists: {}'.format(outdir))
+        else:
+            # path specified but doesn't exist - will create
+            pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
+            print('Outdir does not exists and created: {}'.format(outdir))
+
     chains = resolve_chains(data)
-    write_box_pages(data, chains)
-    write_reports(data, chains)
-    write_maps(data, chains)
+    write_box_pages(data, chains, outdir)
+    write_reports(data, chains, outdir)
+    write_maps(data, chains, outdir)
 
 
 def resolve_chains(data):
@@ -46,41 +59,40 @@ def resolve_chains(data):
     return chains
 
 
-def write_box_pages(data, chains):
+def write_box_pages(data, chains, outdir):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
-            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'], chains['trades'])
+            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'], chains['trades'], outdir)
         elif u.return_kind(v) == 'char':
-            char.write_char_html(v, k, data, chains['pledges'], chains['prisoners'])
+            char.write_char_html(v, k, data, chains['pledges'], chains['prisoners'], outdir)
         elif u.return_kind(v) == 'player':
-            player.write_player_html(v, k, data)
+            player.write_player_html(v, k, data, outdir)
         elif u.return_kind(v) == 'item':
-            itm.write_item_html(v, k, data, chains['trades'])
+            itm.write_item_html(v, k, data, chains['trades'], outdir)
         elif u.return_kind(v) == 'ship':
-            ship.write_ship_html(v, k, data)
+            ship.write_ship_html(v, k, data, outdir)
         elif u.return_kind(v) == 'skill':
-            skill.write_skill_html(v, k, data, chains['teaches'], chains['child_skills'], chains['skills_knowns'])
-            pass
+            skill.write_skill_html(v, k, data, chains['teaches'], chains['child_skills'], chains['skills_knowns'], outdir)
         elif u.return_kind(v) == 'storm':
-            storm.write_storm_html(v, k, data, chains['storms'])
+            storm.write_storm_html(v, k, data, chains['storms'], outdir)
 
 
-def write_reports(data, chains):
+def write_reports(data, chains, outdir):
     print('Writing reports')
-    reports.ship_report(data)
-    reports.player_report(data)
-    reports.item_report(data, chains['trades'])
-    reports.healing_potion_report(data)
-    reports.orb_report(data)
-    reports.projected_cast_potion_report(data)
-    reports.location_report(data)
-    reports.skill_xref_report(data, chains['teaches'])
-    reports.trade_report(data, chains['trades'])
+    reports.ship_report(data, outdir)
+    reports.player_report(data, outdir)
+    reports.item_report(data, chains['trades'], outdir)
+    reports.healing_potion_report(data, outdir)
+    reports.orb_report(data, outdir)
+    reports.projected_cast_potion_report(data, outdir)
+    reports.location_report(data, outdir)
+    reports.skill_xref_report(data, chains['teaches'], outdir)
+    reports.trade_report(data, chains['trades'], outdir)
 
 
-def write_maps(data, chains):
+def write_maps(data, chains, outdir):
     print('Writing Maps')
-    maps.write_index()
-    maps.write_main_map()
-    maps.write_main_map_leaves(data, chains['castles'])
+    maps.write_index(outdir)
+    maps.write_main_map(outdir)
+    maps.write_main_map_leaves(data, chains['castles'], outdir)

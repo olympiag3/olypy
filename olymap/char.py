@@ -4,6 +4,7 @@ import math
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
+import pathlib
 
 
 def write_char_page_header(v, k, outf):
@@ -598,9 +599,9 @@ def write_char_location(data, outf, v):
             outf.write('</tr>\n')
 
 
-def write_char_html(v, k, data, pledge_chain, prisoner_chain):
+def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir):
     # generate char page
-    outf = open(to_oid(k)+'.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath((k)+'.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     if u.return_type(v) == 'garrison':

@@ -4,6 +4,7 @@ import math
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
+import pathlib
 
 
 def write_skill_page_header(v, k, outf):
@@ -100,9 +101,9 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
     outf.write('</table>\n')
 
 
-def write_skill_html(v, k, data, teaches_chain, child_skills_chain, skills_known_chain):
+def write_skill_html(v, k, data, teaches_chain, child_skills_chain, skills_known_chain, outdir):
     # generate skill page
-    outf = open(to_oid(k)+'.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

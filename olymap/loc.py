@@ -9,6 +9,7 @@ from olymap.utilities import anchor2
 import olypy.details as details
 from operator import itemgetter
 import olymap.ship as ship
+import pathlib
 
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
@@ -798,9 +799,9 @@ def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_
     write_loc_map_anchor(v, k, data, outf)
 
 
-def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain):
+def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir):
     # generate loc page
-    outf = open(to_oid(k)+'.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]

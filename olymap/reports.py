@@ -4,10 +4,12 @@ import math
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
+import pathlib
 
 
-def ship_report(data):
+def ship_report(data, outdir):
     outf = open('master_ship_report.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Ship Report</TITLE>\n')
@@ -95,8 +97,8 @@ def ship_report(data):
     outf.close()
 
 
-def item_report(data, trade_chain):
-    outf = open('master_item_report.html', 'w')
+def item_report(data, trade_chain, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_item_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Item Report</TITLE>\n')
@@ -166,8 +168,8 @@ def item_report(data, trade_chain):
     outf.close()
 
 
-def player_report(data):
-    outf = open('master_player_report.html', 'w')
+def player_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_player_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Player Report</TITLE>\n')
@@ -196,8 +198,8 @@ def player_report(data):
     outf.close()
 
 
-def healing_potion_report(data):
-    outf = open('master_healing_potion_report.html', 'w')
+def healing_potion_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_healing_potion_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Healing Potion Report</TITLE>\n')
@@ -238,8 +240,8 @@ def healing_potion_report(data):
     outf.close()
 
 
-def orb_report(data):
-    outf = open('master_orb_report.html', 'w')
+def orb_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_orb_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Orb Report</TITLE>\n')
@@ -272,8 +274,8 @@ def orb_report(data):
     outf.close()
 
 
-def projected_cast_potion_report(data):
-    outf = open('master_projected_cast_report.html', 'w')
+def projected_cast_potion_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_projected_cast_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Projected Cast Potion Report</TITLE>\n')
@@ -319,8 +321,8 @@ def projected_cast_potion_report(data):
     outf.close()
 
 
-def location_report(data):
-    outf = open('master_location_report.html', 'w')
+def location_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_location_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Location Report</TITLE>\n')
@@ -351,8 +353,8 @@ def location_report(data):
     outf.close()
 
 
-def skill_xref_report(data, teaches_chain):
-    outf = open('master_skill_xref_report.html', 'w')
+def skill_xref_report(data, teaches_chain, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_skill_xref_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Skill Xref Report</TITLE>\n')
@@ -387,8 +389,8 @@ def skill_xref_report(data, teaches_chain):
     outf.close()
 
 
-def trade_report(data, trade_chain):
-    outf = open('master_trade_report.html', 'w')
+def trade_report(data, trade_chain, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_trade_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     outf.write('<TITLE>Olympia Master Trade Report</TITLE>\n')

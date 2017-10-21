@@ -5,6 +5,7 @@ import math
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
+import pathlib
 
 
 def write_player_page_header(v, k, outf):
@@ -88,9 +89,9 @@ def write_full_name(outf, v):
             outf.write('<tr><td>Full Name:</td><td>{}</td></tr>\n'.format(full_name))
 
 
-def write_player_html(v, k, data):
+def write_player_html(v, k, data, outdir):
     # generate player page
-    outf = open(to_oid(k)+'.html', 'w')
+    outf = open(pathlib.Path(outdir).joinpath((k) + '.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
     name = v['na'][0]
