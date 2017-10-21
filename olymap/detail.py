@@ -25,7 +25,9 @@ rank_num_string = {'10': 'lord',
                    '70': 'duke',
                    '80': 'king'}
 
-castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a',
+              'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'm',
+              'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z']
 
 loc_types = ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
              'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn',
