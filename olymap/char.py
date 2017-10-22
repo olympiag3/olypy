@@ -289,16 +289,18 @@ def write_char_inventory(v, data, outf):
         if iterations > 0:
             outf.write('<p>Inventory:</p>\n')
             outf.write('<table>\n')
-            outf.write('<tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>\n')
-            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>\n')
+            outf.write('<tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td '
+                       'style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>\n')
+            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td '
+                       'style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>\n')
             for itm in range(0, iterations):
                 item_id = item_list[itm*2]
                 item_qty = int(item_list[(itm*2)+1])
                 outf.write('<tr>')
                 outf.write('<td style="text-align:right">{}</td>'.format(item_qty))
                 itemz = data[item_id]
-                outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz['na'][0] if item_qty == 1 else itemz['IT']['pl'][0],
-                                                                             anchor(to_oid(item_id))))
+                itemz_name = itemz['na'][0] if item_qty == 1 else itemz['IT']['pl'][0]
+                outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz_name, anchor(to_oid(item_id))))
                 if 'wt' in itemz['IT']:
                     item_weight = int(itemz['IT']['wt'][0])
                 else:
@@ -361,8 +363,10 @@ def write_char_inventory(v, data, outf):
                     outf.write('<td>&nbsp;</td>')
                 outf.write('</tr>\n')
             if u.return_type(v) != 'garrison':
-                outf.write('<tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>\n')
-                outf.write('<tr><td></td><td></td><td style="text-align:right">{}</td><td>&nbsp;</td></tr>\n'.format(total_weight))
+                outf.write('<tr><td></td><td></td><td style="text-align:right">====='
+                           '</td><td>&nbsp;</td></tr>\n')
+                outf.write('<tr><td></td><td></td><td style="text-align:right">{}</td>'
+                           '<td>&nbsp;</td></tr>\n'.format(total_weight))
             outf.write('</table>\n')
 
 
@@ -440,17 +444,14 @@ def write_char_capacity(v, data, outf):
                 pass
     outf.write('<p>Capacity: ')
     if land_cap > 0:
-        outf.write('{}/{} land ({}%) '.format(land_weight,
-                                              land_cap,
-                                              math.floor((land_weight * 100) / land_cap)))
+        pct = math.floor((land_weight * 100) / land_cap)
+        outf.write('{}/{} land ({}%) '.format(land_weight, land_cap, pct))
     if ride_cap > 0:
-        outf.write('{}/{} ride ({}%) '.format(ride_weight,
-                                              ride_cap,
-                                              math.floor((ride_weight * 100) / ride_cap)))
+        pct = math.floor((ride_weight * 100) / ride_cap)
+        outf.write('{}/{} ride ({}%) '.format(ride_weight, ride_cap, pct))
     if fly_cap > 0:
-        outf.write('{}/{} fly ({}%)'.format(fly_weight,
-                                            fly_cap,
-                                            math.floor((fly_weight * 100) / fly_cap)))
+        pct = math.floor((fly_weight * 100) / fly_cap)
+        outf.write('{}/{} fly ({}%)'.format(fly_weight, fly_cap, pct))
     outf.write('</p>')
 
 
@@ -461,18 +462,23 @@ def write_char_pending_trades(v, data, outf):
         if iterations > 0:
             outf.write('<p>Pending Trades:</p>\n')
             outf.write('<table>\n')
-            outf.write('<tr><td style="text-align:right">trades</td><td style="text-align:right">price</td><td style="text-align:right">qty</td><td style="text-align:left">item</td>\n')
-            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:right">-----</td><td style="text-align:right">---</td><td style="text-align:left">----</td>\n')
+            outf.write('<tr><td style="text-align:right">trades</td><td style="text-align:right">price</td>'
+                       '<td style="text-align:right">qty</td><td style="text-align:left">item</td>\n')
+            outf.write('<tr><td style="text-align:right">---</td><td style="text-align:right">-----</td>'
+                       '<td style="text-align:right">---</td><td style="text-align:left">----</td>\n')
             for trades in range(0, iterations):
                 try:
                     itemz = data[trade_list[(trades*8)+1]]
                     itemz_plural = itemz['IT']['pl'][0]
                     itemz_name = itemz['na'][0]
                     outf.write('<tr>')
-                    outf.write('<td style="text-align:right">{}</td>'.format('buy' if trade_list[(trades*8)+0] == '1' else 'sell'))
+                    direction = 'buy' if trade_list[(trades*8)+0] == '1' else 'sell'
+                    outf.write('<td style="text-align:right">{}</td>'.format(direction))
                     outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+3]))
                     outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+2]))
-                    outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz_name if int(trade_list[(trades*8)+2]) == 1 else itemz_plural, anchor(to_oid(trade_list[(trades*8)+1]))))
+                    name = itemz_name if int(trade_list[(trades*8)+2]) == 1 else itemz_plural
+                    anch = anchor(to_oid(trade_list[(trades*8)+1]))
+                    outf.write('<td style="text-align:left">{} [{}]</td>'.format(name, anch))
                     outf.write('</tr>\n')
                 except KeyError:
                     pass
@@ -515,18 +521,21 @@ def write_char_magic_stuff(v, data, outf):
                                 loc_kind = ''
                                 loc_name = ''
                                 loc_id = ''
-                                if 'IM' in itemz:
-                                    if 'pc' in itemz['IM']:
-                                        try:
-                                            location = data[itemz['IM']['pc'][0]]
-                                            loc_kind = u.return_kind(location) if u.return_kind(location) != 'loc' else 'location'
-                                            loc_name = location['na'][0]
-                                            loc_id = anchor(to_oid(u.return_unitid(location)))
-                                        except KeyError:
-                                            loc_kind = 'unknown'
-                                            loc_name = 'unknown'
-                                            loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
-                                outf.write('<p>Projected Cast [{}] to {} {} [{}]</p>\n'.format(anchor(to_oid(item_list[items*2])),
+                                if 'IM' in itemz and 'pc' in itemz['IM']:
+                                    try:
+                                        location = data[itemz['IM']['pc'][0]]
+                                        if u.return_kind(location) != 'loc':
+                                            loc_kind = u.return_kind(location)
+                                        else:
+                                            loc_kind = 'location'
+                                        loc_name = location['na'][0]
+                                        loc_id = anchor(to_oid(u.return_unitid(location)))
+                                    except KeyError:
+                                        loc_kind = 'unknown'
+                                        loc_name = 'unknown'
+                                        loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
+                                anch = anchor(to_oid(item_list[items*2]))
+                                outf.write('<p>Projected Cast [{}] to {} {} [{}]</p>\n'.format(anch,
                                                                                                loc_kind,
                                                                                                loc_name,
                                                                                                loc_id))
@@ -546,14 +555,15 @@ def write_char_magic_stuff(v, data, outf):
                                             skill2_name = skill2['na'][0]
                                         except KeyError:
                                             skill2_name = 'unknown'
-                                        required_study = '(requires {} [{}])'.format(skill2_name,
-                                                                                     anchor(to_oid(skill['SK']['rs'][0])))
+                                        anch = anchor(to_oid(skill['SK']['rs'][0]))
+                                        required_study = '(requires {} [{}])'.format(skill2_name, anch)
                             except KeyError:
                                 skill_name = 'unknown'
-                            outf.write('<p>Scroll [{}] permits the study of the following skills:<br>&nbsp;&nbsp;&nbsp;{} [{}] {}</p>\n'.format(scroll_id,
-                                                                                                                                                skill_name,
-                                                                                                                                                skill_id,
-                                                                                                                                                required_study))
+                            outf.write('<p>Scroll [{}] permits the study of the following skills:<br>&nbsp;&nbsp;&nbsp;'
+                                       '{} [{}] {}</p>\n'.format(scroll_id,
+                                                                 skill_name,
+                                                                 skill_id,
+                                                                 required_study))
             except KeyError:
                 pass
 
@@ -593,9 +603,9 @@ def write_char_location(data, outf, v):
     if 'LI' in v:
         if 'wh' in v['LI']:
             loc = data[v['LI']['wh'][0]]
+            anch = anchor(to_oid(v['LI']['wh'][0]))
             outf.write('<tr>')
-            outf.write('<td>Where:</td><td>{} [{}]</td>'.format(loc['na'][0],
-                                                                anchor(to_oid(v['LI']['wh'][0]))))
+            outf.write('<td>Where:</td><td>{} [{}]</td>'.format(loc['na'][0], anch))
             outf.write('</tr>\n')
 
 
@@ -608,8 +618,7 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir):
         name = 'Garrison'
     else:
         name = v['na'][0]
-    outf.write('<TITLE>{} [{}]'.format(name,
-               to_oid(k)))
+    outf.write('<TITLE>{} [{}]'.format(name, to_oid(k)))
     outf.write('</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
