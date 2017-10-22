@@ -3,9 +3,6 @@
 # Given a game lib, generate HTML map for all components
 #
 
-import os
-import pathlib
-
 import olypy.oio as oio
 import olymap.utilities as u
 import olymap.ship as ship
@@ -20,23 +17,7 @@ import olymap.maps as maps
 
 
 def make_map(inlib, outdir):
-    if os.path.isdir(inlib):
-        data = oio.read_lib(inlib)
-    else:
-        raise ValueError('Must specify the name of the lib directory')
-
-    if outdir == '':
-        # non specified sp will go in current directory
-        print('No outdir specified')
-    else:
-        if os.path.isdir(outdir):
-            # path specified and exists
-            print('Outdir exists: {}'.format(outdir))
-        else:
-            # path specified but doesn't exist - will create
-            pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
-            print('Outdir does not exists and created: {}'.format(outdir))
-
+    data = oio.read_lib(inlib)
     chains = resolve_chains(data)
     write_box_pages(data, chains, outdir)
     write_reports(data, chains, outdir)
