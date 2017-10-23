@@ -1431,10 +1431,9 @@ def match_line(text, word, capture=None):
     return m.groups()
 
 
-#@lru_cache(maxsize=None)
+@lru_cache(maxsize=None)
 def match_line_re(word, capture):
     # note that \b needs to be escaped
-    print('compiling', word, capture)
     return re.compile('\\b'+word+'\s+'+capture, re.M)
 
 

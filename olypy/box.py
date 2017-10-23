@@ -201,3 +201,28 @@ def dict_to_inventory(d):
         if int(d[k]) > 0:
             ret.extend([k, d[k]])
     return ret
+
+
+class Box:
+    '''
+    This is intended to eventually wrap all box manipulation
+    '''
+    def __init__(self):
+        self._name = None
+        self._inventory = {}
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def inventory(self):
+        return self._inventory
+
+    @inventory.setter
+    def inventory(self, value):
+        self._inventory = value
