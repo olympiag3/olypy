@@ -2303,6 +2303,13 @@ loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Su
 
 
 def parse_character(name, ident, factint, text, data):
+    '''
+    Parse the character section of a turn report.
+    '''
+    old_ra = None
+    if ident in data and 'CH' in data[ident] and 'ra' in data[ident]['CH']:
+        # rank info is not in the character set of the turn report.
+        old_ra = data[ident]['CH']['ra']
 
     m = re.search(r'^\s+Location:\s+(.*)\n(\s+)(.*)$', text, re.M)
     if m:
@@ -2459,7 +2466,8 @@ def parse_character(name, ident, factint, text, data):
     char['LI']['wh'] = [location]
 
     ch = {}
-    # XXXv2 the existing CH/ra from the map (if same unit) isn't here in the turn :/
+    if old_ra:
+        ch['ra'] = old_ra
     ch['lo'] = [to_int(factint)]
     ch['he'] = [health]
     if sick:
