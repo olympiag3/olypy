@@ -5,22 +5,28 @@ import olypy.dbck as dbck
 
 def test_check_firstline(capsys):
     data = {'1001': 1}
-    assert dbck.check_firstline(data) == 1
+    assert dbck.check_firstline(data, False) == 1
     out, err = capsys.readouterr()
     assert '1001' in err
     assert 'has no firstline' in err
 
     data = {'1001': {'asdf': 1}}
-    assert dbck.check_firstline(data) == 1
+    assert dbck.check_firstline(data, False) == 1
     out, err = capsys.readouterr()
     assert '1001' in err
     assert 'has no firstline' in err
 
-    data = {'1001': {'firstline': '1001 loc forest'}}
-    assert dbck.check_firstline(data, checknames=True) == 1
+    data = {'1001': {'firstline': ['1001 loc forest']}}
+    assert dbck.check_firstline(data, False, checknames=True) == 1
     out, err = capsys.readouterr()
     assert '1001' in err
     assert 'no name' in err
+
+    assert dbck.check_firstline(data, True, checknames=True) == 0
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'no name' in err
+    assert 'fixed' in err
 
 
 def test_check_boxes(capsys):

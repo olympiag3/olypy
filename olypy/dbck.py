@@ -9,16 +9,22 @@ from . import details
 from .formatters import grand_format
 
 
-def check_firstline(data, checknames=False):
+def check_firstline(data, fix, checknames=False):
     '''Make sure everything in data has a firstline'''
     problem = 0
     for k, v in data.items():
         if not isinstance(v, dict) or 'firstline' not in v:
             print('Thing {} has no firstline'.format(k), file=sys.stderr)
             problem += 1
+            # cannot be fixed
         elif checknames and ' unform ' not in v['firstline'][0] and 'na' not in v:
             print('Thing {} has no name'.format(v['firstline']), file=sys.stderr)
-            problem += 1
+            if fix:
+                _, _, kind = v['firstline'][0].split(' ', 2)
+                data[k]['na'] = [kind[0].upper() + kind[1:]]
+                print('   fixed.', file=sys.stderr)
+            else:
+                problem += 1
     return problem
 
 
@@ -300,7 +306,7 @@ def check_links(data, fix=False):
 
 def check_db(data, fix=False, checknames=False):
     problems = 0
-    problems += check_firstline(data, checknames=checknames)
+    problems += check_firstline(data, fix, checknames=checknames)
     problems += check_boxes(data)
     problems += check_where_here(data, fix)
     problems += check_faction_units(data, fix)
