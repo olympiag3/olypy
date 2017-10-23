@@ -64,6 +64,7 @@ def chase_structure(k, data, level, seen_here_list):
 
 
 def xlate_rank(k):
+    rank = 'Undefined'
     if 'CH' in k:
         if 'ra' in k['CH']:
             # could be a dict, but doing this for now because
@@ -71,7 +72,7 @@ def xlate_rank(k):
             try:
                 rank = rank_num_string[k['CH']['ra'][0]]
             except KeyError:
-                rank = 'Undefined'
+                pass
     return rank
 
 
