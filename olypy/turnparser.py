@@ -8,6 +8,7 @@ import os
 import subprocess
 from collections import defaultdict
 import glob
+from functools import lru_cache
 
 from . import get_template_lib
 from .oid import to_int, to_oid, to_int_safely
@@ -796,7 +797,7 @@ def parse_a_structure(parts):
             SL['sd'] = [str(depth * 3)]
             attr['il'] = details.mine_production[depth]
         elif p.startswith('level '):
-            SL['cl'] = p.replace('level ', '')
+            SL['cl'] = [p.replace('level ', '')]
         elif p.endswith('% loaded'):
             pass  # nothing useful to do with loaded %
         elif p.startswith('"') and p.endswith('"'):
@@ -1423,11 +1424,18 @@ def analyze_regions(s, region_after):
 
 def match_line(text, word, capture=None):
     if capture is None:
-        capture = r'(.*)'
-    m = re.search(r'\b'+word+'\s+'+capture, text, re.M)
+        capture = '(.*)'
+    m = re.search(match_line_re(word, capture), text)
     if not m:
         return None,  # caller expects a list
     return m.groups()
+
+
+#@lru_cache(maxsize=None)
+def match_line_re(word, capture):
+    # note that \b needs to be escaped
+    print('compiling', word, capture)
+    return re.compile('\\b'+word+'\s+'+capture, re.M)
 
 
 def remove_visions(s):
@@ -2333,7 +2341,7 @@ def parse_character(name, ident, factint, text, data):
     old_hl = data.get(ident, {}).get('LI', {}).get('hl', [])
     old_lo = data.get(ident, {}).get('CH', {}).get('lo', [None])[0]
 
-    lkind, lrate = match_line(text, 'Loyalty:', capture=r'([A-Za-z]+)-(\d+)')
+    lkind, lrate = match_line(text, 'Loyalty:', capture='([A-Za-z]+)-(\d+)')
     lkind = str(loyalty_kind[lkind])
 
     # Unfortunately this only captures the first one. Even for visible characters,
@@ -2369,13 +2377,13 @@ def parse_character(name, ident, factint, text, data):
     if health == 'n/a':
         health = '-1'
 
-    attack, defense, missile = match_line(text, 'Combat:', capture=r'attack (\d+), defense (\d+), missile (\d+)')
+    attack, defense, missile = match_line(text, 'Combat:', capture='attack (\d+), defense (\d+), missile (\d+)')
 
-    behind, = match_line(text, 'behind', capture=r'(\d+)')
+    behind, = match_line(text, 'behind', capture='(\d+)')
 
-    break_point, = match_line(text, 'Break point:', capture=r'(\d+)')
+    break_point, = match_line(text, 'Break point:', capture='(\d+)')
 
-    vision_protection, = match_line(text, 'Receive Vision:', capture=r'(\d+)')
+    vision_protection, = match_line(text, 'Receive Vision:', capture='(\d+)')
 
     concealed, = match_line(text, 'use  638 1')
     move_me = 0
@@ -2397,13 +2405,13 @@ def parse_character(name, ident, factint, text, data):
     # XXXv2 we don't process "Pledged to us:" so any vassals won't appear
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
-        pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture=r'(.*?) \[(.{4,6})\]')
+        pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture='(.*?) \[(.{4,6})\]')
 
-    current_aura, = match_line(text, 'Current aura:', capture=r'(\d+)')
-    maximum_aura, = match_line(text, 'Maximum aura:', capture=r'(\d+)')
+    current_aura, = match_line(text, 'Current aura:', capture='(\d+)')
+    maximum_aura, = match_line(text, 'Maximum aura:', capture='(\d+)')
 
     aura_artifacts = 0
-    plus, = match_line(text, 'Maximum aura:', capture=r'.*?\((.*)\)')
+    plus, = match_line(text, 'Maximum aura:', capture='.*?\((.*)\)')
     native_aura = 0
     if plus:
         native_aura, p, aura_artifacts = plus.partition('+')
@@ -2586,7 +2594,7 @@ def parse_location(s, factint, everything, data):
             il = box.dict_to_inventory(il_dict)
         data[idint]['il'] = il
 
-    controlling_castle, = match_line(s, 'Province controlled by', capture=r'.*?\[([0-9]{4})\]')
+    controlling_castle, = match_line(s, 'Province controlled by', capture='.*?\[([0-9]{4})\]')
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:

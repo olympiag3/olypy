@@ -2,6 +2,8 @@
 Transforming Olympia ids to/from string and int
 '''
 
+from functools import lru_cache
+
 import string
 import re
 import random
@@ -64,6 +66,7 @@ def to_int_safely(oid):
     return ret
 
 
+@lru_cache(maxsize=None)
 def to_int(oid):
     oid = str(oid)
     # re.fullmatch is python 3.4+
