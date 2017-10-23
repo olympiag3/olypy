@@ -1067,7 +1067,7 @@ def parse_routes_leaving(text):
                 saw_loc = 1
                 if p.startswith('to ') or p.startswith('To '):
                     p = p[3:]
-                m = re.search('(.*?) \[(.{3,6})\]', p)
+                m = re.search(r'(.*?) \[(.{3,6})\]', p)
                 if not m:
                     raise ValueError('failed to match loc in {}'.format(p))
                 name, oid = m.group(1, 2)
