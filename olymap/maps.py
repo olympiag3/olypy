@@ -48,15 +48,20 @@ def write_index(outdir):
     outf.write('</tr>')
     outf.write('</table>\n')
     outf.write('<h2>Intro</h2>\n')
-    outf.write('This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, as of the end of turn 192.<p>')
-    outf.write('Mobile things (characters, ships) are present in the map only if they were seen in turn 192.\n')
+    outf.write('This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, '
+               'as of the end of turn 192.<p>')
+    outf.write('Mobile things (characters, ships) are present in the map only if they were seen in '
+               'turn 192.\n')
     outf.write('<h2>Features</h2>\n')
     outf.write('<ul>\n')
-    outf.write('<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">combat zone</a>)\n')
+    outf.write('<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">'
+               'combat zone</a>)\n')
     outf.write('<li>Ships indicated by yellow border if troop count is low\n')
     outf.write('<li>Barriers indicated by brown border (e.g. ar54, aq52)\n')
-    outf.write('<li>Garrison/castle allegiance is indicated by the @ after the province ID (<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)\n')
-    outf.write('<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, etc.\n')
+    outf.write('<li>Garrison/castle allegiance is indicated by the @ after the province ID '
+               '(<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)\n')
+    outf.write('<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, '
+               'etc.\n')
     outf.write('</ul>\n')
     outf.write('<h2>Limitations / Bugs</h2>\n')
     outf.write('<ul>\n')
@@ -138,9 +143,9 @@ def write_main_map(outdir):
 
 
 def write_main_map_leaves(data, castle_chain, outdir):
-    for outery in range (0, 7):
+    for outery in range(0, 7):
         startingpoint = 10000 + (outery * 1000)
-        for outerx in range (0, 7):
+        for outerx in range(0, 7):
             currentpoint = startingpoint + (outerx * 10)
             outf = open(pathlib.Path(outdir).joinpath('main_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
             outf.write('<HTML>\n')
@@ -206,7 +211,7 @@ def write_main_map_leaves(data, castle_chain, outdir):
                     try:
                         loc_rec = data[cell]
                         outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
-                                                                     u.return_type(loc_rec)))
+                                                                    u.return_type(loc_rec)))
 
                         if barrier(loc_rec):
                             outf.write(' style="border: 2px solid purple" ')
@@ -219,97 +224,89 @@ def write_main_map_leaves(data, castle_chain, outdir):
                             elif enemy_found:
                                 outf.write(' style="outline: 2px solid orange" ')
                         outf.write('>')
-                        if 'LO' in loc_rec:
-                            if 'lc' in loc_rec['LO']:
-                                if loc_rec['LO']['lc'][0] != '0':
-                                    outf.write('<b>')
+                        if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
+                            if loc_rec['LO']['lc'][0] != '0':
+                                outf.write('<b>')
                         outf.write('{}'.format(anchor(to_oid(cell))))
-                        if 'LO' in loc_rec:
-                            if 'lc' in loc_rec['LO']:
-                                if loc_rec['LO']['lc'][0] != '0':
-                                    outf.write('</b>')
-                        if 'LI' in loc_rec:
-                            if 'hl' in loc_rec['LI']:
+                        if 'LO' in loc_rec and  'lc' in loc_rec['LO']:
+                            if loc_rec['LO']['lc'][0] != '0':
+                                outf.write('</b>')
+                        if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
+                            here_list = loc_rec['LI']['hl']
+                            for garr in here_list:
+                                garr_rec = data[garr]
+                                if u.return_type(garr_rec) == 'garrison':
+                                    if 'MI' in garr_rec:
+                                        if 'gc' in garr_rec['MI']:
+                                            castle_id = garr_rec['MI']['gc'][0]
+                                            outf.write('{}'.format(castle_chain[castle_id][0]))
+                        if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
+                            if len(loc_rec['LI']['hl']) > 0:
+                                loc1 = ''
+                                loc2 = ''
+                                city = ''
+                                graveyard = ''
+                                count = int(0)
                                 here_list = loc_rec['LI']['hl']
-                                for garr in here_list:
-                                    garr_rec = data[garr]
-                                    if u.return_type(garr_rec) == 'garrison':
-                                        if 'MI' in garr_rec:
-                                            if 'gc' in garr_rec['MI']:
-                                                castle_id = garr_rec['MI']['gc'][0]
-                                                outf.write('{}'.format(castle_chain[castle_id][0]))
-                        if 'LI' in loc_rec:
-                            if 'hl' in loc_rec['LI']:
-                                if len(loc_rec['LI']['hl']) > 0:
-                                    loc1 = ''
-                                    loc2 = ''
-                                    city = ''
-                                    graveyard = ''
-                                    count = int(0)
-                                    here_list = loc_rec['LI']['hl']
-                                    for here in here_list:
-                                        if int(here) >= 56760 and int(here) <= 78999:
-                                            count = count + 1
-                                            here_rec = data[here]
-                                            if u.return_type(here_rec) != 'city':
-                                                city = here_rec
-                                            elif u.return_type(here_rec) == 'graveyard':
-                                                graveyard = here_rec
-                                            elif loc1 == '' and u.return_kind(here_rec) == 'loc':
-                                                loc1 = here_rec
-                                            elif loc2 == '' and u.return_kind(here_rec) == 'loc':
-                                                loc2 = here_rec
-                                    if city != '':
+                                for here in here_list:
+                                    if 56760 <= int(here) <= 78999:
+                                        count = count + 1
+                                        here_rec = data[here]
+                                        if u.return_type(here_rec) != 'city':
+                                            city = here_rec
+                                        elif u.return_type(here_rec) == 'graveyard':
+                                            graveyard = here_rec
+                                        elif loc1 == '' and u.return_kind(here_rec) == 'loc':
+                                            loc1 = here_rec
+                                        elif loc2 == '' and u.return_kind(here_rec) == 'loc':
+                                            loc2 = here_rec
+                                if city != '':
+                                    if loc2 == '':
+                                        loc2 = loc1
+                                    loc1 = city
+                                if graveyard != '':
+                                    if loc1 == '':
                                         if loc2 == '':
                                             loc2 = loc1
-                                        loc1 = city
-                                    if graveyard != '':
-                                        if loc1 == '':
-                                            if loc2 == '':
-                                                loc2 = loc1
-                                            loc1 = graveyard
-                                        else:
-                                            if loc2 == '':
-                                                loc2 = graveyard
-                                    if count > 2:
-                                        outf.write('<br />many')
+                                        loc1 = graveyard
                                     else:
-                                        if loc2 != '':
-                                            if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
-                                                outf.write('<br />')
-                                                outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
-                                                                               u.return_short_type(loc2))))
-                                            else:
-                                                outf.write('<br />')
-                                                if 'LO' in loc2:
-                                                    if 'hi' in loc2['LO']:
-                                                        if loc2['LO']['hi'][0] == '1':
-                                                            outf.write('<i>')
-                                                outf.write(u.return_short_type(loc2))
-                                                if 'LO' in loc2:
-                                                    if 'hi' in loc2['LO']:
-                                                        if loc2['LO']['hi'][0] == '1':
-                                                            outf.write('</i>')
-                                        else:
-                                            outf.write('<br />&nbsp;')
-                                    if loc1 != '':
-                                        if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
+                                        if loc2 == '':
+                                            loc2 = graveyard
+                                if count > 2:
+                                    outf.write('<br />many')
+                                else:
+                                    if loc2 != '':
+                                        if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
                                             outf.write('<br />')
-                                            outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
-                                                                           u.return_short_type(loc1))))
+                                            outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
+                                                                           u.return_short_type(loc2))))
                                         else:
                                             outf.write('<br />')
-                                            if 'LO' in loc1:
-                                                if 'hi' in loc1['LO']:
-                                                    if loc1['LO']['hi'][0] == '1':
-                                                        outf.write('<i>')
-                                            outf.write(u.return_short_type(loc1))
-                                            if 'LO' in loc1:
-                                                if 'hi' in loc1['LO']:
-                                                    if loc1['LO']['hi'][0] == '1':
-                                                        outf.write('</i>')
+                                            if 'LO' in loc2 and 'hi' in loc2['LO']:
+                                                if loc2['LO']['hi'][0] == '1':
+                                                    outf.write('<i>')
+                                            outf.write(u.return_short_type(loc2))
+                                            if 'LO' in loc2:
+                                                if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
+                                                    outf.write('</i>')
                                     else:
                                         outf.write('<br />&nbsp;')
+                                if loc1 != '':
+                                    if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
+                                        outf.write('<br />')
+                                        outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
+                                                                       u.return_short_type(loc1))))
+                                    else:
+                                        outf.write('<br />')
+                                        if 'LO' in loc1 and 'hi' in loc1['LO']:
+                                            if loc1['LO']['hi'][0] == '1':
+                                                outf.write('<i>')
+                                        outf.write(u.return_short_type(loc1))
+                                        if 'LO' in loc1 and 'hi' in loc1['LO']:
+                                            if loc1['LO']['hi'][0] == '1':
+                                                outf.write('</i>')
+                                else:
+                                    outf.write('<br />&nbsp;')
                         outf.write('</td>\n')
                     except KeyError:
                         outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(cell), to_oid(cell)))
@@ -347,9 +344,8 @@ def write_main_map_leaves(data, castle_chain, outdir):
 def barrier(v):
     ret = False
     if 'LO' in v:
-        if 'ba' in v['LO']:
-            if v['LO']['ba'][0] == '1':
-                ret = True
+        if 'ba' in v['LO'] and v['LO']['ba'][0] == '1':
+            ret = True
     return ret
 
 
@@ -371,14 +367,12 @@ def count_stuff(v, data):
                     iterations = int(len(item_list) / 2)
                     for itemz in range(0, iterations):
                         itemz_rec = data[item_list[itemz*2]]
-                        if 'IT' in itemz_rec:
-                            if 'pr' in itemz_rec['IT']:
-                                if itemz_rec['IT']['pr'][0] == '1':
-                                    nbr_men = nbr_men + int(item_list[(itemz*2) + 1])
+                        if 'IT' in itemz_rec and 'pr' in itemz_rec['IT']:
+                            if itemz_rec['IT']['pr'][0] == '1':
+                                nbr_men = nbr_men + int(item_list[(itemz*2) + 1])
                 if 'CH' in unit:
-                    if 'lo' in unit['CH']:
-                        if unit['CH']['lo'][0] == '100':
-                            enemy_found = True
+                    if 'lo' in unit['CH'] and unit['CH']['lo'][0] == '100':
+                        enemy_found = True
             elif u.return_kind(unit) == 'ship':
                 ships_found = True
     return nbr_men, enemy_found, ships_found

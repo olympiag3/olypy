@@ -8,7 +8,6 @@ import pathlib
 
 
 def ship_report(data, outdir):
-    outf = open('master_ship_report.html', 'w')
     outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
