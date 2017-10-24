@@ -43,8 +43,7 @@ def write_where(data, outf, v):
 
 
 def write_type(outf, v):
-    outf.write('<tr><td>Type: </td><td>{}</td></tr>\n'
-               .format(u.return_type(v)))
+    outf.write('<tr><td>Type: </td><td>{}</td></tr>\n'.format(u.return_type(v)))
 
 
 def write_storm_html(v, k, data, storm_chain, outdir):
