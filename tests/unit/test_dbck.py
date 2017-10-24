@@ -173,3 +173,34 @@ def test_check_prisoners():
     data['6940']['LI']['wh'] = ['1002']
 
     assert dbck.check_prisoners(data) == 1
+
+
+def test_check_links(capsys):
+    data = {'10010': {'firstline': ['10010 loc forest']}}
+    assert dbck.check_links(data) == 1
+    out, err = capsys.readouterr()
+    assert 'lacks LO pd' in err
+
+    data['10010']['LO'] = {}
+    data['10010']['LO']['pd'] = ['1']
+
+    assert dbck.check_links(data) == 1
+    out, err = capsys.readouterr()
+    assert 'which does not exist' in err
+
+    assert dbck.check_links(data, fix=True) == 0
+    out, err = capsys.readouterr()
+    assert 'which does not exist' in err
+    assert 'fixed' in err
+
+    data = {'56799': {'firstline': ['56799 loc city'],
+                      'LO': {'pd': ['10010']}}}
+    assert dbck.check_links(data) == 1
+    out, err = capsys.readouterr()
+    assert 'has NESW link' in err
+
+    data['10010'] = {'firstline': ['10010 loc forest'],
+                     'LO': {'pd': ['56799']}}
+    assert dbck.check_links(data) == 2
+    out, err = capsys.readouterr()
+    assert 'has a NESWUD link to city' in err

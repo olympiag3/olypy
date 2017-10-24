@@ -293,6 +293,7 @@ def check_links(data, fix=False):
                             continue
                         route_fl = data[route]['firstline'][0]
                         if route_fl.endswith(' loc city'):
+                            # turnparser-generated dbs used to have this problem
                             print('Province {} has a NESWUD link to city {}'.format(k, route), file=sys.stderr)
                             problem += 1
             elif kind == 'city':
