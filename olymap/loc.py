@@ -31,98 +31,87 @@ def write_loc_page_header(v, k, data, outf):
             pass
     # if 'city' in loc_type:
     #    outf.write(' [{}]'.format(anchor(to_oid(v['LI']['wh'][0]))))
-    if 'SL' in v:
-        if 'sh' in v['SL']:
-            outf.write(', safe haven')
-    if 'LO' in v:
-        if 'hi' in v['LO']:
-            outf.write(', hidden')
+    if 'SL' in v and 'sh' in v['SL']:
+        outf.write(', safe haven')
+    if 'LO' in v and 'hi' in v['LO']:
+        outf.write(', hidden')
     if loc_type != 'ocean' and u.loc_depth(u.return_type(v)) == 2 \
             and data[u.region(k, data)]['na'][0] != 'faery' and data[u.region(k, data)]['na'][0] != 'hades':
         civ_level = 'wilderness'
-        if 'LO' in v:
-            if 'lc' in v['LO']:
-                if v['LO']['lc'][0] == '0':
-                    civ_level = 'wilderness'
-                else:
-                    civ_level = 'civ-' + v['LO']['lc'][0]
+        if 'LO' in v and 'lc' in v['LO']:
+            if v['LO']['lc'][0] == '0':
+                civ_level = 'wilderness'
+            else:
+                civ_level = 'civ-' + v['LO']['lc'][0]
         outf.write(', {}'.format(civ_level))
     outf.write('</H3>\n')
 
 
 def write_loc_shroud(v, k, outf):
-    if 'LO' in v:
-        if 'sh' in v['LO']:
-            if v['LO']['sh'][0] != '0':
-                outf.write('<p>A magical barrier surrounds {} [{}].</p>\n'.format(v['na'][0],
-                                                                                  anchor(to_oid(k))))
+    if 'LO' in v and 'sh' in v['LO']:
+        if v['LO']['sh'][0] != '0':
+            outf.write('<p>A magical barrier surrounds {} [{}].</p>\n'.format(v['na'][0],
+                                                                              anchor(to_oid(k))))
 
 
 def write_loc_barrier(v, k, outf):
-    if 'LO' in v:
-        if 'ba' in v['LO']:
-            if v['LO']['ba'][0] != '0':
-                outf.write('<p>A magical shroud surrounds {} [{}].</p>\n'.format(v['na'][0],
-                                                                                 anchor(to_oid(k))))
+    if 'LO' in v and 'ba' in v['LO']:
+        if v['LO']['ba'][0] != '0':
+            outf.write('<p>A magical shroud surrounds {} [{}].</p>\n'.format(v['na'][0],
+                                                                             anchor(to_oid(k))))
 
 
 def write_loc_controlled_by(v, data, outf):
-    if 'LI' in v:
-        if 'hl' in v['LI']:
-            here_list = v['LI']['hl']
-            if len(here_list) > 0:
-                for loc in here_list:
-                    try:
-                        charac = data[loc]
-                        if 'MI' in charac:
-                            if 'gc' in charac['MI']:
-                                if charac['MI']['gc'][0] != '0':
-                                    dest_loc = data[charac['MI']['gc'][0]]
-                                    dest_loc2 = data[dest_loc['LI']['wh'][0]]
-                                    outf.write('<p>Province controlled by ')
-                                    dest_name = dest_loc['na'][0]
-                                    dest_id = anchor(to_oid(u.return_unitid(dest_loc)))
-                                    dest_type = u.return_type(dest_loc)
-                                    outf.write('{} [{}], {}'.format(dest_name, dest_id, dest_type))
-                                    dest_type2 = u.return_type(dest_loc2)
-                                    if dest_type2 != 'city':
-                                        dest_name2 = dest_loc2['na'][0]
-                                        dest_id2 = anchor(to_oid(u.return_unitid(dest_loc2)))
-                                        outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
-                                    else:
-                                        dest_loc2 = data[dest_loc2['LI']['wh'][0]]
-                                        dest_name2 = dest_loc2['na'][0]
-                                        dest_id2 = anchor(to_oid(u.return_unitid(dest_loc2)))
-                                        outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
-                                    try:
-                                        garrison = data[dest_loc2['LI']['hl'][0]]
-                                        garr_type = u.return_type(garrison)
-                                        if garr_type == 'garrison':
-                                            # calculate top of pledge chain
-                                            if 'LI' in dest_loc:
-                                                if 'hl' in dest_loc['LI']:
-                                                    top_guy = u.top_ruler(dest_loc['LI']['hl'][0],data)
-                                                    a = ''
-                                                    b = ''
-                                                    try:
-                                                        top_dog = data[top_guy]
-                                                        a = top_dog['na'][0]
-                                                        b = anchor(to_oid(top_guy))
-                                                        outf.write('<br>Ruled by {} [{}]'.format(a, b))
-                                                    except KeyError:
-                                                        pass
-                                    except KeyError:
-                                        pass
-                                    outf.write('</p>\n')
-                    except KeyError:
-                        pass
+    if 'LI' in v and 'hl' in v['LI']:
+        here_list = v['LI']['hl']
+        if len(here_list) > 0:
+            for loc in here_list:
+                try:
+                    charac = data[loc]
+                    if 'MI' in charac and 'gc' in charac['MI']:
+                        if charac['MI']['gc'][0] != '0':
+                            dest_loc = data[charac['MI']['gc'][0]]
+                            dest_loc2 = data[dest_loc['LI']['wh'][0]]
+                            outf.write('<p>Province controlled by ')
+                            dest_name = dest_loc['na'][0]
+                            dest_id = anchor(to_oid(u.return_unitid(dest_loc)))
+                            dest_type = u.return_type(dest_loc)
+                            outf.write('{} [{}], {}'.format(dest_name, dest_id, dest_type))
+                            dest_type2 = u.return_type(dest_loc2)
+                            if dest_type2 != 'city':
+                                dest_name2 = dest_loc2['na'][0]
+                                dest_id2 = anchor(to_oid(u.return_unitid(dest_loc2)))
+                                outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
+                            else:
+                                dest_loc2 = data[dest_loc2['LI']['wh'][0]]
+                                dest_name2 = dest_loc2['na'][0]
+                                dest_id2 = anchor(to_oid(u.return_unitid(dest_loc2)))
+                                outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
+                            try:
+                                garrison = data[dest_loc2['LI']['hl'][0]]
+                                garr_type = u.return_type(garrison)
+                                if garr_type == 'garrison':
+                                    # calculate top of pledge chain
+                                    if 'LI' in dest_loc and 'hl' in dest_loc['LI']:
+                                        top_guy = u.top_ruler(dest_loc['LI']['hl'][0], data)
+                                        try:
+                                            top_dog = data[top_guy]
+                                            a = top_dog['na'][0]
+                                            b = anchor(to_oid(top_guy))
+                                            outf.write('<br>Ruled by {} [{}]'.format(a, b))
+                                        except KeyError:
+                                            pass
+                            except KeyError:
+                                pass
+                            outf.write('</p>\n')
+                except KeyError:
+                    pass
 
 
 def write_province_destination(loc, dest_loc, direction, data, outf):
-    if (u.is_port_city(dest_loc, data) or
-        u.province_has_port_city(dest_loc, data) != '0') and \
-        u.return_type(loc) == 'ocean':
-        if u.is_port_city(dest_loc, data) == False:
+    if (u.is_port_city(dest_loc, data) or u.province_has_port_city(dest_loc, data) != '0') \
+            and u.return_type(loc) == 'ocean':
+        if not u.is_port_city(dest_loc, data):
             dest_loc = data[u.province_has_port_city(dest_loc, data)]
         dest_loc_host = data[dest_loc['LI']['wh'][0]]
         outf.write('<li>{}, port city, to {} [{}]'
@@ -134,9 +123,8 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
         barrier = '0'
-        if 'LO' in dest_loc:
-            if 'ba' in dest_loc['LO']:
-                barrier = dest_loc['LO']['ba'][0]
+        if 'LO' in dest_loc and 'ba' in dest_loc['LO']:
+            barrier = dest_loc['LO']['ba'][0]
         if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         else:
@@ -153,9 +141,8 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
         barrier = '0'
-        if 'LO' in dest_loc_host:
-            if 'ba' in dest_loc_host['LO']:
-                barrier = dest_loc_host['LO']['ba'][0]
+        if 'LO' in dest_loc_host and 'ba' in dest_loc_host['LO']:
+            barrier = dest_loc_host['LO']['ba'][0]
         if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         else:
@@ -173,9 +160,8 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             region_rec = data[u.region(region_key, data)]
             outf.write(', {}'.format(region_rec['na'][0]))
         barrier = '0'
-        if 'LO' in dest_loc:
-            if 'ba' in dest_loc['LO']:
-                barrier = dest_loc['LO']['ba'][0]
+        if 'LO' in dest_loc and 'ba' in dest_loc['LO']:
+            barrier = dest_loc['LO']['ba'][0]
         if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
         elif u.return_type(loc) == 'ocean' and u.return_type(dest_loc) == 'mountain':
@@ -205,10 +191,9 @@ def write_province_destinations(v, data, outf):
 
 def write_loc_routes_out(v, data, outf):
     if u.return_type(v) != 'city':
-        if 'LO' in v:
-            if 'pd' in v['LO']:
-                if len(v['LO']['pd']) > 0:
-                    write_province_destinations(v, data, outf)
+        if 'LO' in v and 'pd' in v['LO']:
+            if len(v['LO']['pd']) > 0:
+                write_province_destinations(v, data, outf)
     else:
         outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
         outf.write('<ul>\n')
@@ -288,17 +273,15 @@ def write_structure_basic_info(v, outf):
 
 
 def write_loc_skills_report(v, data, outf):
-    if 'SL' in v:
-        if 'te' in v['SL']:
-            skills_list = v['SL']['te']
-            if len(skills_list) > 0:
-                outf.write('<H4> Skills taught here:</H4>\n')
-                outf.write('<ul>\n')
-                for skill in skills_list:
-                    outf.write('<li>{} [{}]</li>\n'
-                                .format(data[skill]['na'][0],
-                                        anchor(to_oid(skill))))
-                outf.write('</ul>\n')
+    if 'SL' in v and 'te' in v['SL']:
+        skills_list = v['SL']['te']
+        if len(skills_list) > 0:
+            outf.write('<H4> Skills taught here:</H4>\n')
+            outf.write('<ul>\n')
+            for skill in skills_list:
+                outf.write('<li>{} [{}]</li>\n'.format(data[skill]['na'][0],
+                                                       anchor(to_oid(skill))))
+            outf.write('</ul>\n')
 
 
 def write_loc_market_report(v, k, data, outf, trade_chain):
@@ -319,11 +302,8 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                                         trade_list[(trade * 8) + 2],
                                         trade_list[(trade * 8) + 3]])
         # character trades - needs to be recursive
-        if 'LI' in v:
-            if 'hl' in v['LI']:
-                seen_here_list = v['LI']['hl']
-            else:
-                seen_here_list = []
+        if 'LI' in v and 'hl' in v['LI']:
+            seen_here_list = v['LI']['hl']
         else:
             seen_here_list = []
         list_length = len(seen_here_list)
@@ -348,7 +328,8 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
         outf.write('<H4>Market Report:</H4>\n')
         outf.write('<table border="1" cellpadding="5">\n')
         outf.write('<tr>')
-        outf.write('<th>trade</th><th>who</th><th>price</th><th>qty</th><th>wt/ea</th><th>item</th><th>recip who</th><th>recip price</th><th>recip qty</th>\n')
+        outf.write('<th>trade</th><th>who</th><th>price</th><th>qty</th><th>wt/ea</th><th>item</th>'
+                   '<th>recip who</th><th>recip price</th><th>recip qty</th>\n')
         outf.write('</tr>\n')
         for trade in sorted_list:
             if trade[0] in {'1', '2'}:
@@ -361,6 +342,7 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                 trade_recip = trade_chain[trade[1]]
                 recip_name = ''
                 recip_loc = '0'
+                recip_rec = ''
                 if len(trade_recip) > 0:
                     for recip in trade_recip:
                         if recip[0] != k:
@@ -383,7 +365,7 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                     recip_iterations = int(len(recip_trade_list) / 8)
                     for recip in range(0, recip_iterations):
                         if recip_trade_list[(recip * 8) + 1] == trade[1]:
-                            if recip_trade_list[(recip * 8) + 0] in {'1','2'}:
+                            if recip_trade_list[(recip * 8) + 0] in {'1', '2'}:
                                 recip_qty = recip_trade_list[(recip * 8) + 2]
                                 recip_price = recip_trade_list[(recip * 8) + 3]
                                 outf.write('<td>{}</td>\n'.format(recip_price))
@@ -475,69 +457,63 @@ def write_characters(v, k, data, outf):
 def write_sub_locs(loc, sub_loc, k, data, outf):
     outf.write('<li>')
     outf.write('{} [{}], {}'.format(sub_loc['na'][0],
-                                      anchor(to_oid(k)),
-                                      u.return_type(sub_loc)))
-    if 'LO' in sub_loc:
-        if 'hi' in sub_loc['LO']:
-            outf.write(', hidden')
+                                    anchor(to_oid(k)),
+                                    u.return_type(sub_loc)))
+    if 'LO' in sub_loc and 'hi' in sub_loc['LO']:
+        outf.write(', hidden')
     out_distance = u.calc_exit_distance(loc, sub_loc)
     if out_distance > 0:
         outf.write(', {} {}'.format(out_distance,
                                     'day' if out_distance == 1 else 'days'))
-    if 'SL' in sub_loc:
-        if 'de' in sub_loc['SL']:
-            outf.write(', defense {}'.format(sub_loc['SL']['de'][0]))
+    if 'SL' in sub_loc and 'de' in sub_loc['SL']:
+        outf.write(', defense {}'.format(sub_loc['SL']['de'][0]))
     if 'castle' in u.return_type(sub_loc):
         if 'SL' in sub_loc:
             if 'cl' in sub_loc['SL']:
                 if sub_loc['SL']['cl'][0] != '0':
                     outf.write(', level {}'.format(sub_loc['SL']['cl'][0]))
     if 'mine' in u.return_type(sub_loc):
-        if 'SL' in sub_loc:
-            if 'sd' in sub_loc['SL']:
-                if sub_loc['SL']['sd'][0] != '0':
-                    outf.write(', level {}'.format(int(sub_loc['SL']['sd'][0]) / 3))
+        if 'SL' in sub_loc and 'sd' in sub_loc['SL']:
+            if sub_loc['SL']['sd'][0] != '0':
+                outf.write(', level {}'.format(int(sub_loc['SL']['sd'][0]) / 3))
     if 'SL' in sub_loc:
         if 'eg' and 'er' in sub_loc['SL']:
             effort_given = int(sub_loc['SL']['eg'][0])
             effort_required = int(sub_loc['SL']['er'][0])
             pct_complete = int(float(effort_given / effort_required)*100)
             outf.write(', {}% completed'.format(pct_complete))
-    if 'SL' in sub_loc:
-        if 'da' in sub_loc['SL']:
-            outf.write(', {}% damaged'.format(sub_loc['SL']['da'][0]))
-    if 'LI' in sub_loc:
-        if 'hl' in sub_loc['LI']:
-            sub_here_list = sub_loc['LI']['hl']
-            if len(sub_here_list) > 0:
-                first_here = data[sub_here_list[0]]
-                if u.return_kind(first_here) == 'char':
-                    outf.write(', owner:')
+    if 'SL' in sub_loc and 'da' in sub_loc['SL']:
+        outf.write(', {}% damaged'.format(sub_loc['SL']['da'][0]))
+    if 'LI' in sub_loc and 'hl' in sub_loc['LI']:
+        sub_here_list = sub_loc['LI']['hl']
+        if len(sub_here_list) > 0:
+            first_here = data[sub_here_list[0]]
+            if u.return_kind(first_here) == 'char':
+                outf.write(', owner:')
     outf.write('</li>\n')
     # see if stuff stacked under it
-    if 'LI' in sub_loc:
-        if 'hl' in sub_loc['LI']:
-            sub_here_list = sub_loc['LI']['hl']
-            if len(sub_here_list) > 0:
-                outf.write('<ul>\n')
-                for sub_hl in sub_here_list:
-                    sub_sub_here = data[sub_hl]
-                    if u.return_kind(sub_sub_here) == 'loc':
-                        write_sub_locs(sub_loc,
-                                       sub_sub_here,
-                                       sub_hl,
-                                       data,
-                                       outf)
-                    elif u.return_kind(sub_sub_here) == 'char':
-                        write_characters(sub_sub_here,
-                                         u.return_unitid(sub_sub_here),
-                                         data, outf)
-                    elif u.return_kind(sub_sub_here) == 'ship':
-                        write_ships(sub_sub_here,
-                                    u.return_unitid(sub_sub_here),
-                                    data,
-                                    outf)
-                outf.write('</ul>\n')
+    if 'LI' in sub_loc and 'hl' in sub_loc['LI']:
+        sub_here_list = sub_loc['LI']['hl']
+        if len(sub_here_list) > 0:
+            outf.write('<ul>\n')
+            for sub_hl in sub_here_list:
+                sub_sub_here = data[sub_hl]
+                if u.return_kind(sub_sub_here) == 'loc':
+                    write_sub_locs(sub_loc,
+                                   sub_sub_here,
+                                   sub_hl,
+                                   data,
+                                   outf)
+                elif u.return_kind(sub_sub_here) == 'char':
+                    write_characters(sub_sub_here,
+                                     u.return_unitid(sub_sub_here),
+                                     data, outf)
+                elif u.return_kind(sub_sub_here) == 'ship':
+                    write_ships(sub_sub_here,
+                                u.return_unitid(sub_sub_here),
+                                data,
+                                outf)
+            outf.write('</ul>\n')
 
 
 def write_ships(v, k, data, outf):
@@ -553,8 +529,8 @@ def write_ships(v, k, data, outf):
             else:
                 name = u.return_type(storm)
             outf.write(', {} [{}] (strength: {})'.format(name,
-                                                       anchor(to_oid(v['SL']['bs'][0])),
-                                                       storm['MI']['ss'][0]))
+                                                         anchor(to_oid(v['SL']['bs'][0])),
+                                                         storm['MI']['ss'][0]))
     if 'SL' in v:
         if 'de' in v['SL']:
             outf.write(', defense {}'.format(v['SL']['de'][0]))
@@ -568,29 +544,27 @@ def write_ships(v, k, data, outf):
     pct_load = ship.calc_pct_loaded(data, k, v)
     if pct_load > 0:
         outf.write(', {}% loaded'.format(pct_load))
-    if 'LI' in v:
-        if 'hl' in v['LI']:
-            sub_here_list = v['LI']['hl']
-            if len(sub_here_list) > 0:
-                first_here = data[sub_here_list[0]]
-                if u.return_kind(first_here) == 'char':
-                    outf.write(', owner:')
+    if 'LI' in v and 'hl' in v['LI']:
+        sub_here_list = v['LI']['hl']
+        if len(sub_here_list) > 0:
+            first_here = data[sub_here_list[0]]
+            if u.return_kind(first_here) == 'char':
+                outf.write(', owner:')
     outf.write('</li>\n')
     # see if stuff stacked under it
-    if 'LI' in v:
-        if 'hl' in v['LI']:
-            sub_here_list = v['LI']['hl']
-            if len(sub_here_list) > 0:
-                outf.write('<ul>\n')
-                for sub_hl in sub_here_list:
-                    sub_sub_here = data[sub_hl]
-                    if u.return_kind(sub_sub_here) == 'loc':
-                        write_sub_locs(v, sub_sub_here, sub_hl, data, outf)
-                    elif u.return_kind(sub_sub_here) == 'char':
-                        write_characters(sub_sub_here,
-                                         u.return_unitid(sub_sub_here),
-                                         data, outf)
-                outf.write('</ul>\n')
+    if 'LI' in v and 'hl' in v['LI']:
+        sub_here_list = v['LI']['hl']
+        if len(sub_here_list) > 0:
+            outf.write('<ul>\n')
+            for sub_hl in sub_here_list:
+                sub_sub_here = data[sub_hl]
+                if u.return_kind(sub_sub_here) == 'loc':
+                    write_sub_locs(v, sub_sub_here, sub_hl, data, outf)
+                elif u.return_kind(sub_sub_here) == 'char':
+                    write_characters(sub_sub_here,
+                                     u.return_unitid(sub_sub_here),
+                                     data, outf)
+            outf.write('</ul>\n')
 
 
 def write_storms(v, k, outf):
@@ -602,9 +576,8 @@ def write_storms(v, k, outf):
     outf.write('{} [{}], {}'.format(name,
                                     anchor(to_oid(k)),
                                     u.return_type(v)))
-    if 'MI' in v:
-        if 'ss' in v['MI']:
-            outf.write(' (strength: {})'.format(v['MI']['ss'][0]))
+    if 'MI' in v and 'ss' in v['MI']:
+        outf.write(' (strength: {})'.format(v['MI']['ss'][0]))
     outf.write('</li>\n')
 
 
@@ -679,23 +652,21 @@ def write_here_list(v, data, outf):
 
 
 def write_hidden_access(v, k, data, outf, hidden_chain):
-    if 'LO' in v:
-        if 'hi' in v['LO']:
-            if v['LO']['hi'][0] == '1' or \
-                    u.region(k, data) in {'faery', 'hades'}:
-                # PL/kn
-                try:
-                    hidden_list = hidden_chain[k]
-                    if len(hidden_list) > 0:
-                        outf.write('Hidden location known by:</H4>\n')
-                        outf.write('<ul>\n')
-                        for hidden in hidden_list:
-                            hidden_rec = data[hidden]
-                            outf.write('<li>{} [{}]</td></li>\n'.format(hidden_rec['na'][0],
-                                                                        anchor(to_oid(hidden))))
-                        outf.write('</ul>\n')
-                finally:
-                    pass
+    if 'LO' in v and 'hi' in v['LO']:
+        if v['LO']['hi'][0] == '1' or u.region(k, data) in {'faery', 'hades'}:
+            # PL/kn
+            try:
+                hidden_list = hidden_chain[k]
+                if len(hidden_list) > 0:
+                    outf.write('Hidden location known by:</H4>\n')
+                    outf.write('<ul>\n')
+                    for hidden in hidden_list:
+                        hidden_rec = data[hidden]
+                        outf.write('<li>{} [{}]</td></li>\n'.format(hidden_rec['na'][0],
+                                                                    anchor(to_oid(hidden))))
+                    outf.write('</ul>\n')
+            finally:
+                pass
 
 
 def write_garrisons(v, k, data, outf, garrisons_chain):
@@ -747,15 +718,15 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
 
 
 def write_loc_map_anchor(v, k, data, outf):
-    if int(k) >= 10000 and int(k) < 18000:
+    if 10000 <= int(k) < 18000:
         x_coord = int(10 * math.floor((int(k) % 100) / 10))
         if x_coord >= 70:
             x_coord = 60
         y_coord = int(1000 * math.floor(int(k) / 1000))
         if y_coord >= 17000:
             y_coord = 16000
-        outf.write('<p>{}</p>\n'.format(anchor2('main_map_leaf_'+ to_oid(y_coord + x_coord), 'Return to map')))
-    elif (int(k) >= 56760 and int(k) < 57860) or (int(k) >= 59000 and int(k) < 79000):
+        outf.write('<p>{}</p>\n'.format(anchor2('main_map_leaf_' + to_oid(y_coord + x_coord), 'Return to map')))
+    elif (56760 <= int(k) < 57860) or (59000 <= int(k) < 79000):
         # determine host province
         if u.return_type(v) in details.province_kinds:
             p = k
