@@ -16,7 +16,8 @@ def ship_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Ship Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
-    outf.write('<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th><th>Load</th><th>Storm (Strength)</th></tr>\n')
+    outf.write('<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th>'
+               '<th>Load</th><th>Storm (Strength)</th></tr>\n')
     for unit in data:
         if u.is_ship(data, unit):
             ship_rec = data[unit]
@@ -25,32 +26,25 @@ def ship_report(data, outdir):
                                                  anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(u.return_type(ship_rec)))
             captain = '&nbsp;'
-            if 'LI' in ship_rec:
-                if 'hl' in ship_rec['LI']:
-                    here_list = ship_rec['LI']['hl']
-                    for here in here_list:
-                        if u.is_char(data, here):
-                            here_rec = data[here]
-                            captain = here_rec['na'][0] + ' [' + anchor(to_oid(here)) + ']'
+            if 'LI' in ship_rec and 'hl' in ship_rec['LI']:
+                here_list = ship_rec['LI']['hl']
+                for here in here_list:
+                    if u.is_char(data, here):
+                        here_rec = data[here]
+                        captain = here_rec['na'][0] + ' [' + anchor(to_oid(here)) + ']'
             outf.write('<td>{}</td>'.format(captain))
             location = '&nbsp;'
-            if 'LI' in ship_rec:
-                if 'wh' in ship_rec['LI']:
-                    where_rec = data[ship_rec['LI']['wh'][0]]
-                    location = where_rec['na'][0] + ' [' + anchor(to_oid(u.return_unitid(where_rec))) + ']'
+            if 'LI' in ship_rec and 'wh' in ship_rec['LI']:
+                where_rec = data[ship_rec['LI']['wh'][0]]
+                location = where_rec['na'][0] + ' [' + anchor(to_oid(u.return_unitid(where_rec))) + ']'
             outf.write('<td>{}</td>'.format(location))
-            if 'SL' in ship_rec:
-                if 'da' in ship_rec['SL']:
-                    outf.write('<td>{}%</td>'.format(ship_rec['SL']['da'][0]))
-                else:
-                    outf.write('<td>0%</td>')
+            if 'SL' in ship_rec and 'da' in ship_rec['SL']:
+                outf.write('<td>{}%</td>'.format(ship_rec['SL']['da'][0]))
+                damaged = int(ship_rec['SL']['da'][0])
             else:
                 outf.write('<td>0%</td>')
-            total_weight = 0
-            try:
-                damaged = int(ship_rec['SL']['da'][0])
-            except KeyError:
                 damaged = 0
+            total_weight = 0
             seen_here_list = []
             level = 0
             seen_here_list = u.chase_structure(unit, data, level, seen_here_list)
@@ -64,10 +58,9 @@ def ship_report(data, outdir):
                             if 'ni' in char['CH']:
                                 unit_type = char['CH']['ni'][0]
                         base_unit = data[unit_type]
-                        if 'IT' in base_unit:
-                            if 'wt' in base_unit['IT']:
-                                item_weight = int(base_unit['IT']['wt'][0]) * 1
-                                total_weight = total_weight + item_weight
+                        if 'IT' in base_unit and 'wt' in base_unit['IT']:
+                            item_weight = int(base_unit['IT']['wt'][0]) * 1
+                            total_weight = total_weight + item_weight
                         if 'il' in char:
                             item_list = char['il']
                             iterations = int(len(item_list) / 2)
@@ -87,7 +80,9 @@ def ship_report(data, outdir):
             if 'SL' in ship_rec:
                 if 'bs' in ship_rec['SL']:
                     storm_rec = data[ship_rec['SL']['bs'][0]]
-                    storm = u.return_type(storm_rec) + ' [' + anchor(to_oid(u.return_unitid(storm_rec))) + '] (' + storm_rec['MI']['ss'][0] + ')'
+                    storm = u.return_type(storm_rec) + ' [' \
+                            + anchor(to_oid(u.return_unitid(storm_rec))) \
+                            + '] (' + storm_rec['MI']['ss'][0] + ')'
             outf.write('<td>{}</td>'.format(storm))
             outf.write('</tr>\n')
     outf.write('</table>\n')
@@ -105,7 +100,9 @@ def item_report(data, trade_chain, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Item Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse">\n')
-    outf.write('<tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th><th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th><th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>\n')
+    outf.write('<tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th>'
+               '<th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th>'
+               '<th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>\n')
     for unit in data:
         if u.is_item(data, unit):
             item_rec = data[unit]
@@ -113,43 +110,36 @@ def item_report(data, trade_chain, outdir):
             outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
                                                  anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(u.return_type(item_rec)))
-            weight = ''
             if 'IT' in item_rec:
+                weight = ''
                 if 'wt' in item_rec['IT']:
                     weight = item_rec['IT']['wt'][0]
-            outf.write('<td>{}</td>'.format(weight))
-            man_item = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(weight))
+                man_item = ''
                 if 'mu' in item_rec['IT']:
                     man_item = item_rec['IT']['mu'][0]
-            outf.write('<td>{}</td>'.format(man_item))
-            prominent = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(man_item))
+                prominent = ''
                 if 'pr' in item_rec['IT']:
                     prominent = item_rec['IT']['pr'][0]
-            outf.write('<td>{}</td>'.format(prominent))
-            animal = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(prominent))
+                animal = ''
                 if 'an' in item_rec['IT']:
                     animal = item_rec['IT']['an'][0]
-            outf.write('<td>{}</td>'.format(animal))
-            land_cap = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(animal))
+                land_cap = ''
                 if 'lc' in item_rec['IT']:
                     land_cap = item_rec['IT']['lc'][0]
-            outf.write('<td>{}</td>'.format(land_cap))
-            ride_cap = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(land_cap))
+                ride_cap = ''
                 if 'rc' in item_rec['IT']:
                     ride_cap = item_rec['IT']['rc'][0]
-            outf.write('<td>{}</td>'.format(ride_cap))
-            fly_cap = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(ride_cap))
+                fly_cap = ''
                 if 'fc' in item_rec['IT']:
                     fly_cap = item_rec['IT']['fc'][0]
-            outf.write('<td>{}</td>'.format(fly_cap))
-            who_has = ''
-            if 'IT' in item_rec:
+                outf.write('<td>{}</td>'.format(fly_cap))
+                who_has = ''
                 if 'un' in item_rec['IT']:
                     who_has = item_rec['IT']['un'][0]
                     who_rec = data[who_has]
@@ -158,7 +148,9 @@ def item_report(data, trade_chain, outdir):
                     else:
                         name = u.return_type(who_rec).capitalize()
                     who_has = name + ' [' + anchor(to_oid(who_has)) + ']'
-            outf.write('<td>{}</td>'.format(who_has))
+                outf.write('<td>{}</td>'.format(who_has))
+            else:
+                outf.write('<td>&nbsp;</td>'*8)
             outf.write('<td>{}</td>'.format(u.determine_item_use(item_rec, data, trade_chain)))
         outf.write('</tr>\n')
     outf.write('</table>\n')
@@ -186,9 +178,8 @@ def player_report(data, outdir):
             outf.write('<td>{}</td>'.format(player_rec['na'][0]))
             outf.write('<td>{}</td>'.format(u.return_type(player_rec)))
             count = '0'
-            if 'PL' in player_rec:
-                if 'un' in player_rec['PL']:
-                    count = len(player_rec['PL']['un'])
+            if 'PL' in player_rec and 'un' in player_rec['PL']:
+                count = len(player_rec['PL']['un'])
             outf.write('<td>{}</td>'.format(count))
             outf.write('</tr>\n')
     outf.write('</table>\n')
@@ -210,29 +201,25 @@ def healing_potion_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             itemz = data[unit]
-            if 'IM' in itemz:
-                if 'uk' in itemz['IM']:
-                    if itemz['IM']['uk'][0] == '2':
-                        outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
-                        if 'IT' in itemz:
-                            if 'un' in itemz['IT']:
-                                unit = data[itemz['IT']['un'][0]]
-                                if u.return_kind(unit) == 'char':
-                                    charac = data[itemz['IT']['un'][0]]
-                                    outf.write('<td>{} [{}]</td><td>&nbsp;</td>'.format(charac['na'][0],
-                                                                                        anchor(to_oid(itemz['IT']['un'][0]))))
-                                elif u.return_kind(unit) == 'loc':
-                                    loc = data[itemz['IT']['un'][0]]
-                                    outf.write('<td>&nbsp;</td><td>{} [{}]</td>'.format(loc['na'][0],
-                                                                                        anchor(to_oid(itemz['IT']['un'][0]))))
-                                else:
-                                    outf.write('<td>unknown</td><td>unknown</td>')
-                            else:
-                                outf.write('<td>unknown</td><td>unknown</td>')
+            if 'IM' in itemz and 'uk' in itemz['IM']:
+                if itemz['IM']['uk'][0] == '2':
+                    outf.write('<tr>')
+                    outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
+                    if 'IT' in itemz and 'un' in itemz['IT']:
+                        unit = data[itemz['IT']['un'][0]]
+                        if u.return_kind(unit) == 'char':
+                            charac = data[itemz['IT']['un'][0]]
+                            outf.write('<td>{} [{}]</td><td>&nbsp;</td>'.format(charac['na'][0],
+                                                                                anchor(to_oid(itemz['IT']['un'][0]))))
+                        elif u.return_kind(unit) == 'loc':
+                            loc = data[itemz['IT']['un'][0]]
+                            outf.write('<td>&nbsp;</td><td>{} [{}]</td>'.format(loc['na'][0],
+                                                                                anchor(to_oid(itemz['IT']['un'][0]))))
                         else:
                             outf.write('<td>unknown</td><td>unknown</td>')
-                        outf.write('</tr>\n')
+                    else:
+                        outf.write('<td>unknown</td><td>unknown</td>')
+                    outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
@@ -252,21 +239,20 @@ def orb_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             itemz = data[unit]
-            if 'IM' in itemz:
-                if 'uk' in itemz['IM']:
-                    if itemz['IM']['uk'][0] == '9':
-                        outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
-                        if 'IT' in itemz:
-                            if 'un' in itemz['IT']:
-                                charac = data[itemz['IT']['un'][0]]
-                                outf.write('<td>{} [{}]</td>'.format(charac['na'][0],
-                                                                    anchor(to_oid(itemz['IT']['un'][0]))))
-                            else:
-                                outf.write('<td>unknown</td>')
+            if 'IM' in itemz and 'uk' in itemz['IM']:
+                if itemz['IM']['uk'][0] == '9':
+                    outf.write('<tr>')
+                    outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
+                    if 'IT' in itemz:
+                        if 'un' in itemz['IT']:
+                            charac = data[itemz['IT']['un'][0]]
+                            outf.write('<td>{} [{}]</td>'.format(charac['na'][0],
+                                                                 anchor(to_oid(itemz['IT']['un'][0]))))
                         else:
-                            outf.write('<td>unknown</td><')
-                        outf.write('</tr>\n')
+                            outf.write('<td>unknown</td>')
+                    else:
+                        outf.write('<td>unknown</td><')
+                    outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
@@ -286,34 +272,27 @@ def projected_cast_potion_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             itemz = data[unit]
-            if 'IM' in itemz:
-                if 'uk' in itemz['IM']:
-                    if itemz['IM']['uk'][0] == '5':
-                        outf.write('<tr>')
-                        outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
-                        if 'IT' in itemz:
-                            if 'un' in itemz['IT']:
-                                charac = data[itemz['IT']['un'][0]]
-                                outf.write('<td>{} [{}]</td>'.format(charac['na'][0],
-                                                                    anchor(to_oid(itemz['IT']['un'][0]))))
-                            else:
-                                outf.write('<td>unknown</td>')
-                        else:
-                            outf.write('<td>unknown</td><')
-                        if 'IM' in itemz:
-                            if 'pc' in itemz['IM']:
-                                try:
-                                    loc = data[itemz['IM']['pc'][0]]
-                                    outf.write('<td>{} {} [{}]</td>'.format(u.return_kind(loc),
-                                                                            loc['na'][0],
-                                                                            anchor(to_oid(itemz['IM']['pc'][0]))))
-                                except KeyError:
-                                    outf.write('<td>unknown {}</td>'.format(itemz['IM']['pc'][0]))
-                            else:
-                                outf.write('<td>unknown</td>')
-                        else:
-                            outf.write('<td>unknown</td><')
-                        outf.write('</tr>\n')
+            if 'IM' in itemz and 'uk' in itemz['IM']:
+                if itemz['IM']['uk'][0] == '5':
+                    outf.write('<tr>')
+                    outf.write('<td>{} [{}]</td>'.format(itemz['na'][0], anchor(to_oid(unit))))
+                    if 'IT' in itemz and 'un' in itemz['IT']:
+                        charac = data[itemz['IT']['un'][0]]
+                        outf.write('<td>{} [{}]</td>'.format(charac['na'][0],
+                                                             anchor(to_oid(itemz['IT']['un'][0]))))
+                    else:
+                        outf.write('<td>unknown</td><')
+                    if 'IM' in itemz and 'pc' in itemz['IM']:
+                        try:
+                            loc = data[itemz['IM']['pc'][0]]
+                            outf.write('<td>{} {} [{}]</td>'.format(u.return_kind(loc),
+                                                                    loc['na'][0],
+                                                                    anchor(to_oid(itemz['IM']['pc'][0]))))
+                        except KeyError:
+                            outf.write('<td>unknown {}</td>'.format(itemz['IM']['pc'][0]))
+                    else:
+                        outf.write('<td>unknown</td><')
+                    outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
@@ -415,14 +394,16 @@ def trade_report(data, trade_chain, outdir):
                         buy_reg_literal = buy_reg_literal + '<br>'
                     buy_literal = buy_literal + loc['na'][0] + ' [' + anchor(to_oid(city[0])) + ']'
                     reg_rec = data[u.region(city[0], data)]
-                    buy_reg_literal = buy_reg_literal + reg_rec['na'][0] + ' [' + anchor(to_oid(u.region(city[0], data))) + ']'
+                    buy_reg_literal = buy_reg_literal + reg_rec['na'][0]
+                    buy_reg_literal = buy_reg_literal + ' [' + anchor(to_oid(u.region(city[0], data))) + ']'
                 else:
                     if len(sell_literal) > 0:
                         sell_literal = sell_literal + '<br>'
                         sell_reg_literal = sell_reg_literal + '<br>'
                     sell_literal = sell_literal + loc['na'][0] + ' [' + anchor(to_oid(city[0])) + ']'
                     reg_rec = data[u.region(city[0], data)]
-                    sell_reg_literal = sell_reg_literal + reg_rec['na'][0] + ' [' + anchor(to_oid(u.region(city[0], data))) + ']'
+                    sell_reg_literal = sell_reg_literal + reg_rec['na'][0] + ' ['
+                    sell_reg_literal = sell_reg_literal + anchor(to_oid(u.region(city[0], data))) + ']'
             outf.write('<tr>')
             outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
                                                  anchor(to_oid(unit))))
