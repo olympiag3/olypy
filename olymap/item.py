@@ -64,11 +64,10 @@ def write_item_basic_info(v, k, data, outf, trade_chain):
             charac = data[v['IT']['un'][0]]
             outf.write('<tr><td>Who Has:</td><td>{} [{}]</td></tr>\n'.format(charac['na'][0],
                                                                              anchor(to_oid(v['IT']['un'][0]))))
-    if 'PL' in v:
-        if 'un' in v['PL']:
-            charac = data[v['PL']['un'][0]]
-            outf.write('<tr><td>Dead Body Of:</td><td>{} [{}]</td></tr>\n'.format(charac['na'][0],
-                                                                                  v['PL']['un'][0]))
+    if 'PL' in v and 'un' in v['PL']:
+        charac = data[v['PL']['un'][0]]
+        outf.write('<tr><td>Dead Body Of:</td><td>{} [{}]</td></tr>\n'.format(charac['na'][0],
+                                                                              v['PL']['un'][0]))
     if u.return_type(v) == 'tradegood':
         trade_list = trade_chain[k]
         if len(trade_list) > 0:
