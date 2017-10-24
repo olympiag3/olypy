@@ -142,7 +142,6 @@ def write_main_map_leaves(data, castle_chain, outdir):
         startingpoint = 10000 + (outery * 1000)
         for outerx in range (0, 7):
             currentpoint = startingpoint + (outerx * 10)
-            outf = open('main_map_leaf_' + u.to_oid(currentpoint) + '.html', 'w')
             outf = open(pathlib.Path(outdir).joinpath('main_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
             outf.write('<HTML>\n')
             outf.write('<HEAD>\n')

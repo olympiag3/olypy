@@ -13,18 +13,18 @@ from olymap.detail import use_key
 def return_type(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
-    _, _, type = firstline.split(' ', maxsplit=2)
-    return type
+    _, _, sub_loc = firstline.split(' ', maxsplit=2)
+    return sub_loc
 
 
 def return_short_type(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
-    _, _, type = firstline.split(' ', maxsplit=2)
+    _, _, sub_loc = firstline.split(' ', maxsplit=2)
     try:
-        short_type = long_type_to_display_type[type]
+        short_type = long_type_to_display_type[sub_loc]
     except KeyError:
-        short_type = type
+        short_type = sub_loc
     return short_type
 
 
@@ -65,36 +65,34 @@ def chase_structure(k, data, level, seen_here_list):
 
 def xlate_rank(k):
     rank = 'Undefined'
-    if 'CH' in k:
-        if 'ra' in k['CH']:
-            # could be a dict, but doing this for now because
-            # rank can be a range??
-            try:
-                rank = rank_num_string[k['CH']['ra'][0]]
-            except KeyError:
-                pass
+    if 'CH' in k and 'ra' in k['CH']:
+        # could be a dict, but doing this for now because
+        # rank can be a range??
+        try:
+            rank = rank_num_string[k['CH']['ra'][0]]
+        except KeyError:
+            pass
     return rank
 
 
 def xlate_loyalty(v):
     # translate loyalty
     loyalty = 'Undefined'
-    if 'CH' in v:
-        if 'lk' in v['CH']:
-            if v['CH']['lk'][0] == '0':
-                loyalty = 'Unsworn'
-            elif v['CH']['lk'][0] == '1' and 'lr' in v['CH']:
-                loyalty = 'Contract-' + v['CH']['lr'][0]
-            elif v['CH']['lk'][0] == '2' and 'lr' in v['CH']:
-                loyalty = 'Oath-' + v['CH']['lr'][0]
-            elif v['CH']['lk'][0] == '3' and 'lr' in v['CH']:
-                loyalty = 'Fear-' + v['CH']['lr'][0]
-            elif v['CH']['lk'][0] == '4':
-                loyalty = 'Npc'
-            elif v['CH']['lk'][0] == '5':
-                loyalty = 'Summon'
-            else:
-                loyalty = 'Undefined'
+    if 'CH' in v and 'lk' in v['CH']:
+        if v['CH']['lk'][0] == '0':
+            loyalty = 'Unsworn'
+        elif v['CH']['lk'][0] == '1' and 'lr' in v['CH']:
+            loyalty = 'Contract-' + v['CH']['lr'][0]
+        elif v['CH']['lk'][0] == '2' and 'lr' in v['CH']:
+            loyalty = 'Oath-' + v['CH']['lr'][0]
+        elif v['CH']['lk'][0] == '3' and 'lr' in v['CH']:
+            loyalty = 'Fear-' + v['CH']['lr'][0]
+        elif v['CH']['lk'][0] == '4':
+            loyalty = 'Npc'
+        elif v['CH']['lk'][0] == '5':
+            loyalty = 'Summon'
+        else:
+            loyalty = 'Undefined'
     return loyalty
 
 
@@ -330,11 +328,8 @@ def top_ruler(k, data):
             v = data[k]
         except KeyError:
             return top_dog
-        if 'CM' in v:
-            if 'pl' in v['CM']:
+        if 'CM' in v and 'pl' in v['CM']:
                 k = v['CM']['pl'][0]
-            else:
-                cont = False
         else:
             cont = False
     return top_dog
@@ -347,40 +342,40 @@ def calc_exit_distance(loc1, loc2):
         tmp = loc1
         loc1 = loc2
         loc2 = tmp
-    w_d = loc_depth(return_type(loc1))
-    d_d = loc_depth(return_type(loc2))
+    loc1_return_type = return_type(loc1)
+    loc2_return_type = return_type(loc2)
+    # w_d = loc_depth(loc1_return_type)
+    d_d = loc_depth(loc2_return_type)
     if d_d == 4:
         return 0
     if d_d == 3:
         return 1
-    if return_type(loc1) == 'ocean' and \
-        return_type(loc2) != 'ocean':
+    if loc1_return_type == 'ocean' and loc2_return_type != 'ocean':
         return 2
-    if return_type(loc1) != 'ocean' and \
-        return_type(loc2) == 'ocean':
+    if loc1_return_type != 'ocean' and loc2_return_type == 'ocean':
         return 2
     #
     # skipping province logic for now
     #
-    if return_type(loc2) == 'ocean':
+    if loc2_return_type == 'ocean':
         return 3
-    elif return_type(loc2) == 'mountain':
+    elif loc2_return_type == 'mountain':
         return 10
-    elif return_type(loc2) == 'forest':
+    elif loc2_return_type == 'forest':
         return 8
-    elif return_type(loc2) == 'swamp':
+    elif loc2_return_type == 'swamp':
         return 14
-    elif return_type(loc2) == 'desert':
+    elif loc2_return_type == 'desert':
         return 8
-    elif return_type(loc2) == 'plain':
+    elif loc2_return_type == 'plain':
         return 7
-    elif return_type(loc2) == 'underground':
+    elif loc2_return_type == 'underground':
         return 7
-    elif return_type(loc2) == 'cloud':
+    elif loc2_return_type == 'cloud':
         return 7
-    elif return_type(loc2) == 'tunnel':
+    elif loc2_return_type == 'tunnel':
         return 5
-    elif return_type(loc2) == 'chamber':
+    elif loc2_return_type == 'chamber':
         return 5
     return 0
 
@@ -401,16 +396,15 @@ def is_port_city(loc, data):
 
 
 def province_has_port_city(loc, data):
-    if 'LI' in loc:
-        if 'hl' in loc['LI']:
-            here_list = loc['LI']['hl']
-            for here in here_list:
-                try:
-                    here_loc = data[here]
-                    if is_port_city(here_loc, data):
-                        return here
-                except KeyError:
-                    pass
+    if 'LI' in loc and 'hl' in loc['LI']:
+        here_list = loc['LI']['hl']
+        for here in here_list:
+            try:
+                here_loc = data[here]
+                if is_port_city(here_loc, data):
+                    return here
+            except KeyError:
+                pass
     return '0'
 
 
@@ -428,30 +422,30 @@ def is_priest(v):
 
 
 def xlate_magetype(v):
-    if 'CM' in v:
-        if 'ma' in v['CM']:
-            if int(v['CM']['ma'][0]) <= 5:
-                return ''
-            elif int(v['CM']['ma'][0]) <= 10:
-                return 'conjurer'
-            elif int(v['CM']['ma'][0]) <= 15:
-                return 'mage'
-            elif int(v['CM']['ma'][0]) <= 20:
-                return 'wizard'
-            elif int(v['CM']['ma'][0]) <= 30:
-                return 'sorcerer'
-            elif int(v['CM']['ma'][0]) <= 40:
-                return '6th black circle'
-            elif int(v['CM']['ma'][0]) <= 50:
-                return '5th black circle'
-            elif int(v['CM']['ma'][0]) <= 60:
-                return '4th black circle'
-            elif int(v['CM']['ma'][0]) <= 70:
-                return '3rd black circle'
-            elif int(v['CM']['ma'][0]) <= 80:
-                return '2nd black circle'
-            else:
-                return 'master of the black arts'
+    if 'CM' in v and 'ma' in v['CM']:
+        mage_level = int(v['CM']['ma'][0])
+        if mage_level <= 5:
+            return ''
+        elif mage_level <= 10:
+            return 'conjurer'
+        elif mage_level <= 15:
+            return 'mage'
+        elif mage_level <= 20:
+            return 'wizard'
+        elif mage_level <= 30:
+            return 'sorcerer'
+        elif mage_level <= 40:
+            return '6th black circle'
+        elif mage_level <= 50:
+            return '5th black circle'
+        elif mage_level <= 60:
+            return '4th black circle'
+        elif mage_level <= 70:
+            return '3rd black circle'
+        elif mage_level <= 80:
+            return '2nd black circle'
+        else:
+            return 'master of the black arts'
     return ''
 
 
@@ -478,30 +472,26 @@ def xlate_use_key(k):
 def determine_item_use(v, data, trade_chain):
     ret = ''
     if return_type(v) == '0':
-        if 'IM' in v:
-            if 'uk' in v['IM']:
-                use_key = v['IM']['uk'][0]
-                ret = xlate_use_key(use_key)
-                if use_key == '5':
-                    ret = "projected cast: "
-                    if 'IM' in v:
-                        if 'pc' in v['IM']:
-                            try:
-                                itemz = v['IM']['pc'][0]
-                                itemz_rec = data[itemz]
-                                if 'na' in v:
-                                    name = v['na'][0]
-                                else:
-                                    name = return_type(itemz_rec).capitalize()
-                                ret = ret + return_kind(itemz_rec) +\
-                                      ' ' + name + ' [' +\
-                                    anchor(to_oid(itemz)) + ']'
-                            except KeyError:
-                                ret = ret + 'unknown target'
+        if 'IM' in v and 'uk' in v['IM']:
+            usekey = v['IM']['uk'][0]
+            # this handles all use keys and then '5' is a special case
+            ret = xlate_use_key(usekey)
+            if usekey == '5':
+                ret = "projected cast: "
+                if 'IM' in v and 'pc' in v['IM']:
+                    try:
+                        itemz = v['IM']['pc'][0]
+                        itemz_rec = data[itemz]
+                        if 'na' in v:
+                            name = v['na'][0]
                         else:
-                            ret = ret + 'unknown target'
-                    else:
+                            name = return_type(itemz_rec).capitalize()
+                        ret = ret + return_kind(itemz_rec) + ' ' + name + ' [' +\
+                            anchor(to_oid(itemz)) + ']'
+                    except KeyError:
                         ret = ret + 'unknown target'
+                else:
+                    ret = ret + 'unknown target'
     elif return_type(v) == 'artifact':
         if 'IM' in v:
             ret = ''
@@ -529,44 +519,32 @@ def determine_item_use(v, data, trade_chain):
         else:
             ret = 'unknown'
     elif return_type(v) == 'dead body':
-        if 'PL' in v:
-            if 'un' in v['PL']:
+        if 'PL' in v and 'un' in v['PL']:
                 charac = v['PL']['un'][0]
                 charac_rec = data[charac]
                 ret = charac_rec['na'][0] + ' [' + anchor(to_oid(charac)) + ']'
-            else:
-                ret = 'unknown dead guy'
         else:
             ret = 'unknown dead guy'
     elif return_type(v) == 'npc_token':
         ret = 'controls: '
-        if 'PL' in v:
-            if 'un' in v['PL']:
+        if 'PL' in v and 'un' in v['PL']:
                 charac = v['PL']['un'][0]
                 charac_rec = data[charac]
                 ret = ret + charac_rec['na'][0] + ' [' + anchor(to_oid(charac)) + ']'
-            else:
-                ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
     elif return_type(v) == 'auraculum':
         ret = 'aura: '
-        if 'IM' in v:
-            if 'au' in v['IM']:
+        if 'IM' in v and 'au' in v['IM']:
                 ret = ret + v['IM']['au'][0]
-            else:
-                ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
     elif return_type(v) == 'scroll':
         ret = 'study: '
-        if 'IM' in v:
-            if 'ms' in v['IM']:
+        if 'IM' in v and 'ms' in v['IM']:
                 skill = v['IM']['ms'][0]
                 skill_rec = data[skill]
                 ret = ret + skill_rec['na'][0] + ' [' + anchor(to_oid(skill)) + ']'
-            else:
-                ret = ret + 'unknown'
         else:
             ret = ret + 'unknown'
     elif return_type(v) == 'tradegood':
