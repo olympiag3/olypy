@@ -228,7 +228,7 @@ def write_main_map_leaves(data, castle_chain, outdir):
                             if loc_rec['LO']['lc'][0] != '0':
                                 outf.write('<b>')
                         outf.write('{}'.format(anchor(to_oid(cell))))
-                        if 'LO' in loc_rec and  'lc' in loc_rec['LO']:
+                        if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
                             if loc_rec['LO']['lc'][0] != '0':
                                 outf.write('</b>')
                         if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
