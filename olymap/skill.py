@@ -16,9 +16,9 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
     if 'SK' in v:
         if 'rs' in v['SK']:
             skill = data[v['SK']['rs'][0]]
-            outf.write('<tr><td>Skill Required:</td><td>{} [{}]</td></tr>\n'\
-                      .format(skill['na'][0],
-                              anchor(u.return_unitid(skill))))
+            outf.write('<tr><td>Skill Required:</td><td>{} [{}]'
+                       '</td></tr>\n'.format(skill['na'][0],
+                                             anchor(u.return_unitid(skill))))
         if 'tl' in v['SK']:
             outf.write('<tr><td>Time to Learn:</td><td>{}</td></tr>\n'.format(v['SK']['tl'][0]))
     char_list = skills_known_chain[k]
@@ -30,23 +30,20 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
             outf.write('<tr>')
             if (columns*0) + charac < len(char_list):
                 char_rec = data[char_list[(columns*0) + charac]]
-                outf.write('<td>{} [{}]</td>'
-                          .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(char_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             if (columns*1) + charac < len(char_list):
                 char_rec = data[char_list[(columns*1) + charac]]
-                outf.write('<td>{} [{}]</td>'
-                           .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(char_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             if (columns*2) + charac < len(char_list):
                 char_rec = data[char_list[(columns*2) + charac]]
-                outf.write('<td>{} [{}]</td>'
-                           .format(char_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(char_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(char_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(char_rec)))))
             else:
                 outf.write('<td></td><td></td>')
             outf.write('</tr>\n')
@@ -61,23 +58,20 @@ def write_skill_basic_info(v, k, data, outf, teaches_chain, child_skills_chain, 
             outf.write('<tr>')
             if (columns*0) + skill < len(child_list):
                 skill_rec = data[child_list[(columns*0) + skill]]
-                outf.write('<td>{} [{}]</td>'
-                           .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(skill_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td><')
             if (columns*1) + skill < len(child_list):
                 skill_rec = data[child_list[(columns*1) + skill]]
-                outf.write('<td>{} [{}]</td>'
-                           .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(skill_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td>')
             if (columns*2) + skill < len(child_list):
                 skill_rec = data[child_list[(columns*2) + skill]]
-                outf.write('<td>{} [{}]</td>'
-                           .format(skill_rec['na'][0],
-                                   anchor(to_oid(u.return_unitid(skill_rec)))))
+                outf.write('<td>{} [{}]</td>'.format(skill_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(skill_rec)))))
             else:
                 outf.write('<td></td>')
             outf.write('</tr>\n')
