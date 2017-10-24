@@ -48,14 +48,12 @@ def calc_pct_loaded(data, k, v):
             char = data[un[0]]
             if u.return_kind(char) == 'char':
                 unit_type = '10'
-                if 'CH' in char:
-                    if 'ni' in char['CH']:
-                        unit_type = char['CH']['ni'][0]
+                if 'CH' in char and 'ni' in char['CH']:
+                    unit_type = char['CH']['ni'][0]
                 base_unit = data[unit_type]
-                if 'IT' in base_unit:
-                    if 'wt' in base_unit['IT']:
-                        item_weight = int(base_unit['IT']['wt'][0]) * 1
-                        total_weight = total_weight + item_weight
+                if 'IT' in base_unit and 'wt' in base_unit['IT']:
+                    item_weight = int(base_unit['IT']['wt'][0]) * 1
+                    total_weight = total_weight + item_weight
                 if 'il' in char:
                     item_list = char['il']
                     iterations = int(len(item_list) / 2)
@@ -74,9 +72,9 @@ def calc_pct_loaded(data, k, v):
 
 
 def write_ship_defense(v, outf):
-    try:
+    if 'SL' in v and 'de' in v['SL']:
         defense = v['SL']['de'][0]
-    except KeyError:
+    else:
         defense = '0'
     outf.write('<tr>')
     outf.write('<td>Defense:</td>')
@@ -84,9 +82,9 @@ def write_ship_defense(v, outf):
 
 
 def write_ship_damaged(v, outf):
-    try:
+    if 'SL' in v and 'da' in v['SL']:
         damaged = v['SL']['da'][0]
-    except KeyError:
+    else:
         damaged = '0'
     outf.write('<tr>')
     outf.write('<td>Damaged:</td>')
@@ -94,9 +92,9 @@ def write_ship_damaged(v, outf):
 
 
 def write_ship_owner(v, data, outf):
-    try:
+    if 'LI' in v and 'hl' in v['LI']:
         units = v['LI']['hl']
-    except KeyError:
+    else:
         units = '???'
     if units != '???':
         char = data[units[0]]
@@ -129,9 +127,9 @@ def write_ship_seen_here(k, data, outf):
 
 
 def write_ship_bound_storm(v, data, outf):
-    try:
+    if 'SL' in v and 'bs' in v['SL']:
         bound_storm = v['SL']['bs'][0]
-    except KeyError:
+    else:
         bound_storm = '???'
     if bound_storm != '???':
         bound_storm_rec = data[bound_storm]
