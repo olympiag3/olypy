@@ -44,9 +44,11 @@ def write_box_pages(data, chains, outdir):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
-            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'], chains['trades'], outdir)
+            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
+                               chains['trades'], outdir)
         elif u.return_kind(v) == 'char':
-            char.write_char_html(v, k, data, chains['pledges'], chains['prisoners'], outdir)
+            char.write_char_html(v, k, data, chains['pledges'],
+                                 chains['prisoners'], outdir)
         elif u.return_kind(v) == 'player':
             player.write_player_html(v, k, data, outdir)
         elif u.return_kind(v) == 'item':
@@ -54,7 +56,9 @@ def write_box_pages(data, chains, outdir):
         elif u.return_kind(v) == 'ship':
             ship.write_ship_html(v, k, data, outdir)
         elif u.return_kind(v) == 'skill':
-            skill.write_skill_html(v, k, data, chains['teaches'], chains['child_skills'], chains['skills_knowns'], outdir)
+            skill.write_skill_html(v, k, data, chains['teaches'],
+                                   chains['child_skills'], chains['skills_knowns'],
+                                   outdir)
         elif u.return_kind(v) == 'storm':
             storm.write_storm_html(v, k, data, chains['storms'], outdir)
 
@@ -75,5 +79,9 @@ def write_reports(data, chains, outdir):
 def write_maps(data, chains, outdir):
     print('Writing Maps')
     maps.write_index(outdir)
-    maps.write_main_map(outdir)
-    maps.write_main_map_leaves(data, chains['castles'], outdir)
+    maps.write_top_map(outdir, 10000, 80, 80, 'main')
+    maps.write_top_map(outdir, 18000, 46, 46, 'faery')
+    maps.write_top_map(outdir, 24000, 50, 50, 'hades')
+    maps.write_map_leaves(data, chains['castles'], outdir, 10000, 80, 80, 'main')
+    maps.write_map_leaves(data, chains['castles'], outdir, 18000, 46, 46, 'faery')
+    maps.write_map_leaves(data, chains['castles'], outdir, 24000, 50, 50, 'hades')

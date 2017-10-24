@@ -21,8 +21,8 @@ def write_index(outdir):
     outf.write('<th>')
     outf.write('<ul>Maps<br>')
     outf.write('<li><a href="main_map.html">Main</a></li>')
-    outf.write('<li>Hades</li>')
-    outf.write('<li>Faery</li>')
+    outf.write('<li><a href="hades_map.html">Hades</a></li></li>')
+    outf.write('<li><a href="faery_map.html">Faery</a></li></li>')
     outf.write('</ul>')
     outf.write('</th>')
     outf.write('<th>')
@@ -76,85 +76,133 @@ def write_index(outdir):
     outf.close()
 
 
-def write_main_map(outdir):
-    outf = open(pathlib.Path(outdir).joinpath('main_map.html'), 'w')
+def write_top_map(outdir, upperleft, height, width, prefix):
+    outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
-    outf.write('<TITLE>Main Map</TITLE>\n')
+    outf.write('<TITLE>{} Map</TITLE>\n'.format(prefix.capitalize()))
     outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
-    outf.write('<h3>Olympia Main Map</h3>\n')
-    outf.write('<img height="320" width="320" src="main_thumbnail.gif" usemap="#oly"/>\n')
+    outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
+    outf.write('<img height="320" width="320" src="{}_thumbnail.gif" usemap="#oly"/>\n'.format(prefix))
     outf.write('<map name="oly" id="oly">\n')
-    outf.write('<area shape="rect" coords="0, 0, 60, 60" href="main_map_leaf_aa00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,0,100,60" href="main_map_leaf_aa10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,0,140,60" href="main_map_leaf_aa20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,0,180,60" href="main_map_leaf_aa30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,0,220,60" href="main_map_leaf_aa40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,0,260,60" href="main_map_leaf_aa50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,0,320,60" href="main_map_leaf_aa60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,60,60,100" href="main_map_leaf_an00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,60,100,100" href="main_map_leaf_an10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,60,140,100" href="main_map_leaf_an20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,60,180,100" href="main_map_leaf_an30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,60,220,100" href="main_map_leaf_an40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,60,260,100" href="main_map_leaf_an50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,60,320,100" href="main_map_leaf_an60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,100,60,140" href="main_map_leaf_ba00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,100,100,140" href="main_map_leaf_ba10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,100,140,140" href="main_map_leaf_ba20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,100,180,140" href="main_map_leaf_ba30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,100,220,140" href="main_map_leaf_ba40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,100,260,140" href="main_map_leaf_ba50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,100,320,140" href="main_map_leaf_ba60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,140,60,180" href="main_map_leaf_bn00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,140,100,180" href="main_map_leaf_bn10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,140,140,180" href="main_map_leaf_bn20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,140,180,180" href="main_map_leaf_bn30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,140,220,180" href="main_map_leaf_bn40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,140,260,180" href="main_map_leaf_bn50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,140,320,180" href="main_map_leaf_bn60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,180,60,220" href="main_map_leaf_ca00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,180,100,220" href="main_map_leaf_ca10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,180,140,220" href="main_map_leaf_ca20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,180,180,22" href="main_map_leaf_ca30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,180,220,220" href="main_map_leaf_ca40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,180,260,220" href="main_map_leaf_ca50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,180,320,220" href="main_map_leaf_ca60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,220,60,260" href="main_map_leaf_cn00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,220,100,260" href="main_map_leaf_cn10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,220,140,260" href="main_map_leaf_cn20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,220,180,260" href="main_map_leaf_cn30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,220,220,260" href="main_map_leaf_cn40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,220,260,260" href="main_map_leaf_cn50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,220,320,260" href="main_map_leaf_cn60.html"/>\n')
-    outf.write('<area shape="rect" coords="0,260,60,320" href="main_map_leaf_da00.html"/>\n')
-    outf.write('<area shape="rect" coords="60,260,100,320" href="main_map_leaf_da10.html"/>\n')
-    outf.write('<area shape="rect" coords="100,260,140,320" href="main_map_leaf_da20.html"/>\n')
-    outf.write('<area shape="rect" coords="140,260,180,320" href="main_map_leaf_da30.html"/>\n')
-    outf.write('<area shape="rect" coords="180,260,220,320" href="main_map_leaf_da40.html"/>\n')
-    outf.write('<area shape="rect" coords="220,260,260,320" href="main_map_leaf_da50.html"/>\n')
-    outf.write('<area shape="rect" coords="260,260,320,320" href="main_map_leaf_da60.html"/>\n')
+    x_max = int(width / 10)
+    y_max = int(height / 10)
+    tp = int(0)
+    bt = int(60)
+    for outery in range(0, y_max - 1):
+        startingpoint = upperleft + (outery * 1000)
+        lt = int(0)
+        rt = int(60)
+        if outery == 0:
+            lt = 0
+        elif outery == 1:
+            tp = 60
+            bt = bt + 40
+        elif outery == y_max - 2:
+            tp = tp + 40
+            bt = bt + 60
+        else:
+            tp = tp + 40
+            bt = bt + 40
+        for outerx in range(0, x_max - 1):
+            currentpoint = startingpoint + (outerx * 10)
+            if outerx == 0:
+                pass
+            elif outerx == 1:
+                lt = 60
+                rt = rt + 40
+            elif outerx == x_max - 2:
+                lt = lt + 40
+                rt = rt + 60
+            else:
+                lt = lt + 40
+                rt = rt + 40
+            # outf.write('<area shape="rect" coords="0, 0, 60, 60" '
+            #            'href="{}_map_leaf_{}.html"/>\n'.format(prefix,
+            #                                                    to_oid(currentpoint)))
+            outf.write('<area shape="rect" '
+                       'coords="{}, {}, {}, {}" href="{}_map_leaf_{}.html"/>\n'.format(lt,
+                                                                                       tp,
+                                                                                       rt,
+                                                                                       bt,
+                                                                                       prefix,
+                                                                                       to_oid(currentpoint)))
+    #         print('{} {}, {},{}, {}'.format(to_oid(currentpoint),
+    #                                           lt, tp, rt, bt))
+    # outf.write('<area shape="rect" coords="0, 0, 60, 60" href="main_map_leaf_aa00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,0,100,60" href="main_map_leaf_aa10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,0,140,60" href="main_map_leaf_aa20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,0,180,60" href="main_map_leaf_aa30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,0,220,60" href="main_map_leaf_aa40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,0,260,60" href="main_map_leaf_aa50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,0,320,60" href="main_map_leaf_aa60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,60,60,100" href="main_map_leaf_an00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,60,100,100" href="main_map_leaf_an10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,60,140,100" href="main_map_leaf_an20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,60,180,100" href="main_map_leaf_an30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,60,220,100" href="main_map_leaf_an40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,60,260,100" href="main_map_leaf_an50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,60,320,100" href="main_map_leaf_an60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,100,60,140" href="main_map_leaf_ba00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,100,100,140" href="main_map_leaf_ba10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,100,140,140" href="main_map_leaf_ba20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,100,180,140" href="main_map_leaf_ba30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,100,220,140" href="main_map_leaf_ba40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,100,260,140" href="main_map_leaf_ba50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,100,320,140" href="main_map_leaf_ba60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,140,60,180" href="main_map_leaf_bn00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,140,100,180" href="main_map_leaf_bn10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,140,140,180" href="main_map_leaf_bn20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,140,180,180" href="main_map_leaf_bn30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,140,220,180" href="main_map_leaf_bn40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,140,260,180" href="main_map_leaf_bn50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,140,320,180" href="main_map_leaf_bn60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,180,60,220" href="main_map_leaf_ca00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,180,100,220" href="main_map_leaf_ca10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,180,140,220" href="main_map_leaf_ca20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,180,180,22" href="main_map_leaf_ca30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,180,220,220" href="main_map_leaf_ca40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,180,260,220" href="main_map_leaf_ca50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,180,320,220" href="main_map_leaf_ca60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,220,60,260" href="main_map_leaf_cn00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,220,100,260" href="main_map_leaf_cn10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,220,140,260" href="main_map_leaf_cn20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,220,180,260" href="main_map_leaf_cn30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,220,220,260" href="main_map_leaf_cn40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,220,260,260" href="main_map_leaf_cn50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,220,320,260" href="main_map_leaf_cn60.html"/>\n')
+    # outf.write('<area shape="rect" coords="0,260,60,320" href="main_map_leaf_da00.html"/>\n')
+    # outf.write('<area shape="rect" coords="60,260,100,320" href="main_map_leaf_da10.html"/>\n')
+    # outf.write('<area shape="rect" coords="100,260,140,320" href="main_map_leaf_da20.html"/>\n')
+    # outf.write('<area shape="rect" coords="140,260,180,320" href="main_map_leaf_da30.html"/>\n')
+    # outf.write('<area shape="rect" coords="180,260,220,320" href="main_map_leaf_da40.html"/>\n')
+    # outf.write('<area shape="rect" coords="220,260,260,320" href="main_map_leaf_da50.html"/>\n')
+    # outf.write('<area shape="rect" coords="260,260,320,320" href="main_map_leaf_da60.html"/>\n')
     outf.write('</map>\n')
     outf.write('</BODY>\n')
     outf.write('</html>\n')
     outf.close()
 
 
-def write_main_map_leaves(data, castle_chain, outdir):
-    for outery in range(0, 7):
-        startingpoint = 10000 + (outery * 1000)
-        for outerx in range(0, 7):
+def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix):
+    x_max = int(width / 10)
+    y_max = int(height / 10)
+    for outery in range(0, y_max - 1):
+        startingpoint = upperleft + (outery * 1000)
+        for outerx in range(0, x_max - 1):
             currentpoint = startingpoint + (outerx * 10)
-            outf = open(pathlib.Path(outdir).joinpath('main_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
+            outf = open(pathlib.Path(outdir).joinpath(prefix + '_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
             outf.write('<HTML>\n')
             outf.write('<HEAD>\n')
-            outf.write('<TITLE>Main Map Leaf {}</TITLE>\n'.format(to_oid(currentpoint)))
+            outf.write('<TITLE>{} Map Leaf {}</TITLE>\n'.format(prefix.capitalize(),
+                                                                to_oid(currentpoint)))
             outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
             outf.write('</HEAD>\n')
             outf.write('<BODY>\n')
-            outf.write('<a href="main_map.html">Return to Main Map</a>')
+            outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
+                                                                           prefix.capitalize()))
             outf.write('<TABLE>\n')
             topnav = False
             botnav = False
@@ -164,18 +212,20 @@ def write_main_map_leaves(data, castle_chain, outdir):
             upperrightnav = False
             lowerleftnav = False
             lowerrightnav = False
-            if currentpoint > 10099:
+            # if currentpoint > 10099:
+            if currentpoint > upperleft + 99:
                 topnav = True
-            if currentpoint < 16000:
+            # if currentpoint < 16000:
+            if currentpoint < upperleft + ((x_max - 2) * 1000):
                 botnav = True
-            y1 = (currentpoint - 10000) % 100
+            y1 = (currentpoint - upperleft) % 100
             if (y1 % 10) > 1 or (y1 / 10) > 0:
                 leftnav = True
                 if topnav:
                     upperleftnav = True
                 if botnav:
                     lowerleftnav = True
-            if (y1 % 10) > 1 or (y1 / 10) < 6:
+            if (y1 % 10) > 1 or (y1 / 10) < (x_max - 2):
                 rightnav = True
                 if topnav:
                     upperrightnav = True
@@ -185,16 +235,19 @@ def write_main_map_leaves(data, castle_chain, outdir):
                 outf.write('<tr>\n')
                 if upperleftnav:
                     outf.write('<td class="corner">')
-                    outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint - 1010)))
+                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                       to_oid(currentpoint - 1010)))
                     outf.write('<img src="grey.gif" width="20" height="20">')
                     outf.write('</a></td>\n')
                 outf.write('<td colspan="20" class="top">')
-                outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint-1000)))
+                outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                   to_oid(currentpoint-1000)))
                 outf.write('<img src="grey.gif" width="840" height="20">')
                 outf.write('</a></td>\n')
                 if upperrightnav:
                     outf.write('<td class="corner">')
-                    outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint - 990)))
+                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                       to_oid(currentpoint - 990)))
                     outf.write('<img src="grey.gif" width="20" height="20">')
                     outf.write('</a></td>\n')
                 outf.write('</tr>\n')
@@ -204,7 +257,8 @@ def write_main_map_leaves(data, castle_chain, outdir):
                     if x == 0 and y == 0:
                         if leftnav:
                             outf.write('<td rowspan="20" class="left">')
-                            outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint - 10)))
+                            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                               to_oid(currentpoint - 10)))
                             outf.write('<img src="grey.gif" width="20" height="840">')
                             outf.write('</a></td>\n')
                     cell = str(currentpoint + (x * 100) + y)
@@ -313,7 +367,8 @@ def write_main_map_leaves(data, castle_chain, outdir):
                     if x == 0 and y == 19:
                         if rightnav:
                             outf.write('<td rowspan="20" class="right">')
-                            outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint + 10)))
+                            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                               to_oid(currentpoint + 10)))
                             outf.write('<img src="grey.gif" width="20" height="840">')
                             outf.write('</a></td>\n')
                 outf.write('</tr>\n')
@@ -321,21 +376,25 @@ def write_main_map_leaves(data, castle_chain, outdir):
                 outf.write('<tr>\n')
                 if lowerleftnav:
                     outf.write('<td class="corner">')
-                    outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint + 990)))
+                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                       to_oid(currentpoint + 990)))
                     outf.write('<img src="grey.gif" width="20" height="20">')
                     outf.write('</a></td>\n')
                 outf.write('<td colspan="20" class="bottom">')
-                outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint + 1000)))
+                outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                   to_oid(currentpoint + 1000)))
                 outf.write('<img src="grey.gif" width="840" height="20">')
                 outf.write('</a></td>\n')
                 if lowerrightnav:
                     outf.write('<td class="corner">')
-                    outf.write('<a href="main_map_leaf_{}.html">'.format(to_oid(currentpoint + 1010)))
+                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                                       to_oid(currentpoint + 1010)))
                     outf.write('<img src="grey.gif" width="20" height="20">')
                     outf.write('</a></td>\n')
                 outf.write('</tr>\n')
             outf.write('</TABLE>\n')
-            outf.write('<a href="main_map.html">Return to Main Map</a>')
+            outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
+                                                                           prefix.capitalize()))
             outf.write('</BODY>\n')
             outf.write('</HTML>')
             outf.close()
