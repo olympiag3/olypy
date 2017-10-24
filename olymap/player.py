@@ -34,59 +34,57 @@ def write_player_basic_info(v, data, outf):
 
 
 def write_unit_list(data, outf, v):
-    if 'PL' in v:
-        if 'un' in v['PL']:
-            unit_list = v['PL']['un']
-            unit_list.sort()
-            outf.write('<tr><td valign="top">Unit List:</td><td>')
-            outf.write('<table>\n')
-            columns = int(math.ceil(len(unit_list) / 3))
-            for unit in range(0, columns):
-                outf.write('<tr>')
-                if (columns * 0) + unit < len(unit_list):
-                    char = data[unit_list[(columns * 0) + unit]]
-                    if 'na' in char:
-                        name = char['na'][0]
-                    else:
-                        name = u.return_type(char).capitalize()
-                    outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(char)))))
+    if 'PL' in v and 'un' in v['PL']:
+        unit_list = v['PL']['un']
+        unit_list.sort()
+        outf.write('<tr><td valign="top">Unit List:</td><td>')
+        outf.write('<table>\n')
+        columns = int(math.ceil(len(unit_list) / 3))
+        for unit in range(0, columns):
+            outf.write('<tr>')
+            if (columns * 0) + unit < len(unit_list):
+                char = data[unit_list[(columns * 0) + unit]]
+                if 'na' in char:
+                    name = char['na'][0]
                 else:
-                    outf.write('<td></td>')
-                if (columns * 1) + unit < len(unit_list):
-                    char = data[unit_list[(columns * 1) + unit]]
-                    if 'na' in char:
-                        name = char['na'][0]
-                    else:
-                        name = u.return_type(char).capitalize()
-                    outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(char)))))
+                    name = u.return_type(char).capitalize()
+                outf.write('<td>{} [{}]</td>'.format(name,
+                                                     anchor(to_oid(u.return_unitid(char)))))
+            else:
+                outf.write('<td></td>')
+            if (columns * 1) + unit < len(unit_list):
+                char = data[unit_list[(columns * 1) + unit]]
+                if 'na' in char:
+                    name = char['na'][0]
                 else:
-                    outf.write('<td></td><td></td>')
-                if (columns * 2) + unit < len(unit_list):
-                    char = data[unit_list[(columns * 2) + unit]]
-                    if 'na' in char:
-                        name = char['na'][0]
-                    else:
-                        name = u.return_type(char).capitalize()
-                    outf.write('<td>{} [{}]</td>'.format(name,
-                                                         anchor(to_oid(u.return_unitid(char)))))
+                    name = u.return_type(char).capitalize()
+                outf.write('<td>{} [{}]</td>'.format(name,
+                                                     anchor(to_oid(u.return_unitid(char)))))
+            else:
+                outf.write('<td></td><td></td>')
+            if (columns * 2) + unit < len(unit_list):
+                char = data[unit_list[(columns * 2) + unit]]
+                if 'na' in char:
+                    name = char['na'][0]
                 else:
-                    outf.write('<td></td><td></td>')
-                outf.write('</tr>\n')
-            outf.write('</table>\n')
-            outf.write('</td></tr>')
+                    name = u.return_type(char).capitalize()
+                outf.write('<td>{} [{}]</td>'.format(name,
+                                                     anchor(to_oid(u.return_unitid(char)))))
+            else:
+                outf.write('<td></td><td></td>')
+            outf.write('</tr>\n')
+        outf.write('</table>\n')
+        outf.write('</td></tr>')
 
 
 def write_full_name(outf, v):
-    if 'PL' in v:
-        if 'fn' in v['PL']:
-            full_name = v['PL']['fn'][0]
-            name_list = v['PL']['fn']
-            if len(name_list) > 1:
-                for name in name_list[1:]:
-                    full_name = full_name + ' ' + name
-            outf.write('<tr><td>Full Name:</td><td>{}</td></tr>\n'.format(full_name))
+    if 'PL' in v and 'fn' in v['PL']:
+        full_name = v['PL']['fn'][0]
+        name_list = v['PL']['fn']
+        if len(name_list) > 1:
+            for name in name_list[1:]:
+                full_name = full_name + ' ' + name
+        outf.write('<tr><td>Full Name:</td><td>{}</td></tr>\n'.format(full_name))
 
 
 def write_player_html(v, k, data, outdir):
