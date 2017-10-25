@@ -4,6 +4,8 @@
 #
 
 import olypy.oio as oio
+import olypy.dbck as dbck
+
 import olymap.utilities as u
 import olymap.ship as ship
 import olymap.char as char
@@ -18,6 +20,7 @@ import olymap.maps as maps
 
 def make_map(inlib, outdir):
     data = oio.read_lib(inlib)
+    dbck.check_db(data, fix=True, checknames=True)
     chains = resolve_chains(data)
     write_box_pages(data, chains, outdir)
     write_reports(data, chains, outdir)
