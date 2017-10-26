@@ -18,13 +18,13 @@ import olymap.reports as reports
 import olymap.maps as maps
 
 
-def make_map(inlib, outdir):
+def make_map(inlib, outdir, instance):
     data = oio.read_lib(inlib)
     dbck.check_db(data, fix=True, checknames=True)
     chains = resolve_chains(data)
     write_box_pages(data, chains, outdir)
     write_reports(data, chains, outdir)
-    write_maps(data, chains, outdir)
+    write_maps(data, chains, outdir, instance)
 
 
 def resolve_chains(data):
@@ -79,8 +79,11 @@ def write_reports(data, chains, outdir):
     reports.trade_report(data, chains['trades'], outdir)
 
 
-def write_maps(data, chains, outdir):
+def write_maps(data, chains, outdir, instance):
     print('Writing Maps')
+    inst_dict = {'g2': [['main', '100', '100'], ['hades', 100, 100], ['faery', 100, 100]],
+                 'g4': [['main', '80', '80'], ['hades', 50, 50], ['faery', 46, 46]],
+                 'qa': [['main', '10', '10'], ['hades', 100, 100], ['faery', 100, 100]]}
     maps.write_index(outdir)
     maps.write_top_map(outdir, 10000, 80, 80, 'main')
     maps.write_top_map(outdir, 18000, 46, 46, 'faery')
