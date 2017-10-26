@@ -29,10 +29,6 @@ if args.test:
         exit(0)
     data = read_oly_file(lines)
 
-    if '52' in data:
-        # make sure this is a single string
-        assert data['52']['IT']['pl'][0] == 'riding horses'
-
     in_string = ''.join(lines)
     out_string = StringIO()
 
@@ -51,9 +47,6 @@ if args.test:
         exit(1)
 
 data = read_oly_file(args.inputfile)
-
-if '52' in data:
-    assert data['52']['IT']['pl'][0] == 'riding horses'
 
 write_oly_file(data)
 args.outputfile.close()

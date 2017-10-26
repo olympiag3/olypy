@@ -155,6 +155,7 @@ grand_format = OrderedDict([
 ])
 
 # these are things which are strings and not lists
+# TODO: put this info into the table above
 first_level_strings = set(('na',))
 second_level_strings = set(('ds', 'li', 'pl', 'sn', 'fn', 'pw', 'em', 've'))
 
