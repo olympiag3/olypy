@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import math
+from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
@@ -229,15 +230,32 @@ def write_char_skills_known(v, data, outf):
     if 'CH' in v and 'sl' in v['CH']:
         skills_list = v['CH']['sl']
         skills_iteration = int(len(skills_list) / 5)
+        skills_dict = defaultdict(list)
         if skills_iteration > 0:
+            for skill in range(0, skills_iteration):
+                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 1])
+                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 2])
+                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 3])
+                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 4])
+        sort_list = []
+        for skill in skills_dict:
+            skill_id = skill
+            skills_rec = skills_dict[skill]
+            know = skills_rec[0]
+            sort_list.append([int(know) * -1, skill_id])
+        sort_list.sort()
+        if len(sort_list) > 0:
             printknown = False
             printunknown = False
-            for skill in range(0, skills_iteration):
-                skill_id = skills_list[skill * 5]
-                know = skills_list[(skill * 5) + 1]
-                days_studied = skills_list[(skill * 5) + 2]
+            for skill in sort_list:
+                skill_id = skill[1]
+                skills_rec= skills_dict[skill_id]
+                know = skills_rec[0]
+                days_studied = skills_rec[1]
                 if know == '2':
                     if not printknown:
+                        if printunknown:
+                            outf.write('</ul>\n')
                         outf.write('<p>Skills known:</p>\n')
                         outf.write('<ul style="list-style-type:none">\n')
                         printknown = True
@@ -254,6 +272,8 @@ def write_char_skills_known(v, data, outf):
                     outf.write('</li>\n')
                 if know == '1':
                     if not printunknown:
+                        if printknown:
+                            outf.write('</ul>\n')
                         outf.write('<p>Partially known skills:</p>\n')
                         outf.write('<ul style="list-style-type:none">\n')
                         printunknown = True
