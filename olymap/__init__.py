@@ -81,13 +81,22 @@ def write_reports(data, chains, outdir):
 
 def write_maps(data, chains, outdir, instance):
     print('Writing Maps')
-    inst_dict = {'g2': [['main', '100', '100'], ['hades', 100, 100], ['faery', 100, 100]],
-                 'g4': [['main', '80', '80'], ['hades', 50, 50], ['faery', 46, 46]],
-                 'qa': [['main', '10', '10'], ['hades', 100, 100], ['faery', 100, 100]]}
+    inst_dict = {'g2': {'main': [10000, 120, 100], 'hades': [18000, 100, 100], 'faery': [24000, 100, 100]},
+                 'g4': {'main': [10000, 80, 80], 'hades': [18000, 50, 50], 'faery': [24000, 46, 46]},
+                 'qa': {'main': [10000, 10, 00], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
+    dimensions = inst_dict[instance]
     maps.write_index(outdir)
-    maps.write_top_map(outdir, 10000, 80, 80, 'main')
-    maps.write_top_map(outdir, 18000, 46, 46, 'faery')
-    maps.write_top_map(outdir, 24000, 50, 50, 'hades')
-    maps.write_map_leaves(data, chains['castles'], outdir, 10000, 80, 80, 'main')
-    maps.write_map_leaves(data, chains['castles'], outdir, 18000, 46, 46, 'faery')
-    maps.write_map_leaves(data, chains['castles'], outdir, 24000, 50, 50, 'hades')
+    for world in dimensions:
+        world_rec = dimensions[world]
+        maps.write_top_map(outdir,
+                           world_rec[0],
+                           world_rec[1],
+                           world_rec[2],
+                           world)
+        maps.write_map_leaves(data,
+                              chains['castles'],
+                              outdir,
+                              world_rec[0],
+                              world_rec[1],
+                              world_rec[2],
+                              world)
