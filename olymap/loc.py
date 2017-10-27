@@ -378,8 +378,12 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
         outf.write('</table>\n')
 
 
-def write_characters(v, k, data, outf):
+def write_characters(v, k, data, outf, print_province = False):
     outf.write('<li>')
+    if print_province:
+        if 'LI' in v and 'wh' in v['LI']:
+            province_rec = data[v['LI']['wh'][0]]
+            outf.write('({}) '.format(anchor(to_oid(v['LI']['wh'][0]))))
     # code fix to bug in lib where garrison name is sometimes missing
     if u.return_type(v) == 'garrison':
         name = 'Garrison'
@@ -675,46 +679,15 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
         if len(garrison_list) > 0:
             province_list = []
             for garrison in garrison_list:
-                province = data[garrison]
-                province_list.append(province['LI']['wh'][0])
+                province_rec = data[garrison]
+                province_list.append([province_rec['LI']['wh'][0], garrison])
             province_list.sort()
             outf.write('<H4>Garrisons:</H4>\n')
-            outf.write('<table>\n')
-            rows = int(math.ceil(len(province_list) / 5))
-            for garrison in range(0, rows):
-                outf.write('<tr>')
-                if (rows * 0) + garrison < len(province_list):
-                    province_rec = data[province_list[(rows * 0) + garrison]]
-                    outf.write('<td>{} [{}]</td>'.format(province_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(province_rec)))))
-                else:
-                    outf.write('<td></td>')
-                if (rows * 1) + garrison < len(province_list):
-                    province_rec = data[province_list[(rows * 1) + garrison]]
-                    outf.write('<td>{} [{}]</td>'.format(province_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(province_rec)))))
-                else:
-                    outf.write('<td></td>')
-                if (rows * 2) + garrison < len(province_list):
-                    province_rec = data[province_list[(rows * 2) + garrison]]
-                    outf.write('<td>{} [{}]</td>'.format(province_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(province_rec)))))
-                else:
-                    outf.write('<td></td>')
-                if(rows * 3) + garrison < len(province_list):
-                    province_rec = data[province_list[(rows * 3) + garrison]]
-                    outf.write('<td>{} [{}]</td>'.format(province_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(province_rec)))))
-                else:
-                    outf.write('<td></td>')
-                if (rows * 4) + garrison < len(province_list):
-                    province_rec = data[province_list[(rows * 4) + garrison]]
-                    outf.write('<td>{} [{}]</td>'.format(province_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(province_rec)))))
-                else:
-                    outf.write('<td></td>')
-                outf.write('</tr>\n')
-            outf.write('</table>\n')
+            outf.write('<ul>\n')
+            for province in province_list:
+                garrison_rec = data[province[1]]
+                write_characters(garrison_rec, province[1], data, outf, True)
+            outf.write('</ul>\n')
 
 
 def write_loc_map_anchor(v, k, data, outf):

@@ -249,7 +249,7 @@ def write_char_skills_known(v, data, outf):
             printunknown = False
             for skill in sort_list:
                 skill_id = skill[1]
-                skills_rec= skills_dict[skill_id]
+                skills_rec = skills_dict[skill_id]
                 know = skills_rec[0]
                 days_studied = skills_rec[1]
                 if know == '2':
