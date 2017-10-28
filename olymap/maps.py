@@ -5,6 +5,7 @@ import olymap.utilities as u
 from olymap.utilities import anchor
 from olymap.utilities import anchor2
 import pathlib
+from pngcanvas import *
 
 
 def write_index(outdir):
@@ -85,7 +86,7 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
-    outf.write('<img height="320" width="320" src="{}_thumbnail.gif" usemap="#oly"/>\n'.format(prefix))
+    outf.write('<img height="320" width="320" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(prefix))
     outf.write('<map name="oly" id="oly">\n')
     x_max = int(width / 10)
     y_max = int(height / 10)
@@ -435,3 +436,31 @@ def count_stuff(v, data):
             elif u.return_kind(unit) == 'ship':
                 ships_found = True
     return nbr_men, enemy_found, ships_found
+
+
+def write_bitmap(outdir, data, upperleft, height, width, prefix):
+    color_pallette = {'ocean': (0x00, 0xff, 0xff, 0xff),
+                      'plain': (0x90, 0xee, 0x90, 0xff),
+                      'forest': (0x32, 0xcd, 0x32, 0xff),
+                      'swamp': (0xff, 0x00, 0xff, 0xff),
+                      'mountain': (0x80, 0x80, 0x80, 0xff),
+                      'desert': (0xff, 0xff, 0x00, 0xff),
+                      'underground': (0xff, 0xa5, 0x00, 0xff),
+                      'cloud': (0xee, 0xe8, 0xaa, 0xff)}
+    outf = open(pathlib.Path(outdir).joinpath(prefix + '_thumbnail.png'), 'wb')
+    map = PNGCanvas(width, height, color=(0xff, 0, 0, 0xff))
+    for x in range(0, width):
+        for y in range(0, height):
+            curr_loc = upperleft + (y * 100) + (x * 1)
+            try:
+                province_box = data[str(curr_loc)]
+                try:
+                    color = color_pallette[u.return_type(province_box)]
+                    map.point(x, y, color)
+                except KeyError:
+                    print('missing color for: {}'.format(u.return_type(province_box)))
+            except KeyError:
+                # print('missing box record for: {}'.format(curr_loc))
+                pass
+    outf.write(map.dump())
+    outf.close()
