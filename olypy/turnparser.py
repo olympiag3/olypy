@@ -2306,6 +2306,14 @@ def fixup_nesw(data):
                     pd[3] = w
 
 
+# XXX pytest me
+def set_prisoner_health(data, p, phealth):
+    if not db.is_char(data, p):
+        return
+    if data.get(p, {}).get('CH', {}).get('pr', ['0'])[0] == '1':
+        data[p]['CH']['he'] = [phealth]
+
+
 loyalty_kind = {'Unsworn': 0, 'Contract': 1, 'Oath': 2, 'Fear': 3, 'Npc': 4, 'Summon': 5}
 
 
@@ -2343,25 +2351,61 @@ def parse_character(name, ident, factint, text, data):
     lkind, lrate = match_line(text, 'Loyalty:', capture='([A-Za-z]+)-(\d+)')
     lkind = str(loyalty_kind[lkind])
 
-    # Unfortunately this only captures the first one. Even for visible characters,
-    # the output shown in turns is incomplete and is truncated to stack depth 2.
-    # Stacked under doesn't give us an order, but at least it's complete for allies.
-    # Stacked over is complete and ordered.
-    # XXXv0 we should unwhere/where stacked_over if we're going to where them
-    # XXXv1 capture all of the stacked-overs, not just the first
     stacked_over, = match_line(text, 'Stacked over:')
     if stacked_over is not None:
         stacked_over = [parse_an_id(stacked_over)]
+
+        # experiment
+        _, _, over = text.partition('Stacked over:')
+        lines = over.split('\n')
+        lines.pop(0)
+        for l in lines:
+            if not l.startswith(' '*16):
+                break
+            stacked_over.append(parse_an_id(l))
     else:
         stacked_over = []
 
-    # stacked over should be an ordered list, but so far it's just the first element
-    if stacked_over:
-        if old_hl and stacked_over[0] != old_hl[0]:
-            print('hey greg, surprised that {} was not stacked first under {}'.format(stacked_over[0], ident))
-            old_hl.insert(0, stacked_over[0])
-            db.set_where(data, stacked_over[0], ident, keep_children=True)
+    # these do not also appear in stacked-over, alas, leaving us with an ordering problem
+    prisoners, = match_line(text, 'Prisoners:')
+    if prisoners is not None:
+        p = parse_an_id(prisoners)
+        phealth = match_line(text, 'health', capture='(\\d+)')[0]
+        set_prisoner_health(data, p, phealth)
+        prisoners = [p]
+        # experiment
+        _, _, over = text.partition('Prisoners:')
+        lines = over.split('\n')
+        lines.pop(0)
+        for l in lines:
+            if not l.startswith(' '*16):
+                break
+            p = parse_an_id(l)
+            prisoners.append(p)
+            phealth = match_line(l, 'health', capture='(\\d+)')[0]
+            set_prisoner_health(data, p, phealth)
+    else:
+        prisoners = []
 
+    belongs_here = set(stacked_over).update(set(prisoners))
+    if belongs_here:
+        new_hl = [hl for hl in old_hl if hl in belongs_here]
+    else:
+        new_hl = []
+
+    # now form a thing to dedup that includes all of the info we have
+    # if our info is complete new_hl will have everything and be in the correct order
+    new_hl = new_hl + stacked_over + prisoners + old_hl
+    new_hl = box.uniq_f11(new_hl)
+    for t in new_hl:
+        db.set_where(data, t, ident, keep_children=True)
+
+    if (old_hl or new_hl) and old_hl != new_hl:
+        print('hey greg, here is the hl analysis for unit', ident)
+        print('  old_hl', old_hl)
+        print('  new_hl', new_hl)
+
+    # Stacked under doesn't give us an order, but at least it's complete for allies.
     stacked_under, = match_line(text, 'Stacked under:')
     if stacked_under is not None:
         stacked_under = parse_an_id(stacked_under)
@@ -2402,6 +2446,7 @@ def parse_character(name, ident, factint, text, data):
         db.set_where(data, ident, location, keep_children=True)
 
     # XXXv2 we don't process "Pledged to us:" so any vassals won't appear
+    #       pledged to us isn't in the lib anyway, so...
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
         pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture='(.*?) \[(.{4,6})\]')
@@ -2468,8 +2513,8 @@ def parse_character(name, ident, factint, text, data):
 
     char['LI'] = {}
 
-    if old_hl:
-        char['LI']['hl'] = old_hl
+    if new_hl:
+        char['LI']['hl'] = new_hl
     char['LI']['wh'] = [location]
 
     ch = {}
