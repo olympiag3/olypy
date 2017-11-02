@@ -86,7 +86,11 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
-    outf.write('<img height="320" width="320" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(prefix))
+    iheight = 4 * height
+    iwidth = 4 * width
+    outf.write('<img height="{}" width="{}" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(iheight,
+                                                                                             iwidth,
+                                                                                             prefix))
     outf.write('<map name="oly" id="oly">\n')
     x_max = int(width / 10)
     y_max = int(height / 10)
