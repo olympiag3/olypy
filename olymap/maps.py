@@ -439,6 +439,7 @@ def count_stuff(v, data):
 
 
 def write_bitmap(outdir, data, upperleft, height, width, prefix):
+    BUFSIZE = 8*1024
     color_pallette = {'ocean': (0x00, 0xff, 0xff, 0xff),
                       'plain': (0x90, 0xee, 0x90, 0xff),
                       'forest': (0x32, 0xcd, 0x32, 0xff),
