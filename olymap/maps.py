@@ -4,6 +4,7 @@ from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
 from olymap.utilities import anchor2
+import olypy.details as details
 import pathlib
 from pngcanvas import *
 import math
@@ -352,10 +353,11 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
             count = int(0)
             here_list = loc_rec['LI']['hl']
             for here in here_list:
-                if 56760 <= int(here) <= 78999:
+                # if 56760 <= int(here) <= 78999:
+                here_rec = data[here]
+                if u.return_type(here_rec) in details.subloc_kinds:
                     count = count + 1
-                    here_rec = data[here]
-                    if u.return_type(here_rec) != 'city':
+                    if u.return_type(here_rec) == 'city':
                         city = here_rec
                     elif u.return_type(here_rec) == 'graveyard':
                         graveyard = here_rec
