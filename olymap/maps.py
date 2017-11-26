@@ -10,7 +10,7 @@ from pngcanvas import *
 import math
 
 
-def write_index(outdir, instance):
+def write_index(outdir, instance, inst_dict):
     outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
@@ -23,9 +23,10 @@ def write_index(outdir, instance):
     outf.write('<tr>')
     outf.write('<th>')
     outf.write('<ul>Maps<br>')
-    outf.write('<li><a href="main_map.html">Main</a></li>')
-    outf.write('<li><a href="hades_map.html">Hades</a></li></li>')
-    outf.write('<li><a href="faery_map.html">Faery</a></li></li>')
+    dimensions = inst_dict[instance]
+    for world in dimensions:
+        outf.write('<li><a href="{}_map.html">{}</a></li>'.format(world,
+                                                                  world.title()))
     outf.write('</ul>')
     outf.write('</th>')
     outf.write('<th>')
