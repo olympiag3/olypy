@@ -6,9 +6,10 @@ from olymap.utilities import anchor
 from olymap.utilities import anchor2
 import pathlib
 from pngcanvas import *
+import math
 
 
-def write_index(outdir):
+def write_index(outdir, instance):
     outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
@@ -48,30 +49,31 @@ def write_index(outdir):
     outf.write('</th>')
     outf.write('</tr>')
     outf.write('</table>\n')
-    outf.write('<h2>Intro</h2>\n')
-    outf.write('This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, '
-               'as of the end of turn 192.<p>')
-    outf.write('Mobile things (characters, ships) are present in the map only if they were seen in '
-               'turn 192.\n')
-    outf.write('<h2>Features</h2>\n')
-    outf.write('<ul>\n')
-    outf.write('<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">'
-               'combat zone</a>)\n')
-    outf.write('<li>Ships indicated by yellow border if troop count is low\n')
-    outf.write('<li>Barriers indicated by brown border (e.g. ar54, aq52)\n')
-    outf.write('<li>Garrison/castle allegiance is indicated by the @ after the province ID '
-               '(<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)\n')
-    outf.write('<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, '
-               'etc.\n')
-    outf.write('</ul>\n')
-    outf.write('<h2>Limitations / Bugs</h2>\n')
-    outf.write('<ul>\n')
-    outf.write('<li>Vision / Scry information is not included\n')
-    outf.write('<li>Hades and Faery entrances are not represented correctly (Undercity is OK)\n')
-    outf.write('<li>Faery map is broken\n')
-    outf.write('<li>There is no indication of how old info is (e.g. "this market report is from turn 184")\n')
-    outf.write('<li>Mobile things (characters, ships) only included if seen in the last turn\n')
-    outf.write('</ul>\n')
+    if instance == "g4":
+        outf.write('<h2>Intro</h2>\n')
+        outf.write('This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, '
+                   'as of the end of turn 192.<p>')
+        outf.write('Mobile things (characters, ships) are present in the map only if they were seen in '
+                   'turn 192.\n')
+        outf.write('<h2>Features</h2>\n')
+        outf.write('<ul>\n')
+        outf.write('<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">'
+                   'combat zone</a>)\n')
+        outf.write('<li>Ships indicated by yellow border if troop count is low\n')
+        outf.write('<li>Barriers indicated by brown border (e.g. ar54, aq52)\n')
+        outf.write('<li>Garrison/castle allegiance is indicated by the @ after the province ID '
+                   '(<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)\n')
+        outf.write('<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, '
+                   'etc.\n')
+        outf.write('</ul>\n')
+        outf.write('<h2>Limitations / Bugs</h2>\n')
+        outf.write('<ul>\n')
+        outf.write('<li>Vision / Scry information is not included\n')
+        outf.write('<li>Hades and Faery entrances are not represented correctly (Undercity is OK)\n')
+        outf.write('<li>Faery map is broken\n')
+        outf.write('<li>There is no indication of how old info is (e.g. "this market report is from turn 184")\n')
+        outf.write('<li>Mobile things (characters, ships) only included if seen in the last turn\n')
+        outf.write('</ul>\n')
     outf.write('</BODY>\n')
     outf.write('</html>\n')
     outf.close()
@@ -86,105 +88,73 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
-    iheight = 4 * height
-    iwidth = 4 * width
+    if height <= 50 and width <= 50:
+        multiple = 12
+    elif height <= 80 and width <= 80:
+        multiple = 7
+    else:
+        multiple = 5
+    rem_height = height % 10
+    if rem_height > 0:
+        iheight = (multiple * (height - 10)) + (rem_height * multiple)
+    else:
+        iheight = (multiple * height)
+    rem_width = width % 10
+    if rem_width > 0:
+        iwidth = (multiple * (width - 10)) + (rem_width * multiple)
+    else:
+        iwidth = (multiple * width)
     outf.write('<img height="{}" width="{}" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(iheight,
                                                                                              iwidth,
                                                                                              prefix))
     outf.write('<map name="oly" id="oly">\n')
-    x_max = int(width / 10)
-    y_max = int(height / 10)
-    tp = int(0)
-    bt = int(60)
-    for outery in range(0, y_max - 1):
-        startingpoint = upperleft + (outery * 1000)
-        lt = int(0)
-        rt = int(60)
-        if outery == 0:
+    x_max = math.ceil(width / 10)
+    y_max = math.ceil(height / 10)
+    lwidth = int(iwidth / (x_max - 1))
+    lheight = int(iheight / (y_max - 1))
+    tp = 0
+    bt = lheight
+    for outery in range(0, y_max):
+        if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0):
+            startingpoint = upperleft + (outery * 1000)
             lt = 0
-        elif outery == 1:
-            tp = 60
-            bt = bt + 40
-        elif outery == y_max - 2:
-            tp = tp + 40
-            bt = bt + 60
-        else:
-            tp = tp + 40
-            bt = bt + 40
-        for outerx in range(0, x_max - 1):
-            currentpoint = startingpoint + (outerx * 10)
-            if outerx == 0:
-                pass
-            elif outerx == 1:
-                lt = 60
-                rt = rt + 40
-            elif outerx == x_max - 2:
-                lt = lt + 40
-                rt = rt + 60
+            rt = lwidth
+            if outery == 0:
+                lt = 0
+            elif outery == 1:
+                tp = lheight
+                bt = bt + lheight
+            elif outery == y_max - 2:
+                tp = tp + lheight
+                bt = bt + lheight
+            elif outery == y_max - 1:
+                bt = bt + (rem_height * multiple)
             else:
-                lt = lt + 40
-                rt = rt + 40
-            # outf.write('<area shape="rect" coords="0, 0, 60, 60" '
-            #            'href="{}_map_leaf_{}.html"/>\n'.format(prefix,
-            #                                                    to_oid(currentpoint)))
-            outf.write('<area shape="rect" '
-                       'coords="{}, {}, {}, {}" href="{}_map_leaf_{}.html"/>\n'.format(lt,
-                                                                                       tp,
-                                                                                       rt,
-                                                                                       bt,
-                                                                                       prefix,
-                                                                                       to_oid(currentpoint)))
-    #         print('{} {}, {},{}, {}'.format(to_oid(currentpoint),
-    #                                           lt, tp, rt, bt))
-    # outf.write('<area shape="rect" coords="0, 0, 60, 60" href="main_map_leaf_aa00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,0,100,60" href="main_map_leaf_aa10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,0,140,60" href="main_map_leaf_aa20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,0,180,60" href="main_map_leaf_aa30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,0,220,60" href="main_map_leaf_aa40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,0,260,60" href="main_map_leaf_aa50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,0,320,60" href="main_map_leaf_aa60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,60,60,100" href="main_map_leaf_an00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,60,100,100" href="main_map_leaf_an10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,60,140,100" href="main_map_leaf_an20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,60,180,100" href="main_map_leaf_an30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,60,220,100" href="main_map_leaf_an40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,60,260,100" href="main_map_leaf_an50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,60,320,100" href="main_map_leaf_an60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,100,60,140" href="main_map_leaf_ba00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,100,100,140" href="main_map_leaf_ba10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,100,140,140" href="main_map_leaf_ba20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,100,180,140" href="main_map_leaf_ba30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,100,220,140" href="main_map_leaf_ba40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,100,260,140" href="main_map_leaf_ba50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,100,320,140" href="main_map_leaf_ba60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,140,60,180" href="main_map_leaf_bn00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,140,100,180" href="main_map_leaf_bn10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,140,140,180" href="main_map_leaf_bn20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,140,180,180" href="main_map_leaf_bn30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,140,220,180" href="main_map_leaf_bn40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,140,260,180" href="main_map_leaf_bn50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,140,320,180" href="main_map_leaf_bn60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,180,60,220" href="main_map_leaf_ca00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,180,100,220" href="main_map_leaf_ca10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,180,140,220" href="main_map_leaf_ca20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,180,180,22" href="main_map_leaf_ca30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,180,220,220" href="main_map_leaf_ca40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,180,260,220" href="main_map_leaf_ca50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,180,320,220" href="main_map_leaf_ca60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,220,60,260" href="main_map_leaf_cn00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,220,100,260" href="main_map_leaf_cn10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,220,140,260" href="main_map_leaf_cn20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,220,180,260" href="main_map_leaf_cn30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,220,220,260" href="main_map_leaf_cn40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,220,260,260" href="main_map_leaf_cn50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,220,320,260" href="main_map_leaf_cn60.html"/>\n')
-    # outf.write('<area shape="rect" coords="0,260,60,320" href="main_map_leaf_da00.html"/>\n')
-    # outf.write('<area shape="rect" coords="60,260,100,320" href="main_map_leaf_da10.html"/>\n')
-    # outf.write('<area shape="rect" coords="100,260,140,320" href="main_map_leaf_da20.html"/>\n')
-    # outf.write('<area shape="rect" coords="140,260,180,320" href="main_map_leaf_da30.html"/>\n')
-    # outf.write('<area shape="rect" coords="180,260,220,320" href="main_map_leaf_da40.html"/>\n')
-    # outf.write('<area shape="rect" coords="220,260,260,320" href="main_map_leaf_da50.html"/>\n')
-    # outf.write('<area shape="rect" coords="260,260,320,320" href="main_map_leaf_da60.html"/>\n')
+                tp = tp + lheight
+                bt = bt + lheight
+            for outerx in range(0, x_max - 1):
+                if outerx < x_max - 1 or (outerx == x_max - 1 and rem_width > 0):
+                    currentpoint = startingpoint + (outerx * 10)
+                    if outerx == 0:
+                        pass
+                    elif outerx == 1:
+                        lt = lwidth
+                        rt = rt + lwidth
+                    elif outerx == x_max - 2:
+                        lt = lt + lwidth
+                        rt = rt + lwidth
+                    elif outerx == x_max - 1:
+                        rt = rt + (rem_width * multiple)
+                    else:
+                        lt = lt + lwidth
+                        rt = rt + lwidth
+                    outf.write('<area shape="rect" '
+                               'coords="{}, {}, {}, {}" href="{}_map_leaf_{}.html"/>\n'.format(lt,
+                                                                                               tp,
+                                                                                               rt,
+                                                                                               bt,
+                                                                                               prefix,
+                                                                                               to_oid(currentpoint)))
     outf.write('</map>\n')
     outf.write('</BODY>\n')
     outf.write('</html>\n')
@@ -192,217 +162,267 @@ def write_top_map(outdir, upperleft, height, width, prefix):
 
 
 def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix):
-    x_max = int(width / 10)
-    y_max = int(height / 10)
-    for outery in range(0, y_max - 1):
-        startingpoint = upperleft + (outery * 1000)
-        for outerx in range(0, x_max - 1):
-            currentpoint = startingpoint + (outerx * 10)
-            outf = open(pathlib.Path(outdir).joinpath(prefix + '_map_leaf_' + u.to_oid(currentpoint) + '.html'), 'w')
-            outf.write('<HTML>\n')
-            outf.write('<HEAD>\n')
-            outf.write('<TITLE>{} Map Leaf {}</TITLE>\n'.format(prefix.capitalize(),
-                                                                to_oid(currentpoint)))
-            outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
-            outf.write('</HEAD>\n')
-            outf.write('<BODY>\n')
-            outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
-                                                                           prefix.capitalize()))
-            outf.write('<TABLE>\n')
-            topnav = False
-            botnav = False
-            leftnav = False
-            rightnav = False
-            upperleftnav = False
-            upperrightnav = False
-            lowerleftnav = False
-            lowerrightnav = False
-            # if currentpoint > 10099:
-            if currentpoint > upperleft + 99:
-                topnav = True
-            # if currentpoint < 16000:
-            if currentpoint < upperleft + ((x_max - 2) * 1000):
-                botnav = True
-            y1 = (currentpoint - upperleft) % 100
-            if (y1 % 10) > 1 or (y1 / 10) > 0:
-                leftnav = True
-                if topnav:
-                    upperleftnav = True
-                if botnav:
-                    lowerleftnav = True
-            if (y1 % 10) > 1 or (y1 / 10) < (x_max - 2):
-                rightnav = True
-                if topnav:
-                    upperrightnav = True
-                if botnav:
-                    lowerrightnav = True
-            if topnav:
-                outf.write('<tr>\n')
-                if upperleftnav:
-                    outf.write('<td class="corner">')
-                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                       to_oid(currentpoint - 1010)))
-                    outf.write('<img src="grey.gif" width="20" height="20">')
-                    outf.write('</a></td>\n')
-                outf.write('<td colspan="20" class="top">')
-                outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                   to_oid(currentpoint-1000)))
-                outf.write('<img src="grey.gif" width="840" height="20">')
-                outf.write('</a></td>\n')
-                if upperrightnav:
-                    outf.write('<td class="corner">')
-                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                       to_oid(currentpoint - 990)))
-                    outf.write('<img src="grey.gif" width="20" height="20">')
-                    outf.write('</a></td>\n')
-                outf.write('</tr>\n')
-            for x in range(0, 20):
-                outf.write('<tr>\n')
-                for y in range(0, 20):
-                    if x == 0 and y == 0:
-                        if leftnav:
-                            outf.write('<td rowspan="20" class="left">')
-                            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                               to_oid(currentpoint - 10)))
-                            outf.write('<img src="grey.gif" width="20" height="840">')
-                            outf.write('</a></td>\n')
-                    cell = str(currentpoint + (x * 100) + y)
-                    try:
-                        loc_rec = data[cell]
-                        outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
-                                                                    u.return_type(loc_rec)))
+    x_max = math.ceil(width / 10)
+    y_max = math.ceil(height / 10)
+    rem_height = height % 20
+    rem_width = width % 20
+    for outery in range(0, y_max):
+        if outery < y_max - 1:
+            startingpoint = upperleft + (outery * 1000)
+            for outerx in range(0, x_max):
+                if outerx < x_max - 1:
+                    currentpoint = startingpoint + (outerx * 10)
+                    outf = open(pathlib.Path(outdir).joinpath(prefix +
+                                                              '_map_leaf_'
+                                                              + u.to_oid(currentpoint) +
+                                                              '.html'), 'w')
+                    write_leaf_header(currentpoint, outdir, prefix, outf)
+                    outf.write('<TABLE>\n')
+                    topnav = False
+                    botnav = False
+                    leftnav = False
+                    rightnav = False
+                    upperleftnav = False
+                    upperrightnav = False
+                    lowerleftnav = False
+                    lowerrightnav = False
+                    if currentpoint > upperleft + 99:
+                        topnav = True
+                    if rem_height > 0:
+                        if currentpoint < upperleft + ((x_max - 2) * 1000):
+                            botnav = True
+                    else:
+                        if currentpoint < upperleft + ((x_max - 2) * 1000):
+                            botnav = True
+                    y1 = (currentpoint - upperleft) % 100
+                    if (y1 % 10) > 1 or (y1 / 10) > 0:
+                        leftnav = True
+                        if topnav:
+                            upperleftnav = True
+                        if botnav:
+                            lowerleftnav = True
+                    if rem_width > 0:
+                        if (y1 % 10) > 1 or (y1 / 10) < (y_max - 2):
+                            rightnav = True
+                    else:
+                        if (y1 % 10) > 1 or (y1 / 10) < (y_max - 2):
+                            rightnav = True
+                    if rightnav:
+                        if topnav:
+                            upperrightnav = True
+                        if botnav:
+                            lowerrightnav = True
+                    if topnav:
+                        generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav)
+                    for y in range(0, 20):
+                        if (rem_height == 0 or outery <= y_max - 3) or (outery == y_max - 2 and y < rem_height + 10):
+                            outf.write('<tr>\n')
+                            for x in range(0, 20):
+                                if (rem_width == 0 or outerx <= x_max - 3) or (outerx == x_max - 2 and x < rem_width + 10):
+                                    write_cell(castle_chain,
+                                               currentpoint,
+                                               data,
+                                               leftnav,
+                                               outf,
+                                               prefix,
+                                               rightnav,
+                                               x,
+                                               y,
+                                               rem_width,
+                                               rem_height)
+                            outf.write('</tr>\n')
+                    if botnav:
+                        generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix)
+                    outf.write('</TABLE>\n')
+                    outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
+                                                                                   prefix.capitalize()))
+                    outf.write('</BODY>\n')
+                    outf.write('</HTML>')
+                    outf.close()
 
-                        if barrier(loc_rec):
-                            outf.write(' style="border: 2px solid purple" ')
-                        else:
-                            nbr_men, enemy_found, ships_found = count_stuff(loc_rec, data)
-                            if nbr_men > 50:
-                                outf.write(' style="border: 2px solid red" ')
-                            elif ships_found:
-                                outf.write(' style="border: 2px solid yellow" ')
-                            elif enemy_found:
-                                outf.write(' style="outline: 2px solid orange" ')
-                        outf.write('>')
-                        if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
-                            if loc_rec['LO']['lc'][0] != '0':
-                                outf.write('<b>')
-                        outf.write('{}'.format(anchor(to_oid(cell))))
-                        if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
-                            if loc_rec['LO']['lc'][0] != '0':
-                                outf.write('</b>')
-                        if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
-                            here_list = loc_rec['LI']['hl']
-                            for garr in here_list:
-                                garr_rec = data[garr]
-                                if u.return_type(garr_rec) == 'garrison':
-                                    if 'MI' in garr_rec:
-                                        if 'gc' in garr_rec['MI']:
-                                            castle_id = garr_rec['MI']['gc'][0]
-                                            outf.write('{}'.format(castle_chain[castle_id][0]))
-                        if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
-                            if len(loc_rec['LI']['hl']) > 0:
-                                loc1 = ''
-                                loc2 = ''
-                                city = ''
-                                graveyard = ''
-                                count = int(0)
-                                here_list = loc_rec['LI']['hl']
-                                for here in here_list:
-                                    if 56760 <= int(here) <= 78999:
-                                        count = count + 1
-                                        here_rec = data[here]
-                                        if u.return_type(here_rec) != 'city':
-                                            city = here_rec
-                                        elif u.return_type(here_rec) == 'graveyard':
-                                            graveyard = here_rec
-                                        elif loc1 == '' and u.return_kind(here_rec) == 'loc':
-                                            loc1 = here_rec
-                                        elif loc2 == '' and u.return_kind(here_rec) == 'loc':
-                                            loc2 = here_rec
-                                if city != '':
-                                    if loc2 == '':
-                                        loc2 = loc1
-                                    loc1 = city
-                                if graveyard != '':
-                                    if loc1 == '':
-                                        if loc2 == '':
-                                            loc2 = loc1
-                                        loc1 = graveyard
-                                    else:
-                                        if loc2 == '':
-                                            loc2 = graveyard
-                                if count > 2:
-                                    outf.write('<br />many')
-                                else:
-                                    if loc2 != '':
-                                        if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
-                                            outf.write('<br />')
-                                            outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
-                                                                           u.return_short_type(loc2))))
-                                        else:
-                                            outf.write('<br />')
-                                            if 'LO' in loc2 and 'hi' in loc2['LO']:
-                                                if loc2['LO']['hi'][0] == '1':
-                                                    outf.write('<i>')
-                                            outf.write(u.return_short_type(loc2))
-                                            if 'LO' in loc2:
-                                                if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
-                                                    outf.write('</i>')
-                                    else:
-                                        outf.write('<br />&nbsp;')
-                                if loc1 != '':
-                                    if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
-                                        outf.write('<br />')
-                                        outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
-                                                                       u.return_short_type(loc1))))
-                                    else:
-                                        outf.write('<br />')
-                                        if 'LO' in loc1 and 'hi' in loc1['LO']:
-                                            if loc1['LO']['hi'][0] == '1':
-                                                outf.write('<i>')
-                                        outf.write(u.return_short_type(loc1))
-                                        if 'LO' in loc1 and 'hi' in loc1['LO']:
-                                            if loc1['LO']['hi'][0] == '1':
-                                                outf.write('</i>')
-                                else:
-                                    outf.write('<br />&nbsp;')
-                        outf.write('</td>\n')
-                    except KeyError:
-                        outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(cell), to_oid(cell)))
-                    if x == 0 and y == 19:
-                        if rightnav:
-                            outf.write('<td rowspan="20" class="right">')
-                            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                               to_oid(currentpoint + 10)))
-                            outf.write('<img src="grey.gif" width="20" height="840">')
-                            outf.write('</a></td>\n')
-                outf.write('</tr>\n')
-            if botnav:
-                outf.write('<tr>\n')
-                if lowerleftnav:
-                    outf.write('<td class="corner">')
-                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                       to_oid(currentpoint + 990)))
-                    outf.write('<img src="grey.gif" width="20" height="20">')
-                    outf.write('</a></td>\n')
-                outf.write('<td colspan="20" class="bottom">')
-                outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                   to_oid(currentpoint + 1000)))
-                outf.write('<img src="grey.gif" width="840" height="20">')
-                outf.write('</a></td>\n')
-                if lowerrightnav:
-                    outf.write('<td class="corner">')
-                    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                                       to_oid(currentpoint + 1010)))
-                    outf.write('<img src="grey.gif" width="20" height="20">')
-                    outf.write('</a></td>\n')
-                outf.write('</tr>\n')
-            outf.write('</TABLE>\n')
-            outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
-                                                                           prefix.capitalize()))
-            outf.write('</BODY>\n')
-            outf.write('</HTML>')
-            outf.close()
+
+def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height):
+    if x == 0 and y == 0:
+        if leftnav:
+            outf.write('<td rowspan="20" class="left">')
+            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                               to_oid(currentpoint - 10)))
+            outf.write('<img src="grey.gif" width="20" height="840">')
+            outf.write('</a></td>\n')
+    cell = str(currentpoint + (x + (y * 100)))
+    try:
+        loc_rec = data[cell]
+        outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
+                                                    u.return_type(loc_rec)))
+
+        generate_border(data, loc_rec, outf)
+        outf.write('>')
+        generate_cell_contents(castle_chain, cell, data, loc_rec, outf)
+        outf.write('</td>\n')
+    except KeyError:
+        outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(cell), to_oid(cell)))
+    if x == 19 and y == 0:
+        if rightnav:
+            outf.write('<td rowspan="20" class="right">')
+            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                               to_oid(currentpoint + 10)))
+            outf.write('<img src="grey.gif" width="20" height="840">')
+            outf.write('</a></td>\n')
+
+
+def write_leaf_header(currentpoint, outdir, prefix, outf):
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<TITLE>{} Map Leaf {}</TITLE>\n'.format(prefix.capitalize(),
+                                                        to_oid(currentpoint)))
+    outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
+                                                                   prefix.capitalize()))
+
+
+def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix):
+    outf.write('<tr>\n')
+    if lowerleftnav:
+        outf.write('<td class="corner">')
+        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                           to_oid(currentpoint + 990)))
+        outf.write('<img src="grey.gif" width="20" height="20">')
+        outf.write('</a></td>\n')
+    outf.write('<td colspan="20" class="bottom">')
+    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                       to_oid(currentpoint + 1000)))
+    outf.write('<img src="grey.gif" width="840" height="20">')
+    outf.write('</a></td>\n')
+    if lowerrightnav:
+        outf.write('<td class="corner">')
+        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                           to_oid(currentpoint + 1010)))
+        outf.write('<img src="grey.gif" width="20" height="20">')
+        outf.write('</a></td>\n')
+    outf.write('</tr>\n')
+
+
+def generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav):
+    outf.write('<tr>\n')
+    if upperleftnav:
+        outf.write('<td class="corner">')
+        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                           to_oid(currentpoint - 1010)))
+        outf.write('<img src="grey.gif" width="20" height="20">')
+        outf.write('</a></td>\n')
+    outf.write('<td colspan="20" class="top">')
+    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                       to_oid(currentpoint - 1000)))
+    outf.write('<img src="grey.gif" width="840" height="20">')
+    outf.write('</a></td>\n')
+    if upperrightnav:
+        outf.write('<td class="corner">')
+        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
+                                                           to_oid(currentpoint - 990)))
+        outf.write('<img src="grey.gif" width="20" height="20">')
+        outf.write('</a></td>\n')
+    outf.write('</tr>\n')
+
+
+def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
+    if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
+        if loc_rec['LO']['lc'][0] != '0':
+            outf.write('<b>')
+    outf.write('{}'.format(anchor(to_oid(cell))))
+    if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
+        if loc_rec['LO']['lc'][0] != '0':
+            outf.write('</b>')
+    if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
+        here_list = loc_rec['LI']['hl']
+        for garr in here_list:
+            garr_rec = data[garr]
+            if u.return_type(garr_rec) == 'garrison':
+                if 'MI' in garr_rec:
+                    if 'gc' in garr_rec['MI']:
+                        castle_id = garr_rec['MI']['gc'][0]
+                        outf.write('{}'.format(castle_chain[castle_id][0]))
+    if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
+        if len(loc_rec['LI']['hl']) > 0:
+            loc1 = ''
+            loc2 = ''
+            city = ''
+            graveyard = ''
+            count = int(0)
+            here_list = loc_rec['LI']['hl']
+            for here in here_list:
+                if 56760 <= int(here) <= 78999:
+                    count = count + 1
+                    here_rec = data[here]
+                    if u.return_type(here_rec) != 'city':
+                        city = here_rec
+                    elif u.return_type(here_rec) == 'graveyard':
+                        graveyard = here_rec
+                    elif loc1 == '' and u.return_kind(here_rec) == 'loc':
+                        loc1 = here_rec
+                    elif loc2 == '' and u.return_kind(here_rec) == 'loc':
+                        loc2 = here_rec
+            if city != '':
+                if loc2 == '':
+                    loc2 = loc1
+                loc1 = city
+            if graveyard != '':
+                if loc1 == '':
+                    if loc2 == '':
+                        loc2 = loc1
+                    loc1 = graveyard
+                else:
+                    if loc2 == '':
+                        loc2 = graveyard
+            if count > 2:
+                outf.write('<br />many')
+            else:
+                if loc2 != '':
+                    if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
+                        outf.write('<br />')
+                        outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
+                                                       u.return_short_type(loc2))))
+                    else:
+                        outf.write('<br />')
+                        if 'LO' in loc2 and 'hi' in loc2['LO']:
+                            if loc2['LO']['hi'][0] == '1':
+                                outf.write('<i>')
+                        outf.write(u.return_short_type(loc2))
+                        if 'LO' in loc2:
+                            if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
+                                outf.write('</i>')
+                else:
+                    outf.write('<br />&nbsp;')
+            if loc1 != '':
+                if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
+                    outf.write('<br />')
+                    outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
+                                                   u.return_short_type(loc1))))
+                else:
+                    outf.write('<br />')
+                    if 'LO' in loc1 and 'hi' in loc1['LO']:
+                        if loc1['LO']['hi'][0] == '1':
+                            outf.write('<i>')
+                    outf.write(u.return_short_type(loc1))
+                    if 'LO' in loc1 and 'hi' in loc1['LO']:
+                        if loc1['LO']['hi'][0] == '1':
+                            outf.write('</i>')
+            else:
+                outf.write('<br />&nbsp;')
+
+
+def generate_border(data, loc_rec, outf):
+    if barrier(loc_rec):
+        outf.write(' style="border: 2px solid purple" ')
+    else:
+        nbr_men, enemy_found, ships_found = count_stuff(loc_rec, data)
+        if nbr_men > 50:
+            outf.write(' style="border: 2px solid red" ')
+        elif ships_found:
+            outf.write(' style="border: 2px solid yellow" ')
+        elif enemy_found:
+            outf.write(' style="outline: 2px solid orange" ')
 
 
 def barrier(v):

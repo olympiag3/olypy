@@ -82,10 +82,10 @@ def write_reports(data, chains, outdir):
 def write_maps(data, chains, outdir, instance):
     print('Writing Maps')
     inst_dict = {'g2': {'main': [10000, 100, 100], 'hades': [18000, 100, 100], 'faery': [24000, 100, 100]},
-                 'g4': {'main': [10000, 80, 80], 'hades': [18000, 50, 50], 'faery': [24000, 46, 46], 'cloudland': [30000, 4, 4]},
+                 'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46]},
                  'qa': {'main': [10000, 10, 10], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
     dimensions = inst_dict[instance]
-    maps.write_index(outdir)
+    maps.write_index(outdir, instance)
     for world in dimensions:
         world_rec = dimensions[world]
         maps.write_bitmap(outdir,
