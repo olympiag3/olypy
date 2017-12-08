@@ -713,6 +713,7 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
 
 
 def write_loc_map_anchor(v, k, data, outf):
+    # this needs to be rewritten using instance/world matrix
     if 10000 <= int(k) < 18000:
         x_coord = int(10 * math.floor((int(k) % 100) / 10))
         if x_coord >= 70:
