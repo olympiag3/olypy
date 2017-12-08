@@ -174,22 +174,46 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             out_distance = u.calc_exit_distance(loc, dest_loc)
             outf.write(', {} {}'.format(out_distance,
                                         'day' if out_distance == 1 else 'days'))
+        if dest_loc['na'][0] == 'Hades' and loc['na'][0] != 'Hades':
+            outf.write('<br>&nbsp;&nbsp;&nbsp;"Notice to all mortals, from the Gatekeeper '
+                       'Spirit of Hades: 100 gold/head<br>&nbsp;&nbsp;&nbsp;&nbsp;'
+                       'is removed from any stack taking this road"')
         outf.write('</li>\n')
 
 
 def write_province_destinations(v, data, outf):
-    outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
-    outf.write('<ul>\n')
-    pd_list = v['LO']['pd']
-    i = int(0)
-    for pd in pd_list:
-        if pd != '0':
-            write_province_destination(v,
-                                       data[pd],
-                                       pd_directions[i],
-                                       data,
-                                       outf)
-        i = i + 1
+    print_header = False
+    pd_list = ''
+    if 'LO' in v:
+        if 'pd' in v['LO']:
+            pd_list = v['LO']['pd']
+    if len(pd_list) > 0:
+        i = int(0)
+        for pd in pd_list:
+            if pd != '0':
+                if not print_header:
+                    print_header = True
+                    outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+                    outf.write('<ul>\n')
+                write_province_destination(v,
+                                           data[pd],
+                                           pd_directions[i],
+                                           data,
+                                           outf)
+            i = i + 1
+    if u.return_type(v) not in details.province_kinds:
+        if not print_header:
+            print_header = True
+            outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+            outf.write('<ul>\n')
+        if 'LI' in v:
+            if 'wh' in v['LI']:
+                out_rec = data[v['LI']['wh'][0]]
+                write_province_destination(v,
+                                           out_rec,
+                                           'Out',
+                                           data,
+                                           outf)
     # see if road or gate
     if 'LI' in v:
         if 'hl' in v['LI']:
@@ -202,19 +226,34 @@ def write_province_destinations(v, data, outf):
                         name = 'Gate'
                     else:
                         name = here_record['na'][0]
+                    if not print_header:
+                        print_header = True
+                        outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+                        outf.write('<ul>\n')
                     write_province_destination(v,
                                                to_record,
                                                name,
                                                data,
                                                outf)
-    outf.write('</ul>\n')
+    if 'SL' in v:
+        if 'lt' in v['SL']:
+            link_to_record = data[v['SL']['lt'][0]]
+            if not print_header:
+                print_header = True
+                outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+                outf.write('<ul>\n')
+            write_province_destination(v,
+                                       link_to_record,
+                                       u.return_type(link_to_record).title(),
+                                       data,
+                                       outf)
+    if print_header:
+        outf.write('</ul>\n')
 
 
 def write_loc_routes_out(v, data, outf):
     if u.return_type(v) != 'city':
-        if 'LO' in v and 'pd' in v['LO']:
-            if len(v['LO']['pd']) > 0:
-                write_province_destinations(v, data, outf)
+        write_province_destinations(v, data, outf)
     else:
         outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
         outf.write('<ul>\n')
@@ -609,11 +648,18 @@ def write_storms(v, k, outf):
 
 def write_inner_locs(v, data, outf, here_list):
     outf.write('<ul>\n')
-    for here in here_list:
-        here_rec = data[here]
-        if u.return_kind(here_rec) == 'loc':
-            write_sub_locs(v, here_rec, u.return_unitid(here_rec),
-                           data, outf)
+    if len(here_list) > 0:
+        for here in here_list:
+            here_rec = data[here]
+            if u.return_kind(here_rec) == 'loc':
+                write_sub_locs(v, here_rec, u.return_unitid(here_rec),
+                               data, outf)
+    if 'SL' in v:
+        if 'lf' in v['SL']:
+            link_from_record = data[v['SL']['lf'][0]]
+            if u.return_kind(link_from_record) == 'loc':
+                write_sub_locs(v, link_from_record, u.return_unitid(link_from_record),
+                               data, outf)
     outf.write('</ul>\n')
 
 
@@ -645,24 +691,31 @@ def write_storms_here(data, outf, here_list):
 
 
 def write_here_list(v, data, outf):
-    try:
-        here_list = v['LI']['hl']
-    except KeyError:
-        return
     print_inner = False
     seen_here = False
     ships_docked = False
     storms_here = False
-    for here in here_list:
-        here_rec = data[here]
-        if u.return_kind(here_rec) == 'loc':
+    here_list = []
+    try:
+        here_list = v['LI']['hl']
+        for here in here_list:
+            here_rec = data[here]
+            if u.return_kind(here_rec) == 'loc':
+                print_inner = True
+            elif u.return_kind(here_rec) == 'char':
+                seen_here = True
+            elif u.return_kind(here_rec) == 'ship':
+                ships_docked = True
+            elif u.return_kind(here_rec) == 'storm':
+                storms_here = True
+    except KeyError:
+        pass
+    try:
+        inner_list = v['SL']['lf']
+        if len(inner_list) > 0:
             print_inner = True
-        elif u.return_kind(here_rec) == 'char':
-            seen_here = True
-        elif u.return_kind(here_rec) == 'ship':
-            ships_docked = True
-        elif u.return_kind(here_rec) == 'storm':
-            storms_here = True
+    except KeyError:
+        pass
     if print_inner:
         outf.write('<H4>Inner Locations:</H4>\n')
         write_inner_locs(v, data, outf, here_list)
@@ -751,8 +804,6 @@ def write_loc_map_anchor(v, k, data, outf):
 
 
 def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain):
-    if to_oid(k) == 'd535':
-        print('d535')
     write_loc_map_anchor(v, k, data, outf)
     write_loc_barrier(v, k, outf)
     write_loc_shroud(v, k, outf)
