@@ -171,7 +171,7 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.close()
 
 
-def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix):
+def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance):
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
     rem_height = height % 20
@@ -243,7 +243,8 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                                                x,
                                                y,
                                                rem_width,
-                                               rem_height)
+                                               rem_height,
+                                               instance)
                             outf.write('</tr>\n')
                     if botnav:
                         generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix)
@@ -255,7 +256,7 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                     outf.close()
 
 
-def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height):
+def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height, instance):
     if x == 0 and y == 0:
         if leftnav:
             outf.write('<td rowspan="20" class="left">')
@@ -269,7 +270,7 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
         outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
                                                     u.return_type(loc_rec)))
 
-        generate_border(data, loc_rec, outf)
+        generate_border(data, loc_rec, outf, instance)
         outf.write('>')
         generate_cell_contents(castle_chain, cell, data, loc_rec, outf)
         outf.write('</td>\n')
@@ -438,7 +439,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 outf.write('<br />&nbsp;')
 
 
-def generate_border(data, loc_rec, outf):
+def generate_border(data, loc_rec, outf, instance):
     if barrier(loc_rec):
         outf.write(' style="border: 2px solid blue" ')
     else:
@@ -448,7 +449,8 @@ def generate_border(data, loc_rec, outf):
         elif ships_found:
             outf.write(' style="border: 2px solid yellow" ')
         elif enemy_found:
-            outf.write(' style="outline: 2px solid orange" ')
+            if instance not in {'g2', 'qa'}:
+                outf.write(' style="outline: 2px solid orange" ')
 
 
 def barrier(v):

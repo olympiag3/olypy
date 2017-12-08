@@ -107,4 +107,5 @@ def write_maps(data, chains, outdir, instance):
                               world_rec[0],
                               world_rec[1],
                               world_rec[2],
-                              world)
+                              world,
+                              instance)
