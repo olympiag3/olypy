@@ -454,7 +454,7 @@ def generate_border(data, loc_rec, outf):
 def barrier(v):
     ret = False
     if 'LO' in v:
-        if 'ba' in v['LO'] and v['LO']['ba'][0] == '1':
+        if 'ba' in v['LO'] and v['LO']['ba'][0] != '0':
             ret = True
     return ret
 

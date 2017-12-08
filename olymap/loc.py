@@ -50,14 +50,14 @@ def write_loc_page_header(v, k, data, outf):
 def write_loc_shroud(v, k, outf):
     if 'LO' in v and 'sh' in v['LO']:
         if v['LO']['sh'][0] != '0':
-            outf.write('<p>A magical barrier surrounds {} [{}].</p>\n'.format(v['na'][0],
+            outf.write('<p>A magical shroud surrounds {} [{}].</p>\n'.format(v['na'][0],
                                                                               anchor(to_oid(k))))
 
 
 def write_loc_barrier(v, k, outf):
     if 'LO' in v and 'ba' in v['LO']:
         if v['LO']['ba'][0] != '0':
-            outf.write('<p>A magical shroud surrounds {} [{}].</p>\n'.format(v['na'][0],
+            outf.write('<p>A magical barrier surrounds {} [{}].</p>\n'.format(v['na'][0],
                                                                              anchor(to_oid(k))))
 
 
