@@ -553,9 +553,10 @@ def write_ships(v, k, data, outf):
                 name = storm['na'][0]
             else:
                 name = u.return_type(storm)
-            outf.write(', {} [{}] (strength: {})'.format(name,
-                                                         anchor(to_oid(v['SL']['bs'][0])),
-                                                         storm['MI']['ss'][0]))
+            outf.write(', bound {}-storm {} [{}] (strength: {})'.format(u.return_type(storm),
+                                                                        name,
+                                                                        anchor(to_oid(v['SL']['bs'][0])),
+                                                                        storm['MI']['ss'][0]))
     if 'SL' in v:
         if 'de' in v['SL']:
             outf.write(', defense {}'.format(v['SL']['de'][0]))
