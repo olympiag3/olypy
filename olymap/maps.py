@@ -440,7 +440,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
 
 def generate_border(data, loc_rec, outf):
     if barrier(loc_rec):
-        outf.write(' style="border: 2px solid purple" ')
+        outf.write(' style="border: 2px solid blue" ')
     else:
         nbr_men, enemy_found, ships_found = count_stuff(loc_rec, data)
         if nbr_men > 50:

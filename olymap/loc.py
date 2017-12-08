@@ -751,6 +751,8 @@ def write_loc_map_anchor(v, k, data, outf):
 
 
 def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain):
+    if to_oid(k) == 'd535':
+        print('d535')
     write_loc_map_anchor(v, k, data, outf)
     write_loc_barrier(v, k, outf)
     write_loc_shroud(v, k, outf)
