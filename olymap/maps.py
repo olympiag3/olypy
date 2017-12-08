@@ -99,12 +99,12 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     else:
         multiple = 5
     rem_height = height % 10
-    if rem_height > 0:
+    if rem_height > 0 and height >= 10:
         iheight = (multiple * (height - 10)) + (rem_height * multiple)
     else:
         iheight = (multiple * height)
     rem_width = width % 10
-    if rem_width > 0:
+    if rem_width > 0 and width >= 10:
         iwidth = (multiple * (width - 10)) + (rem_width * multiple)
     else:
         iwidth = (multiple * width)
@@ -114,12 +114,18 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.write('<map name="oly" id="oly">\n')
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
-    lwidth = int(iwidth / (x_max - 1))
-    lheight = int(iheight / (y_max - 1))
+    if x_max == 1:
+        lwidth = width * multiple
+    else:
+        lwidth = int(iwidth / (x_max - 1))
+    if y_max == 1:
+        lheight = height * multiple
+    else:
+        lheight = int(iheight / (y_max - 1))
     tp = 0
     bt = lheight
     for outery in range(0, y_max):
-        if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0):
+        if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0) or y_max == 1:
             startingpoint = upperleft + (outery * 1000)
             lt = 0
             rt = lwidth
@@ -136,10 +142,10 @@ def write_top_map(outdir, upperleft, height, width, prefix):
             else:
                 tp = tp + lheight
                 bt = bt + lheight
-            for outerx in range(0, x_max - 1):
-                if outerx < x_max - 1 or (outerx == x_max - 1 and rem_width > 0):
+            for outerx in range(0, x_max):
+                if outerx < x_max - 1 or (outerx == x_max - 1 and rem_width > 0) or x_max == 1:
                     currentpoint = startingpoint + (outerx * 10)
-                    if outerx == 0:
+                    if outerx == 0 and x_max != 1:
                         pass
                     elif outerx == 1:
                         lt = lwidth
@@ -147,7 +153,7 @@ def write_top_map(outdir, upperleft, height, width, prefix):
                     elif outerx == x_max - 2:
                         lt = lt + lwidth
                         rt = rt + lwidth
-                    elif outerx == x_max - 1:
+                    elif outerx == x_max - 1 or x_max == 1:
                         rt = rt + (rem_width * multiple)
                     else:
                         lt = lt + lwidth
@@ -171,10 +177,10 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
     rem_height = height % 20
     rem_width = width % 20
     for outery in range(0, y_max):
-        if outery < y_max - 1:
+        if outery < y_max - 1 or y_max == 1:
             startingpoint = upperleft + (outery * 1000)
             for outerx in range(0, x_max):
-                if outerx < x_max - 1:
+                if outerx < x_max - 1 or x_max == 1:
                     currentpoint = startingpoint + (outerx * 10)
                     outf = open(pathlib.Path(outdir).joinpath(prefix +
                                                               '_map_leaf_'
@@ -219,10 +225,14 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                     if topnav:
                         generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav)
                     for y in range(0, 20):
-                        if (rem_height == 0 or outery <= y_max - 3) or (outery == y_max - 2 and y < rem_height + 10):
+                        if (rem_height == 0 or outery <= y_max - 3) or \
+                            (outery == y_max - 2 and y < rem_height + 10) or \
+                            (y_max == 1 and y < rem_height):
                             outf.write('<tr>\n')
                             for x in range(0, 20):
-                                if (rem_width == 0 or outerx <= x_max - 3) or (outerx == x_max - 2 and x < rem_width + 10):
+                                if (rem_width == 0 or outerx <= x_max - 3) or \
+                                    (outerx == x_max - 2 and x < rem_width + 10) or \
+                                    (x_max == 1 and x < rem_width):
                                     write_cell(castle_chain,
                                                currentpoint,
                                                data,
@@ -487,7 +497,7 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix):
                       'mountain': (0x80, 0x80, 0x80, 0xff),
                       'desert': (0xff, 0xff, 0x00, 0xff),
                       'underground': (0xff, 0xa5, 0x00, 0xff),
-                      'cloud': (0xee, 0xe8, 0xaa, 0xff)}
+                      'cloud': (0xad, 0xd8, 0xe6, 0xff)}
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_thumbnail.png'), 'wb')
     map = PNGCanvas(width, height, color=(0xff, 0, 0, 0xff))
     for x in range(0, width):
@@ -496,6 +506,8 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix):
             try:
                 province_box = data[str(curr_loc)]
                 try:
+                    if u.return_type(province_box) == 'cloud':
+                        print('cloud')
                     color = color_pallette[u.return_type(province_box)]
                     map.point(x, y, color)
                 except KeyError:
