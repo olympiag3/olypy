@@ -506,8 +506,6 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix):
             try:
                 province_box = data[str(curr_loc)]
                 try:
-                    if u.return_type(province_box) == 'cloud':
-                        print('cloud')
                     color = color_pallette[u.return_type(province_box)]
                     map.point(x, y, color)
                 except KeyError:

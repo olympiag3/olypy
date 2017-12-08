@@ -116,12 +116,18 @@ def write_char_combat(v, outf):
     outf.write('<td>behind {} {}</td></tr>\n'.format(behind, behind_text))
 
 
-def write_char_break_point(v, outf):
+def write_char_break_point(v, outf, instance):
     # CH/bp
-    break_point = '1'
+    # workaround for differences between g2 and g4
+    if instance.lower() in {'g2','qa'}:
+        break_point = '100'
+    else:
+        break_point = '50'
     if 'CH' in v and 'bp' in v['CH']:
         break_point = v['CH']['bp'][0]
-    if break_point == '0':
+        if break_point == '0':
+            break_point = '100'
+    if break_point != '50':
         break_point_text = '(fight to the death)'
     else:
         break_point_text = ''
@@ -568,7 +574,7 @@ def write_char_magic_stuff(v, data, outf):
                 pass
 
 
-def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain):
+def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain, instance):
     if u.return_type(v) != 'garrison':
         outf.write('<table>\n')
         write_char_rank(v, k, outf)
@@ -579,7 +585,7 @@ def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain):
         write_char_stacked_over(v, data, outf)
         write_char_health(v, outf)
         write_char_combat(v, outf)
-        write_char_break_point(v, outf)
+        write_char_break_point(v, outf, instance)
         write_char_vision_protection(v, outf)
         write_char_pledged_to(v, data, outf)
         write_char_pledged_to_us(k, data, outf, pledge_chain)
@@ -608,7 +614,7 @@ def write_char_location(data, outf, v):
         outf.write('</tr>\n')
 
 
-def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir):
+def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
     # generate char page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k)+'.html'), 'w')
     outf.write('<HTML>\n')
@@ -622,7 +628,7 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     write_char_page_header(v, k, outf)
-    write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain)
+    write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain, instance)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()

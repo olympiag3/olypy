@@ -22,7 +22,7 @@ def make_map(inlib, outdir, instance):
     data = oio.read_lib(inlib)
     dbck.check_db(data, fix=True, checknames=True)
     chains = resolve_chains(data)
-    write_box_pages(data, chains, outdir)
+    write_box_pages(data, chains, outdir, instance)
     write_reports(data, chains, outdir)
     write_maps(data, chains, outdir, instance)
 
@@ -43,7 +43,7 @@ def resolve_chains(data):
     return chains
 
 
-def write_box_pages(data, chains, outdir):
+def write_box_pages(data, chains, outdir, instance):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
@@ -51,7 +51,7 @@ def write_box_pages(data, chains, outdir):
                                chains['trades'], outdir)
         elif u.return_kind(v) == 'char':
             char.write_char_html(v, k, data, chains['pledges'],
-                                 chains['prisoners'], outdir)
+                                 chains['prisoners'], outdir, instance)
         elif u.return_kind(v) == 'player':
             player.write_player_html(v, k, data, outdir)
         elif u.return_kind(v) == 'item':
