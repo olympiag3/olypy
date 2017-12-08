@@ -16,6 +16,13 @@ long_type_to_display_type = {'poppy field': 'p.field',
                              'enchanted forest': 'e.forst',
                              'collapsed mine': 'c.mine'}
 
+long_kind_to_display_kind = {'Secret pass': 's.pass',
+                             'Secret route': 's.rte',
+                             'Old road': 'o.road',
+                             'Narrow channel': 'n.chan',
+                             'Rocky channel': 'r.chan',
+                             'Secret sea route': 'sea.rte',
+                             'Underground': 'ugrnd'}
 rank_num_string = {'10': 'lord',
                    '20': 'knight',
                    '30': 'baron',

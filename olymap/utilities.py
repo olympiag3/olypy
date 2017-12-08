@@ -4,6 +4,7 @@ import olypy.details as details
 from collections import defaultdict
 from olypy.oid import to_oid
 from olymap.detail import long_type_to_display_type
+from olymap.detail import long_kind_to_display_kind
 from olymap.detail import rank_num_string
 from olymap.detail import castle_ind
 from olymap.detail import loc_types
@@ -25,6 +26,17 @@ def return_short_type(box):
         short_type = long_type_to_display_type[sub_loc]
     except KeyError:
         short_type = sub_loc
+        # try kind
+        if sub_loc not in details.subloc_kinds:
+            if is_road_or_gate(box):
+                if return_kind(box) == 'gate':
+                    short_type = 'gate'
+                else:
+                    name = box['na'][0]
+                    try:
+                        short_type = long_kind_to_display_kind[name]
+                    except KeyError:
+                        pass
     return short_type
 
 
@@ -170,6 +182,13 @@ def is_garrison(data, unit):
 def is_castle(data, unit):
     if return_type(data[unit]) == 'castle':
         return True
+    return False
+
+
+def is_road_or_gate(loc_record):
+    if 'GA' in loc_record:
+        if 'tl' in loc_record['GA']:
+            return True
     return False
 
 

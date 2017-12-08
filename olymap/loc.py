@@ -164,7 +164,11 @@ def write_province_destination(loc, dest_loc, direction, data, outf):
             barrier = dest_loc['LO']['ba'][0]
         if barrier != '0':
             outf.write(', impassable<br>&nbsp;&nbsp;&nbsp;A magical barrier prevents entry.')
-        elif u.return_type(loc) == 'ocean' and u.return_type(dest_loc) == 'mountain':
+        elif (u.return_type(loc) == 'ocean' and \
+            u.return_type(dest_loc) == 'mountain') or \
+            (u.return_type(loc) == 'mountain' and \
+            u.return_type(dest_loc) == 'ocean') and \
+            direction.lower() not in details.road_directions:
             outf.write(', impassable')
         else:
             out_distance = u.calc_exit_distance(loc, dest_loc)
@@ -186,6 +190,23 @@ def write_province_destinations(v, data, outf):
                                        data,
                                        outf)
         i = i + 1
+    # see if road or gate
+    if 'LI' in v:
+        if 'hl' in v['LI']:
+            here_list = v['LI']['hl']
+            for here in here_list:
+                here_record = data[here]
+                if u.is_road_or_gate(here_record):
+                    to_record = data[here_record['GA']['tl'][0]]
+                    if u.return_kind(here_record) == 'gate':
+                        name = 'Gate'
+                    else:
+                        name = here_record['na'][0]
+                    write_province_destination(v,
+                                               to_record,
+                                               name,
+                                               data,
+                                               outf)
     outf.write('</ul>\n')
 
 

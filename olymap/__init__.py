@@ -77,6 +77,8 @@ def write_reports(data, chains, outdir):
     reports.location_report(data, outdir)
     reports.skill_xref_report(data, chains['teaches'], outdir)
     reports.trade_report(data, chains['trades'], outdir)
+    reports.road_report(data, outdir)
+    reports.gate_report(data, outdir)
 
 
 def write_maps(data, chains, outdir, instance):

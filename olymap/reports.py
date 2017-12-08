@@ -515,3 +515,84 @@ def trade_report(data, trade_chain, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def road_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_road_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Road Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Road Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Type</th><th>Name</th><th>Start</th><th>Destination</th></tr>\n')
+    road_list = []
+    for unit in data:
+        if u.is_road_or_gate(data[unit]):
+            road_list.append(int(to_int(unit)))
+    road_list.sort()
+    if road_list != '':
+        for road in road_list:
+            road_rec = data[str(road)]
+            try:
+                if road_rec['GA']['rh'][0] == '1':
+                    outf.write('<tr>')
+                    outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
+                    outf.write('<td>{}</td>'.format(road_rec['na'][0]))
+                    start = road_rec['LI']['wh'][0]
+                    start_rec = data[start]
+                    outf.write('<td>{} [{}]</td>'.format(start_rec['na'][0],
+                                                         anchor(to_oid(u.return_unitid(start_rec)))))
+                    dest = road_rec['GA']['tl'][0]
+                    dest_rec = data[dest]
+                    outf.write('<td>{} [{}]</td>'.format(dest_rec['na'][0],
+                                                         anchor(to_oid(u.return_unitid(dest_rec)))))
+                    outf.write('</tr>\n')
+            except KeyError:
+                pass
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+
+
+def gate_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_gate_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Gate Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Gate Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Type</th><th>Start</th><th>Destination</th></tr>\n')
+    road_list = []
+    for unit in data:
+        if u.is_road_or_gate(data[unit]):
+            road_list.append(int(to_int(unit)))
+    road_list.sort()
+    if road_list != '':
+        for road in road_list:
+            road_rec = data[str(road)]
+            try:
+                if road_rec['GA']['rh'][0] == '1':
+                    pass
+            except KeyError:
+                outf.write('<tr>')
+                outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
+                start = road_rec['LI']['wh'][0]
+                start_rec = data[start]
+                outf.write('<td>{} [{}]</td>'.format(start_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(start_rec)))))
+                dest = road_rec['GA']['tl'][0]
+                dest_rec = data[dest]
+                outf.write('<td>{} [{}]</td>'.format(dest_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(dest_rec)))))
+                outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()

@@ -40,6 +40,8 @@ def write_index(outdir, instance, inst_dict):
     outf.write('<li><a href="master_trade_report.html">Trades</a></li>')
     outf.write('<li><a href="master_ship_report.html">Ships</a></li>')
     outf.write('<li><a href="master_location_report.html">Locations</a></li>')
+    outf.write('<li><a href="master_road_report.html">Roads</a></li>')
+    outf.write('<li><a href="master_gate_report.html">Gates</a></li>')
     outf.write('</ul>')
     outf.write('</th>')
     outf.write('<th>')
@@ -351,17 +353,20 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
             loc2 = ''
             city = ''
             graveyard = ''
+            road_or_gate = ''
             count = int(0)
             here_list = loc_rec['LI']['hl']
             for here in here_list:
                 # if 56760 <= int(here) <= 78999:
                 here_rec = data[here]
-                if u.return_type(here_rec) in details.subloc_kinds:
+                if u.return_type(here_rec) in details.subloc_kinds or u.is_road_or_gate(here_rec):
                     count = count + 1
                     if u.return_type(here_rec) == 'city':
                         city = here_rec
                     elif u.return_type(here_rec) == 'graveyard':
                         graveyard = here_rec
+                    elif u.is_road_or_gate(here_rec):
+                        road_or_gate = here_rec
                     elif loc1 == '' and u.return_kind(here_rec) == 'loc':
                         loc1 = here_rec
                     elif loc2 == '' and u.return_kind(here_rec) == 'loc':
@@ -378,6 +383,14 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 else:
                     if loc2 == '':
                         loc2 = graveyard
+            if road_or_gate != '':
+                if loc1 == '':
+                    if loc2 == '':
+                        loc2 = loc1
+                    loc1 = road_or_gate
+                else:
+                    if loc2 == '':
+                        loc2 = road_or_gate
             if count > 2:
                 outf.write('<br />many')
             else:
