@@ -438,6 +438,60 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
         outf.write('</table>\n')
 
 
+def print_wearable_wielding(v, data, outf):
+    attack_max = 0
+    missile_max = 0
+    defense_max = 0
+    attack = ''
+    missile = ''
+    defense = ''
+    if 'il' in v:
+        item_list = v['il']
+        iterations = int(len(item_list) / 2)
+        if iterations > 0:
+            for items in range(0, iterations):
+                itemz = data[item_list[items * 2]]
+                if 'IM' in itemz:
+                    if 'ab' in itemz['IM']:
+                        if int(itemz['IM']['ab'][0]) > attack_max:
+                            attack_max = int(itemz['IM']['ab'][0])
+                            attack = u.return_unitid(itemz)
+                    if 'mb' in itemz['IM']:
+                        if int(itemz['IM']['mb'][0]) > missile_max:
+                            missile_max = int(itemz['IM']['mb'][0])
+                            missile = u.return_unitid(itemz)
+                    if 'db' in itemz['IM']:
+                        if int(itemz['IM']['db'][0]) > defense_max:
+                            defense_max = int(itemz['IM']['db'][0])
+                            defense = u.return_unitid(itemz)
+        # found something
+        if attack != '' or missile != '' or defense != '':
+            if attack == missile:
+                missile = ''
+        if attack == defense:
+            defense = ''
+        if attack != '' or missile != '':
+            if attack == '':
+                missile_rec = data[missile]
+                outf.write(', wielding {} [{}]'.format(missile_rec['na'][0],
+                                                       anchor(to_oid(u.return_unitid(missile_rec)))))
+            elif missile == '':
+                attack_rec = data[attack]
+                outf.write(', wielding {} [{}]'.format(attack_rec['na'][0],
+                                                       anchor(to_oid(u.return_unitid(attack_rec)))))
+            else:
+                missile_rec = data[missile]
+                attack_rec = data[attack]
+                outf.write(', wielding {} [{}] and {} [{}]'.format(attack_rec['na'][0],
+                                                                   anchor(to_oid(u.return_unitid(attack_rec))),
+                                                                   missile_rec['na'][0],
+                                                                   anchor(to_oid(u.return_unitid(missile_rec)))))
+        if defense != '':
+            defense_rec = data[defense]
+            outf.write(', wearing {} [{}]'.format(defense_rec['na'][0],
+                                                  anchor(to_oid(u.return_unitid(defense_rec)))))
+
+
 def write_characters(v, k, data, outf, print_province = False):
     outf.write('<li>')
     if print_province:
@@ -451,17 +505,16 @@ def write_characters(v, k, data, outf, print_province = False):
         name = v['na'][0]
     outf.write('{} [{}]'.format(name,
                                 anchor(to_oid(k))))
-    if u.xlate_loyalty(v) not in {'Undefined', 'Npc'}:
+    if u.xlate_loyalty(v) not in {'Undefined'}:
         outf.write(' ({}'.format(u.xlate_loyalty(v)))
-        if 'CH' in v:
-            if 'sl' in v['CH']:
-                skills_list = v['CH']['sl']
-                if int(len(skills_list)) > 0:
-                    iterations = int(len(skills_list) / 5)
-                    for skill in range(0, iterations):
-                        if skills_list[skill * 5] == '909':
-                            if skills_list[(skill * 5) + 1] == '2':
-                                outf.write(':AB')
+        if 'CH' in v and 'sl' in v['CH']:
+            skills_list = v['CH']['sl']
+            if int(len(skills_list)) > 0:
+                iterations = int(len(skills_list) / 5)
+                for skill in range(0, iterations):
+                    if skills_list[skill * 5] == '909':
+                        if skills_list[(skill * 5) + 1] == '2':
+                            outf.write(':AB')
         outf.write(')')
     else:
         if 'CH' in v:
@@ -474,24 +527,27 @@ def write_characters(v, k, data, outf, print_province = False):
                             if skills_list[(skill * 5) + 1] == '2':
                                 outf.write('(AB')
     if u.return_type(v) != '0':
-        outf.write(', {}'.format(u.return_type(v)))
+        if u.return_type(v) == 'ni':
+            char_type = v['na'][0].lower()
+        else:
+            char_type = u.return_type(v)
+        outf.write(', {}'.format(char_type))
     if 'CH' in v:
-        if 'pr' in v['CH']:
-            if v['CH']['pr'][0] == '2':
-                outf.write(', prisoner')
+        if 'pr' in v['CH'] and v['CH']['pr'][0] == '2':
+            outf.write(', prisoner')
     if u.is_priest(v):
         outf.write(', priest')
     if u.is_magician(v):
         if u.xlate_magetype(v) not in {'', 'undefined'}:
             outf.write(', {}'.format(u.xlate_magetype(v)))
     if 'CH' in v:
-        if 'gu' in v['CH']:
-            if v['CH']['gu'][0] == '1':
-                outf.write(', on guard')
-    if 'CH' in v:
-        if 'hs' in v['CH']:
-            if v['CH']['hs'][0] == '1':
-                outf.write(' concealed')
+        if 'gu' in v['CH'] and v['CH']['gu'][0] == '1':
+            outf.write(', on guard')
+        if 'hs' in v['CH'] and v['CH']['hs'][0] == '1':
+            outf.write(' concealed')
+    # print wearing/wielding
+    print_wearable_wielding(v, data, outf)
+    # print prominent items
     if 'il' in v:
         item_list = v['il']
         iterations = int(len(item_list) / 2)

@@ -82,7 +82,10 @@ def write_char_health(v, outf):
                     status = '(getting worse)'
                 else:
                     status = '(getting better)'
-            outf.write('<td>{}% {}</td></tr>\n'.format(v['CH']['he'][0], status))
+            if int(v['CH']['he'][0]) < 0:
+                outf.write('<td>{} {}</td></tr>\n'.format('n/a', status))
+            else:
+                outf.write('<td>{}% {}</td></tr>\n'.format(v['CH']['he'][0], status))
         else:
             outf.write('<td>{}%</td></tr>\n'.format(v['CH']['he'][0]))
 
@@ -120,13 +123,11 @@ def write_char_break_point(v, outf, instance):
     # CH/bp
     # workaround for differences between g2 and g4
     if instance.lower() in {'g2','qa'}:
-        break_point = '100'
+        break_point = '0'
     else:
         break_point = '50'
     if 'CH' in v and 'bp' in v['CH']:
         break_point = v['CH']['bp'][0]
-        if break_point == '0':
-            break_point = '100'
     if break_point != '50':
         break_point_text = '(fight to the death)'
     else:
@@ -292,6 +293,10 @@ def write_char_skills_known(v, data, outf):
                     outf.write('</li>\n')
             if printknown or printunknown:
                 outf.write('</ul>\n')
+    else:
+        outf.write('<p>Skills known:</p>\n')
+        outf.write('<ul style="list-style-type:none">\n')
+        outf.write('<li>none</li></ul>\n')
 
 
 def write_char_inventory(v, data, outf):
@@ -310,7 +315,7 @@ def write_char_inventory(v, data, outf):
                 item_id = item_list[itm*2]
                 item_qty = int(item_list[(itm*2)+1])
                 outf.write('<tr>')
-                outf.write('<td style="text-align:right">{}</td>'.format(item_qty))
+                outf.write('<td style="text-align:right">{}</td>'.format(f"{item_qty:,d}"))
                 itemz = data[item_id]
                 itemz_name = itemz['na'][0] if item_qty == 1 else itemz['IT']['pl'][0]
                 outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz_name, anchor(to_oid(item_id))))
@@ -318,7 +323,8 @@ def write_char_inventory(v, data, outf):
                     item_weight = int(itemz['IT']['wt'][0])
                 else:
                     item_weight = int(0)
-                outf.write('<td style="text-align:right">{}</td>'.format(item_weight * item_qty))
+                item_ext = int(item_weight * item_qty)
+                outf.write('<td style="text-align:right">{}</td>'.format(f"{item_ext:,d}"))
                 total_weight = total_weight + (item_weight * item_qty)
                 if u.return_type(v) != "garrison":
                     outf.write('<td>')
@@ -332,11 +338,11 @@ def write_char_inventory(v, data, outf):
                     if 'rc' in itemz['IT']:
                         ride_capacity = int(itemz['IT']['rc'][0])
                     if fly_capacity > 0:
-                        outf.write('fly {}'.format(fly_capacity * item_qty))
+                        outf.write('fly {}'.format(f"{(fly_capacity * item_qty):,d}"))
                     elif ride_capacity > 0:
-                        outf.write('ride {}'.format(ride_capacity * item_qty))
+                        outf.write('ride {}'.format(f"{(ride_capacity * item_qty):,d}"))
                     elif land_capacity > 0:
-                        outf.write('cap {}'.format(land_capacity * item_qty))
+                        outf.write('cap {}'.format(f"{(land_capacity * item_qty):,d}"))
                     if u.is_fighter(itemz, item_id):
                         attack = int(0)
                         defense = int(0)
@@ -356,14 +362,14 @@ def write_char_inventory(v, data, outf):
                             attack_bonus = int(itemz['IM']['ab'][0])
                         if 'db' in itemz['IM']:
                             defense_bonus = int(itemz['IM']['db'][0])
-                        if 'mi' in itemz['IT']:
+                        if 'mb' in itemz['IM']:
                             missile_bonus = int(itemz['IM']['mb'][0])
                     if attack_bonus > 0:
-                        outf.write('+ {} attack'.format(attack_bonus))
+                        outf.write('+ {} attack'.format(f"{attack_bonus:,d}"))
                     if defense_bonus > 0:
-                        outf.write('+ {} defense'.format(defense_bonus))
+                        outf.write('+ {} defense'.format(f"{defense_bonus:,d}"))
                     if missile_bonus > 0:
-                        outf.write('+ {} missile'.format(missile_bonus))
+                        outf.write('+ {} missile'.format(f"{missile_bonus:,d}"))
                     if u.is_magician(v):
                         aura_bonus = 0
                         if 'IM' in itemz and 'ba' in itemz['IM']:
@@ -378,7 +384,7 @@ def write_char_inventory(v, data, outf):
                 outf.write('<tr><td></td><td></td><td style="text-align:right">====='
                            '</td><td>&nbsp;</td></tr>\n')
                 outf.write('<tr><td></td><td></td><td style="text-align:right">{}</td>'
-                           '<td>&nbsp;</td></tr>\n'.format(total_weight))
+                           '<td>&nbsp;</td></tr>\n'.format(f"{total_weight:,d}"))
             outf.write('</table>\n')
 
 
@@ -399,15 +405,15 @@ def write_char_capacity(v, data, outf):
     if 'IT' in base_unit and 'wt' in base_unit['IT']:
         item_weight = int(base_unit['IT']['wt'][0]) * 1
     if 'IT' in base_unit:
-        if 'lc' in base_unit['IT']:
+        if 'lc' in base_unit['IT'] and base_unit['IT']['lc'][0] != '0':
             land_cap = land_cap + int(base_unit['IT']['lc'][0])
         else:
             land_weight = land_weight + item_weight
-        if 'fc' in base_unit['IT']:
+        if 'fc' in base_unit['IT'] and base_unit['IT']['fc'][0] != '0':
             fly_cap = fly_cap + int(base_unit['IT']['fc'][0])
         else:
             fly_weight = fly_weight + item_weight
-        if 'rc' in base_unit['IT']:
+        if 'rc' in base_unit['IT'] and base_unit['IT']['rc'][0] != '0':
             ride_cap = ride_cap + int(base_unit['IT']['rc'][0])
         else:
             ride_weight = ride_weight + item_weight
@@ -432,15 +438,15 @@ def write_char_capacity(v, data, outf):
                 if 'IT' in base_unit and 'wt' in base_unit['IT']:
                     item_weight = int(base_unit['IT']['wt'][0]) * item_qty
                 if 'IT' in base_unit:
-                    if 'lc' in base_unit['IT']:
+                    if 'lc' in base_unit['IT'] and base_unit['IT']['lc'][0] != '0':
                         land_cap = land_cap + int(base_unit['IT']['lc'][0]) * item_qty
                     else:
                         land_weight = land_weight + item_weight
-                    if 'fc' in base_unit['IT']:
+                    if 'fc' in base_unit['IT'] and base_unit['IT']['fc'][0] != '0':
                         fly_cap = fly_cap + int(base_unit['IT']['fc'][0]) * item_qty
                     else:
                         fly_weight = fly_weight + item_weight
-                    if 'rc' in base_unit['IT']:
+                    if 'rc' in base_unit['IT'] and base_unit['IT']['rc'][0] != '0':
                         ride_cap = ride_cap + int(base_unit['IT']['rc'][0]) * item_qty
                     else:
                         ride_weight = ride_weight + item_weight
@@ -454,13 +460,13 @@ def write_char_capacity(v, data, outf):
     outf.write('<p>Capacity: ')
     if land_cap > 0:
         pct = math.floor((land_weight * 100) / land_cap)
-        outf.write('{}/{} land ({}%) '.format(land_weight, land_cap, pct))
+        outf.write('{}/{} land ({}%) '.format(f"{land_weight:,d}", f"{land_cap:,d}", f"{pct:,d}"))
     if ride_cap > 0:
         pct = math.floor((ride_weight * 100) / ride_cap)
-        outf.write('{}/{} ride ({}%) '.format(ride_weight, ride_cap, pct))
+        outf.write('{}/{} ride ({}%) '.format(f"{ride_weight:,d}", f"{ride_cap:,d}", f"{pct:,d}"))
     if fly_cap > 0:
         pct = math.floor((fly_weight * 100) / fly_cap)
-        outf.write('{}/{} fly ({}%)'.format(fly_weight, fly_cap, pct))
+        outf.write('{}/{} fly ({}%)'.format(f"{fly_weight:,d}", f"{fly_cap:,d}", f"{pct:,d}"))
     outf.write('</p>')
 
 

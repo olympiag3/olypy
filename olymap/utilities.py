@@ -99,8 +99,8 @@ def xlate_loyalty(v):
             loyalty = 'Oath-' + v['CH']['lr'][0]
         elif v['CH']['lk'][0] == '3' and 'lr' in v['CH']:
             loyalty = 'Fear-' + v['CH']['lr'][0]
-        elif v['CH']['lk'][0] == '4':
-            loyalty = 'Npc'
+        elif v['CH']['lk'][0] == '4' and 'lr' in v['CH']:
+            loyalty = 'Npc-' + v['CH']['lr'][0]
         elif v['CH']['lk'][0] == '5':
             loyalty = 'Summon'
         else:
