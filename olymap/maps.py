@@ -359,13 +359,13 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                     if 'gc' in garr_rec['MI']:
                         castle_id = garr_rec['MI']['gc'][0]
                         outf.write('{}'.format(castle_chain[castle_id][0]))
+    loc1 = ''
+    loc2 = ''
+    city = ''
+    graveyard = ''
+    road_or_gate = ''
     if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
         if len(loc_rec['LI']['hl']) > 0:
-            loc1 = ''
-            loc2 = ''
-            city = ''
-            graveyard = ''
-            road_or_gate = ''
             count = int(0)
             here_list = loc_rec['LI']['hl']
             for here in here_list:
@@ -383,61 +383,75 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                         loc1 = here_rec
                     elif loc2 == '' and u.return_kind(here_rec) == 'loc':
                         loc2 = here_rec
-            if city != '':
+    if 'SL' in loc_rec:
+        if 'lt' in loc_rec['SL']:
+            here_rec = data[loc_rec['SL']['lt'][0]]
+            if loc1 == '':
+                loc1 = here_rec
+            elif loc2 == '':
+                loc2 = here_rec
+        if 'lf' in loc_rec['SL']:
+            here_rec = data[loc_rec['SL']['lf'][0]]
+            if loc1 == '':
+                loc1 = here_rec
+            elif loc2 == '':
+                loc2 = here_rec
+    if loc1 != '' or loc2 != '' or city != '' or graveyard != ''or road_or_gate != '':
+        if city != '':
+            if loc2 == '':
+                loc2 = loc1
+            loc1 = city
+        if graveyard != '':
+            if loc1 == '':
                 if loc2 == '':
                     loc2 = loc1
-                loc1 = city
-            if graveyard != '':
-                if loc1 == '':
-                    if loc2 == '':
-                        loc2 = loc1
-                    loc1 = graveyard
-                else:
-                    if loc2 == '':
-                        loc2 = graveyard
-            if road_or_gate != '':
-                if loc1 == '':
-                    if loc2 == '':
-                        loc2 = loc1
-                    loc1 = road_or_gate
-                else:
-                    if loc2 == '':
-                        loc2 = road_or_gate
-            if count > 2:
-                outf.write('<br />many')
+                loc1 = graveyard
             else:
-                if loc2 != '':
-                    if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard':
-                        outf.write('<br />')
-                        outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
-                                                       u.return_short_type(loc2))))
-                    else:
-                        outf.write('<br />')
-                        if 'LO' in loc2 and 'hi' in loc2['LO']:
-                            if loc2['LO']['hi'][0] == '1':
-                                outf.write('<i>')
-                        outf.write(u.return_short_type(loc2))
-                        if 'LO' in loc2:
-                            if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
-                                outf.write('</i>')
-                else:
-                    outf.write('<br />&nbsp;')
-            if loc1 != '':
-                if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard':
+                if loc2 == '':
+                    loc2 = graveyard
+        if road_or_gate != '':
+            if loc1 == '':
+                if loc2 == '':
+                    loc2 = loc1
+                loc1 = road_or_gate
+            else:
+                if loc2 == '':
+                    loc2 = road_or_gate
+        if count > 2:
+            outf.write('<br />many')
+        else:
+            if loc2 != '':
+                if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard' or u.return_type(loc2) == 'faery hill':
                     outf.write('<br />')
-                    outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
-                                                   u.return_short_type(loc1))))
+                    outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
+                                                   u.return_short_type(loc2))))
                 else:
                     outf.write('<br />')
-                    if 'LO' in loc1 and 'hi' in loc1['LO']:
-                        if loc1['LO']['hi'][0] == '1':
+                    if 'LO' in loc2 and 'hi' in loc2['LO']:
+                        if loc2['LO']['hi'][0] == '1':
                             outf.write('<i>')
-                    outf.write(u.return_short_type(loc1))
-                    if 'LO' in loc1 and 'hi' in loc1['LO']:
-                        if loc1['LO']['hi'][0] == '1':
+                    outf.write(u.return_short_type(loc2))
+                    if 'LO' in loc2:
+                        if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
                             outf.write('</i>')
             else:
                 outf.write('<br />&nbsp;')
+        if loc1 != '':
+            if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard' or u.return_type(loc1) == 'faery hill':
+                outf.write('<br />')
+                outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
+                                               u.return_short_type(loc1))))
+            else:
+                outf.write('<br />')
+                if 'LO' in loc1 and 'hi' in loc1['LO']:
+                    if loc1['LO']['hi'][0] == '1':
+                        outf.write('<i>')
+                outf.write(u.return_short_type(loc1))
+                if 'LO' in loc1 and 'hi' in loc1['LO']:
+                    if loc1['LO']['hi'][0] == '1':
+                        outf.write('</i>')
+        else:
+            outf.write('<br />&nbsp;')
 
 
 def generate_border(data, loc_rec, outf, instance):
