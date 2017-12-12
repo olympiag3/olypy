@@ -79,6 +79,7 @@ def write_reports(data, chains, outdir):
     reports.trade_report(data, chains['trades'], outdir)
     reports.road_report(data, outdir)
     reports.gate_report(data, outdir)
+    reports.character_report(data, outdir)
 
 
 def write_maps(data, chains, outdir, instance):

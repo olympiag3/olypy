@@ -596,3 +596,63 @@ def gate_report(data, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def character_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_character_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Character Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Character Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Character</th><th>Name</th><th>Faction</th><th>Loyalty</th>'
+               '<th>Health</th><th>Mage</th><th>Priest</th></tr>\n')
+    character_list = []
+    for unit in data:
+        if u.is_char(data, unit):
+            character_list.append(int(to_int(unit)))
+    character_list.sort()
+    if character_list != '':
+        for unit in character_list:
+            character = data[str(unit)]
+            if 'na' in character:
+                name = character['na'][0]
+            else:
+                name = u.return_type(character).capitalize()
+            outf.write('<tr>')
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          name,
+                                                                          anchor(to_oid(unit))))
+            outf.write('<td>{}</td>'.format(name))
+            if 'CH' in character and 'lo' in character['CH']:
+                player = data[character['CH']['lo'][0]]
+                outf.write('<td sorttable_customkey="{}">{} [{}]</td>\n'.format(u.return_unitid(player),
+                                                                                     player['na'][0],
+                                                                                     anchor(to_oid(u.return_unitid(player)))))
+            else:
+                outf.write('<td>&nbsp;</td>')
+            outf.write('<td>{}</td>'.format(u.xlate_loyalty(character)))
+            if 'CH' in character and 'he' in character['CH']:
+                if int(character['CH']['he'][0]) < 0:
+                    health = 'n/a'
+                else:
+                    health = character['CH']['he'][0]
+                outf.write('<td>{}</td>'.format(health))
+            else:
+                outf.write('<td>&nbsp;</td>')
+            if u.is_magician(character):
+                outf.write('<td>Yes</td>')
+            else:
+                outf.write('<td>No</td>')
+            if u.is_priest(character):
+                outf.write('<td>Yes</td>')
+            else:
+                outf.write('<td>No</td>')
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
