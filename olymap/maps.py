@@ -368,9 +368,9 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
     city = ''
     graveyard = ''
     road_or_gate = ''
+    count = int(0)
     if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
         if len(loc_rec['LI']['hl']) > 0:
-            count = int(0)
             here_list = loc_rec['LI']['hl']
             for here in here_list:
                 # if 56760 <= int(here) <= 78999:
@@ -390,12 +390,14 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
     if 'SL' in loc_rec:
         if 'lt' in loc_rec['SL']:
             here_rec = data[loc_rec['SL']['lt'][0]]
+            count = count + 1
             if loc1 == '':
                 loc1 = here_rec
             elif loc2 == '':
                 loc2 = here_rec
         if 'lf' in loc_rec['SL']:
             here_rec = data[loc_rec['SL']['lf'][0]]
+            count = count + 1
             if loc1 == '':
                 loc1 = here_rec
             elif loc2 == '':
