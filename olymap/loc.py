@@ -821,46 +821,59 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
             outf.write('</ul>\n')
 
 
-def write_loc_map_anchor(v, k, data, outf):
+def write_loc_map_anchor(v, k, data, outf, instance, inst_dict):
     # this needs to be rewritten using instance/world matrix
-    if 10000 <= int(k) < 18000:
+    dimensions = inst_dict[instance]
+    saved_world = ''
+    for world in dimensions:
+        world_rec = dimensions[world]
+        if world_rec[0] <= int(k) < world_rec[0] + (world_rec[1] * 100):
+            saved_world = world
+            break
+    if saved_world != '':
         x_coord = int(10 * math.floor((int(k) % 100) / 10))
-        if x_coord >= 70:
-            x_coord = 60
+        if x_coord >= world_rec[1] - 10:
+            x_coord = world_rec[1] - 20
         y_coord = int(1000 * math.floor(int(k) / 1000))
-        if y_coord >= 17000:
-            y_coord = 16000
-        outf.write('<p>{}</p>\n'.format(anchor2('main_map_leaf_' + to_oid(y_coord + x_coord), 'Return to map')))
-    elif (56760 <= int(k) < 57860) or (59000 <= int(k) < 79000):
-        # determine host province
-        if u.return_type(v) in details.province_kinds:
-            p = k
-        else:
-            v = data[v['LI']['wh'][0]]
-            k = u.return_unitid(v)
-            if u.return_type(v) in details.province_kinds:
-                p = k
-            else:
-                v = data[v['LI']['wh'][0]]
-                k = u.return_unitid(v)
-                if u.return_type(v) in details.province_kinds:
-                    p = k
-                else:
-                    v = data[v['LI']['wh'][0]]
-                    k = u.return_unitid(v)
-                    if u.return_type(v) in details.province_kinds:
-                        p = k
-        x_coord = int(10 * math.floor((int(p) % 100) / 10))
-        if x_coord >= 70:
-            x_coord = 60
-        y_coord = int(1000 * math.floor(int(p) / 1000))
-        if y_coord >= 17000:
-            y_coord = 16000
-        outf.write('<p>{}</p>\n'.format(anchor2('main_map_leaf_' + to_oid(y_coord + x_coord), 'Return to map')))
+        if y_coord >= world_rec[0] + (world_rec[2] * 100) - 1000:
+            y_coord = world_rec[0] + (world_rec[2] * 100) - 2000
+            if y_coord < world_rec[0]:
+                y_coord = world_rec[0]
+        final_coord =  y_coord + x_coord
+        if final_coord < world_rec[0]:
+            final_coord = world_rec[0]
+        anchor_string = saved_world + '_map_leaf_' + to_oid(final_coord)
+        outf.write('<p>{}</p>\n'.format(anchor2(anchor_string, 'Return to map')))
+    # elif (56760 <= int(k) < 57860) or (59000 <= int(k) < 79000):
+    #     # determine host province
+    #     if u.return_type(v) in details.province_kinds:
+    #         p = k
+    #     else:
+    #         v = data[v['LI']['wh'][0]]
+    #         k = u.return_unitid(v)
+    #         if u.return_type(v) in details.province_kinds:
+    #             p = k
+    #         else:
+    #             v = data[v['LI']['wh'][0]]
+    #             k = u.return_unitid(v)
+    #             if u.return_type(v) in details.province_kinds:
+    #                 p = k
+    #             else:
+    #                 v = data[v['LI']['wh'][0]]
+    #                 k = u.return_unitid(v)
+    #                 if u.return_type(v) in details.province_kinds:
+    #                     p = k
+    #     x_coord = int(10 * math.floor((int(p) % 100) / 10))
+    #     if x_coord >= 70:
+    #         x_coord = 60
+    #     y_coord = int(1000 * math.floor(int(p) / 1000))
+    #     if y_coord >= 17000:
+    #         y_coord = 16000
+    #     outf.write('<p>{}</p>\n'.format(anchor2('main_map_leaf_' + to_oid(y_coord + x_coord), 'Return to map')))
 
 
-def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain):
-    write_loc_map_anchor(v, k, data, outf)
+def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_link):
+    write_loc_map_anchor(v, k, data, outf, instance, inst_link)
     write_loc_barrier(v, k, outf)
     write_loc_shroud(v, k, outf)
     write_loc_controlled_by(v, data, outf)
@@ -872,10 +885,10 @@ def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_
     write_here_list(v, data, outf)
     write_hidden_access(v, k, data, outf, hidden_chain)
     write_garrisons(v, k, data, outf, garrisons_chain)
-    write_loc_map_anchor(v, k, data, outf)
+    write_loc_map_anchor(v, k, data, outf, instance, inst_link)
 
 
-def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir):
+def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir, instance, inst_dict):
     # generate loc page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
@@ -892,7 +905,7 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     write_loc_page_header(v, k, data, outf)
-    write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain)
+    write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_dict)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()

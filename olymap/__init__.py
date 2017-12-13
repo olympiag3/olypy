@@ -19,12 +19,16 @@ import olymap.maps as maps
 
 
 def make_map(inlib, outdir, instance):
+    inst_dict = {'g2': {'main': [10000, 100, 100]},
+                 'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46],
+                        'cloudlands': [30000, 5, 5]},
+                 'qa': {'main': [10000, 10, 10], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
     data = oio.read_lib(inlib)
     dbck.check_db(data, fix=True, checknames=True)
     chains = resolve_chains(data)
-    write_box_pages(data, chains, outdir, instance)
+    write_box_pages(data, chains, outdir, instance, inst_dict)
     write_reports(data, chains, outdir)
-    write_maps(data, chains, outdir, instance)
+    write_maps(data, chains, outdir, instance, inst_dict)
 
 
 def resolve_chains(data):
@@ -43,12 +47,12 @@ def resolve_chains(data):
     return chains
 
 
-def write_box_pages(data, chains, outdir, instance):
+def write_box_pages(data, chains, outdir, instance, inst_dict):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
             loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
-                               chains['trades'], outdir)
+                               chains['trades'], outdir, instance, inst_dict)
         elif u.return_kind(v) == 'char':
             char.write_char_html(v, k, data, chains['pledges'],
                                  chains['prisoners'], outdir, instance)
@@ -82,7 +86,7 @@ def write_reports(data, chains, outdir):
     reports.character_report(data, outdir)
 
 
-def write_maps(data, chains, outdir, instance):
+def write_maps(data, chains, outdir, instance, inst_dict):
     print('Writing Maps')
     inst_dict = {'g2': {'main': [10000, 100, 100]},
                  'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46], 'cloudlands': [30000, 5, 5]},
