@@ -668,7 +668,7 @@ def graveyard_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Graveyard Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Graveyard</th><th>Province</th><th>Region</th></tr>\n')
+    outf.write('<tr><th>Graveyard</th><th>Province</th><th>Region</th><th>Target</th></tr>\n')
     graveyard_list = []
     for unit in data:
         if u.is_graveyard(data, unit):
@@ -698,6 +698,18 @@ def graveyard_report(data, outdir):
             outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
                                                                           region_rec['na'][0],
                                                                           anchor(to_oid(region))))
+            # SL/lt
+            if 'SL' in graveyard and 'lt' in graveyard['SL']:
+                target = data[graveyard['SL']['lt'][0]]
+                if 'na' in loc_rec:
+                    name_target = target['na'][0]
+                else:
+                    name_target = u.return_type(target).capitalize()
+                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(target),
+                                                                              name_target,
+                                                                              anchor(to_oid(u.return_unitid(target)))))
+            else:
+                outf.write('<td>&nbsp;</td>')
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
@@ -715,7 +727,7 @@ def faeryhill_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Faery Hill Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Faery Hill</th><th>Province</th><th>Region</th></tr>\n')
+    outf.write('<tr><th>Faery Hill</th><th>Province</th><th>Region</th><th>Target</th><th>Target Region</th></tr>\n')
     faeryhill_list = []
     for unit in data:
         if u.is_faeryhill(data, unit):
@@ -745,6 +757,23 @@ def faeryhill_report(data, outdir):
             outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
                                                                           region_rec['na'][0],
                                                                           anchor(to_oid(region))))
+            # SL/lt
+            if 'SL' in faeryhill and 'lt' in faeryhill['SL']:
+                target = data[faeryhill['SL']['lt'][0]]
+                if 'na' in loc_rec:
+                    name_target = target['na'][0]
+                else:
+                    name_target = u.return_type(target).capitalize()
+                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(target),
+                                                                              name_target,
+                                                                              anchor(to_oid(u.return_unitid(target)))))
+                target_region = u.region(str(faeryhill['SL']['lt'][0]), data)
+                target_region_rec = data[target_region]
+                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(target_region,
+                                                                              target_region_rec['na'][0],
+                                                                              anchor(to_oid(target_region))))
+            else:
+                outf.write('<td>&nbsp;</td><td>&nbsp;</td>')
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
