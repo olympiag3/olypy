@@ -656,3 +656,195 @@ def character_report(data, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def graveyard_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_graveyard_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Graveyard Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Graveyard Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Graveyard</th><th>Province</th><th>Region</th></tr>\n')
+    graveyard_list = []
+    for unit in data:
+        if u.is_graveyard(data, unit):
+            graveyard_list.append(int(to_int(unit)))
+        graveyard_list.sort()
+    if graveyard_list != '':
+        for unit in graveyard_list:
+            graveyard = data[str(unit)]
+            if 'na' in graveyard:
+                name = graveyard['na'][0]
+            else:
+                name = u.return_type(graveyard).capitalize()
+            outf.write('<tr>')
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          name,
+                                                                          anchor(to_oid(unit))))
+            loc_rec = data[graveyard['LI']['wh'][0]]
+            if 'na' in loc_rec:
+                name_loc = loc_rec['na'][0]
+            else:
+                name_loc = u.return_type(loc_rec).capitalize()
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
+                                                                          name_loc,
+                                                                          anchor(to_oid(u.return_unitid(loc_rec)))))
+            region = u.region(str(unit), data)
+            region_rec = data[region]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
+                                                                          region_rec['na'][0],
+                                                                          anchor(to_oid(region))))
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+
+
+def faeryhill_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_faeryhill_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Faery Hill Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Faery Hill Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Faery Hill</th><th>Province</th><th>Region</th></tr>\n')
+    faeryhill_list = []
+    for unit in data:
+        if u.is_faeryhill(data, unit):
+            faeryhill_list.append(int(to_int(unit)))
+        faeryhill_list.sort()
+    if faeryhill_list != '':
+        for unit in faeryhill_list:
+            faeryhill = data[str(unit)]
+            if 'na' in faeryhill:
+                name = faeryhill['na'][0]
+            else:
+                name = u.return_type(faeryhill).capitalize()
+            outf.write('<tr>')
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          name,
+                                                                          anchor(to_oid(unit))))
+            loc_rec = data[faeryhill['LI']['wh'][0]]
+            if 'na' in loc_rec:
+                name_loc = loc_rec['na'][0]
+            else:
+                name_loc = u.return_type(loc_rec).capitalize()
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
+                                                                          name_loc,
+                                                                          anchor(to_oid(u.return_unitid(loc_rec)))))
+            region = u.region(str(unit), data)
+            region_rec = data[region]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
+                                                                          region_rec['na'][0],
+                                                                          anchor(to_oid(region))))
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+    
+
+def castle_report(data, outdir, garrisons_chain):
+    outf = open(pathlib.Path(outdir).joinpath('master_castle_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Castle Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Castle Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Castle</th><th>Province</th><th>Region</th><th># Garr</th></tr>\n')
+    castle_list = []
+    for unit in data:
+        if u.is_castle(data, unit):
+            castle_list.append(int(to_int(unit)))
+        castle_list.sort()
+    if castle_list != '':
+        for unit in castle_list:
+            castle = data[str(unit)]
+            if 'na' in castle:
+                name = castle['na'][0]
+            else:
+                name = u.return_type(castle).capitalize()
+            outf.write('<tr>')
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          name,
+                                                                          anchor(to_oid(unit))))
+            loc_rec = data[castle['LI']['wh'][0]]
+            if 'na' in loc_rec:
+                name_loc = loc_rec['na'][0]
+            else:
+                name_loc = u.return_type(loc_rec).capitalize()
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
+                                                                          name_loc,
+                                                                          anchor(to_oid(u.return_unitid(loc_rec)))))
+            region = u.region(str(unit), data)
+            region_rec = data[region]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
+                                                                          region_rec['na'][0],
+                                                                          anchor(to_oid(region))))
+            garrison_list = garrisons_chain[str(unit)]
+            outf.write('<td>{}</td>'.format(len(garrison_list)))
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+
+
+def city_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_city_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master City Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master City Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th></tr>\n')
+    city_list = []
+    for unit in data:
+        if u.is_city(data, unit):
+            city_list.append(int(to_int(unit)))
+        city_list.sort()
+    if city_list != '':
+        for unit in city_list:
+            city = data[str(unit)]
+            if 'na' in city:
+                name = city['na'][0]
+            else:
+                name = u.return_type(city).capitalize()
+            outf.write('<tr>')
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          name,
+                                                                          anchor(to_oid(unit))))
+            loc_rec = data[city['LI']['wh'][0]]
+            if 'na' in loc_rec:
+                name_loc = loc_rec['na'][0]
+            else:
+                name_loc = u.return_type(loc_rec).capitalize()
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
+                                                                          name_loc,
+                                                                          anchor(to_oid(u.return_unitid(loc_rec)))))
+            region = u.region(str(unit), data)
+            region_rec = data[region]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
+                                                                          region_rec['na'][0],
+                                                                          anchor(to_oid(region))))
+            outf.write('<td>{}</td>'.format(u.is_port_city(city, data)))
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+

@@ -84,6 +84,10 @@ def write_reports(data, chains, outdir):
     reports.road_report(data, outdir)
     reports.gate_report(data, outdir)
     reports.character_report(data, outdir)
+    reports.graveyard_report(data, outdir)
+    reports.faeryhill_report(data, outdir)
+    reports.castle_report(data, outdir, chains['garrisons'])
+    reports.city_report(data, outdir)
 
 
 def write_maps(data, chains, outdir, instance, inst_dict):

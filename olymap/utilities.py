@@ -137,6 +137,18 @@ def is_char(data, unit):
     return False
 
 
+def is_graveyard(data, unit):
+    if return_type(data[unit]) == 'graveyard':
+        return True
+    return False
+
+
+def is_faeryhill(data, unit):
+    if return_type(data[unit]) == 'faery hill':
+        return True
+    return False
+
+
 def is_loc(data, unit):
     if return_kind(data[unit]) == 'loc':
         return True
