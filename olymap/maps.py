@@ -88,7 +88,7 @@ def write_index(outdir, instance, inst_dict):
     outf.close()
 
 
-def write_top_map(outdir, upperleft, height, width, prefix):
+def write_top_map(outdir, upperleft, height, width, prefix, map_matrix=[]):
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
@@ -129,6 +129,8 @@ def write_top_map(outdir, upperleft, height, width, prefix):
         lheight = int(iheight / (y_max - 1))
     tp = 0
     bt = lheight
+    if len(map_matrix) > 0:
+        upperleft = 0
     for outery in range(0, y_max):
         if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0) or y_max == 1:
             startingpoint = upperleft + (outery * 1000)
@@ -150,6 +152,10 @@ def write_top_map(outdir, upperleft, height, width, prefix):
             for outerx in range(0, x_max):
                 if outerx < x_max - 1 or (outerx == x_max - 1 and rem_width > 0) or x_max == 1:
                     currentpoint = startingpoint + (outerx * 10)
+                    if len(map_matrix) > 0:
+                        xx = currentpoint % 100
+                        yy = math.floor(currentpoint / 100)
+                        currentpoint = map_matrix[yy][xx]
                     if outerx == 0 and x_max != 1:
                         pass
                     elif outerx == 1:
@@ -176,22 +182,30 @@ def write_top_map(outdir, upperleft, height, width, prefix):
     outf.close()
 
 
-def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance):
+def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance, map_matrix=[]):
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
     rem_height = height % 20
     rem_width = width % 20
+    if len(map_matrix) > 0:
+        upperleft = 0
     for outery in range(0, y_max):
         if outery < y_max - 1 or y_max == 1:
             startingpoint = upperleft + (outery * 1000)
             for outerx in range(0, x_max):
                 if outerx < x_max - 1 or x_max == 1:
                     currentpoint = startingpoint + (outerx * 10)
+                    printpoint = currentpoint
+                    if len(map_matrix) > 0:
+                        xx = currentpoint % 100
+                        yy = math.floor(currentpoint / 100)
+                        printpoint = map_matrix[yy][xx]
+                    print('leaf {}'.format(u.to_oid(printpoint)))
                     outf = open(pathlib.Path(outdir).joinpath(prefix +
                                                               '_map_leaf_'
-                                                              + u.to_oid(currentpoint) +
+                                                              + u.to_oid(printpoint) +
                                                               '.html'), 'w')
-                    write_leaf_header(currentpoint, outdir, prefix, outf)
+                    write_leaf_header(printpoint, outdir, prefix, outf)
                     outf.write('<TABLE>\n')
                     topnav = False
                     botnav = False
@@ -228,7 +242,8 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                         if botnav:
                             lowerrightnav = True
                     if topnav:
-                        generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav)
+                        generate_topnav(currentpoint, outf, prefix,
+                                        upperleftnav, upperrightnav, map_matrix)
                     for y in range(0, 20):
                         if (rem_height == 0 or outery <= y_max - 3) or \
                             (outery == y_max - 2 and y < rem_height + 10) or \
@@ -249,10 +264,12 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                                                y,
                                                rem_width,
                                                rem_height,
-                                               instance)
+                                               instance,
+                                               map_matrix)
                             outf.write('</tr>\n')
                     if botnav:
-                        generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix)
+                        generate_botnav(currentpoint, lowerleftnav,
+                                        lowerrightnav, outf, prefix, map_matrix)
                     outf.write('</TABLE>\n')
                     outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
                                                                                    prefix.capitalize()))
@@ -261,31 +278,50 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                     outf.close()
 
 
-def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height, instance):
+def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height, instance, map_matrix=[]):
     if x == 0 and y == 0:
         if leftnav:
             outf.write('<td rowspan="20" class="left">')
+            printpoint = currentpoint - 10
+            if len(map_matrix) > 0:
+                xx = printpoint % 100
+                yy = math.floor(printpoint / 100)
+                printpoint = map_matrix[yy][xx]
             outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(currentpoint - 10)))
+                                                               to_oid(printpoint)))
             outf.write('<img src="grey.gif" width="20" height="840">')
             outf.write('</a></td>\n')
-    cell = str(currentpoint + (x + (y * 100)))
+    cell = currentpoint + (x + (y * 100))
+    printpoint = cell
+    if len(map_matrix) > 0:
+        xx = cell % 100
+        yy = math.floor(cell / 100)
+        try:
+            printpoint = map_matrix[yy][xx]
+        except:
+            printpoint = 99999999
     try:
-        loc_rec = data[cell]
-        outf.write('<td id ="{}" class="{}"'.format(to_oid(cell),
+        loc_rec = data[str(printpoint)]
+        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
                                                     u.return_type(loc_rec)))
-
         generate_border(data, loc_rec, outf, instance)
         outf.write('>')
-        generate_cell_contents(castle_chain, cell, data, loc_rec, outf)
+        generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
         outf.write('</td>\n')
-    except KeyError:
-        outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(cell), to_oid(cell)))
+    except:
+        pass
+    # except KeyError:
+    #    outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(printpoint), to_oid(printpoint)))
     if x == 19 and y == 0:
         if rightnav:
             outf.write('<td rowspan="20" class="right">')
+            printpoint = currentpoint + 10
+            if len(map_matrix) > 0:
+                xx = printpoint % 100
+                yy = math.floor(printpoint / 100)
+                printpoint = map_matrix[yy][xx]
             outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(currentpoint + 10)))
+                                                               to_oid(printpoint)))
             outf.write('<img src="grey.gif" width="20" height="840">')
             outf.write('</a></td>\n')
 
@@ -302,45 +338,75 @@ def write_leaf_header(currentpoint, outdir, prefix, outf):
                                                                    prefix.capitalize()))
 
 
-def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix):
+def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix, map_matrix=[]):
     outf.write('<tr>\n')
     if lowerleftnav:
+        printpoint = currentpoint + 990
+        if len(map_matrix) > 0:
+            xx = printpoint % 100
+            yy = math.floor(printpoint / 100)
+            printpoint = map_matrix[yy][xx]
         outf.write('<td class="corner">')
         outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(currentpoint + 990)))
+                                                           to_oid(printpoint)))
         outf.write('<img src="grey.gif" width="20" height="20">')
         outf.write('</a></td>\n')
     outf.write('<td colspan="20" class="bottom">')
+    printpoint = currentpoint + 1000
+    if len(map_matrix) > 0:
+        xx = printpoint % 100
+        yy = math.floor(printpoint / 100)
+        printpoint = map_matrix[yy][xx]
     outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(currentpoint + 1000)))
+                                                       to_oid(printpoint)))
     outf.write('<img src="grey.gif" width="840" height="20">')
     outf.write('</a></td>\n')
     if lowerrightnav:
         outf.write('<td class="corner">')
+        printpoint = currentpoint + 1010
+        if len(map_matrix) > 0:
+            xx = printpoint % 100
+            yy = math.floor(printpoint / 100)
+            printpoint = map_matrix[yy][xx]
         outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(currentpoint + 1010)))
+                                                           to_oid(printpoint)))
         outf.write('<img src="grey.gif" width="20" height="20">')
         outf.write('</a></td>\n')
     outf.write('</tr>\n')
 
 
-def generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav):
+def generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav, map_matrix=[]):
     outf.write('<tr>\n')
     if upperleftnav:
         outf.write('<td class="corner">')
+        printpoint = currentpoint - 1010
+        if len(map_matrix) > 0:
+            xx = printpoint % 100
+            yy = math.floor(printpoint / 100)
+            printpoint = map_matrix[yy][xx]
         outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(currentpoint - 1010)))
+                                                           to_oid(printpoint)))
         outf.write('<img src="grey.gif" width="20" height="20">')
         outf.write('</a></td>\n')
     outf.write('<td colspan="20" class="top">')
+    printpoint = currentpoint - 1000
+    if len(map_matrix) > 0:
+        xx = printpoint % 100
+        yy = math.floor(printpoint / 100)
+        printpoint = map_matrix[yy][xx]
     outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(currentpoint - 1000)))
+                                                       to_oid(printpoint)))
     outf.write('<img src="grey.gif" width="840" height="20">')
     outf.write('</a></td>\n')
     if upperrightnav:
         outf.write('<td class="corner">')
+        printpoint = currentpoint - 990
+        if len(map_matrix) > 0:
+            xx = printpoint % 100
+            yy = math.floor(printpoint / 100)
+            printpoint = map_matrix[yy][xx]
         outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(currentpoint - 990)))
+                                                           to_oid(printpoint)))
         outf.write('<img src="grey.gif" width="20" height="20">')
         outf.write('</a></td>\n')
     outf.write('</tr>\n')
@@ -350,6 +416,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
     if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
         if loc_rec['LO']['lc'][0] != '0':
             outf.write('<b>')
+    a = to_oid(cell)
     outf.write('{}'.format(anchor(to_oid(cell))))
     if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
         if loc_rec['LO']['lc'][0] != '0':
@@ -511,7 +578,7 @@ def count_stuff(v, data):
     return nbr_men, enemy_found, ships_found
 
 
-def write_bitmap(outdir, data, upperleft, height, width, prefix):
+def write_bitmap(outdir, data, upperleft, height, width, prefix, map_matrix):
     BUFSIZE = 8*1024
     color_pallette = {'ocean': (0x00, 0xff, 0xff, 0xff),
                       'plain': (0x90, 0xee, 0x90, 0xff),
@@ -523,18 +590,33 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix):
                       'cloud': (0xad, 0xd8, 0xe6, 0xff)}
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_thumbnail.png'), 'wb')
     map = PNGCanvas(width, height, color=(0xff, 0, 0, 0xff))
-    for x in range(0, width):
-        for y in range(0, height):
-            curr_loc = upperleft + (y * 100) + (x * 1)
-            try:
-                province_box = data[str(curr_loc)]
+    if len(map_matrix) == 0:
+        for x in range(0, width):
+            for y in range(0, height):
+                curr_loc = upperleft + (y * 100) + (x * 1)
                 try:
-                    color = color_pallette[u.return_type(province_box)]
-                    map.point(x, y, color)
+                    province_box = data[str(curr_loc)]
+                    try:
+                        color = color_pallette[u.return_type(province_box)]
+                        map.point(x, y, color)
+                    except KeyError:
+                        print('missing color for: {}'.format(u.return_type(province_box)))
                 except KeyError:
-                    print('missing color for: {}'.format(u.return_type(province_box)))
-            except KeyError:
-                # print('missing box record for: {}'.format(curr_loc))
-                pass
+                    print('missing box record for: {}'.format(curr_loc))
+                    pass
+    else:
+        for x in range(0, width):
+            for y in range(0, height):
+                curr_loc = map_matrix[y][x]
+                try:
+                    province_box = data[str(curr_loc)]
+                    try:
+                        color = color_pallette[u.return_type(province_box)]
+                        map.point(x, y, color)
+                    except KeyError:
+                        print('missing color for: {}'.format(u.return_type(province_box)))
+                except KeyError:
+                    print('missing box record for: {}'.format(curr_loc))
+                    pass
     outf.write(map.dump())
     outf.close()
