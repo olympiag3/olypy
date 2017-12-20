@@ -188,8 +188,8 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                 if outerx < x_max - 1 or x_max == 1:
                     currentpoint = startingpoint + (outerx * 10)
                     printpoint = currentpoint
-                    print('leaf {} ({})'.format(u.to_oid(printpoint),
-                                                prefix))
+                    # print('leaf {} ({})'.format(u.to_oid(printpoint),
+                    #                             prefix))
                     outf = open(pathlib.Path(outdir).joinpath(prefix +
                                                               '_map_leaf_'
                                                               + u.to_oid(printpoint) +
