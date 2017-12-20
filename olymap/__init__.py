@@ -26,15 +26,16 @@ def make_map(inlib, outdir, instance):
                  'qa': {'main': [10000, 10, 10], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
     data = oio.read_lib(inlib)
     dbck.check_db(data, fix=True, checknames=True)
-    hades_matrix = []
-    faery_matrix = []
     if instance == 'g2':
-        hades_maxtrix = legacy.create_hades_matrix(data, inst_dict['g2']['hades'][0])
-        faery_maxtrix = legacy.create_hades_matrix(data, inst_dict['g2']['faery'][0])
+        hades_matrix = legacy.create_hades_matrix(data, inst_dict['g2']['hades'][0])
+        faery_matrix = legacy.create_hades_matrix(data, inst_dict['g2']['faery'][0])
+    else:
+        hades_matrix = []
+        faery_matrix = []
     chains = resolve_chains(data)
     write_box_pages(data, chains, outdir, instance, inst_dict)
     write_reports(data, chains, outdir)
-    write_maps(data, chains, outdir, instance, inst_dict, hades_maxtrix, faery_maxtrix)
+    write_maps(data, chains, outdir, instance, inst_dict)
 
 
 def resolve_chains(data):
@@ -96,7 +97,7 @@ def write_reports(data, chains, outdir):
     reports.city_report(data, outdir)
 
 
-def write_maps(data, chains, outdir, instance, inst_dict, hades_matrix, faery_matrix):
+def write_maps(data, chains, outdir, instance, inst_dict):
     print('Writing Maps')
     # inst_dict = {'g2': {'main': [10000, 100, 100]},
     #              'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46], 'cloudlands': [30000, 5, 5]},
@@ -106,60 +107,14 @@ def write_maps(data, chains, outdir, instance, inst_dict, hades_matrix, faery_ma
     for world in dimensions:
         world_rec = dimensions[world]
         if instance == 'g2' and world in {'faery', 'hades'}:
-            if world == 'hades':
-                maps.write_bitmap(outdir,
-                                 data,
-                                 world_rec[0],
-                                 world_rec[1],
-                                 world_rec[2],
-                                 world,
-                                 hades_matrix)
-                maps.write_top_map(outdir,
-                                   world_rec[0],
-                                   world_rec[1],
-                                   world_rec[2],
-                                   world,
-                                   hades_matrix)
-                maps.write_map_leaves(data,
-                                      chains['castles'],
-                                      outdir,
-                                      world_rec[0],
-                                      world_rec[1],
-                                      world_rec[2],
-                                      world,
-                                      instance,
-                                      hades_matrix)
-            else:
-                maps.write_bitmap(outdir,
-                                  data,
-                                  world_rec[0],
-                                  world_rec[1],
-                                  world_rec[2],
-                                  world,
-                                  faery_matrix)
-                maps.write_top_map(outdir,
-                                   world_rec[0],
-                                   world_rec[1],
-                                   world_rec[2],
-                                   world,
-                                   faery_matrix)
-                maps.write_map_leaves(data,
-                                      chains['castles'],
-                                      outdir,
-                                      world_rec[0],
-                                      world_rec[1],
-                                      world_rec[2],
-                                      world,
-                                      instance,
-                                      faery_matrix)
+            pass
         else:
             maps.write_bitmap(outdir,
                              data,
                              world_rec[0],
                              world_rec[1],
                              world_rec[2],
-                             world,
-                             [])
+                             world)
             maps.write_top_map(outdir,
                                world_rec[0],
                                world_rec[1],

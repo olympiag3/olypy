@@ -266,7 +266,7 @@ def write_loc_routes_out(v, data, outf):
             for pd in dest_loc_list:
                 try:
                     pd_loc = data[pd]
-                    if u.return_type(pd_loc) != 'ocean':
+                    if u.return_type(pd_loc) == 'ocean':
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc)
                         out_distance = u.calc_exit_distance(v, pd_loc)
@@ -286,6 +286,22 @@ def write_loc_routes_out(v, data, outf):
                            anchor(to_oid(u.return_unitid(host_prov))),
                            out_distance,
                            'day' if out_distance == 1 else 'days'))
+        if 'LI' in v:
+            if 'hl' in v['LI']:
+                here_list = v['LI']['hl']
+                for here in here_list:
+                    here_record = data[here]
+                    if u.is_road_or_gate(here_record):
+                        to_record = data[here_record['GA']['tl'][0]]
+                        if u.return_kind(here_record) == 'gate':
+                            name = 'Gate'
+                        else:
+                            name = here_record['na'][0]
+                        write_province_destination(v,
+                                                   to_record,
+                                                   name,
+                                                   data,
+                                                   outf)
         outf.write('</ul>\n')
 
 
