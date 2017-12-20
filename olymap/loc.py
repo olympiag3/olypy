@@ -838,42 +838,42 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
             outf.write('</ul>\n')
 
 
-def write_loc_map_anchor(v, k, data, outf, instance, inst_dict):
-    # this needs to be rewritten using instance/world matrix
+def write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices):
     dimensions = inst_dict[instance]
-    saved_world = ''
-    for world in dimensions:
-        world_rec = dimensions[world]
-        if world_rec[0] <= int(k) < world_rec[0] + (world_rec[2] * 100):
-            saved_world = world
-            break
-    if saved_world == '':
-        if u.return_type(v) in list(set().union(details.subloc_kinds, detail.loc_types)):
-            v = data[v['LI']['wh'][0]]
-            k = u.return_unitid(v)
-            if u.return_type(v) in details.province_kinds:
-                p = k
-            else:
-                v = data[v['LI']['wh'][0]]
-                k = u.return_unitid(v)
-                if u.return_type(v) in details.province_kinds:
-                    p = k
-                else:
-                    v = data[v['LI']['wh'][0]]
-                    k = u.return_unitid(v)
-                    if u.return_type(v) in details.province_kinds:
-                        p = k
-            saved_world = ''
+    region = u.region(k, data)
+    region_rec = data[region]
+    province = u.province(k, data)
+    if province == 0:
+        return 0
+    province_rec = data[province]
+    custom = False
+    save_rec = []
+    save_world = ''
+    try:
+        save_rec = map_matrices[region_rec['na'][0].lower()]
+        save_world = region_rec['na'][0].lower()
+        custom = True
+    except KeyError:
+        try:
+            save_rec = dimensions[region_rec['na'][0].lower()]
+            save_world = region_rec['na'][0].lower()
+        except KeyError:
             for world in dimensions:
                 world_rec = dimensions[world]
-                if world_rec[0] <= int(k) < world_rec[0] + (world_rec[2] * 100):
-                    saved_world = world
+                if world_rec[0] <= int(province) < world_rec[0] + (world_rec[2] * 100):
+                    save_rec = world_rec
+                    save_world = world
                     break
-    if saved_world != '':
-        x_coord = int(10 * math.floor((int(k) % 100) / 10))
+    # if len(save_rec) == 0:
+    #     print('error {} {}'.format(to_oid(k),
+    #                                u.return_type(v)))
+    if len(save_rec) > 0 and not custom:
+        world_rec = save_rec
+        world = save_world
+        x_coord = int(10 * math.floor((int(province) % 100) / 10))
         if x_coord >= world_rec[1] - 10:
             x_coord = world_rec[1] - 20
-        y_coord = int(1000 * math.floor(int(k) / 1000))
+        y_coord = int(1000 * math.floor(int(province) / 1000))
         if y_coord >= world_rec[0] + (world_rec[2] * 100) - 1000:
             y_coord = world_rec[0] + (world_rec[2] * 100) - 2000
             if y_coord < world_rec[0]:
@@ -881,12 +881,24 @@ def write_loc_map_anchor(v, k, data, outf, instance, inst_dict):
         final_coord = y_coord + x_coord
         if final_coord < world_rec[0]:
             final_coord = world_rec[0]
-        anchor_string = saved_world + '_map_leaf_' + to_oid(final_coord)
+        anchor_string = world + '_map_leaf_' + to_oid(final_coord)
+        outf.write('<p>{}</p>\n'.format(anchor2(anchor_string, 'Return to map')))
+    if len(save_rec) > 0 and custom:
+        world_rec = save_rec
+        world = save_world
+        for xx in range(0, len(save_rec[0])):
+            for yy in range(0,len(save_rec)):
+                if save_rec[yy][xx] == province:
+                    xxx = int(math.floor(xx / 10)) * 10
+                    yyy = int(math.floor(yy / 10)) * 10
+                    final_coord = save_rec[yyy][xxx]
+                    break
+        anchor_string = world + '_map_leaf_' + to_oid(final_coord)
         outf.write('<p>{}</p>\n'.format(anchor2(anchor_string, 'Return to map')))
 
 
-def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_link):
-    write_loc_map_anchor(v, k, data, outf, instance, inst_link)
+def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_dict, map_matrices):
+    write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices)
     write_loc_barrier(v, k, outf)
     write_loc_shroud(v, k, outf)
     write_loc_controlled_by(v, data, outf)
@@ -898,10 +910,10 @@ def write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_
     write_here_list(v, data, outf)
     write_hidden_access(v, k, data, outf, hidden_chain)
     write_garrisons(v, k, data, outf, garrisons_chain)
-    write_loc_map_anchor(v, k, data, outf, instance, inst_link)
+    write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices)
 
 
-def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir, instance, inst_dict):
+def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir, instance, inst_dict, map_matrices):
     # generate loc page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     outf.write('<HTML>\n')
@@ -918,7 +930,7 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     write_loc_page_header(v, k, data, outf)
-    write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_dict)
+    write_loc_basic_info(v, k, data, outf, hidden_chain, garrisons_chain, trade_chain, instance, inst_dict, map_matrices)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()

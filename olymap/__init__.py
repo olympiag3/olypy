@@ -37,7 +37,7 @@ def make_map(inlib, outdir, instance):
             if world_rec[3] == 'Y':
                 map_matrices[world] = legacy.create_map_matrix(data, inst_dict[instance][world][0])
     chains = resolve_chains(data)
-    write_box_pages(data, chains, outdir, instance, inst_dict)
+    write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices)
     write_reports(data, chains, outdir)
     write_maps(data, chains, outdir, instance, inst_dict, map_matrices)
 
@@ -58,12 +58,12 @@ def resolve_chains(data):
     return chains
 
 
-def write_box_pages(data, chains, outdir, instance, inst_dict):
+def write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
             loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
-                               chains['trades'], outdir, instance, inst_dict)
+                               chains['trades'], outdir, instance, inst_dict, map_matrices)
         elif u.return_kind(v) == 'char':
             char.write_char_html(v, k, data, chains['pledges'],
                                  chains['prisoners'], outdir, instance)

@@ -351,6 +351,17 @@ def region(who, data):
     return who
 
 
+def province(who, data):
+    v = data[who]
+    if loc_depth(return_type(v)) == 1:
+        return 0
+    while (int(who) > 0 and
+            (return_kind(v) != 'loc' or loc_depth(return_type(v)) != 2)):
+        v = data[v['LI']['wh'][0]]
+        who = return_unitid(v)
+    return who
+
+
 def top_ruler(k, data):
     cont = True
     while cont:
