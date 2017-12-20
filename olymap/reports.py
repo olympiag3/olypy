@@ -877,3 +877,36 @@ def city_report(data, outdir):
     outf.write('</HTML>\n')
     outf.close()
 
+
+def region_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_region_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Region Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Region Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Region</th><th>Provinces</th></tr>\n')
+    region_list = []
+    for unit in data:
+        if u.is_region(data, unit):
+            region_list.append(int(to_int(unit)))
+        region_list.sort()
+    if region_list != '':
+        for unit in region_list:
+            region_rec = data[str(unit)]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          region_rec['na'][0],
+                                                                          anchor(to_oid(unit))))
+            nbr_provinces = 0
+            if 'LI' in region_rec:
+                if 'hl' in region_rec['LI']:
+                    nbr_provinces = len(region_rec['LI']['hl'])
+            outf.write('<td>{}</td>'.format(nbr_provinces))
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()

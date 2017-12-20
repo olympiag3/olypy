@@ -22,7 +22,7 @@ import olymap.legacy as legacy
 
 def make_map(inlib, outdir, instance):
     inst_dict = {'g2': {'main': [10000, 100, 100], 'hades': [24251, 76, 76, 'Y'], 'faery': [20013, 7, 938, 'Y'],
-                        'cloudlands': [23184, 5, 5, 'Y']},
+                        'cloudlands': [23184, 5, 5, 'Y'], 'subworld': [39167, 11, 11, 'Y']},
                  'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46],
                         'cloudlands': [30000, 5, 5], 'subworld': [32005, 6, 6]},
                  'qa': {'main': [10000, 10, 10], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
@@ -99,6 +99,7 @@ def write_reports(data, chains, outdir):
     reports.faeryhill_report(data, outdir)
     reports.castle_report(data, outdir, chains['garrisons'])
     reports.city_report(data, outdir)
+    reports.region_report(data, outdir)
 
 
 def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):

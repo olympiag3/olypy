@@ -197,6 +197,12 @@ def is_castle(data, unit):
     return False
 
 
+def is_region(data, unit):
+    if return_type(data[unit]) == 'region':
+        return True
+    return False
+
+
 def is_road_or_gate(loc_record):
     if 'GA' in loc_record:
         if 'tl' in loc_record['GA']:

@@ -203,12 +203,12 @@ def write_province_destinations(v, data, outf):
                                            outf)
             i = i + 1
     if u.return_type(v) not in details.province_kinds:
-        if not print_header:
-            print_header = True
-            outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
-            outf.write('<ul>\n')
         if 'LI' in v:
             if 'wh' in v['LI']:
+                if not print_header:
+                    print_header = True
+                    outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+                    outf.write('<ul>\n')
                 out_rec = data[v['LI']['wh'][0]]
                 write_province_destination(v,
                                            out_rec,
@@ -256,8 +256,7 @@ def write_loc_routes_out(v, data, outf):
     if u.return_type(v) != 'city':
         write_province_destinations(v, data, outf)
     else:
-        outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
-        outf.write('<ul>\n')
+        header_printed = False
         host_prov = data[v['LI']['wh'][0]]
         # If city is in a mountain, can't move from city to ocean
         if u.return_type(host_prov) != 'mountain':
@@ -267,6 +266,9 @@ def write_loc_routes_out(v, data, outf):
                 try:
                     pd_loc = data[pd]
                     if u.return_type(pd_loc) == 'ocean':
+                        if not header_printed:
+                            outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
+                            outf.write('<ul>\n')
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc)
                         out_distance = u.calc_exit_distance(v, pd_loc)
@@ -280,6 +282,9 @@ def write_loc_routes_out(v, data, outf):
                 except KeyError:
                     pass
                 i = i + 1
+        if not header_printed:
+            outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
+            outf.write('<ul>\n')
         out_distance = u.calc_exit_distance(v, host_prov)
         outf.write('<li>Out, to {} [{}], {} {}</li>\n'
                    .format(host_prov['na'][0],
@@ -297,12 +302,16 @@ def write_loc_routes_out(v, data, outf):
                             name = 'Gate'
                         else:
                             name = here_record['na'][0]
+                        if not header_printed:
+                            outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
+                            outf.write('<ul>\n')
                         write_province_destination(v,
                                                    to_record,
                                                    name,
                                                    data,
                                                    outf)
-        outf.write('</ul>\n')
+        if header_printed:
+            outf.write('</ul>\n')
 
 
 def write_structure_basic_info(v, outf):
