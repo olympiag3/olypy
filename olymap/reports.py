@@ -330,7 +330,7 @@ def projected_cast_potion_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Projected Cast Potion Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Who Has</th><th>Target</th></tr>\n')
+    outf.write('<tr><th>Item</th><th>Who Has</th><th>Target</th><th>Target Region</th></tr>\n')
     projected_cast_list = []
     for unit in data:
         if u.is_item(data, unit):
@@ -361,10 +361,18 @@ def projected_cast_potion_report(data, outdir):
                                                                 u.return_kind(loc),
                                                                 loc['na'][0],
                                                                 anchor(to_oid(itemz['IM']['pc'][0]))))
+                            try:
+                                region = u.region(str(itemz['IM']['pc'][0]), data)
+                                region_rec = data[region]
+                                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
+                                                                                              region_rec['na'][0],
+                                                                                              anchor(to_oid(region))))
+                            except KeyError:
+                                outf.write('<td>&nbsp;</td>')
                         except KeyError:
-                            outf.write('<td sorttable_customkey="">unknown {}</td>'.format(itemz['IM']['pc'][0]))
+                            outf.write('<td sorttable_customkey="">unknown {}</td><td>&nbsp;</td>'.format(itemz['IM']['pc'][0]))
                     else:
-                        outf.write('<td sorttable_customkey="">unknown</td><')
+                        outf.write('<td sorttable_customkey="">unknown</td><td>&nbsp;</td>')
                     outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
@@ -937,7 +945,7 @@ def mage_report(data, outdir):
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Mage</th><th>Mage Name</th><th>Rank</th>'
                '<th>Curr Aura</th><th>Max Aura</th><th>Auraculum Aura</th><th>Total Aura</th>'
-               '<th>Auraculum</th></tr>\n')
+               '<th>Auraculum</th><th>Player</th></tr>\n')
     mage_list = []
     for unit in data:
         if u.is_magician(data[unit]):
@@ -978,6 +986,11 @@ def mage_report(data, outdir):
                                                      anchor(to_oid(auraculum_id))))
             else:
                 outf.write('<td>&nbsp;</td>')
+            if 'CH' in mage_rec and 'lo' in mage_rec['CH']:
+                player = data[mage_rec['CH']['lo'][0]]
+                outf.write('<td sorttable_customkey="{}">{} [{}]</td>\n'.format(u.return_unitid(player),
+                                                                                player['na'][0],
+                                                                                anchor(to_oid(u.return_unitid(player)))))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
