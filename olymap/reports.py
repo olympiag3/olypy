@@ -1027,7 +1027,8 @@ def priest_report(data, outdir):
     outf.write('<H3>Olympia Master priest Report</H3>\n')
     outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Visons Received</th></tr>\n')
+    outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Can Visison</th><th>Can Resurrect</th>'
+               '<th># Visions</th><th>Visons Received</th></tr>\n')
     priest_list = []
     for unit in data:
         if u.is_priest(data[unit]):
@@ -1040,8 +1041,25 @@ def priest_report(data, outdir):
                                                                           priest_rec['na'][0],
                                                                           anchor(to_oid(unit))))
             outf.write('<td>{}</td>'.format(priest_rec['na'][0]))
+            if 'CH' in priest_rec and 'sl' in priest_rec['CH']:
+                skills_list = priest_rec['CH']['sl']
+                skills_iteration = int(len(skills_list) / 5)
+                skill_753 = 'No'
+                skill_755 = 'No'
+                if skills_iteration > 0:
+                    for skill in range(0, skills_iteration):
+                        if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
+                            skill_753 = 'Yes'
+                        if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
+                            skill_755 = 'Yes'
+                    outf.write('<td>{}</td>'.format(skill_753))
+                    outf.write('<td>{}</td>'.format(skill_755))
+            else:
+                outf.write('<td>No</td>')
+                outf.write('<td>No</td>')
             if 'CM' in priest_rec and 'vi' in priest_rec['CM']:
                 vision_list = priest_rec['CM']['vi']
+                outf.write('<td>{}</td>'.format(len(vision_list)))
                 outf.write('<td>')
                 outf.write('<table>')
                 second = False
@@ -1064,6 +1082,9 @@ def priest_report(data, outdir):
                         second = True
                 outf.write('</table>')
                 outf.write('</td>')
+            else:
+                outf.write('<td>0</td>')
+                outf.write('<td>&nbsp;</td>')
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
