@@ -187,12 +187,15 @@ def write_char_concealed(v, outf):
 def write_char_aura(v, data, outf):
     # CM/im, CM/ca, CM/ma, CN/ar
     # need to check if alone - lib doesn't currently show
-    if 'CM' in v and 'im' in v['CM']:
-        if v['CM']['im'][0] == '1':
-            if 'ca' in v['CM']:
-                outf.write('<tr>')
-                outf.write('<td>Current Aura:</td>')
-                outf.write('<td>{}</td></tr>\n'.format(v['CM']['ca'][0]))
+    if u.is_magician(v):
+        if u.xlate_magetype(v, data) not in {'', 'undefined'}:
+            outf.write('<tr>')
+            outf.write('<td>Mage Rank:</td>')
+            outf.write('<td>{}</td></tr>\n'.format(u.xlate_magetype(v, data).capitalize()))
+        if 'ca' in v['CM']:
+            outf.write('<tr>')
+            outf.write('<td>Current Aura:</td>')
+            outf.write('<td>{}</td></tr>\n'.format(v['CM']['ca'][0]))
         max_aura = '0'
         if 'ma' in v['CM']:
             max_aura = v['CM']['ma'][0]

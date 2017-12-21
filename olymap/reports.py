@@ -923,3 +923,63 @@ def region_report(data, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def mage_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_mage_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Mage Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Mage Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Mage</th><th>Mage Name</th><th>Rank</th>'
+               '<th>Curr Aura</th><th>Max Aura</th><th>Auraculum Aura</th><th>Total Aura</th>'
+               '<th>Auraculum</th></tr>\n')
+    mage_list = []
+    for unit in data:
+        if u.is_magician(data[unit]):
+            mage_list.append(int(to_int(unit)))
+        mage_list.sort()
+    if mage_list != '':
+        for unit in mage_list:
+            mage_rec = data[str(unit)]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          mage_rec['na'][0],
+                                                                          anchor(to_oid(unit))))
+            outf.write('<td>{}</td>'.format(mage_rec['na'][0]))
+            outf.write('<td>{}</td>'.format(u.xlate_magetype(mage_rec, data)))
+            current_aura = 0
+            max_aura = 0
+            auraculum_aura = 0
+            total_aura = 0
+            auraculum_id = ''
+            auraculum_name = ''
+            if 'CM' in mage_rec:
+                if 'ca' in mage_rec['CM']:
+                    current_aura = int(mage_rec['CM']['ca'][0])
+                if 'ma' in mage_rec['CM']:
+                    max_aura = int(mage_rec['CM']['ma'][0])
+                if 'ar' in mage_rec['CM']:
+                    auraculum = data[mage_rec['CM']['ar'][0]]
+                    auraculum_id = mage_rec['CM']['ar'][0]
+                    if 'IM' in auraculum and 'au' in auraculum['IM']:
+                        auraculum_aura = int(auraculum['IM']['au'][0])
+                        auraculum_name = auraculum['na'][0]
+                total_aura = max_aura + auraculum_aura
+            outf.write('<td>{}</td>'.format(current_aura))
+            outf.write('<td>{}</td>'.format(max_aura))
+            outf.write('<td>{}</td>'.format(auraculum_aura))
+            outf.write('<td>{}</td>'.format(total_aura))
+            if len(auraculum_id) > 0:
+                outf.write('<td>{} [{}]</td>'.format(auraculum_name,
+                                                     anchor(to_oid(auraculum_id))))
+            else:
+                outf.write('<td>&nbsp;</td>')
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()

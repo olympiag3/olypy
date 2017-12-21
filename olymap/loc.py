@@ -567,8 +567,8 @@ def write_characters(v, k, data, outf, print_province = False):
     if u.is_priest(v):
         outf.write(', priest')
     if u.is_magician(v):
-        if u.xlate_magetype(v) not in {'', 'undefined'}:
-            outf.write(', {}'.format(u.xlate_magetype(v)))
+        if u.xlate_magetype(v, data) not in {'', 'undefined'}:
+            outf.write(', {}'.format(u.xlate_magetype(v, data)))
     if 'CH' in v:
         if 'gu' in v['CH'] and v['CH']['gu'][0] == '1':
             outf.write(', on guard')

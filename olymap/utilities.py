@@ -469,9 +469,17 @@ def is_priest(v):
     return False
 
 
-def xlate_magetype(v):
+def xlate_magetype(v, data):
+    max_aura = 0
+    auraculum_aura = 0
     if 'CM' in v and 'ma' in v['CM']:
-        mage_level = int(v['CM']['ma'][0])
+        max_aura = int(v['CM']['ma'][0])
+        if 'ar' in v['CM']:
+            auraculum = data[v['CM']['ar'][0]]
+            auraculum_id = v['CM']['ar'][0]
+            if 'IM' in auraculum and 'au' in auraculum['IM']:
+                auraculum_aura = int(auraculum['IM']['au'][0])
+        mage_level = max_aura + auraculum_aura
         if mage_level <= 5:
             return ''
         elif mage_level <= 10:
