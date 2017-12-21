@@ -18,6 +18,7 @@ def ship_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Ship Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th>'
                '<th>Load</th><th>Storm (Strength)</th></tr>\n')
@@ -119,6 +120,7 @@ def item_report(data, trade_chain, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Item Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th>'
                '<th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th>'
@@ -198,6 +200,7 @@ def player_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Player Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Player</th><th>Name</th><th>Type</th><th># Units</th></tr>\n')
     player_list = []
@@ -234,6 +237,7 @@ def healing_potion_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Healing Potion Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th><th>Location</th></tr>\n')
     healing_potion_list = []
@@ -286,6 +290,7 @@ def orb_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Orb Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th></tr>\n')
     orb_list = []
@@ -329,6 +334,7 @@ def projected_cast_potion_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Projected Cast Potion Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Item</th><th>Who Has</th><th>Target</th><th>Target Region</th></tr>\n')
     projected_cast_list = []
@@ -389,6 +395,7 @@ def location_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Location Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Location</th><th>Type</th><th>Region</th><th># Men</th></tr>\n')
     location_list = []
@@ -431,6 +438,7 @@ def skill_xref_report(data, teaches_chain, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Skill Xref Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Skill</th><th>Location</th><th>Region</th></tr>\n')
     skill_list = sorted(list(teaches_chain))
@@ -472,6 +480,7 @@ def trade_report(data, trade_chain, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Trade Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Item</th><th>Seller</th><th>Buyer</th><th>Sell Region</th><th>Buy Region</th></tr>\n')
     trade_list = sorted(list(trade_chain))
@@ -539,6 +548,7 @@ def road_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Road Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Type</th><th>Name</th><th>Start</th><th>Destination</th></tr>\n')
     road_list = []
@@ -580,6 +590,7 @@ def gate_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Gate Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Type</th><th>Start</th><th>Destination</th></tr>\n')
     road_list = []
@@ -620,6 +631,7 @@ def character_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Character Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Character</th><th>Name</th><th>Faction</th><th>Loyalty</th>'
                '<th>Health</th><th>Mage</th><th>Priest</th><th># Men</th></tr>\n')
@@ -684,6 +696,7 @@ def graveyard_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Graveyard Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Graveyard</th><th>Province</th><th>Region</th><th>Target</th></tr>\n')
     graveyard_list = []
@@ -743,6 +756,7 @@ def faeryhill_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Faery Hill Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Faery Hill</th><th>Province</th><th>Region</th><th>Target</th><th>Target Region</th></tr>\n')
     faeryhill_list = []
@@ -807,6 +821,7 @@ def castle_report(data, outdir, garrisons_chain):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Castle Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Castle</th><th>Province</th><th>Region</th><th># Garr</th><th># Men</th></tr>\n')
     castle_list = []
@@ -858,6 +873,7 @@ def city_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master City Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th><th># Men</th></tr>\n')
     city_list = []
@@ -908,6 +924,7 @@ def region_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Region Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Region</th><th>Provinces</th></tr>\n')
     region_list = []
@@ -942,6 +959,7 @@ def mage_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Mage Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Mage</th><th>Mage Name</th><th>Rank</th>'
                '<th>Curr Aura</th><th>Max Aura</th><th>Auraculum Aura</th><th>Total Aura</th>'
@@ -1007,6 +1025,7 @@ def priest_report(data, outdir):
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master priest Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Visons Received</th></tr>\n')
     priest_list = []
