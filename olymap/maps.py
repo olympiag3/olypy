@@ -61,31 +61,13 @@ def write_index(outdir, instance, inst_dict):
     outf.write('</th>')
     outf.write('</tr>')
     outf.write('</table>\n')
-    if instance == "g4":
-        outf.write('<h2>Intro</h2>\n')
-        outf.write('This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, '
-                   'as of the end of turn 192.<p>')
-        outf.write('Mobile things (characters, ships) are present in the map only if they were seen in '
-                   'turn 192.\n')
-        outf.write('<h2>Features</h2>\n')
-        outf.write('<ul>\n')
-        outf.write('<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">'
-                   'combat zone</a>)\n')
-        outf.write('<li>Ships indicated by yellow border if troop count is low\n')
-        outf.write('<li>Barriers indicated by brown border (e.g. ar54, aq52)\n')
-        outf.write('<li>Garrison/castle allegiance is indicated by the @ after the province ID '
-                   '(<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)\n')
-        outf.write('<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, '
-                   'etc.\n')
-        outf.write('</ul>\n')
-        outf.write('<h2>Limitations / Bugs</h2>\n')
-        outf.write('<ul>\n')
-        outf.write('<li>Vision / Scry information is not included\n')
-        outf.write('<li>Hades and Faery entrances are not represented correctly (Undercity is OK)\n')
-        outf.write('<li>Faery map is broken\n')
-        outf.write('<li>There is no indication of how old info is (e.g. "this market report is from turn 184")\n')
-        outf.write('<li>Mobile things (characters, ships) only included if seen in the last turn\n')
-        outf.write('</ul>\n')
+    try:
+        index_file = open('olymap/{}_index.txt'.format(instance), 'r')
+    except:
+        print('No index file')
+    else:
+        index_text = index_file.read()
+        outf.write(index_text)
     outf.write('</BODY>\n')
     outf.write('</html>\n')
     outf.close()

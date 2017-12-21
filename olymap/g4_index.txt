@@ -1,0 +1,18 @@
+<h2>Intro</h2>
+This is the map of Olympia, including S.O.C.R.A.T.E.S. and Lords of the Crown data, as of the end of turn 192.<p>Mobile things (characters, ships) are present in the map only if they were seen in turn 192.
+<h2>Features</h2>
+<ul>
+<li>Concentrations of men indicated by red border (here is a <a href="main_map_leaf_an40.html">combat zone</a>)
+<li>Ships indicated by yellow border if troop count is low
+<li>Barriers indicated by brown border (e.g. ar54, aq52)
+<li>Garrison/castle allegiance is indicated by the @ after the province ID (<a href="main_map_leaf_ba10.html">Grinter</a> is a good example)
+<li>Keep clicking down, there is a lot of info about nobles, <a href="2160.html">garrisons</a>, etc.
+</ul>
+<h2>Limitations / Bugs</h2>
+<ul>
+<li>Vision / Scry information is not included
+<li>Hades and Faery entrances are not represented correctly (Undercity is OK)
+<li>Faery map is broken
+<li>There is no indication of how old info is (e.g. "this market report is from turn 184")
+<li>Mobile things (characters, ships) only included if seen in the last turn
+</ul>
