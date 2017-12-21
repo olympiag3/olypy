@@ -174,8 +174,8 @@ def item_report(data, trade_chain, outdir):
                         name = who_rec['na'][0]
                     else:
                         name = u.return_type(who_rec).capitalize()
-                        if name == 'Ni':
-                            name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
+                    if name == 'Ni':
+                        name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
                     who_literal = name + ' [' + anchor(to_oid(who_has)) + ']'
                     outf.write('<td sorttable_customkey="{}">{}</td>'.format(who_has,
                                                                              who_literal))
@@ -1142,6 +1142,7 @@ def gold_report(data, outdir):
                                                                                                   u.return_unitid(
                                                                                                       loc_rec)))))
                                 outf.write('<td>{}</td>'.format(f"{item_qty:,d}"))
+                            break
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')

@@ -586,7 +586,13 @@ def determine_item_use(v, data, trade_chain):
         if 'PL' in v and 'un' in v['PL']:
                 charac = v['PL']['un'][0]
                 charac_rec = data[charac]
-                ret = ret + charac_rec['na'][0] + ' [' + anchor(to_oid(charac)) + ']'
+                if 'na' in charac_rec:
+                    name = charac_rec['na'][0]
+                else:
+                    name = return_type(charac_rec).capitalize()
+                if name == 'Ni':
+                    name = data[charac_rec['CH']['ni'][0]]['na'][0].capitalize()
+                ret = ret + name + ' [' + anchor(to_oid(charac)) + ']'
         else:
             ret = ret + 'unknown'
     elif return_type(v) == 'auraculum':
