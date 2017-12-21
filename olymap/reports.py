@@ -171,6 +171,8 @@ def item_report(data, trade_chain, outdir):
                         name = who_rec['na'][0]
                     else:
                         name = u.return_type(who_rec).capitalize()
+                        if name == 'Ni':
+                            name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
                     who_literal = name + ' [' + anchor(to_oid(who_has)) + ']'
                     outf.write('<td sorttable_customkey="{}">{}</td>'.format(who_has,
                                                                              who_literal))
@@ -622,6 +624,8 @@ def character_report(data, outdir):
                 name = character['na'][0]
             else:
                 name = u.return_type(character).capitalize()
+            if name == 'Ni':
+                name = data[character['CH']['ni'][0]]['na'][0].capitalize()
             outf.write('<tr>')
             outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
                                                                           name,

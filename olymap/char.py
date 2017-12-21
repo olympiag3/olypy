@@ -8,11 +8,13 @@ from olymap.utilities import anchor
 import pathlib
 
 
-def write_char_page_header(v, k, outf):
+def write_char_page_header(v, k, outf, data):
     if u.return_type(v) == 'garrison':
         name = 'Garrison'
     else:
         name = v['na'][0]
+        if name == 'Ni':
+            name = data[v['CH']['ni'][0]]['na'][0].capitalize()
     outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid(k)))
 
 
@@ -580,9 +582,18 @@ def write_char_magic_stuff(v, data, outf):
                 pass
 
 
+def write_char_type(v, k, data, outf):
+    if u.return_type(v) == 'ni':
+        outf.write('<tr>')
+        outf.write('<td>Type:</td>')
+        outf.write('<td>{} [{}]</td></tr>\n'.format(data[v['CH']['ni'][0]]['na'][0],
+                                                    anchor(to_oid(v['CH']['ni'][0]))))
+
+
 def write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain, instance):
     if u.return_type(v) != 'garrison':
         outf.write('<table>\n')
+        write_char_type(v, k, data, outf)
         write_char_rank(v, k, outf)
         write_char_faction(v, data, outf)
         write_char_location(data, outf, v)
@@ -629,11 +640,13 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
         name = 'Garrison'
     else:
         name = v['na'][0]
+        if name == 'Ni':
+            name = data[v['CH']['ni'][0]]['na'][0].capitalize()
     outf.write('<TITLE>{} [{}]'.format(name, to_oid(k)))
     outf.write('</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
-    write_char_page_header(v, k, outf)
+    write_char_page_header(v, k, outf, data)
     write_char_basic_info(v, k, data, outf, pledge_chain, prisoner_chain, instance)
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')

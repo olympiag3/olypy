@@ -305,7 +305,6 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
             outf.write('</a></td>\n')
 
 
-
 def write_leaf_header(currentpoint, outdir, prefix, outf):
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')

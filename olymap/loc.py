@@ -529,6 +529,8 @@ def write_characters(v, k, data, outf, print_province = False):
         name = 'Garrison'
     else:
         name = v['na'][0]
+        if name == 'Ni':
+            name = data[v['CH']['ni'][0]]['na'][0].capitalize()
     outf.write('{} [{}]'.format(name,
                                 anchor(to_oid(k))))
     if u.xlate_loyalty(v) not in {'Undefined'}:
@@ -554,7 +556,8 @@ def write_characters(v, k, data, outf, print_province = False):
                                 outf.write('(AB')
     if u.return_type(v) != '0':
         if u.return_type(v) == 'ni':
-            char_type = v['na'][0].lower()
+            # char_type = v['na'][0].lower()
+            char_type = data[v['CH']['ni'][0]]['na'][0]
         else:
             char_type = u.return_type(v)
         outf.write(', {}'.format(char_type))

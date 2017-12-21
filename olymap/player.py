@@ -48,6 +48,8 @@ def write_unit_list(data, outf, v):
                     name = char['na'][0]
                 else:
                     name = u.return_type(char).capitalize()
+                if name == 'Ni':
+                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
                 outf.write('<td>{} [{}]</td>'.format(name,
                                                      anchor(to_oid(u.return_unitid(char)))))
             else:
@@ -58,6 +60,8 @@ def write_unit_list(data, outf, v):
                     name = char['na'][0]
                 else:
                     name = u.return_type(char).capitalize()
+                if name == 'Ni':
+                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
                 outf.write('<td>{} [{}]</td>'.format(name,
                                                      anchor(to_oid(u.return_unitid(char)))))
             else:
@@ -68,6 +72,8 @@ def write_unit_list(data, outf, v):
                     name = char['na'][0]
                 else:
                     name = u.return_type(char).capitalize()
+                if name == 'Ni':
+                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
                 outf.write('<td>{} [{}]</td>'.format(name,
                                                      anchor(to_oid(u.return_unitid(char)))))
             else:
