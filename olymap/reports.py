@@ -5,6 +5,7 @@ from olypy.oid import to_oid
 from olypy.oid import to_int
 import olymap.utilities as u
 from olymap.utilities import anchor
+import olymap.maps as maps
 import pathlib
 
 
@@ -381,7 +382,7 @@ def location_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Location Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Location</th><th>Type</th><th>Region</th></tr>\n')
+    outf.write('<tr><th>Location</th><th>Type</th><th>Region</th><th># Men</th></tr>\n')
     location_list = []
     for unit in data:
         if u.is_loc(data, unit):
@@ -404,6 +405,8 @@ def location_report(data, outdir):
             outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
                                                                           region_rec['na'][0],
                                                                           anchor(to_oid(region))))
+            nbrmen, _, _ = maps.count_stuff(loc, data)
+            outf.write('<td>{}</td>'.format(nbrmen))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
@@ -611,7 +614,7 @@ def character_report(data, outdir):
     outf.write('<H3>Olympia Master Character Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Character</th><th>Name</th><th>Faction</th><th>Loyalty</th>'
-               '<th>Health</th><th>Mage</th><th>Priest</th></tr>\n')
+               '<th>Health</th><th>Mage</th><th>Priest</th><th># Men</th></tr>\n')
     character_list = []
     for unit in data:
         if u.is_char(data, unit):
@@ -655,6 +658,8 @@ def character_report(data, outdir):
                 outf.write('<td>Yes</td>')
             else:
                 outf.write('<td>No</td>')
+            nbrmen, _, _ = maps.count_stuff(character, data)
+            outf.write('<td>{}</td>'.format(nbrmen))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
@@ -795,7 +800,7 @@ def castle_report(data, outdir, garrisons_chain):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master Castle Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Castle</th><th>Province</th><th>Region</th><th># Garr</th></tr>\n')
+    outf.write('<tr><th>Castle</th><th>Province</th><th>Region</th><th># Garr</th><th># Men</th></tr>\n')
     castle_list = []
     for unit in data:
         if u.is_castle(data, unit):
@@ -827,6 +832,8 @@ def castle_report(data, outdir, garrisons_chain):
                                                                           anchor(to_oid(region))))
             garrison_list = garrisons_chain[str(unit)]
             outf.write('<td>{}</td>'.format(len(garrison_list)))
+            nbrmen, _, _ = maps.count_stuff(castle, data)
+            outf.write('<td>{}</td>'.format(nbrmen))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
@@ -844,7 +851,7 @@ def city_report(data, outdir):
     outf.write('<BODY>\n')
     outf.write('<H3>Olympia Master City Report</H3>\n')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th></tr>\n')
+    outf.write('<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th><th># Men</th></tr>\n')
     city_list = []
     for unit in data:
         if u.is_city(data, unit):
@@ -875,6 +882,8 @@ def city_report(data, outdir):
                                                                           region_rec['na'][0],
                                                                           anchor(to_oid(region))))
             outf.write('<td>{}</td>'.format(u.is_port_city(city, data)))
+            nbrmen, _, _ = maps.count_stuff(city, data)
+            outf.write('<td>{}</td>'.format(nbrmen))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
