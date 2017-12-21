@@ -43,6 +43,7 @@ def write_index(outdir, instance, inst_dict):
     outf.write('<li><a href="master_mage_report.html">Mages</a></li>')
     outf.write('<li><a href="master_orb_report.html">Orbs</a></li>')
     outf.write('<li><a href="master_player_report.html">Players</a></li>')
+    outf.write('<li><a href="master_priest_report.html">Priests</a></li>')
     outf.write('<li><a href="master_projected_cast_report.html">Projected Casts</a></li>')
     outf.write('<li><a href="master_region_report.html">Regions</a></li>')
     outf.write('<li><a href="master_road_report.html">Roads</a></li>')

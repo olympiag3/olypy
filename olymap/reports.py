@@ -983,3 +983,57 @@ def mage_report(data, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def priest_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_priest_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Priest Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master priest Report</H3>\n')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Visons Received</th></tr>\n')
+    priest_list = []
+    for unit in data:
+        if u.is_priest(data[unit]):
+            priest_list.append(int(to_int(unit)))
+        priest_list.sort()
+    if priest_list != '':
+        for unit in priest_list:
+            priest_rec = data[str(unit)]
+            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                          priest_rec['na'][0],
+                                                                          anchor(to_oid(unit))))
+            outf.write('<td>{}</td>'.format(priest_rec['na'][0]))
+            if 'CM' in priest_rec and 'vi' in priest_rec['CM']:
+                vision_list = priest_rec['CM']['vi']
+                outf.write('<td>')
+                outf.write('<table>')
+                second = False
+                for vision in vision_list:
+                    if not second:
+                        outf.write('<tr>')
+                    outf.write('<td>')
+                    try:
+                        visioned = data[vision]
+                        vision_name = visioned['na'][0]
+                    except KeyError:
+                        vision_name = 'missing'
+                    outf.write('{} [{}]'.format(vision_name,
+                                                anchor(to_oid(vision))))
+                    outf.write('</td>')
+                    if second:
+                        outf.write('</tr>')
+                        second = False
+                    else:
+                        second = True
+                outf.write('</table>')
+                outf.write('</td>')
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
