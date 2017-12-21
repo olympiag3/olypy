@@ -2197,7 +2197,9 @@ def sweep_independent_units(data):
                 # beastmastery and use beasts
                 box.subbox_append(data, k, 'CH', 'sl', ['650', '2', '28', '0', '0'])
                 box.subbox_append(data, k, 'CH', 'sl', ['653', '2', '28', '0', '0'])
-                # FTTD is on
+                # FTTD is on -- CH bp elided -- box.py does not handle this? XXXv0
+                if 'bp' in data[k]['CH']:
+                    del data[k]['CH']['bp']
                 box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
                 # loop through inventory and remove any unique items that don't exist
                 # example: weapons and armor
@@ -2532,7 +2534,8 @@ def parse_character(name, ident, factint, text, data):
         ch['bh'] = [behind]
     # guard?
     # time_flying XXXv2 - hard one
-    ch['bp'] = [break_point]
+    if break_point != '0':
+        ch['bp'] = [break_point]  # C lib elides this if zero
     # rank
     ch['at'] = [attack]
     ch['df'] = [defense]
