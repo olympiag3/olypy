@@ -102,6 +102,7 @@ def write_reports(data, chains, outdir):
     reports.region_report(data, outdir)
     reports.mage_report(data, outdir)
     reports.priest_report(data, outdir)
+    reports.gold_report(data, outdir)
 
 
 def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):

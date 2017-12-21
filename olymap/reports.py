@@ -1024,7 +1024,7 @@ def priest_report(data, outdir):
     outf.write('<TITLE>Olympia Master Priest Report</TITLE>\n')
     outf.write('</HEAD>\n')
     outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master priest Report</H3>\n')
+    outf.write('<H3>Olympia Master Priest Report</H3>\n')
     outf.write('<h5>(Click on table headers to sort)</h5>')
     outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
     outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Can Visison</th><th>Can Resurrect</th>'
@@ -1085,6 +1085,63 @@ def priest_report(data, outdir):
             else:
                 outf.write('<td>0</td>')
                 outf.write('<td>&nbsp;</td>')
+            outf.write('</tr>\n')
+    outf.write('</table>\n')
+    outf.write('</BODY>\n')
+    outf.write('</HTML>\n')
+    outf.close()
+
+
+def gold_report(data, outdir):
+    outf = open(pathlib.Path(outdir).joinpath('master_gold_report.html'), 'w')
+    outf.write('<HTML>\n')
+    outf.write('<HEAD>\n')
+    outf.write('<script src="sorttable.js"></script>')
+    outf.write('<TITLE>Olympia Master Gold (> 10k) Report</TITLE>\n')
+    outf.write('</HEAD>\n')
+    outf.write('<BODY>\n')
+    outf.write('<H3>Olympia Master Gold (> 10k) Report</H3>\n')
+    outf.write('<h5>(Click on table headers to sort)</h5>')
+    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
+    outf.write('<tr><th>Character</th><th>Character Name</th><th>Location</th><th>Gold</th></tr>\n')
+    character_list = []
+    for unit in data:
+        if u.is_char(data, unit):
+            character_list.append(int(to_int(unit)))
+        character_list.sort()
+    if character_list != '':
+        for unit in character_list:
+            character_rec = data[str(unit)]
+            if 'il' in character_rec:
+                item_list = character_rec['il']
+                iterations = int(len(item_list) / 2)
+                if iterations > 0:
+                    for itm in range(0, iterations):
+                        item_id = item_list[itm * 2]
+                        if item_id == '1':
+                            item_qty = int(item_list[(itm * 2) + 1])
+                            if item_qty > 10000:
+                                if 'na' in character_rec:
+                                    name = character_rec['na'][0]
+                                else:
+                                    name = u.return_type(character_rec).capitalize()
+                                if name == 'Ni':
+                                    name = data[character_rec['CH']['ni'][0]]['na'][0].capitalize()
+                                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
+                                                                                              name,
+                                                                                              anchor(to_oid(unit))))
+                                outf.write('<td>{}</td>'.format(name))
+                                loc_rec = data[character_rec['LI']['wh'][0]]
+                                if 'na' in loc_rec:
+                                    name_loc = loc_rec['na'][0]
+                                else:
+                                    name_loc = u.return_type(loc_rec).capitalize()
+                                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
+                                                                                              name_loc,
+                                                                                              anchor(to_oid(
+                                                                                                  u.return_unitid(
+                                                                                                      loc_rec)))))
+                                outf.write('<td>{}</td>'.format(f"{item_qty:,d}"))
             outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
