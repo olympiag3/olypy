@@ -27,6 +27,7 @@ class PyTest(TestCommand):
 
 packages = [
     'olypy',
+    'olymap',
 ]
 
 requires = []
@@ -35,6 +36,7 @@ test_requirements = ['pytest>=3.0.0', 'coverage', 'pytest-cov']
 scripts = ['scripts/box-to-json',
            'scripts/build-player-lib',
            'scripts/copylib',
+           'scripts/make-oly-map',
            'scripts/modify-qa-lib',
            'scripts/monkeypatch',
            'scripts/oid',
