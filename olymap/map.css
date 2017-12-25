@@ -1,0 +1,63 @@
+﻿table {
+  border: 1px solid black;
+  cellpading: 0;
+  cellspacing: 0;
+}
+
+td {
+  border: 1px solid black;
+  font: 12px normal verdana, sans-serif;
+  vertical-align: top;
+  height: 40px;
+}
+
+td.top, td.bottom, td.corner {
+  height: 20px;
+}
+
+img {
+  border: 0;
+}
+
+.plain {
+  background-color: lightgreen;
+}
+
+.forest {
+  background-color: limegreen;
+}
+
+.mountain {
+  background-color: gray;
+}
+
+.desert {
+  background-color: yellow;
+}
+
+.swamp {
+  background-color: purple;
+}
+
+.ocean {
+  background-color: aqua;
+}
+
+.sealane {
+  background-color: teal;
+}
+
+.x_land {
+  background-color: #bbb;
+}
+
+.x_sea {
+  background-color: #ddd;
+}
+.underground{
+  background-color: orange;
+}
+
+.cloud{
+  background-color: lightblue;
+}
