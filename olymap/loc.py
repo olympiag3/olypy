@@ -4,7 +4,7 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import 
+from olymap.utilities import anchor
 from olymap.utilities import anchor2
 import olypy.details as details
 import olymap.detail as detail
