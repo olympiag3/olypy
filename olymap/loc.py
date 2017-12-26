@@ -4,7 +4,7 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor
+from olymap.utilities import 
 from olymap.utilities import anchor2
 import olypy.details as details
 import olymap.detail as detail
@@ -851,6 +851,8 @@ def write_garrisons(v, k, data, outf, garrisons_chain):
 
 
 def write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices):
+    if u.return_type(v) in ['tunnel', 'chamber']:
+        return 0
     dimensions = inst_dict[instance]
     region = u.region(k, data)
     region_rec = data[region]
