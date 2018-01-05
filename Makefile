@@ -34,7 +34,7 @@ test_coverage: clean_coverage
 defaultlib:
 	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
 # TODO lore?
-	(cd qa-lib; python ../modifylib.py mapgen-lib)
+	(cd qa-lib; python ../scripts/modify-qa-lib mapgen-lib)
 	(cd qa-lib/modified-lib; tar cjf ../../sim/defaultlib.tar.gz .)
 
 register:
@@ -47,3 +47,25 @@ dist: distclean
 	python ./setup.py --long-description | rst2html --exit-status=2 2>&1 > /dev/null
 	python ./setup.py bdist_wheel
 	twine upload dist/* -r pypi
+
+maps: g2 g4 qa
+
+g2:
+	PYTHONPATH=. python scripts/make-oly-map lib.g2 lib.g2.out g2
+	cp -p olymap/map.css lib.g2.out
+	cp -p olymap/grey.gif lib.g2.out
+	cp -p olymap/sorttable.js lib.g2.out
+
+g4:
+	PYTHONPATH=. python scripts/make-oly-map lib.g4-minus-grinter lib.g4.out g4
+	cp -p olymap/map.css lib.g4.out
+	cp -p olymap/grey.gif lib.g4.out
+	cp -p olymap/sorttable.js lib.g4.out
+
+qa:
+	PYTHONPATH=. python scripts/make-oly-map lib.qa lib.qa.out qa
+	cp -p olymap/map.css lib.qa.out
+	cp -p olymap/grey.gif lib.qa.out
+	cp -p olymap/sorttable.js lib.qa.out
+
+
