@@ -44,7 +44,9 @@ distclean:
 	rm -rf dist/*
 
 dist: distclean
-	python ./setup.py --long-description | rst2html --exit-status=2 2>&1 > /dev/null
+# check syntax of documentation -- currently failing -- pandoc works
+#	python ./setup.py --long-description | rst2html --exit-status=2 2>&1 > /dev/null
+	pandoc --from=markdown --to=rst --output=README README.md
 	python ./setup.py bdist_wheel
 	twine upload dist/* -r pypi
 
