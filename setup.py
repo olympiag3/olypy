@@ -30,7 +30,7 @@ packages = [
     'olymap',
 ]
 
-requires = []
+requires = ['PyYAML', 'pngcanvas']
 test_requirements = ['pytest>=3.0.0', 'coverage', 'pytest-cov']
 
 scripts = ['scripts/box-to-json',

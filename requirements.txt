@@ -3,6 +3,9 @@
 # used to configure game-qa-testing
 PyYAML==3.12
 
+# used by olymap
+pngcanvas==1.0.3
+
 # used to maintain this file
 pur==4.0.3
 
