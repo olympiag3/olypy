@@ -232,7 +232,7 @@ def resolve_all_pledges(data):
     for unit in data:
         if is_char(data, unit):
             pl = data[unit].get('CM', {}).get('pl', [None])[0]
-            if pl:
+            if pl and pl is not [None]:
                 ret[pl].append(unit)
     return ret
 
@@ -259,7 +259,7 @@ def resolve_bound_storms(data):
     for unit in data:
         if is_ship(data, unit):
             pl = data[unit].get('SL', {}).get('bs', [None])[0]
-            if pl:
+            if pl and pl is not [None]:
                 ret[pl].append(unit)
     return ret
 
@@ -269,7 +269,7 @@ def resolve_all_prisoners(data):
     for unit in data:
         if is_char(data, unit):
             pl = data[unit].get('CH', {}).get('pr', [None])[0]
-            if pl:
+            if pl and pl is not [None]:
                 ret[data[unit].get('LI', {}).get('wh', [None])[0]].append(unit)
     return ret
 
@@ -278,8 +278,8 @@ def resolve_hidden_locs(data):
     ret = defaultdict(list)
     for unit in data:
         if is_player(data, unit):
-            pl = data[unit].get('PL', {}).get('kn', [None])
-            if pl:
+            pl = data[unit].get('PL', {}).get('kn', None)
+            if pl and pl is not None:
                 for loc in pl:
                     try:
                         loc_rec = data[loc]
@@ -295,11 +295,10 @@ def resolve_teaches(data):
     ret = defaultdict(list)
     for unit in data:
         if is_city(data, unit):
-            pl = data[unit].get('SL', {}).get('te', [None])
-            if pl:
+            pl = data[unit].get('SL', {}).get('te', None)
+            if pl and pl is not None:
                 for skill in pl:
-                    if skill is not None:
-                        ret[skill].append(unit)
+                    ret[skill].append(unit)
     return ret
 
 
@@ -307,8 +306,8 @@ def resolve_child_skills(data):
     ret = defaultdict(list)
     for unit in data:
         if is_skill(data, unit):
-            pl = data[unit].get('SK', {}).get('rs', [None])
-            if pl:
+            pl = data[unit].get('SK', {}).get('rs', None)
+            if pl and pl is not None:
                 for skill in pl:
                     ret[skill].append(unit)
     return ret
@@ -318,8 +317,8 @@ def resolve_garrisons(data):
     ret = defaultdict(list)
     for unit in data:
         if is_garrison(data, unit):
-            pl = data[unit].get('MI', {}).get('gc', [None])
-            if pl:
+            pl = data[unit].get('MI', {}).get('gc', None)
+            if pl and pl is not None:
                 for skill in pl:
                     ret[skill].append(unit)
     return ret
@@ -329,11 +328,10 @@ def resolve_skills_known(data):
     ret = defaultdict(list)
     for unit in data:
         if is_char(data, unit):
-            pl = data[unit].get('CH', {}).get('sl', [None])
-            if pl:
-                iterations = int(len(pl) / 5)
-                for skill in range(0, iterations - 1):
-                    ret[pl[skill*5]].append(unit)
+            pl = data[unit].get('CH', {}).get('sl', None)
+            if pl and pl is not None:
+                for skill in range(0, len(pl), 5):
+                    ret[pl[skill]].append(unit)
     for row in ret:
         ret[row].sort()
     return ret
@@ -343,13 +341,12 @@ def resolve_trades(data):
     ret = defaultdict(list)
     for unit in data:
         if is_city(data, unit):
-            pl = data[unit].get('tl', [None])
-            iterations = int(len(pl) / 8)
-            for goods in range(0, iterations - 1):
-                if int(pl[(goods*8) + 1]) >= 300:
-                    if pl[(goods * 8) + 0] in {'1', '2'}:
-                        if pl[(goods*8) + 1] is not None:
-                            ret[pl[(goods*8) + 1]].append([unit, pl[(goods * 8) + 0]])
+            pl = data[unit].get('tl', None)
+            if pl is not None:
+                for goods in range(0, len(pl), 8):
+                    if int(pl[(goods + 1)]) >= 300:
+                        if pl[goods] in {'1', '2'}:
+                            ret[pl[(goods + 1)]].append([unit, pl[goods]])
     return ret
 
 
@@ -480,10 +477,9 @@ def is_priest(v):
         if 'sl' in v['CH']:
             skills_list = v['CH']['sl']
             if len(skills_list) > 0:
-                iterations = int(len(skills_list) / 5)
-                for skill in range(0, iterations - 1):
-                    if skills_list[skill * 5] == '750':
-                        if skills_list[(skill * 5) + 1] == '2':
+                for skill in range(0, len(skills_list), 5):
+                    if skills_list[skill] == '750':
+                        if skills_list[skill + 1] == '2':
                             return True
     return False
 
