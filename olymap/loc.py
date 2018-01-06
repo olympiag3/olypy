@@ -26,10 +26,11 @@ def write_loc_page_header(v, k, data, outf):
             outf.write(' province ')
         try:
             loc2 = data[v['LI']['wh'][0]]
-            outf.write(' {} [{}]'.format(loc2['na'][0],
-                                         anchor(to_oid(u.return_unitid(loc2)))))
         except KeyError:
             pass
+        else:
+            outf.write(' {} [{}]'.format(loc2['na'][0],
+                                         anchor(to_oid(u.return_unitid(loc2)))))
     # if 'city' in loc_type:
     #    outf.write(' [{}]'.format(anchor(to_oid(v['LI']['wh'][0]))))
     if 'SL' in v and 'sh' in v['SL']:
@@ -69,6 +70,9 @@ def write_loc_controlled_by(v, data, outf):
             for loc in here_list:
                 try:
                     charac = data[loc]
+                except KeyError:
+                    pass
+                else:
                     if 'MI' in charac and 'gc' in charac['MI']:
                         if charac['MI']['gc'][0] != '0':
                             dest_loc = data[charac['MI']['gc'][0]]
@@ -90,6 +94,9 @@ def write_loc_controlled_by(v, data, outf):
                                 outf.write(', in {} [{}]'.format(dest_name2, dest_id2))
                             try:
                                 garrison = data[dest_loc2['LI']['hl'][0]]
+                            except KeyError:
+                                pass
+                            else:
                                 garr_type = u.return_type(garrison)
                                 if garr_type == 'garrison':
                                     # calculate top of pledge chain
@@ -97,16 +104,13 @@ def write_loc_controlled_by(v, data, outf):
                                         top_guy = u.top_ruler(dest_loc['LI']['hl'][0], data)
                                         try:
                                             top_dog = data[top_guy]
+                                        except KeyError:
+                                            pass
+                                        else:
                                             a = top_dog['na'][0]
                                             b = anchor(to_oid(top_guy))
                                             outf.write('<br>Ruled by {} [{}]'.format(a, b))
-                                        except KeyError:
-                                            pass
-                            except KeyError:
-                                pass
                             outf.write('</p>\n')
-                except KeyError:
-                    pass
 
 
 def write_province_destination(loc, dest_loc, direction, data, outf):
@@ -265,6 +269,9 @@ def write_loc_routes_out(v, data, outf):
             for pd in dest_loc_list:
                 try:
                     pd_loc = data[pd]
+                except KeyError:
+                    pass
+                else:
                     if u.return_type(pd_loc) == 'ocean':
                         if not header_printed:
                             outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
@@ -279,8 +286,6 @@ def write_loc_routes_out(v, data, outf):
                                            data[u.region(pd_loc_id, data)]['na'][0],
                                            out_distance,
                                            'day' if out_distance == 1 else 'days'))
-                except KeyError:
-                    pass
                 i = i + 1
         if not header_printed:
             outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
@@ -783,6 +788,9 @@ def write_here_list(v, data, outf):
     here_list = []
     try:
         here_list = v['LI']['hl']
+    except KeyError:
+        pass
+    else:
         for here in here_list:
             here_rec = data[here]
             if u.return_kind(here_rec) == 'loc':
@@ -793,14 +801,13 @@ def write_here_list(v, data, outf):
                 ships_docked = True
             elif u.return_kind(here_rec) == 'storm':
                 storms_here = True
-    except KeyError:
-        pass
     try:
         inner_list = v['SL']['lf']
-        if len(inner_list) > 0:
-            print_inner = True
     except KeyError:
         pass
+    else:
+        if len(inner_list) > 0:
+            print_inner = True
     if print_inner:
         outf.write('<H4>Inner Locations:</H4>\n')
         write_inner_locs(v, data, outf, here_list)
@@ -821,6 +828,9 @@ def write_hidden_access(v, k, data, outf, hidden_chain):
             # PL/kn
             try:
                 hidden_list = hidden_chain[k]
+            except:
+                pass
+            else:
                 if len(hidden_list) > 0:
                     outf.write('Hidden location known by:</H4>\n')
                     outf.write('<ul>\n')
@@ -829,8 +839,6 @@ def write_hidden_access(v, k, data, outf, hidden_chain):
                         outf.write('<li>{} [{}]</td></li>\n'.format(hidden_rec['na'][0],
                                                                     anchor(to_oid(hidden))))
                     outf.write('</ul>\n')
-            finally:
-                pass
 
 
 def write_garrisons(v, k, data, outf, garrisons_chain):
@@ -865,12 +873,9 @@ def write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices):
     save_world = ''
     try:
         save_rec = map_matrices[region_rec['na'][0].lower()]
-        save_world = region_rec['na'][0].lower()
-        custom = True
     except KeyError:
         try:
             save_rec = dimensions[region_rec['na'][0].lower()]
-            save_world = region_rec['na'][0].lower()
         except KeyError:
             for world in dimensions:
                 world_rec = dimensions[world]
@@ -878,6 +883,11 @@ def write_loc_map_anchor(v, k, data, outf, instance, inst_dict, map_matrices):
                     save_rec = world_rec
                     save_world = world
                     break
+        else:
+            save_world = region_rec['na'][0].lower()
+    else:
+        save_world = region_rec['na'][0].lower()
+        custom = True
     # if len(save_rec) == 0:
     #     print('error {} {}'.format(to_oid(k),
     #                                u.return_type(v)))
@@ -935,9 +945,10 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
     name = v['na'][0]
     try:
         loc2 = data[v['LI']['wh'][0]]
-        loc2_name = ', in ' + loc2['na'][0]
     except KeyError:
         loc2_name = ''
+    else:
+        loc2_name = ', in ' + loc2['na'][0]
     outf.write('<TITLE>{} [{}], {}{}'.format(name,
                to_oid(k), u.return_type(v), loc2_name))
     outf.write('</TITLE>\n')
