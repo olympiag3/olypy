@@ -362,21 +362,24 @@ def projected_cast_potion_report(data, outdir):
                     if 'IM' in itemz and 'pc' in itemz['IM']:
                         try:
                             loc = data[itemz['IM']['pc'][0]]
+                        except KeyError:
+                            outf.write('<td sorttable_customkey="">unknown {}</td><td>&nbsp;</td>'.format(itemz['IM']['pc'][0]))
+                        else:
+                            name = loc.get('na', [u.return_kind(loc)])[0]
                             outf.write('<td sorttable_customkey="{}">'
                                        '{} {} [{}]</td>'.format(itemz['IM']['pc'],
                                                                 u.return_kind(loc),
-                                                                loc['na'][0],
+                                                                name,
                                                                 anchor(to_oid(itemz['IM']['pc'][0]))))
                             try:
                                 region = u.region(str(itemz['IM']['pc'][0]), data)
+                            except KeyError:
+                                outf.write('<td>&nbsp;</td>')
+                            else:
                                 region_rec = data[region]
                                 outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
                                                                                               region_rec['na'][0],
                                                                                               anchor(to_oid(region))))
-                            except KeyError:
-                                outf.write('<td>&nbsp;</td>')
-                        except KeyError:
-                            outf.write('<td sorttable_customkey="">unknown {}</td><td>&nbsp;</td>'.format(itemz['IM']['pc'][0]))
                     else:
                         outf.write('<td sorttable_customkey="">unknown</td><td>&nbsp;</td>')
                     outf.write('</tr>\n')
@@ -559,22 +562,19 @@ def road_report(data, outdir):
     if road_list != '':
         for road in road_list:
             road_rec = data[str(road)]
-            try:
-                if road_rec['GA']['rh'][0] == '1':
-                    outf.write('<tr>')
-                    outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
-                    outf.write('<td>{}</td>'.format(road_rec['na'][0]))
-                    start = road_rec['LI']['wh'][0]
-                    start_rec = data[start]
-                    outf.write('<td>{} [{}]</td>'.format(start_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(start_rec)))))
-                    dest = road_rec['GA']['tl'][0]
-                    dest_rec = data[dest]
-                    outf.write('<td>{} [{}]</td>'.format(dest_rec['na'][0],
-                                                         anchor(to_oid(u.return_unitid(dest_rec)))))
-                    outf.write('</tr>\n')
-            except KeyError:
-                pass
+            if 'GA' in road_rec and 'rh' in road_rec['GA'] and road_rec['GA']['rh'][0] == '1':
+                outf.write('<tr>')
+                outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
+                outf.write('<td>{}</td>'.format(road_rec['na'][0]))
+                start = road_rec['LI']['wh'][0]
+                start_rec = data[start]
+                outf.write('<td>{} [{}]</td>'.format(start_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(start_rec)))))
+                dest = road_rec['GA']['tl'][0]
+                dest_rec = data[dest]
+                outf.write('<td>{} [{}]</td>'.format(dest_rec['na'][0],
+                                                     anchor(to_oid(u.return_unitid(dest_rec)))))
+                outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
@@ -601,10 +601,9 @@ def gate_report(data, outdir):
     if road_list != '':
         for road in road_list:
             road_rec = data[str(road)]
-            try:
-                if road_rec['GA']['rh'][0] == '1':
-                    pass
-            except KeyError:
+            if 'GA' in road_rec and 'rh' in road_rec['GA'] and road_rec['GA']['rh'][0] == '1':
+                pass
+            else:
                 outf.write('<tr>')
                 outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
                 start = road_rec['LI']['wh'][0]
@@ -1069,14 +1068,15 @@ def priest_report(data, outdir):
                     outf.write('<td>')
                     try:
                         visioned = data[vision]
-                        vision_name = visioned['na'][0]
                     except KeyError:
                         vision_name = 'missing'
+                    else:
+                        vision_name = visioned.get('na', [u.return_kind(visioned)])[0]
                     outf.write('{} [{}]'.format(vision_name,
                                                 anchor(to_oid(vision))))
                     outf.write('</td>')
                     if second:
-                        outf.write('</tr>')
+                        outf.write('</tr>\n')
                         second = False
                     else:
                         second = True
