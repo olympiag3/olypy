@@ -80,14 +80,15 @@ def return_firstline(box):
 def chase_structure(k, data, level, seen_here_list):
     try:
         z = data[k]
+    except KeyError:
+        return seen_here_list
+    else:
         seen_here_list.append((return_unitid(z), level))
         if 'LI' in z:
             if 'hl' in z['LI']:
                 level = level + 1
                 for here in z['LI']['hl']:
                     seen_here_list = chase_structure(here, data, level, seen_here_list)
-    except KeyError:
-        return seen_here_list
     return seen_here_list
 
 
@@ -282,10 +283,11 @@ def resolve_hidden_locs(data):
                 for loc in pl:
                     try:
                         loc_rec = data[loc]
-                        if return_kind(loc_rec) == 'loc':
-                            ret[loc].append(unit)
                     except KeyError:
                         pass
+                    else:
+                        if return_kind(loc_rec) == 'loc':
+                            ret[loc].append(unit)
     return ret
 
 
@@ -465,10 +467,11 @@ def province_has_port_city(loc, data):
         for here in here_list:
             try:
                 here_loc = data[here]
-                if is_port_city(here_loc, data):
-                    return here
             except KeyError:
                 pass
+            else:
+                if is_port_city(here_loc, data):
+                    return here
     return '0'
 
 
@@ -553,15 +556,20 @@ def determine_item_use(v, data, trade_chain):
                 if 'IM' in v and 'pc' in v['IM']:
                     try:
                         itemz = v['IM']['pc'][0]
-                        itemz_rec = data[itemz]
-                        if 'na' in v:
-                            name = v['na'][0]
-                        else:
-                            name = return_type(itemz_rec).capitalize()
-                        ret = ret + return_kind(itemz_rec) + ' ' + name + ' [' +\
-                            anchor(to_oid(itemz)) + ']'
                     except KeyError:
                         ret = ret + 'unknown target'
+                    else:
+                        try:
+                            itemz_rec = data[itemz]
+                        except KeyError:
+                            ret = ret + 'unknown target'
+                        else:
+                            if 'na' in v:
+                                name = v['na'][0]
+                            else:
+                                name = return_type(itemz_rec).capitalize()
+                            ret = ret + return_kind(itemz_rec) + ' ' + name + ' [' +\
+                                anchor(to_oid(itemz)) + ']'
                 else:
                     ret = ret + 'unknown target'
     elif return_type(v) == 'artifact':
