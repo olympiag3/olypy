@@ -468,14 +468,14 @@ def write_char_capacity(v, data, outf):
     outf.write('<p>Capacity: ')
     if land_cap > 0:
         pct = math.floor((land_weight * 100) / land_cap)
-        outf.write('{}/{} land ({}%) '.format(f"{land_weight:,d}", f"{land_cap:,d}", f"{pct:,d}"))
+        outf.write('{}/{} land ({}%)'.format(f"{land_weight:,d}", f"{land_cap:,d}", f"{pct:,d}"))
     if ride_cap > 0:
         pct = math.floor((ride_weight * 100) / ride_cap)
-        outf.write('{}/{} ride ({}%) '.format(f"{ride_weight:,d}", f"{ride_cap:,d}", f"{pct:,d}"))
+        outf.write(' {}/{} ride ({}%)'.format(f"{ride_weight:,d}", f"{ride_cap:,d}", f"{pct:,d}"))
     if fly_cap > 0:
         pct = math.floor((fly_weight * 100) / fly_cap)
-        outf.write('{}/{} fly ({}%)'.format(f"{fly_weight:,d}", f"{fly_cap:,d}", f"{pct:,d}"))
-    outf.write('</p>')
+        outf.write(' {}/{} fly ({}%)'.format(f"{fly_weight:,d}", f"{fly_cap:,d}", f"{pct:,d}"))
+    outf.write('</p>\n')
 
 
 def write_char_pending_trades(v, data, outf):
@@ -519,7 +519,7 @@ def write_char_visions_received(v, data, outf):
             except KeyError:
                 vision_name = 'missing'
             else:
-                vision_name = visioned['na'][0]
+                vision_name = visioned.get('na', ['missing'])[0]
             outf.write('<tr><td>{} [{}]</td></tr>\n'.format(vision_name,
                                                             anchor(to_oid(vision))))
         outf.write('</table>\n')
@@ -542,8 +542,8 @@ def write_char_magic_stuff(v, data, outf):
                         if use_key == '2':
                             outf.write('<p>Healing Potion [{}]</p>\n'.format(anchor(to_oid(item_list[items*2]))))
                         elif use_key == '5':
-                            loc_kind = ''
-                            loc_name = ''
+                            loc_kind = 'unknown'
+                            loc_name = 'unknown'
                             loc_id = ''
                             if 'IM' in itemz and 'pc' in itemz['IM']:
                                 try:
@@ -551,19 +551,24 @@ def write_char_magic_stuff(v, data, outf):
                                 except KeyError:
                                     loc_kind = 'unknown'
                                     loc_name = 'unknown'
+                                    loc_id = to_oid(itemz['IM']['pc'][0])
                                 else:
                                     loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
                                     if u.return_kind(location) != 'loc':
                                         loc_kind = u.return_kind(location)
                                     else:
                                         loc_kind = 'location'
-                                    loc_name = location['na'][0]
+                                    loc_name = location.get('na', ['unknown'])[0]
                                     loc_id = anchor(to_oid(u.return_unitid(location)))
+                            else:
+                                loc_id = '(no id)'
                             anch = anchor(to_oid(item_list[items*2]))
-                            outf.write('<p>Projected Cast [{}] to {} {} [{}]</p>\n'.format(anch,
-                                                                                           loc_kind,
-                                                                                           loc_name,
-                                                                                           loc_id))
+                            outf.write('<p>Projected Cast [{}] to {} {}'.format(anch,
+                                                                                loc_kind,
+                                                                                loc_name))
+                            if loc_id != '':
+                                outf.write(' [{}]'.format(loc_id))
+                            outf.write('</p>\n')
                 elif item_type == 'scroll':
                     if 'IM' in itemz and 'ms' in itemz['IM']:
                         skill_id = anchor(to_oid(itemz['IM']['ms'][0]))
@@ -579,9 +584,10 @@ def write_char_magic_stuff(v, data, outf):
                                 if 'rs' in skill['SK']:
                                     try:
                                         skill2 = data[skill['SK']['rs'][0]]
-                                        skill2_name = skill2['na'][0]
                                     except KeyError:
                                         skill2_name = 'unknown'
+                                    else:
+                                        skill2_name = skill2.get('na', ['unknown'])[0]
                                     anch = anchor(to_oid(skill['SK']['rs'][0]))
                                     required_study = '(requires {} [{}])'.format(skill2_name, anch)
                         outf.write('<p>Scroll [{}] permits the study of the following skills:<br>&nbsp;&nbsp;&nbsp;'
