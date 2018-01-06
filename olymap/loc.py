@@ -384,14 +384,13 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
     city_trade_list = []
     if len(trade_list) > 0:
         # city trades
-        iterations = int(len(trade_list) / 8)
-        for trade in range(0, iterations):
-            if trade_list[(trade * 8) + 0] in {'1', '2'}:
-                city_trade_list.append([trade_list[(trade * 8) + 0],
-                                        trade_list[(trade * 8) + 1],
+        for trade in range(0, len(trade_list), 8):
+            if trade_list[trade] in {'1', '2'}:
+                city_trade_list.append([trade_list[trade],
+                                        trade_list[trade + 1],
                                         k,
-                                        trade_list[(trade * 8) + 2],
-                                        trade_list[(trade * 8) + 3]])
+                                        trade_list[trade + 2],
+                                        trade_list[trade + 3]])
         # character trades - needs to be recursive
         if 'LI' in v and 'hl' in v['LI']:
             seen_here_list = v['LI']['hl']
@@ -406,14 +405,13 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                         trade_list = charac_rec['tl']
                         if len(trade_list) > 0:
                             # character trades
-                            iterations = int(len(trade_list) / 8)
-                            for trade in range(0, iterations):
-                                if trade_list[(trade * 8) + 0] in {'1', '2'}:
-                                    city_trade_list.append([trade_list[(trade * 8) + 0],
-                                                            trade_list[(trade * 8) + 1],
+                            for trade in range(0, len(trade_list), 8):
+                                if trade_list[trade] in {'1', '2'}:
+                                    city_trade_list.append([trade_list[trade],
+                                                            trade_list[trade + 1],
                                                             un,
-                                                            trade_list[(trade * 8) + 2],
-                                                            trade_list[(trade * 8) + 3]])
+                                                            trade_list[trade + 2],
+                                                            trade_list[trade + 3]])
     if len(city_trade_list) > 0:
         sorted_list = sorted(city_trade_list, key=itemgetter(0, 1, 2))
         outf.write('<H4>Market Report:</H4>\n')
@@ -453,12 +451,11 @@ def write_loc_market_report(v, k, data, outf, trade_chain):
                     outf.write('<td>{} [{}]</td>\n'.format(recip_name,
                                                            anchor(to_oid(recip_loc))))
                     recip_trade_list = recip_rec['tl']
-                    recip_iterations = int(len(recip_trade_list) / 8)
-                    for recip in range(0, recip_iterations):
-                        if recip_trade_list[(recip * 8) + 1] == trade[1]:
-                            if recip_trade_list[(recip * 8) + 0] in {'1', '2'}:
-                                recip_qty = recip_trade_list[(recip * 8) + 2]
-                                recip_price = recip_trade_list[(recip * 8) + 3]
+                    for recip in range(0, len(recip_trade_list), 8):
+                        if recip_trade_list[recip + 1] == trade[1]:
+                            if recip_trade_list[recip] in {'1', '2'}:
+                                recip_qty = recip_trade_list[recip + 2]
+                                recip_price = recip_trade_list[recip + 3]
                                 outf.write('<td>{}</td>\n'.format(recip_price))
                                 outf.write('<td>{}</td>\n'.format(recip_qty))
                 else:
@@ -478,10 +475,9 @@ def print_wearable_wielding(v, data, outf):
     defense = ''
     if 'il' in v:
         item_list = v['il']
-        iterations = int(len(item_list) / 2)
-        if iterations > 0:
-            for items in range(0, iterations):
-                itemz = data[item_list[items * 2]]
+        if len(item_list) > 0:
+            for items in range(0, len(item_list), 2):
+                itemz = data[item_list[items]]
                 if 'IM' in itemz:
                     if 'ab' in itemz['IM']:
                         if int(itemz['IM']['ab'][0]) > attack_max:
@@ -543,10 +539,9 @@ def write_characters(v, k, data, outf, print_province = False):
         if 'CH' in v and 'sl' in v['CH']:
             skills_list = v['CH']['sl']
             if int(len(skills_list)) > 0:
-                iterations = int(len(skills_list) / 5)
-                for skill in range(0, iterations):
-                    if skills_list[skill * 5] == '909':
-                        if skills_list[(skill * 5) + 1] == '2':
+                for skill in range(0, len(skills_list), 5):
+                    if skills_list[skill] == '909':
+                        if skills_list[skill + 1] == '2':
                             outf.write(':AB')
         outf.write(')')
     else:
@@ -554,10 +549,9 @@ def write_characters(v, k, data, outf, print_province = False):
             if 'sl' in v['CH']:
                 skills_list = v['CH']['sl']
                 if int(len(skills_list)) > 0:
-                    iterations = int(len(skills_list) / 5)
-                    for skill in range(0, iterations):
-                        if skills_list[skill * 5] == '909':
-                            if skills_list[(skill * 5) + 1] == '2':
+                    for skill in range(0, len(skills_list), 5):
+                        if skills_list[skill] == '909':
+                            if skills_list[skill + 1] == '2':
                                 outf.write('(AB')
     if u.return_type(v) != '0':
         if u.return_type(v) == 'ni':
@@ -584,15 +578,14 @@ def write_characters(v, k, data, outf, print_province = False):
     # print prominent items
     if 'il' in v:
         item_list = v['il']
-        iterations = int(len(item_list) / 2)
-        if iterations > 0:
-            for items in range(0, iterations):
-                itemz = data[item_list[items * 2]]
+        if len(item_list) > 0:
+            for items in range(0, len(item_list), 2):
+                itemz = data[item_list[items]]
                 if 'IT' in itemz:
                     if 'pr' in itemz['IT']:
                         if itemz['IT']['pr'][0] == '1':
-                            item_name = u.get_item_name(itemz) if int(item_list[(items * 2) + 1]) == 1 else u.get_item_plural(itemz)
-                            outf.write(', {} {}'.format(item_list[(items * 2) + 1], item_name))
+                            item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
+                            outf.write(', {} {}'.format(item_list[items + 1], item_name))
     if 'LI' in v:
         if 'hl' in v['LI']:
             outf.write(', accompanied by: ')

@@ -505,12 +505,12 @@ def count_stuff(v, data):
             if 'char' in u.return_kind(unit):
                 if'il' in unit:
                     item_list = unit['il']
-                    iterations = int(len(item_list) / 2)
-                    for itemz in range(0, iterations):
-                        itemz_rec = data[item_list[itemz*2]]
-                        if 'IT' in itemz_rec and 'pr' in itemz_rec['IT']:
-                            if itemz_rec['IT']['pr'][0] == '1':
-                                nbr_men = nbr_men + int(item_list[(itemz*2) + 1])
+                    if len(item_list) > 0:
+                        for itemz in range(0, len(item_list), 2):
+                            itemz_rec = data[item_list[itemz]]
+                            if 'IT' in itemz_rec and 'pr' in itemz_rec['IT']:
+                                if itemz_rec['IT']['pr'][0] == '1':
+                                    nbr_men = nbr_men + int(item_list[itemz + 1])
                 if 'CH' in unit:
                     if 'lo' in unit['CH'] and unit['CH']['lo'][0] == '100':
                         enemy_found = True

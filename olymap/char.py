@@ -243,14 +243,13 @@ def write_char_skills_known(v, data, outf):
     # CH/sl
     if 'CH' in v and 'sl' in v['CH']:
         skills_list = v['CH']['sl']
-        skills_iteration = int(len(skills_list) / 5)
         skills_dict = defaultdict(list)
-        if skills_iteration > 0:
-            for skill in range(0, skills_iteration):
-                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 1])
-                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 2])
-                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 3])
-                skills_dict[skills_list[skill * 5]].append(skills_list[(skill * 5) + 4])
+        if len(skills_list) > 0:
+            for skill in range(0, len(skills_list), 5):
+                skills_dict[skills_list[skill]].append(skills_list[skill + 1])
+                skills_dict[skills_list[skill]].append(skills_list[skill + 2])
+                skills_dict[skills_list[skill]].append(skills_list[skill + 3])
+                skills_dict[skills_list[skill]].append(skills_list[skill + 4])
         sort_list = []
         for skill in skills_dict:
             skill_id = skill
@@ -310,17 +309,16 @@ def write_char_inventory(v, data, outf):
     total_weight = int(0)
     if 'il' in v:
         item_list = v['il']
-        iterations = int(len(item_list) / 2)
-        if iterations > 0:
+        if len(item_list) > 0:
             outf.write('<p>Inventory:</p>\n')
             outf.write('<table>\n')
             outf.write('<tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td '
                        'style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>\n')
             outf.write('<tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td '
                        'style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>\n')
-            for itm in range(0, iterations):
-                item_id = item_list[itm*2]
-                item_qty = int(item_list[(itm*2)+1])
+            for itm in range(0, len(item_list), 2):
+                item_id = item_list[itm]
+                item_qty = int(item_list[itm + 1])
                 outf.write('<tr>')
                 outf.write('<td style="text-align:right">{}</td>'.format(f"{item_qty:,d}"))
                 itemz = data[item_id]
@@ -435,10 +433,9 @@ def write_char_capacity(v, data, outf):
         #    if 'an' in base_unit['IT']:
         #        animals = animals + 1
         item_list = v['il']
-        iterations = int(len(item_list) / 2)
-        for itm in range(0, iterations):
-            item_id = item_list[itm * 2]
-            item_qty = int(item_list[(itm * 2) + 1])
+        for itm in range(0, len(item_list), 2):
+            item_id = item_list[itm]
+            item_qty = int(item_list[itm + 1])
             try:
                 base_unit = data[item_id]
             except KeyError:
@@ -481,27 +478,26 @@ def write_char_capacity(v, data, outf):
 def write_char_pending_trades(v, data, outf):
     if 'tl' in v:
         trade_list = v['tl']
-        iterations = int(len(trade_list) / 8)
-        if iterations > 0:
+        if len(trade_list) > 0:
             outf.write('<p>Pending Trades:</p>\n')
             outf.write('<table>\n')
             outf.write('<tr><td style="text-align:right">trades</td><td style="text-align:right">price</td>'
                        '<td style="text-align:right">qty</td><td style="text-align:left">item</td>\n')
             outf.write('<tr><td style="text-align:right">---</td><td style="text-align:right">-----</td>'
                        '<td style="text-align:right">---</td><td style="text-align:left">----</td>\n')
-            for trades in range(0, iterations):
+            for trades in range(0, len(trade_list), 8):
                 try:
-                    itemz = data[trade_list[(trades*8)+1]]
+                    itemz = data[trade_list[trades + 1]]
                 except KeyError:
                     pass
                 else:
                     outf.write('<tr>')
-                    direction = 'buy' if trade_list[(trades*8)+0] == '1' else 'sell'
+                    direction = 'buy' if trade_list[trades] == '1' else 'sell'
                     outf.write('<td style="text-align:right">{}</td>'.format(direction))
-                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+3]))
-                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+2]))
-                    name = u.get_item_name (itemz) if int(trade_list[(trades*8)+2]) == 1 else u.get_item_plural(itemz)
-                    anch = anchor(to_oid(trade_list[(trades*8)+1]))
+                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[trades + 3]))
+                    outf.write('<td style="text-align:right">{}</td>'.format(trade_list[trades + 2]))
+                    name = u.get_item_name (itemz) if int(trade_list[trades + 2]) == 1 else u.get_item_plural(itemz)
+                    anch = anchor(to_oid(trade_list[trades + 1]))
                     outf.write('<td style="text-align:left">{} [{}]</td>'.format(name, anch))
                     outf.write('</tr>\n')
             outf.write('</table>\n')
@@ -510,7 +506,6 @@ def write_char_pending_trades(v, data, outf):
 def write_char_visions_received(v, data, outf):
     if 'CM' in v and 'vi' in v['CM']:
         vision_list = v['CM']['vi']
-        # iterations = len(vision_list)
         outf.write('<p>Visions Received:</p>\n')
         outf.write('<table>\n')
         for vision in vision_list:
@@ -528,10 +523,9 @@ def write_char_visions_received(v, data, outf):
 def write_char_magic_stuff(v, data, outf):
     if 'il' in v:
         item_list = v['il']
-        iterations = int(len(item_list) / 2)
-        for items in range(0, iterations):
+        for items in range(0, len(item_list), 2):
             try:
-                itemz = data[item_list[items*2]]
+                itemz = data[item_list[items]]
             except KeyError:
                 pass
             else:
@@ -540,7 +534,7 @@ def write_char_magic_stuff(v, data, outf):
                     if 'IM' in itemz and 'uk' in itemz['IM']:
                         use_key = itemz['IM']['uk'][0]
                         if use_key == '2':
-                            outf.write('<p>Healing Potion [{}]</p>\n'.format(anchor(to_oid(item_list[items*2]))))
+                            outf.write('<p>Healing Potion [{}]</p>\n'.format(anchor(to_oid(item_list[items]))))
                         elif use_key == '5':
                             loc_kind = 'unknown'
                             loc_name = 'unknown'
@@ -562,7 +556,7 @@ def write_char_magic_stuff(v, data, outf):
                                     loc_id = anchor(to_oid(u.return_unitid(location)))
                             else:
                                 loc_id = '(no id)'
-                            anch = anchor(to_oid(item_list[items*2]))
+                            anch = anchor(to_oid(item_list[items]))
                             outf.write('<p>Projected Cast [{}] to {} {}'.format(anch,
                                                                                 loc_kind,
                                                                                 loc_name))
@@ -572,7 +566,7 @@ def write_char_magic_stuff(v, data, outf):
                 elif item_type == 'scroll':
                     if 'IM' in itemz and 'ms' in itemz['IM']:
                         skill_id = anchor(to_oid(itemz['IM']['ms'][0]))
-                        scroll_id = anchor(to_oid(item_list[items*2]))
+                        scroll_id = anchor(to_oid(item_list[items]))
                         required_study = ''
                         try:
                             skill = data[itemz['IM']['ms'][0]]

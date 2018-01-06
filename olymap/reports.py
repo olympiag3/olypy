@@ -80,14 +80,13 @@ def ship_report(data, outdir):
                             total_weight = total_weight + item_weight
                         if 'il' in char:
                             item_list = char['il']
-                            iterations = int(len(item_list) / 2)
-                            for itm in range(0, iterations - 1):
-                                itemz = data[item_list[itm * 2]]
+                            for itm in range(0, len(item_list), 2):
+                                itemz = data[item_list[itm]]
                                 try:
                                     item_weight = int(itemz['IT']['wt'][0])
                                 except KeyError:
                                     item_weight = int(0)
-                                qty = int(item_list[(itm * 2) + 1])
+                                qty = int(item_list[itm + 1])
                                 total_weight = total_weight + int(qty * item_weight)
             ship_capacity = int(ship_rec['SL']['ca'][0])
             actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
@@ -1114,12 +1113,11 @@ def gold_report(data, outdir):
             character_rec = data[str(unit)]
             if 'il' in character_rec:
                 item_list = character_rec['il']
-                iterations = int(len(item_list) / 2)
-                if iterations > 0:
-                    for itm in range(0, iterations):
-                        item_id = item_list[itm * 2]
+                if len(item_list) > 0:
+                    for itm in range(0, len(item_list), 2):
+                        item_id = item_list[itm]
                         if item_id == '1':
-                            item_qty = int(item_list[(itm * 2) + 1])
+                            item_qty = int(item_list[itm + 1])
                             if item_qty > 10000:
                                 if 'na' in character_rec:
                                     name = character_rec['na'][0]
