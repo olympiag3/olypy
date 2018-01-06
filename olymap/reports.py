@@ -297,7 +297,7 @@ def orb_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             orb_list.append(int(to_int(unit)))
-        orb_list.sort()
+    orb_list.sort()
     if orb_list != '':
         for unit in orb_list:
             itemz = data[str(unit)]
@@ -763,7 +763,7 @@ def faeryhill_report(data, outdir):
     for unit in data:
         if u.is_faeryhill(data, unit):
             faeryhill_list.append(int(to_int(unit)))
-        faeryhill_list.sort()
+    faeryhill_list.sort()
     if faeryhill_list != '':
         for unit in faeryhill_list:
             faeryhill = data[str(unit)]
@@ -828,7 +828,7 @@ def castle_report(data, outdir, garrisons_chain):
     for unit in data:
         if u.is_castle(data, unit):
             castle_list.append(int(to_int(unit)))
-        castle_list.sort()
+    castle_list.sort()
     if castle_list != '':
         for unit in castle_list:
             castle = data[str(unit)]
@@ -880,7 +880,7 @@ def city_report(data, outdir):
     for unit in data:
         if u.is_city(data, unit):
             city_list.append(int(to_int(unit)))
-        city_list.sort()
+    city_list.sort()
     if city_list != '':
         for unit in city_list:
             city = data[str(unit)]
@@ -931,7 +931,7 @@ def region_report(data, outdir):
     for unit in data:
         if u.is_region(data, unit):
             region_list.append(int(to_int(unit)))
-        region_list.sort()
+    region_list.sort()
     if region_list != '':
         for unit in region_list:
             region_rec = data[str(unit)]
@@ -968,7 +968,7 @@ def mage_report(data, outdir):
     for unit in data:
         if u.is_magician(data[unit]):
             mage_list.append(int(to_int(unit)))
-        mage_list.sort()
+    mage_list.sort()
     if mage_list != '':
         for unit in mage_list:
             mage_rec = data[str(unit)]
@@ -1033,7 +1033,7 @@ def priest_report(data, outdir):
     for unit in data:
         if u.is_priest(data[unit]):
             priest_list.append(int(to_int(unit)))
-        priest_list.sort()
+    priest_list.sort()
     if priest_list != '':
         for unit in priest_list:
             priest_rec = data[str(unit)]
@@ -1108,7 +1108,7 @@ def gold_report(data, outdir):
     for unit in data:
         if u.is_char(data, unit):
             character_list.append(int(to_int(unit)))
-        character_list.sort()
+    character_list.sort()
     if character_list != '':
         for unit in character_list:
             character_rec = data[str(unit)]
