@@ -265,18 +265,19 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
     printpoint = cell
     try:
         loc_rec = data[str(printpoint)]
-        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
-                                                    u.return_type(loc_rec)))
-        generate_border(data, loc_rec, outf, instance)
-        outf.write('>')
-        generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
-        outf.write('</td>\n')
     except:
         outf.write('<td id ="{}" class="{}">'.format(to_oid(printpoint),
                                                      'undefined'))
         outf.write('{}'.format(to_oid(printpoint)))
         outf.write('<br>{}'.format('&nbsp;' * 8))
         outf.write('<br>{}'.format('&nbsp;' * 8))
+        outf.write('</td>\n')
+    else:
+        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
+                                                    u.return_type(loc_rec)))
+        generate_border(data, loc_rec, outf, instance)
+        outf.write('>')
+        generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
         outf.write('</td>\n')
     # except KeyError:
     #    outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(printpoint), to_oid(printpoint)))
