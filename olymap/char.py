@@ -161,6 +161,9 @@ def write_char_pledged_to_us(k, data, outf, pledge_chain):
     # CM/pl
     try:
         pledge_list = pledge_chain[k]
+    except:
+        pass
+    else:
         if len(pledge_list) > 0:
             pledged_text = 'Pledged To Us:'
             for pledgee in pledge_list:
@@ -170,8 +173,6 @@ def write_char_pledged_to_us(k, data, outf, pledge_chain):
                 pledged_text = '&nbsp;'
                 outf.write('<td>{} [{}]</td></tr>\n'.format(pledgee_rec['na'][0],
                                                             anchor(to_oid(pledgee))))
-    finally:
-        pass
 
 
 def write_char_concealed(v, outf):
@@ -219,6 +220,9 @@ def write_char_prisoners(k, data, outf, prisoner_chain):
     # CH/pr
     try:
         prisoner_list = prisoner_chain[k]
+    except:
+        pass
+    else:
         if len(prisoner_list) > 0:
             prisoner_text = 'Prisoners:'
             for prisoner in prisoner_list:
@@ -233,8 +237,6 @@ def write_char_prisoners(k, data, outf, prisoner_chain):
                 outf.write('<td>{} [{}]{}</td></tr>\n'.format(prisoner_rec['na'][0],
                                                               anchor(to_oid(prisoner)),
                                                               prisoner_health_text))
-    finally:
-        pass
 
 
 def write_char_skills_known(v, data, outf):
@@ -439,6 +441,9 @@ def write_char_capacity(v, data, outf):
             item_qty = int(item_list[(itm * 2) + 1])
             try:
                 base_unit = data[item_id]
+            except KeyError:
+                pass
+            else:
                 item_weight = 0
                 if 'IT' in base_unit and 'wt' in base_unit['IT']:
                     item_weight = int(base_unit['IT']['wt'][0]) * item_qty
@@ -460,8 +465,6 @@ def write_char_capacity(v, data, outf):
                     fly_weight = fly_weight + item_weight
                     ride_weight = ride_weight + item_weight
                 total_weight = total_weight + item_weight
-            except KeyError:
-                pass
     outf.write('<p>Capacity: ')
     if land_cap > 0:
         pct = math.floor((land_weight * 100) / land_cap)
@@ -489,7 +492,13 @@ def write_char_pending_trades(v, data, outf):
             for trades in range(0, iterations):
                 try:
                     itemz = data[trade_list[(trades*8)+1]]
-                    itemz_plural = itemz['IT']['pl'][0]
+                except KeyError:
+                    pass
+                else:
+                    if 'IT' in itemz and 'pl' in itemz['IT']:
+                        itemz_plural = itemz['IT']['pl'][0]
+                    else:
+                        itemz_plural = itemz['na'][0]
                     itemz_name = itemz['na'][0]
                     outf.write('<tr>')
                     direction = 'buy' if trade_list[(trades*8)+0] == '1' else 'sell'
@@ -500,8 +509,6 @@ def write_char_pending_trades(v, data, outf):
                     anch = anchor(to_oid(trade_list[(trades*8)+1]))
                     outf.write('<td style="text-align:left">{} [{}]</td>'.format(name, anch))
                     outf.write('</tr>\n')
-                except KeyError:
-                    pass
             outf.write('</table>\n')
 
 
@@ -514,9 +521,10 @@ def write_char_visions_received(v, data, outf):
         for vision in vision_list:
             try:
                 visioned = data[vision]
-                vision_name = visioned['na'][0]
             except KeyError:
                 vision_name = 'missing'
+            else:
+                vision_name = visioned['na'][0]
             outf.write('<tr><td>{} [{}]</td></tr>\n'.format(vision_name,
                                                             anchor(to_oid(vision))))
         outf.write('</table>\n')
@@ -529,6 +537,9 @@ def write_char_magic_stuff(v, data, outf):
         for items in range(0, iterations):
             try:
                 itemz = data[item_list[items*2]]
+            except KeyError:
+                pass
+            else:
                 item_type = u.return_type(itemz)
                 if item_type == '0':
                     if 'IM' in itemz and 'uk' in itemz['IM']:
@@ -542,16 +553,17 @@ def write_char_magic_stuff(v, data, outf):
                             if 'IM' in itemz and 'pc' in itemz['IM']:
                                 try:
                                     location = data[itemz['IM']['pc'][0]]
+                                except KeyError:
+                                    loc_kind = 'unknown'
+                                    loc_name = 'unknown'
+                                else:
+                                    loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
                                     if u.return_kind(location) != 'loc':
                                         loc_kind = u.return_kind(location)
                                     else:
                                         loc_kind = 'location'
                                     loc_name = location['na'][0]
                                     loc_id = anchor(to_oid(u.return_unitid(location)))
-                                except KeyError:
-                                    loc_kind = 'unknown'
-                                    loc_name = 'unknown'
-                                    loc_id = anchor(to_oid(itemz['IM']['pc'][0]))
                             anch = anchor(to_oid(item_list[items*2]))
                             outf.write('<p>Projected Cast [{}] to {} {} [{}]</p>\n'.format(anch,
                                                                                            loc_kind,
@@ -564,6 +576,9 @@ def write_char_magic_stuff(v, data, outf):
                         required_study = ''
                         try:
                             skill = data[itemz['IM']['ms'][0]]
+                        except KeyError:
+                            skill_name = 'unknown'
+                        else:
                             skill_name = skill['na'][0]
                             if 'SK' in skill:
                                 if 'rs' in skill['SK']:
@@ -574,15 +589,11 @@ def write_char_magic_stuff(v, data, outf):
                                         skill2_name = 'unknown'
                                     anch = anchor(to_oid(skill['SK']['rs'][0]))
                                     required_study = '(requires {} [{}])'.format(skill2_name, anch)
-                        except KeyError:
-                            skill_name = 'unknown'
                         outf.write('<p>Scroll [{}] permits the study of the following skills:<br>&nbsp;&nbsp;&nbsp;'
                                    '{} [{}] {}</p>\n'.format(scroll_id,
                                                              skill_name,
                                                              skill_id,
                                                              required_study))
-            except KeyError:
-                pass
 
 
 def write_char_type(v, k, data, outf):
