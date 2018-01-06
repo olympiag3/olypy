@@ -65,9 +65,10 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix, map_matrix):
                 province_box = data[map_matrix[y][x]]
                 try:
                     color = color_pallette[u.return_type(province_box)]
-                    map.point(x, y, color)
                 except KeyError:
                     print('missing color for: {}'.format(u.return_type(province_box)))
+                else:
+                    map.point(x, y, color)
             except KeyError:
                 # print('missing box record for: {} {}'.format(curr_loc,
                 #                                              to_oid(curr_loc)))
@@ -257,18 +258,19 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
     printpoint = cell
     try:
         loc_rec = data[str(printpoint)]
-        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
-                                                    u.return_type(loc_rec)))
-        maps.generate_border(data, loc_rec, outf, instance)
-        outf.write('>')
-        maps.generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
-        outf.write('</td>\n')
     except:
         outf.write('<td id ="{}" class="{}">'.format(to_oid(printpoint),
                                                      'undefined'))
         outf.write('{}'.format(to_oid(printpoint)))
         outf.write('<br>{}'.format('&nbsp;' * 8))
         outf.write('<br>{}'.format('&nbsp;' * 8))
+        outf.write('</td>\n')
+    else:
+        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
+                                                    u.return_type(loc_rec)))
+        maps.generate_border(data, loc_rec, outf, instance)
+        outf.write('>')
+        maps.generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
         outf.write('</td>\n')
     # except KeyError:
     #    outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(printpoint), to_oid(printpoint)))
