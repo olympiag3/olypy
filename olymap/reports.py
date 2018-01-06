@@ -1125,6 +1125,7 @@ def gold_report(data, outdir):
                                     name = u.return_type(character_rec).capitalize()
                                 if name == 'Ni':
                                     name = data[character_rec['CH']['ni'][0]]['na'][0].capitalize()
+                                outf.write('<tr>')
                                 outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
                                                                                               name,
                                                                                               anchor(to_oid(unit))))
@@ -1140,8 +1141,8 @@ def gold_report(data, outdir):
                                                                                                   u.return_unitid(
                                                                                                       loc_rec)))))
                                 outf.write('<td>{}</td>'.format(f"{item_qty:,d}"))
+                                outf.write('</tr>\n')
                             break
-            outf.write('</tr>\n')
     outf.write('</table>\n')
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
