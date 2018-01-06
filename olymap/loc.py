@@ -586,7 +586,7 @@ def write_characters(v, k, data, outf, print_province = False):
                 if 'IT' in itemz:
                     if 'pr' in itemz['IT']:
                         if itemz['IT']['pr'][0] == '1':
-                            item_name = itemz['na'][0] if int(item_list[(items * 2) + 1]) == 1 else itemz['IT']['pl'][0]
+                            item_name = u.get_item_name(itemz) if int(item_list[(items * 2) + 1]) == 1 else u.get_item_plural(itemz)
                             outf.write(', {} {}'.format(item_list[(items * 2) + 1], item_name))
     if 'LI' in v:
         if 'hl' in v['LI']:

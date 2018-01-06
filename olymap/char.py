@@ -324,7 +324,7 @@ def write_char_inventory(v, data, outf):
                 outf.write('<tr>')
                 outf.write('<td style="text-align:right">{}</td>'.format(f"{item_qty:,d}"))
                 itemz = data[item_id]
-                itemz_name = itemz['na'][0] if item_qty == 1 else itemz['IT']['pl'][0]
+                itemz_name = u.get_item_name(itemz) if item_qty == 1 else u.get_item_plural(itemz)
                 outf.write('<td style="text-align:left">{} [{}]</td>'.format(itemz_name, anchor(to_oid(item_id))))
                 if 'wt' in itemz['IT']:
                     item_weight = int(itemz['IT']['wt'][0])
@@ -495,17 +495,12 @@ def write_char_pending_trades(v, data, outf):
                 except KeyError:
                     pass
                 else:
-                    if 'IT' in itemz and 'pl' in itemz['IT']:
-                        itemz_plural = itemz['IT']['pl'][0]
-                    else:
-                        itemz_plural = itemz['na'][0]
-                    itemz_name = itemz['na'][0]
                     outf.write('<tr>')
                     direction = 'buy' if trade_list[(trades*8)+0] == '1' else 'sell'
                     outf.write('<td style="text-align:right">{}</td>'.format(direction))
                     outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+3]))
                     outf.write('<td style="text-align:right">{}</td>'.format(trade_list[(trades*8)+2]))
-                    name = itemz_name if int(trade_list[(trades*8)+2]) == 1 else itemz_plural
+                    name = u.get_item_name (itemz) if int(trade_list[(trades*8)+2]) == 1 else u.get_item_plural(itemz)
                     anch = anchor(to_oid(trade_list[(trades*8)+1]))
                     outf.write('<td style="text-align:left">{} [{}]</td>'.format(name, anch))
                     outf.write('</tr>\n')

@@ -11,6 +11,22 @@ from olymap.detail import loc_types
 from olymap.detail import use_key
 
 
+def get_item_names(box):
+    itemz_name = box.get('na', [return_type(box).capitalize()])[0]
+    itemz_plural = box['IT'].get('pl', [itemz_name])[0]
+    return itemz_name, itemz_plural
+
+
+def get_item_name(box):
+    itemz_name, _ = get_item_names(box)
+    return itemz_name
+
+
+def get_item_plural(box):
+    _, itemz_plural = get_item_names(box)
+    return itemz_plural
+
+
 def return_type(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
