@@ -933,6 +933,7 @@ def region_report(data, outdir):
     if region_list != '':
         for unit in region_list:
             region_rec = data[str(unit)]
+            outf.write('<tr>')
             outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
                                                                           region_rec['na'][0],
                                                                           anchor(to_oid(unit))))
