@@ -1141,7 +1141,7 @@ def gold_report(data, outdir):
                                                                                               anchor(to_oid(
                                                                                                   u.return_unitid(
                                                                                                       loc_rec)))))
-                                outf.write('<td>{}</td>'.format(f"{item_qty:,d}"))
+                                outf.write(f'<td>{item_qty:,d}</td>')
                                 outf.write('</tr>\n')
                             break
     outf.write('</table>\n')
