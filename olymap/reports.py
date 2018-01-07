@@ -7,6 +7,7 @@ import olymap.utilities as u
 from olymap.utilities import anchor
 import olymap.maps as maps
 import pathlib
+from olypy.db import loop_here
 
 
 def ship_report(data, outdir):
@@ -62,13 +63,11 @@ def ship_report(data, outdir):
                 outf.write('<td>0%</td>')
                 damaged = 0
             total_weight = 0
-            seen_here_list = []
-            level = 0
-            seen_here_list = u.chase_structure(unit, data, level, seen_here_list)
-            list_length = len(seen_here_list)
-            if list_length > 1:
-                for un in seen_here_list[1:]:
-                    char = data[un[0]]
+            seen_here_set = loop_here(data, str(unit), False, True)
+            set_length = len(seen_here_set)
+            if set_length > 1:
+                for un in seen_here_set:
+                    char = data[un]
                     if u.return_kind(char) == 'char':
                         unit_type = '10'
                         if 'CH' in char:

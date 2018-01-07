@@ -5,6 +5,7 @@ from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
 import pathlib
+from olypy.db import loop_here
 
 
 def write_ship_page_header(v, k, outf):
@@ -39,13 +40,12 @@ def calc_pct_loaded(data, k, v):
         damaged = int(v['SL']['da'][0])
     except KeyError:
         damaged = 0
-    seen_here_list = []
     level = 0
-    seen_here_list = u.chase_structure(k, data, level, seen_here_list)
-    list_length = len(seen_here_list)
-    if list_length > 1:
-        for un in seen_here_list[1:]:
-            char = data[un[0]]
+    seen_here_set = loop_here(data, k, False, True)
+    set_length = len(seen_here_set)
+    if set_length > 1:
+        for un in seen_here_set:
+            char = data[un]
             if u.return_kind(char) == 'char':
                 unit_type = '10'
                 if 'CH' in char and 'ni' in char['CH']:
@@ -109,18 +109,14 @@ def write_ship_owner(v, data, outf):
 
 def write_ship_seen_here(k, data, outf):
     label1 = 'Seen Here:'
-    seen_here_list = []
-    level = 0
-    seen_here_list = u.chase_structure(k, data, level, seen_here_list)
-    list_length = len(seen_here_list)
-    if list_length > 1:
-        for un in seen_here_list[1:]:
-            char = data[un[0]]
-            depth = un[1] - 1
+    seen_here_set = loop_here(data, k, False, True)
+    set_length = len(seen_here_set)
+    if set_length > 1:
+        for un in seen_here_set:
+            char = data[un]
             outf.write('<tr>')
             outf.write('<td>{}</td>'.format(label1))
-            outf.write('<td>{} {} [{}]</td></tr>\n'.format('.'*depth,
-                                                           char['na'][0],
+            outf.write('<td>{} [{}]</td></tr>\n'.format(char['na'][0],
                                                            anchor(to_oid(u.return_unitid(char)))))
             label1 = '&nbsp;'
 

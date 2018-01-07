@@ -8,6 +8,7 @@ import olypy.details as details
 import pathlib
 from pngcanvas import *
 import math
+from olypy.db import loop_here
 
 
 def write_index(outdir, instance, inst_dict):
@@ -497,11 +498,11 @@ def count_stuff(v, data):
     seen_here_list = []
     level = 0
     k = u.return_unitid(v)
-    seen_here_list = u.chase_structure(k, data, level, seen_here_list)
-    list_length = len(seen_here_list)
-    if list_length > 1:
-        for un in seen_here_list[1:]:
-            unit = data[un[0]]
+    seen_here_set = loop_here(data, k, False, True)
+    set_length = len(seen_here_set)
+    if set_length >= 1:
+        for un in seen_here_set:
+            unit = data[un]
             if 'char' in u.return_kind(unit):
                 if'il' in unit:
                     item_list = unit['il']
@@ -510,7 +511,11 @@ def count_stuff(v, data):
                             itemz_rec = data[item_list[itemz]]
                             if 'IT' in itemz_rec and 'pr' in itemz_rec['IT']:
                                 if itemz_rec['IT']['pr'][0] == '1':
-                                    nbr_men = nbr_men + int(item_list[itemz + 1])
+                                    if 'an' in itemz_rec['IT']:
+                                        if itemz_rec['IT']['an'][0] != '1':
+                                            nbr_men = nbr_men + int(item_list[itemz + 1])
+                                    else:
+                                        nbr_men = nbr_men + int(item_list[itemz + 1])
                 if 'CH' in unit:
                     if 'lo' in unit['CH'] and unit['CH']['lo'][0] == '100':
                         enemy_found = True

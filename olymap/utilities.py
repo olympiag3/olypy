@@ -77,19 +77,19 @@ def return_firstline(box):
     return firstline
 
 
-def chase_structure(k, data, level, seen_here_list):
-    try:
-        z = data[k]
-    except KeyError:
-        return seen_here_list
-    else:
-        seen_here_list.append((return_unitid(z), level))
-        if 'LI' in z:
-            if 'hl' in z['LI']:
-                level = level + 1
-                for here in z['LI']['hl']:
-                    seen_here_list = chase_structure(here, data, level, seen_here_list)
-    return seen_here_list
+# def chase_structure(k, data, level, seen_here_list):
+#     try:
+#         z = data[k]
+#     except KeyError:
+#         return seen_here_list
+#     else:
+#         seen_here_list.append((return_unitid(z), level))
+#         if 'LI' in z:
+#             if 'hl' in z['LI']:
+#                 level = level + 1
+#                 for here in z['LI']['hl']:
+#                     seen_here_list = chase_structure(here, data, level, seen_here_list)
+#     return seen_here_list
 
 
 def xlate_rank(k):
