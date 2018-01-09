@@ -7,7 +7,7 @@ pytest:
 	PYTHONPATH=. py.test -v -v
 
 test: pytest
-	(cd tests; PYTHONPATH=. ./test.sh)
+	(cd tests; PYTHONPATH=.. ./test.sh)
 
 pylint:
 	PYTHONPATH=. pylint *.py
