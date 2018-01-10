@@ -2737,11 +2737,11 @@ def parse_location(s, factint, everything, data):
         return region
 
     # form lists of stuff, old/new, respecting fog
-    new = db.loop_here(things, idint, fog)
+    new = set(db.loop_here(things, idint, fog))
     if idint in data:
-        old = db.loop_here(data, idint, fog)
+        old = set(db.loop_here(data, idint, fog))
     else:
-        old = []
+        old = set()
 
     # make sure that hidden things are present... they will not all be in things[] but should all be in data[]
     for i in global_hidden_stuff.get(idint, []):

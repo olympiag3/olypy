@@ -80,18 +80,18 @@ def loop_here(data, where, fog=False, into_city=False):
     If fog, make a list of only the visible things
     (caller responsible for making sure that fog=True only for provinces)
     '''
-    hls = set()
+    hls = []
     if 'LI' in data[where]:
         if 'hl' in data[where]['LI']:
             for w in data[where]['LI']['hl']:
                 if fog and is_char(data, w):
                     continue
-                hls.add(w)
+                hls.append(w)
                 firstline = data[w]['firstline'][0]
                 if ' loc city' in firstline and not into_city:
                     # do not descend into cities
                     continue
-                [hls.add(x) for x in loop_here(data, w)]
+                [hls.append(x) for x in loop_here(data, w)]
     return hls
 
 
@@ -167,15 +167,15 @@ def upsert_location(data, newdata, top, promote_children=True):
     data[top]['firstline'] = newdata[top]['firstline']
     data[top]['na'] = newdata[top]['na']
 
-    oldhl = loop_here(data[top])
-    newhl = loop_here(newdata[top])
+    oldhl = set(loop_here(data[top]))
+    newhl = set(loop_here(newdata[top]))
     gone_or_new = oldhl.symmetric_difference(newhl)
     gone = gone_or_new.intersect(oldhl)
     new = gone_or_new.intersect(newhl)
     invisible_friends = set()
     if newdata[top].get('foggy'):
-        invisible_friends = loop_here(data[top], fogonly=True)
-        for i in list(invisible_friends):
+        invisible_friends = set(loop_here(data[top], fogonly=True))
+        for i in invisible_friends:
             try:
                 gone.remove(i)
             except KeyError:

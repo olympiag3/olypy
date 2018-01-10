@@ -95,12 +95,12 @@ def test_loop_here():
             '1005': {'firstline': ['1005 char 0']},
             '1006': {'firstline': ['1006 loc city'], 'LI': {'hl': ['1007']}},
             '1007': {'firstline': ['1007 char 0']}}
-    assert loop_here(data, '1001') == {'1002', '1003', '1004', '1005', '1006'}
-    assert loop_here(data, '1001', fog=True) == {'1003', '1005', '1006'}
-    assert loop_here(data, '1001', into_city=True) == {'1002', '1003', '1004', '1005', '1006', '1007'}
-    assert loop_here(data, '1003') == {'1005'}
+    assert loop_here(data, '1001') == ['1002', '1004', '1003', '1005', '1006']
+    assert loop_here(data, '1001', fog=True) == ['1003', '1005', '1006']
+    assert loop_here(data, '1001', into_city=True) == ['1002', '1004', '1003', '1005', '1006', '1007']
+    assert loop_here(data, '1003') == ['1005']
 
-    if loop_here(data, '1003', fog=True) == {'1005'}:
+    if loop_here(data, '1003', fog=True) == ['1005']:
         pytest.xfail('have not implemented non-province fog yet')
 
 
