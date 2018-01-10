@@ -9,6 +9,8 @@ from olymap.detail import rank_num_string
 from olymap.detail import castle_ind
 from olymap.detail import loc_types
 from olymap.detail import use_key
+from olypy.db import loop_here
+import math
 
 
 def get_item_names(box):
@@ -646,3 +648,39 @@ def determine_item_use(v, data, trade_chain):
         else:
             ret = 'inactive tradegood'
     return ret
+
+
+def calc_ship_pct_loaded(data, k, v):
+    total_weight = 0
+    try:
+        damaged = int(v['SL']['da'][0])
+    except KeyError:
+        damaged = 0
+    level = 0
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length > 1:
+        for un in seen_here_list:
+            char = data[un]
+            if return_kind(char) == 'char':
+                unit_type = '10'
+                if 'CH' in char and 'ni' in char['CH']:
+                    unit_type = char['CH']['ni'][0]
+                base_unit = data[unit_type]
+                if 'IT' in base_unit and 'wt' in base_unit['IT']:
+                    item_weight = int(base_unit['IT']['wt'][0]) * 1
+                    total_weight = total_weight + item_weight
+                if 'il' in char:
+                    item_list = char['il']
+                    for itm in range(0, len(item_list), 2):
+                        itemz = data[item_list[itm]]
+                        try:
+                            item_weight = int(itemz['IT']['wt'][0])
+                        except KeyError:
+                            item_weight = int(0)
+                        qty = int(item_list[itm + 1])
+                        total_weight = total_weight + int(qty * item_weight)
+    ship_capacity = int(v['SL']['ca'][0])
+    actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
+    pct_loaded = math.floor((total_weight * 100) / actual_capacity)
+    return pct_loaded

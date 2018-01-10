@@ -6,6 +6,8 @@ import olymap.utilities as u
 from olymap.utilities import anchor
 import pathlib
 from olypy.db import loop_here
+from olymap.loc import write_characters
+from olymap.utilities import calc_ship_pct_loaded
 
 
 def write_ship_page_header(v, k, outf):
@@ -28,46 +30,10 @@ def write_ship_pct_complete(v, outf):
 
 
 def write_ship_pct_loaded(v, k, data, outf):
-    pct_loaded = calc_pct_loaded(data, k, v)
+    pct_loaded = calc_ship_pct_loaded(data, k, v)
     outf.write('<tr>')
     outf.write('<td>Percent Loaded:</td>')
     outf.write('<td>{}%</td></tr>\n'.format(pct_loaded))
-
-
-def calc_pct_loaded(data, k, v):
-    total_weight = 0
-    try:
-        damaged = int(v['SL']['da'][0])
-    except KeyError:
-        damaged = 0
-    level = 0
-    seen_here_list = loop_here(data, k, False, True)
-    list_length = len(seen_here_list)
-    if list_length > 1:
-        for un in seen_here_list:
-            char = data[un]
-            if u.return_kind(char) == 'char':
-                unit_type = '10'
-                if 'CH' in char and 'ni' in char['CH']:
-                    unit_type = char['CH']['ni'][0]
-                base_unit = data[unit_type]
-                if 'IT' in base_unit and 'wt' in base_unit['IT']:
-                    item_weight = int(base_unit['IT']['wt'][0]) * 1
-                    total_weight = total_weight + item_weight
-                if 'il' in char:
-                    item_list = char['il']
-                    for itm in range(0, len(item_list), 2):
-                        itemz = data[item_list[itm]]
-                        try:
-                            item_weight = int(itemz['IT']['wt'][0])
-                        except KeyError:
-                            item_weight = int(0)
-                        qty = int(item_list[itm + 1])
-                        total_weight = total_weight + int(qty * item_weight)
-    ship_capacity = int(v['SL']['ca'][0])
-    actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
-    pct_loaded = math.floor((total_weight * 100) / actual_capacity)
-    return pct_loaded
 
 
 def write_ship_defense(v, outf):
@@ -107,18 +73,30 @@ def write_ship_owner(v, data, outf):
         outf.write('<td>unoccupied</td></tr>\n')
 
 
-def write_ship_seen_here(k, data, outf):
+def write_ship_seen_here(v, k, data, outf):
     label1 = 'Seen Here:'
-    seen_here_list = loop_here(data, k, False, True)
-    list_length = len(seen_here_list)
-    if list_length > 1:
-        for un in seen_here_list:
-            char = data[un]
-            outf.write('<tr>')
-            outf.write('<td>{}</td>'.format(label1))
-            outf.write('<td>{} [{}]</td></tr>\n'.format(char['na'][0],
-                                                           anchor(to_oid(u.return_unitid(char)))))
-            label1 = '&nbsp;'
+    # seen_here_list = loop_here(data, k, False, True)
+    # list_length = len(seen_here_list)
+    # if list_length > 1:
+    #     for un in seen_here_list:
+    #         char = data[un]
+    #         outf.write('<tr>')
+    #         outf.write('<td>{}</td>'.format(label1))
+    #         outf.write('<td>{} [{}]</td></tr>\n'.format(char['na'][0],
+    #                                                        anchor(to_oid(u.return_unitid(char)))))
+    #         label1 = '&nbsp;'
+    if 'LI' in v and 'hl' in v['LI']:
+        sub_here_list = v['LI']['hl']
+        if len(sub_here_list) > 0:
+            outf.write('<p>Seen Here:</p>\n')
+            outf.write('<ul>\n')
+            for sub_hl in sub_here_list:
+                sub_sub_here = data[sub_hl]
+                if u.return_kind(sub_sub_here) == 'char':
+                    write_characters(sub_sub_here,
+                                     u.return_unitid(sub_sub_here),
+                                     data, outf)
+            outf.write('</ul>\n')
 
 
 def write_ship_bound_storm(v, data, outf):
@@ -147,9 +125,9 @@ def write_ship_basic_info(v, k, data, outf):
     write_ship_defense(v, outf)
     write_ship_damaged(v, outf)
     write_ship_owner(v, data, outf)
-    write_ship_seen_here(k, data, outf)
     write_ship_bound_storm(v, data, outf)
     outf.write('</table>\n')
+    write_ship_seen_here(v, k, data, outf)
 
 
 def write_ship_html(v, k, data, outdir):

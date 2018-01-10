@@ -9,7 +9,8 @@ from olymap.utilities import anchor2
 import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
-import olymap.ship as ship
+# import olymap.ship as ship
+from olymap.utilities import calc_ship_pct_loaded
 import pathlib
 
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
@@ -689,7 +690,7 @@ def write_ships(v, k, data, outf):
             outf.write(', {}% completed'.format(pct_complete))
         if 'da' in v['SL']:
             outf.write(', {}% damaged'.format(v['SL']['da'][0]))
-    pct_load = ship.calc_pct_loaded(data, k, v)
+    pct_load = calc_ship_pct_loaded(data, k, v)
     if pct_load > 0:
         outf.write(', {}% loaded'.format(pct_load))
     if 'LI' in v and 'hl' in v['LI']:
