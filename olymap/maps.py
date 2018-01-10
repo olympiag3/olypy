@@ -498,10 +498,10 @@ def count_stuff(v, data):
     seen_here_list = []
     level = 0
     k = u.return_unitid(v)
-    seen_here_set = loop_here(data, k, False, True)
-    set_length = len(seen_here_set)
-    if set_length >= 1:
-        for un in seen_here_set:
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length >= 1:
+        for un in seen_here_list:
             unit = data[un]
             if 'char' in u.return_kind(unit):
                 if'il' in unit:

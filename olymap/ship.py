@@ -41,10 +41,10 @@ def calc_pct_loaded(data, k, v):
     except KeyError:
         damaged = 0
     level = 0
-    seen_here_set = loop_here(data, k, False, True)
-    set_length = len(seen_here_set)
-    if set_length > 1:
-        for un in seen_here_set:
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length > 1:
+        for un in seen_here_list:
             char = data[un]
             if u.return_kind(char) == 'char':
                 unit_type = '10'
@@ -109,10 +109,10 @@ def write_ship_owner(v, data, outf):
 
 def write_ship_seen_here(k, data, outf):
     label1 = 'Seen Here:'
-    seen_here_set = loop_here(data, k, False, True)
-    set_length = len(seen_here_set)
-    if set_length > 1:
-        for un in seen_here_set:
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length > 1:
+        for un in seen_here_list:
             char = data[un]
             outf.write('<tr>')
             outf.write('<td>{}</td>'.format(label1))

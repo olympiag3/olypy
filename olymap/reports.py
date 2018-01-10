@@ -27,8 +27,9 @@ def ship_report(data, outdir):
     for unit in data:
         if u.is_ship(data, unit):
             ship_list.append(unit)
-    ship_list.sort()
-    for unit in ship_list:
+    # ship_list.sort()
+    # for unit in ship_list:
+    for unit in sorted(ship_list, key=lambda x:int(x)):
         ship_rec = data[unit]
         outf.write('<tr>')
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(to_oid(unit),
@@ -62,10 +63,10 @@ def ship_report(data, outdir):
             outf.write('<td>0%</td>')
             damaged = 0
         total_weight = 0
-        seen_here_set = loop_here(data, str(unit), False, True)
-        set_length = len(seen_here_set)
-        if set_length > 1:
-            for un in seen_here_set:
+        seen_here_list = loop_here(data, str(unit), False, True)
+        list_length = len(seen_here_list)
+        if list_length > 1:
+            for un in seen_here_list:
                 char = data[un]
                 if u.return_kind(char) == 'char':
                     unit_type = '10'
@@ -126,8 +127,9 @@ def item_report(data, trade_chain, outdir):
     for unit in data:
         if u.is_item(data, unit):
             item_list.append(unit)
-    item_list.sort()
-    for unit in item_list:
+    # item_list.sort()
+    # for unit in item_list:
+    for unit in sorted(item_list, key=lambda x: int(x)):
         item_rec = data[unit]
         outf.write('<tr>')
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
@@ -203,8 +205,9 @@ def player_report(data, outdir):
     for unit in data:
         if u.is_player(data, unit):
             player_list.append(unit)
-    player_list.sort()
-    for unit in player_list:
+    # player_list.sort()
+    # for unit in player_list:
+    for unit in sorted(player_list, key=lambda x: int(x)):
         player_rec = data[unit]
         outf.write('<tr>')
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
@@ -239,8 +242,9 @@ def healing_potion_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit) and data[unit].get('IM', {}).get('uk', [''])[0] == '2':
             healing_potion_list.append(unit)
-    healing_potion_list.sort()
-    for unit in healing_potion_list:
+    # healing_potion_list.sort()
+    # for unit in healing_potion_list:
+    for unit in sorted(healing_potion_list, key=lambda x: int(x)):
         itemz = data[unit]
         outf.write('<tr>')
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
@@ -289,8 +293,9 @@ def orb_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             orb_list.append(unit)
-    orb_list.sort()
-    for unit in orb_list:
+    # orb_list.sort()
+    # for unit in orb_list:
+    for unit in sorted(orb_list, key=lambda x: int(x)):
         itemz = data[unit]
         if 'IM' in itemz and 'uk' in itemz['IM']:
             if itemz['IM']['uk'][0] == '9':
@@ -332,8 +337,9 @@ def projected_cast_potion_report(data, outdir):
     for unit in data:
         if u.is_item(data, unit):
             projected_cast_list.append(unit)
-    projected_cast_list.sort()
-    for unit in projected_cast_list:
+    # projected_cast_list.sort()
+    # for unit in projected_cast_list:
+    for unit in sorted(projected_cast_list, key=lambda x: int(x)):
         itemz = data[unit]
         if 'IM' in itemz and 'uk' in itemz['IM']:
             if itemz['IM']['uk'][0] == '5':
@@ -395,8 +401,9 @@ def location_report(data, outdir):
     for unit in data:
         if u.is_loc(data, unit):
             location_list.append(unit)
-    location_list.sort()
-    for unit in location_list:
+    # location_list.sort()
+    # for unit in location_list:
+    for unit in sorted(location_list, key=lambda x: int(x)):
         loc = data[str(unit)]
         if 'na' in loc:
             name = loc['na'][0]
@@ -547,8 +554,9 @@ def road_report(data, outdir):
     for unit in data:
         if u.is_road_or_gate(data[unit]):
             road_list.append(unit)
-    road_list.sort()
-    for road in road_list:
+    # road_list.sort()
+    # for road in road_list:
+    for road in sorted(road_list, key=lambda x: int(x)):
         road_rec = data[road]
         if 'GA' in road_rec and 'rh' in road_rec['GA'] and road_rec['GA']['rh'][0] == '1':
             outf.write('<tr>')
@@ -585,8 +593,9 @@ def gate_report(data, outdir):
     for unit in data:
         if u.is_road_or_gate(data[unit]):
             road_list.append(unit)
-    road_list.sort()
-    for road in road_list:
+    # road_list.sort()
+    # for road in road_list:
+    for road in sorted(road_list, key=lambda x: int(x)):
         road_rec = data[road]
         if 'GA' in road_rec and 'rh' in road_rec['GA'] and road_rec['GA']['rh'][0] == '1':
             pass
@@ -625,8 +634,9 @@ def character_report(data, outdir):
     for unit in data:
         if u.is_char(data, unit):
             character_list.append(unit)
-    character_list.sort()
-    for unit in character_list:
+    # character_list.sort()
+    # for unit in character_list:
+    for unit in sorted(character_list, key=lambda x: int(x)):
         character = data[unit]
         if 'na' in character:
             name = character['na'][0]
@@ -688,8 +698,9 @@ def graveyard_report(data, outdir):
     for unit in data:
         if u.is_graveyard(data, unit):
             graveyard_list.append(unit)
-    graveyard_list.sort()
-    for unit in graveyard_list:
+    # graveyard_list.sort()
+    # for unit in graveyard_list:
+    for unit in sorted(graveyard_list, key=lambda x: int(x)):
         graveyard = data[unit]
         if 'na' in graveyard:
             name = graveyard['na'][0]
@@ -747,8 +758,9 @@ def faeryhill_report(data, outdir):
     for unit in data:
         if u.is_faeryhill(data, unit):
             faeryhill_list.append(unit)
-    faeryhill_list.sort()
-    for unit in faeryhill_list:
+    # faeryhill_list.sort()
+    # for unit in faeryhill_list:
+    for unit in sorted(faeryhill_list, key=lambda x: int(x)):
         faeryhill = data[unit]
         if 'na' in faeryhill:
             name = faeryhill['na'][0]
@@ -811,8 +823,9 @@ def castle_report(data, outdir, garrisons_chain):
     for unit in data:
         if u.is_castle(data, unit):
             castle_list.append(unit)
-    castle_list.sort()
-    for unit in castle_list:
+    # castle_list.sort()
+    # for unit in castle_list:
+    for unit in sorted(castle_list, key=lambda x: int(x)):
         castle = data[unit]
         if 'na' in castle:
             name = castle['na'][0]
@@ -862,8 +875,9 @@ def city_report(data, outdir):
     for unit in data:
         if u.is_city(data, unit):
             city_list.append(unit)
-    city_list.sort()
-    for unit in city_list:
+    # city_list.sort()
+    # for unit in city_list:
+    for unit in sorted(city_list, key=lambda x: int(x)):
         city = data[unit]
         if 'na' in city:
             name = city['na'][0]
@@ -912,8 +926,9 @@ def region_report(data, outdir):
     for unit in data:
         if u.is_region(data, unit):
             region_list.append(unit)
-    region_list.sort()
-    for unit in region_list:
+    # region_list.sort()
+    # for unit in region_list:
+    for unit in sorted(region_list, key=lambda x: int(x)):
         region_rec = data[unit]
         outf.write('<tr>')
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
@@ -949,8 +964,9 @@ def mage_report(data, outdir):
     for unit in data:
         if u.is_magician(data[unit]):
             mage_list.append(unit)
-    mage_list.sort()
-    for unit in mage_list:
+    # mage_list.sort()
+    # for unit in mage_list:
+    for unit in sorted(mage_list, key=lambda x: int(x)):
         mage_rec = data[unit]
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
                                                                       mage_rec['na'][0],
@@ -1013,8 +1029,9 @@ def priest_report(data, outdir):
     for unit in data:
         if u.is_priest(data[unit]):
             priest_list.append(unit)
-    priest_list.sort()
-    for unit in priest_list:
+    # priest_list.sort()
+    # for unit in priest_list:
+    for unit in sorted(priest_list, key=lambda x: int(x)):
         priest_rec = data[unit]
         outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
                                                                       priest_rec['na'][0],
@@ -1088,8 +1105,9 @@ def gold_report(data, outdir):
     for unit in data:
         if u.is_char(data, unit):
             character_list.append(unit)
-    character_list.sort()
-    for unit in character_list:
+    # character_list.sort()
+    # for unit in character_list:
+    for unit in sorted(character_list, key=lambda x: int(x)):
         character_rec = data[unit]
         if 'il' in character_rec:
             item_list = character_rec['il']
