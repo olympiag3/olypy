@@ -117,6 +117,46 @@ def write_ship_bound_storm(v, data, outf):
                                                                    bound_storm_rec['MI']['ss'][0]))
 
 
+def write_ship_non_prominent(v, k, data, outf):
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length > 1:
+        first_time = True
+        printed_items = False
+        for un in seen_here_list:
+            unit_rec = data[un]
+            if 'il' in unit_rec:
+                item_list = unit_rec['il']
+                for items in range(0, len(item_list), 2):
+                    item_rec = data[item_list[items]]
+                    if 'IT' in item_rec and 'pr' in item_rec['IT'] and item_rec['IT']['pr'][0] == '1':
+                        pass
+                    else:
+                        if int(item_list[items + 1]) > 0:
+                            weight = 0
+                            qty = int(item_list[items + 1])
+                            if 'wt' in item_rec['IT']:
+                                weight = int(item_rec['IT']['wt'][0])
+                            total_weight = int(qty * weight)
+                            if first_time and total_weight > 0:
+                                outf.write('<p>Non-Prominent Items Onboard:</p>\n')
+                                outf.write('<table border="1" cellpadding="5">\n')
+                                outf.write('<tr><th>Possessor</th><th>Item</th><th>Qty</th><th>Weight</th></tr>')
+                                first_time = False
+                            if total_weight > 0:
+                                printed_items = True
+                                outf.write('<tr>')
+                                outf.write('<td>{} [{}]</td>'.format(unit_rec['na'][0],
+                                                                     anchor(to_oid(un))))
+                                outf.write('<td>{} [{}]</td>'.format(item_rec['na'][0],
+                                                                     anchor(to_oid(item_list[items]))))
+                                outf.write(f'<td style="text-align:right">{qty:,d}</td>')
+                                outf.write(f'<td style="text-align:right">{total_weight:,d}</td>')
+                                outf.write('</tr>\n')
+        if printed_items:
+            outf.write('</table>\n')
+
+
 def write_ship_basic_info(v, k, data, outf):
     outf.write('<table>\n')
     write_ship_location(v, data, outf)
@@ -128,6 +168,7 @@ def write_ship_basic_info(v, k, data, outf):
     write_ship_bound_storm(v, data, outf)
     outf.write('</table>\n')
     write_ship_seen_here(v, k, data, outf)
+    write_ship_non_prominent(v, k, data, outf)
 
 
 def write_ship_html(v, k, data, outdir):
