@@ -661,3 +661,112 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def get_char_detail(k, v, data):
+    char_detail = ''
+    if u.xlate_loyalty(v) not in {'Undefined'}:
+        char_detail = char_detail + ' (' + u.xlate_loyalty(v)
+        if u.is_absorb_aura_blast(v, data):
+            char_detail = char_detail + ':AB'
+        char_detail = char_detail + ')'
+    else:
+        if u.is_absorb_aura_blast(v, data):
+            char_detail = char_detail + '(AB)'
+    if u.return_type(v) != '0':
+        if u.return_type(v) == 'ni':
+            # char_type = v['na'][0].lower()
+            char_type = data[v['CH']['ni'][0]]['na'][0]
+        else:
+            char_type = u.return_type(v)
+        char_detail = char_detail + ', ' + char_type
+    if u.is_prisoner(v):
+        char_detail = char_detail + ', prisoner'
+    if u.is_priest(v):
+        char_detail = char_detail = ', priest'
+    if u.is_on_guard(v):
+        char_detail = char_detail + ', on guard'
+    if u.is_concealed(v):
+        char_detail = char_detail + ', concealed'
+    char_detail = char_detail + get_char_wearable_wielding(v, data)
+    char_detail = char_detail + get_char_prominent_items(v, data)
+    char_detail = char_detail + get_char_accomp_by(v, data)
+    return char_detail
+
+
+def get_char_wearable_wielding(v, data):
+    ww_str = ''
+    attack_max = 0
+    missile_max = 0
+    defense_max = 0
+    attack = ''
+    missile = ''
+    defense = ''
+    if 'il' in v:
+        item_list = v['il']
+        if len(item_list) > 0:
+            for items in range(0, len(item_list), 2):
+                itemz = data[item_list[items]]
+                if 'IM' in itemz:
+                    if 'ab' in itemz['IM']:
+                        if int(itemz['IM']['ab'][0]) > attack_max:
+                            attack_max = int(itemz['IM']['ab'][0])
+                            attack = u.return_unitid(itemz)
+                    if 'mb' in itemz['IM']:
+                        if int(itemz['IM']['mb'][0]) > missile_max:
+                            missile_max = int(itemz['IM']['mb'][0])
+                            missile = u.return_unitid(itemz)
+                    if 'db' in itemz['IM']:
+                        if int(itemz['IM']['db'][0]) > defense_max:
+                            defense_max = int(itemz['IM']['db'][0])
+                            defense = u.return_unitid(itemz)
+        # found something
+        if attack != '' or missile != '' or defense != '':
+            if attack == missile:
+                missile = ''
+        if attack == defense:
+            defense = ''
+        if attack != '' or missile != '':
+            if attack == '':
+                missile_rec = data[missile]
+                ww_str = ww_str + ', wielding {} [{}]'.format(missile_rec['na'][0],
+                                     anchor(to_oid(u.return_unitid(missile_rec))))
+            elif missile == '':
+                attack_rec = data[attack]
+                ww_str = ww_str + ', wielding {} [{}]'.format(attack_rec['na'][0],
+                                     anchor(to_oid(u.return_unitid(attack_rec))))
+            else:
+                missile_rec = data[missile]
+                attack_rec = data[attack]
+                ww_str = ww_str + ', wielding {} [{}] and {} [{}]'.format(attack_rec['na'][0],
+                                     anchor(to_oid(u.return_unitid(attack_rec))),
+                                     missile_rec['na'][0],
+                                     anchor(to_oid(u.return_unitid(missile_rec))))
+        if defense != '':
+            defense_rec = data[defense]
+            ww_str = ww_str + ', wearing {} [{}]'.format(defense_rec['na'][0],
+                                 anchor(to_oid(u.return_unitid(defense_rec))))
+    return ww_str
+
+
+def get_char_prominent_items(v, data):
+    pi_str = ''
+    if 'il' in v:
+        item_list = v['il']
+        if len(item_list) > 0:
+            for items in range(0, len(item_list), 2):
+                itemz = data[item_list[items]]
+                if 'IT' in itemz:
+                    if 'pr' in itemz['IT']:
+                        if itemz['IT']['pr'][0] == '1':
+                            item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
+                            pi_str = pi_str + ', {} {}'.format(item_list[items + 1], item_name)
+    return pi_str
+
+
+def get_char_accomp_by(v, data):
+    ab_str = ''
+    if 'LI' in v and 'hl' in v['LI']:
+        ab_str = ab_str + ', accompanied by: '
+    # add nsted list
+    return ab_str

@@ -4,8 +4,7 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor
-from olymap.utilities import anchor2
+from olymap.utilities import anchor, anchor2, get_name
 import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
@@ -537,23 +536,12 @@ def write_characters(v, k, data, outf, print_province = False):
                                 anchor(to_oid(k))))
     if u.xlate_loyalty(v) not in {'Undefined'}:
         outf.write(' ({}'.format(u.xlate_loyalty(v)))
-        if 'CH' in v and 'sl' in v['CH']:
-            skills_list = v['CH']['sl']
-            if int(len(skills_list)) > 0:
-                for skill in range(0, len(skills_list), 5):
-                    if skills_list[skill] == '909':
-                        if skills_list[skill + 1] == '2':
-                            outf.write(':AB')
+        if u.is_absorb_aura_blast(v, data):
+            outf.write(':AB')
         outf.write(')')
     else:
-        if 'CH' in v:
-            if 'sl' in v['CH']:
-                skills_list = v['CH']['sl']
-                if int(len(skills_list)) > 0:
-                    for skill in range(0, len(skills_list), 5):
-                        if skills_list[skill] == '909':
-                            if skills_list[skill + 1] == '2':
-                                outf.write('(AB')
+        if u.is_absorb_aura_blast(v, data):
+            outf.write('(AB')
     if u.return_type(v) != '0':
         if u.return_type(v) == 'ni':
             # char_type = v['na'][0].lower()

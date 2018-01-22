@@ -1,13 +1,16 @@
 #!/usr/bin/python
 import math
 
-from olypy.oid import to_oid
+from collections import defaultdict
 import olymap.utilities as u
-from olymap.utilities import anchor
+from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid
 import pathlib
 from olypy.db import loop_here
-from olymap.loc import write_characters
+import olymap.loc as loc
 from olymap.utilities import calc_ship_pct_loaded
+from jinja2 import Environment, PackageLoader, select_autoescape
+import olymap.storm as storm
+from olymap.char import get_char_detail
 
 
 def write_ship_page_header(v, k, outf):
@@ -93,9 +96,9 @@ def write_ship_seen_here(v, k, data, outf):
             for sub_hl in sub_here_list:
                 sub_sub_here = data[sub_hl]
                 if u.return_kind(sub_sub_here) == 'char':
-                    write_characters(sub_sub_here,
-                                     u.return_unitid(sub_sub_here),
-                                     data, outf)
+                    loc.write_characters(sub_sub_here,
+                                         u.return_unitid(sub_sub_here),
+                                         data, outf)
             outf.write('</ul>\n')
 
 
@@ -186,3 +189,148 @@ def write_ship_html(v, k, data, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '_z.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('ship.html')
+    ship = build_ship_dict(k, v, data)
+    loc_id = v['LI']['wh'][0]
+    loc_rec = data[loc_id]
+    loc = build_loc_dict(loc_id, loc_rec, data)
+    owner = build_owner_dict(k, v, data)
+    storm = build_storm_dict(k, v, data)
+    seen_here = build_seenhere_dict(k, v, data)
+    non_prominent_items = build_non_prominent_items_dict(k, v, data)
+    outf.write(template.render(ship=ship, loc=loc, owner=owner, storm=storm,
+                               seen_here=seen_here,
+                               non_prominent_items = non_prominent_items))
+
+
+def get_complete(v):
+    effort_given = int(v.get('SL', {}).get('eg', [0])[0])
+    effort_required = int(v.get('SL', {}).get('er', [0])[0])
+    if effort_required > 0:
+        complete = (effort_given / effort_required) * 100
+    elif effort_required == 0 and effort_given == 0:
+        complete = 100
+    else:
+        complete = 0
+    return complete
+
+
+def get_load(k, v, data):
+    return calc_ship_pct_loaded(data, k, v)
+
+
+def get_defense(v):
+    return v.get('SL', {}).get('de', [0])[0]
+
+
+def get_damage(v):
+    return v.get('SL', {}).get('da', [0])[0]
+
+
+def build_ship_dict(k, v, data):
+    ship_dict = defaultdict(list)
+    ship_dict['name'].append(get_name(v))
+    ship_dict['oid'].append(get_oid(k))
+    ship_dict['type'].append(get_type(v))
+    complete = get_complete(v)
+    if complete < 100:
+        ship_dict['complete'].append(complete)
+    ship_dict['load'].append(get_load(k, v, data))
+    ship_dict['defense'].append(get_defense(v))
+    ship_dict['damage'].append(get_damage(v))
+    return ship_dict
+
+
+def build_loc_dict(k, v, data):
+    loc_dict = defaultdict(list)
+    loc_dict['name'].append(get_name(v))
+    loc_dict['oid'].append(get_oid(k))
+    loc_dict['type'].append(get_type(v))
+    return loc_dict
+
+
+def get_owner(v):
+    owner_id = v.get('LI', {}).get('hl', [None])[0]
+    if owner_id is not None:
+        return owner_id
+    return None
+
+
+def build_owner_dict(k, v, data):
+    owner_dict = defaultdict(list)
+    if get_owner(v) is not None:
+        owner_id = get_owner(v)
+        owner_dict['oid'].append(get_oid(owner_id))
+        owner_rec = data[owner_id]
+        owner_name = get_name(owner_rec)
+        owner_dict['name'].append(owner_name)
+    return owner_dict
+
+
+def get_storm(v):
+    return v.get('SL', {}).get('bs', [None])[0]
+
+
+def build_storm_dict(k, v, data):
+    storm_dict = defaultdict(list)
+    if get_storm(v) is not None:
+        storm_id = get_storm(v)
+        storm_dict['oid'].append(get_oid(storm_id))
+        storm_rec = data[storm_id]
+        storm_name = get_name(storm_rec)
+        storm_dict['name'].append(storm_name)
+        storm_dict['strength'].append(storm.get_strength(storm_rec))
+    return storm_dict
+
+
+def build_seenhere_dict(k, v, data):
+    seen_here = []
+    here_list =  v.get('LI', {}).get('hl', [None])
+    if here_list[0] is not None:
+        for characters in here_list:
+            char_rec = data[characters]
+            char_name = get_name(char_rec)
+            char_oid = get_oid(characters)
+            char_detail = get_char_detail(characters, char_rec, data)
+            seen_entry = dict(oid=char_oid,
+                              name = char_name,
+                              detail = char_detail)
+            seen_here.append(seen_entry)
+    return seen_here
+
+
+def build_non_prominent_items_dict(k, v, data):
+    npi_list = []
+    seen_here_list = loop_here(data, k, False, True)
+    list_length = len(seen_here_list)
+    if list_length > 1:
+        printed_items = False
+        for un in seen_here_list:
+            unit_rec = data[un]
+            if 'il' in unit_rec:
+                item_list = unit_rec['il']
+                for items in range(0, len(item_list), 2):
+                    item_rec = data[item_list[items]]
+                    if 'IT' in item_rec and 'pr' in item_rec['IT'] and item_rec['IT']['pr'][0] == '1':
+                        pass
+                    else:
+                        if int(item_list[items + 1]) > 0:
+                            weight = 0
+                            qty = int(item_list[items + 1])
+                            if 'wt' in item_rec['IT']:
+                                weight = int(item_rec['IT']['wt'][0])
+                            total_weight = int(qty * weight)
+                            if total_weight > 0:
+                                npi_entry = dict(possessor_oid=to_oid(un),
+                                                 possessor_name=unit_rec['na'][0],
+                                                 item_oid=to_oid(item_list[items]),
+                                                 item_name=item_rec['na'][0],
+                                                 qty=qty,
+                                                 weight=total_weight)
+                                npi_list.append(npi_entry)
+    return npi_list

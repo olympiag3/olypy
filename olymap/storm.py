@@ -65,3 +65,7 @@ def write_storm_html(v, k, data, storm_chain, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+
+
+def get_strength(v):
+    return v.get('MI', {}).get('ss', [0])[0]

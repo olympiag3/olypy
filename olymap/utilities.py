@@ -684,3 +684,52 @@ def calc_ship_pct_loaded(data, k, v):
     actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
     pct_loaded = math.floor((total_weight * 100) / actual_capacity)
     return pct_loaded
+
+
+def get_name(v):
+    if 'na' in v:
+        name = v['na'][0]
+    else:
+        name = return_type(v)
+        if name.islower():
+            name = name.capitalize()
+        if name == 'Ni':
+            name = data[v['CH']['ni'][0]]['na'][0].capitalize()
+    return name
+
+
+def get_oid(k):
+    return to_oid(k)
+
+
+def get_type(v):
+    return return_type(v)
+
+
+def is_absorb_aura_blast(v, data):
+    if 'CH' in v and 'sl' in v['CH']:
+        skills_list = v['CH']['sl']
+        if int(len(skills_list)) > 0:
+            for skill in range(0, len(skills_list), 5):
+                if skills_list[skill] == '909':
+                    if skills_list[skill + 1] == '2':
+                        return True
+    return False
+
+
+def is_prisoner(v):
+    if 'CH' in v and 'pr' in v['CH'] and v['CH']['pr'][0] == '2':
+        return True
+    return False
+
+
+def is_on_guard(v):
+    if 'CH' in v and  'gu' in v['CH'] and v['CH']['gu'][0] == '1':
+        return True
+    return False
+
+
+def is_concealed(v):
+    if 'CH' in v and 'hs' in v['CH'] and v['CH']['hs'][0] == '1':
+        return True
+    return False
