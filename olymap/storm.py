@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
+from collections import defaultdict
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor
+from olymap.utilities import anchor, get_oid, get_name, get_type
 import pathlib
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def write_storm_page_header(v, k, outf):
@@ -65,7 +67,58 @@ def write_storm_html(v, k, data, storm_chain, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '_z.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('storm.html')
+    loc_id = v['LI']['wh'][0]
+    loc_rec = data[loc_id]
+    loc = build_loc_dict(loc_id, loc_rec, data)
+    storm = build_storm_dict(k, v, data)
+    ship = build_ship_dict(k, data, storm_chain)
+    outf.write(template.render(loc=loc,
+                               storm=storm,
+                               ship=ship))
 
 
 def get_strength(v):
     return v.get('MI', {}).get('ss', [0])[0]
+
+
+def build_storm_dict(k, v, data):
+    storm_dict = defaultdict(list)
+    storm_dict['oid'].append(get_oid(k))
+    storm_rec = data[k]
+    storm_name = get_name(storm_rec)
+    storm_dict['name'].append(storm_name)
+    storm_dict['type'].append(get_type(v))
+    storm_dict['strength'].append(get_strength(storm_rec))
+    return storm_dict
+
+
+def build_loc_dict(k, v, data):
+    loc_dict = defaultdict(list)
+    loc_dict['name'].append(get_name(v))
+    loc_dict['oid'].append(get_oid(k))
+    loc_dict['type'].append(get_type(v))
+    return loc_dict
+
+
+def get_bound_ship(k, storm_chain):
+    ship_list = storm_chain[k]
+    if len(ship_list) > 0:
+        return ship_list[0]
+    else:
+        return None
+
+
+def build_ship_dict(k, data, storm_chain):
+    ship_dict = defaultdict(list)
+    ship_id = get_bound_ship(k, storm_chain)
+    if ship_id is not None:
+        ship_rec = data[ship_id]
+        ship_dict['name'].append(get_name(ship_rec))
+        ship_dict['oid'].append(get_oid(ship_id))
+    return ship_dict

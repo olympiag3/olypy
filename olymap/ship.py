@@ -272,14 +272,14 @@ def build_owner_dict(k, v, data):
     return owner_dict
 
 
-def get_storm(v):
+def get_bound_storm(v):
     return v.get('SL', {}).get('bs', [None])[0]
 
 
 def build_storm_dict(k, v, data):
     storm_dict = defaultdict(list)
-    if get_storm(v) is not None:
-        storm_id = get_storm(v)
+    if get_bound_storm(v) is not None:
+        storm_id = get_bound_storm(v)
         storm_dict['oid'].append(get_oid(storm_id))
         storm_rec = data[storm_id]
         storm_name = get_name(storm_rec)
