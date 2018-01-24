@@ -1,13 +1,16 @@
 #!/usr/bin/python
 import math
 
+from collections import defaultdict
 from olypy.oid import to_oid
 from olypy.oid import to_int
 import olymap.utilities as u
-from olymap.utilities import anchor
+from olymap.utilities import anchor, get_oid, get_name, get_type
+from olymap.item import get_weight, get_man_item, get_prominent, get_animal, get_capacities
 import olymap.maps as maps
 import pathlib
 from olypy.db import loop_here
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def ship_report(data, outdir):
@@ -187,6 +190,50 @@ def item_report(data, trade_chain, outdir):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+    outf = open(pathlib.Path(outdir).joinpath('master_item_report_z.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_item_report.html')
+    itemz = build_item_dict(item_list, data, trade_chain)
+    outf.write(template.render(itemz=itemz))
+
+
+def build_item_dict(item_list, data, trade_chain):
+    itemz = []
+    for item_id in item_list:
+        item_rec = data[item_id]
+        item_name = get_name(item_rec)
+        item_oid = get_oid(item_id)
+        land_cap, riding_cap, flying_cap = get_capacities(item_rec)
+        who_has_id, who_has_name = get_who_has(item_rec, data)
+        item_entry = dict(oid = item_oid,
+                          name = item_name,
+                          weight = get_weight(item_rec),
+                          man_item = get_man_item(item_rec),
+                          type = get_type(item_rec),
+                          prominent = get_prominent(item_rec),
+                          animal = get_animal(item_rec),
+                          land_cap = land_cap,
+                          riding_cap = riding_cap,
+                          flying_cap = flying_cap,
+                          who_has_id = who_has_id,
+                          who_has_name = who_has_name,
+                          notes = u.determine_item_use(item_rec, data, trade_chain))
+        itemz.append(item_entry)
+    return itemz
+
+
+def get_who_has(item_rec, data):
+    if 'un' in item_rec['IT']:
+        who_has = item_rec['IT']['un'][0]
+        who_rec = data[who_has]
+        name = get_name(who_rec)
+        if name == 'Ni':
+            name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
+        return who_has, name
+    return None, None
 
 
 def player_report(data, outdir):
