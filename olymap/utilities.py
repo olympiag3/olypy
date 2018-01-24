@@ -562,8 +562,8 @@ def determine_item_use(v, data, trade_chain):
                         except KeyError:
                             ret = ret + 'unknown target'
                         else:
-                            if 'na' in v:
-                                name = v['na'][0]
+                            if 'na' in itemz_rec:
+                                name = itemz_rec['na'][0]
                             else:
                                 name = return_type(itemz_rec).capitalize()
                             ret = ret + return_kind(itemz_rec) + ' ' + name + ' [' +\

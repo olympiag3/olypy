@@ -17,7 +17,7 @@
         {% else %}
         <td>&nbsp;</td>
         {% endif %}
-        <td>{{ entry.notes }}</td></tr>
+        <td>{{ entry.notes|safe }}</td></tr>
 {% endfor %}
 </table>
 </BODY>
