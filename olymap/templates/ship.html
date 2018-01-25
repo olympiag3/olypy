@@ -49,8 +49,8 @@
     {% for entry in non_prominent_items %}
         <tr><td>{{ entry.possessor_name }} [<a href="{{ entry.possessor_oid }}.html">{{ entry.possessor_oid }}</a>]</td>
         <td>{{ entry.item_name }} [<a href="{{ entry.item_oid }}.html">{{ entry.item_oid }}</a>]</td>
-        <td>{{ entry.qty }}</td>
-        <td>{{ entry.weight }}</td></tr>
+        <td align="right">{{ entry.qty }}</td>
+        <td align="right">{{ entry.weight }}</td></tr>
     {% endfor %}
 </table>
 {% endif %}
