@@ -8,14 +8,14 @@
 <tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th><th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th><th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>
 {% for entry in itemz %}
     <tr><td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        <td>{{ entry.type }}</td><td>{{ entry.weight[0] }}</td><td>{{ entry.man_item[0] }}</td>
-        <td>{{ entry.prominent[0] }}</td><td>{{ entry.animal[0] }}</td>
-        <td>{{ entry.land_cap[0] }}</td><td>{{ entry.riding_cap[0] }}</td>
-        <td>{{ entry.flying_cap[0] }}</td>
+        <td>{{ entry.type }}</td><td>{{ entry.weight }}</td><td>{{ entry.man_item }}</td>
+        <td>{{ entry.prominent }}</td><td>{{ entry.animal }}</td>
+        <td>{{ entry.land_cap }}</td><td>{{ entry.riding_cap }}</td>
+        <td>{{ entry.flying_cap }}</td>
         {% if entry.who_has_name %}
-        <td>{{ entry.who_has_name }} [<a href="{{ entry.who_has_id }}">{{ entry.who_has_id }}</a>]</td>
+            <td>{{ entry.who_has_name }} [<a href="{{ entry.who_has_id }}">{{ entry.who_has_id }}</a>]</td>
         {% else %}
-        <td>&nbsp;</td>
+            <td>&nbsp;</td>
         {% endif %}
         <td>{{ entry.notes|safe }}</td></tr>
 {% endfor %}

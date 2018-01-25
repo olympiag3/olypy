@@ -3,7 +3,7 @@ import math
 
 from collections import defaultdict
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid
+from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2
 import pathlib
 from olypy.db import loop_here
 import olymap.loc as loc
@@ -225,32 +225,28 @@ def get_load(k, v, data):
 
 
 def get_defense(v):
-    return v.get('SL', {}).get('de', [0])[0]
+    return v.get('SL', {}).get('de', [0])
 
 
 def get_damage(v):
-    return v.get('SL', {}).get('da', [0])[0]
+    return v.get('SL', {}).get('da', [0])
 
 
 def build_ship_dict(k, v, data):
-    ship_dict = defaultdict(list)
-    ship_dict['name'].append(get_name(v))
-    ship_dict['oid'].append(get_oid(k))
-    ship_dict['type'].append(get_type(v))
-    complete = get_complete(v)
-    if complete < 100:
-        ship_dict['complete'].append(complete)
-    ship_dict['load'].append(get_load(k, v, data))
-    ship_dict['defense'].append(get_defense(v))
-    ship_dict['damage'].append(get_damage(v))
+    ship_dict = dict(oid = get_oid(k),
+                     name = get_name(v),
+                     type = get_type(v),
+                     complete = get_complete(v),
+                     load = get_load(k, v, data),
+                     defense = get_defense(v)[0],
+                     damage = get_damage(v)[0])
     return ship_dict
 
 
 def build_loc_dict(k, v, data):
-    loc_dict = defaultdict(list)
-    loc_dict['name'].append(get_name(v))
-    loc_dict['oid'].append(get_oid(k))
-    loc_dict['type'].append(get_type(v))
+    loc_dict = dict(oid = get_oid(k),
+                    name = get_name(v),
+                    type = get_type(v))
     return loc_dict
 
 
@@ -262,13 +258,13 @@ def get_owner(v):
 
 
 def build_owner_dict(k, v, data):
-    owner_dict = defaultdict(list)
     if get_owner(v) is not None:
         owner_id = get_owner(v)
-        owner_dict['oid'].append(get_oid(owner_id))
         owner_rec = data[owner_id]
-        owner_name = get_name(owner_rec)
-        owner_dict['name'].append(owner_name)
+        owner_dict = dict(oid = get_oid(owner_id),
+                          name = get_name(owner_rec))
+    else:
+        owner_dict = None
     return owner_dict
 
 
@@ -277,29 +273,34 @@ def get_bound_storm(v):
 
 
 def build_storm_dict(k, v, data):
-    storm_dict = defaultdict(list)
     if get_bound_storm(v) is not None:
         storm_id = get_bound_storm(v)
-        storm_dict['oid'].append(get_oid(storm_id))
         storm_rec = data[storm_id]
         storm_name = get_name(storm_rec)
-        storm_dict['name'].append(storm_name)
-        storm_dict['strength'].append(storm.get_strength(storm_rec))
+        storm_dict = dict(oid = get_oid(storm_id),
+                          name = get_name(storm_rec),
+                          strength = storm.get_strength(storm_rec))
+    else:
+        storm_dict = None
     return storm_dict
 
 
 def build_seenhere_dict(k, v, data):
+    stack_list = []
+    stack_list = loop_here2(data, k)
+    # print (stack_list)
     seen_here = []
-    here_list =  v.get('LI', {}).get('hl', [None])
-    if here_list[0] is not None:
-        for characters in here_list:
-            char_rec = data[characters]
+    # here_list =  v.get('LI', {}).get('hl', [None])
+    if len(stack_list) > 0:
+        for characters in stack_list:
+            char_rec = data[characters[0]]
             char_name = get_name(char_rec)
-            char_oid = get_oid(characters)
-            char_detail = get_char_detail(characters, char_rec, data)
-            seen_entry = dict(oid=char_oid,
+            char_oid = get_oid(characters[0])
+            char_detail = get_char_detail(characters[0], char_rec, data)
+            seen_entry = dict(oid = char_oid,
                               name = char_name,
-                              detail = char_detail)
+                              detail = char_detail,
+                              level = characters[1])
             seen_here.append(seen_entry)
     return seen_here
 
@@ -309,7 +310,6 @@ def build_non_prominent_items_dict(k, v, data):
     seen_here_list = loop_here(data, k, False, True)
     list_length = len(seen_here_list)
     if list_length > 1:
-        printed_items = False
         for un in seen_here_list:
             unit_rec = data[un]
             if 'il' in unit_rec:

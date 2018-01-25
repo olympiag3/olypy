@@ -1,43 +1,56 @@
 <HTML>
 <HEAD>
-<TITLE>{{ ship.name[0] }} [{{ ship.oid[0] }}], {{ ship.type[0] }}</TITLE>
+<TITLE>{{ ship.name }} [{{ ship.oid }}], {{ ship.type }}</TITLE>
 </HEAD>
 <BODY>
-<H3>{{ ship.name[0] }} [{{ ship.oid[0] }}], {{ ship.type[0] }}</H3>
+<H3>{{ ship.name }} [{{ ship.oid }}], {{ ship.type }}</H3>
 <table>
-<tr><td>Location:</td><td>{{ loc.name[0] }} [<a href="{{ loc.oid[0] }}.html">{{ loc.oid[0] }}</a>]</td></tr>
-{% if ship.complete %}
-<tr><td>Percent Complete:</td><td>{{ ship.complete[0] }}%</td></tr>
+<tr><td>Location:</td><td>{{ loc.name }} [<a href="{{ loc.oid }}.html">{{ loc.oid }}</a>]</td></tr>
+{% if ship.complete < 100 %}
+    <tr><td>Percent Complete:</td><td>{{ ship.complete }}%</td></tr>
 {% endif %}
-<tr><td>Percent Loaded:</td><td>{{ ship.load[0] }}%</td></tr>
-<tr><td>Defense:</td><td>{{ ship.defense[0] }}</td></tr>
-<tr><td>Damaged:</td><td>{{ ship.damage[0] }}%</td></tr>
+<tr><td>Percent Loaded:</td><td>{{ ship.load }}%</td></tr>
+<tr><td>Defense:</td><td>{{ ship.defense }}</td></tr>
+<tr><td>Damaged:</td><td>{{ ship.damage }}%</td></tr>
 {% if owner %}
-    <tr><td>Owner:</td><td>{{ owner.name[0] }} [<a href="{{ owner.oid[0] }}.html">{{ owner.oid[0] }}</a>]</td></tr>
+    <tr><td>Owner:</td><td>{{ owner.name }} [<a href="{{ owner.oid }}.html">{{ owner.oid }}</a>]</td></tr>
 {% else %}
-<tr><td>Owner:</td><td>unoccupied</td></tr>
+    <tr><td>Owner:</td><td>unoccupied</td></tr>
 {% endif %}
 {% if storm %}
-    <tr><td>Bound Storm:</td><td>{{ storm.name[0] }} [<a href="{{ storm.oid[0] }}.html">{{ storm.oid[0] }}</a>] (Strength: {{ storm.strength[0] }})</td></tr>
+    <tr><td>Bound Storm:</td><td>{{ storm.name }} [<a href="{{ storm.oid }}.html">{{ storm.oid }}</a>] (Strength: {{ storm.strength }})</td></tr>
 {% endif %}
 </table>
 {% if seen_here %}
 <p>Seen Here:</p>
 <ul>
-    {% for entry in seen_here%}
-    <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] {{ entry.detail }}</li>
+    {% set ns = namespace(save_level=0) %}
+    {% for entry in seen_here %}
+        {% if entry.level > ns.save_level %}
+                <ul>
+        {% elif entry.level < ns.save_level %}
+                </ul>
+        {% endif %}
+        {% set ns.save_level = entry.level %}
+        <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] {{ entry.detail|safe }}</li>
     {% endfor %}
+    {% if ns.save_level > 0 %}
+        {% set to_level = ns.save_level %}
+        {% for i in range(0, to_level): %}
+            </ul>
+        {% endfor %}
+    {% endif %}
 </ul>
 {% endif %}
 {% if non_prominent_items %}
 <p>Non-Prominent Items Onboard:</p>
 <table border="1" cellpadding="5">
-    <tr><th>Possessor</th><th>Item</th><th>Qty</th><th>Weight</th><tr>
+    <tr><th>Possessor</th><th>Item</th><th>Qty</th><th>Weight</th></tr>
     {% for entry in non_prominent_items %}
-    <tr><td>{{ entry.possessor_name }} [<a href="{{ entry.possessor_oid }}.html">{{ entry.possessor_oid }}</a>]</td>
-    <td>{{ entry.item_name }} [<a href="{{ entry.item_oid }}.html">{{ entry.item_oid }}</a>]</td>
-    <td>{{ entry.qty }}</td>
-    <td>{{ entry.weight }}</td><tr>
+        <tr><td>{{ entry.possessor_name }} [<a href="{{ entry.possessor_oid }}.html">{{ entry.possessor_oid }}</a>]</td>
+        <td>{{ entry.item_name }} [<a href="{{ entry.item_oid }}.html">{{ entry.item_oid }}</a>]</td>
+        <td>{{ entry.qty }}</td>
+        <td>{{ entry.weight }}</td></tr>
     {% endfor %}
 </table>
 {% endif %}

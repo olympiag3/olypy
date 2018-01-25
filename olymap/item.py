@@ -108,20 +108,20 @@ def write_item_html(v, k, data, trade_chain, outdir):
 
 
 def get_weight(v):
-    return v.get('IT', {}).get('wt', 0)
+    return v.get('IT', {}).get('wt', [0])
 
 
 def get_man_item(v):
-    return v.get('IT', {}).get('mu', '')
+    return v.get('IT', {}).get('mu', [''])
 
 
 def get_prominent(v):
-    return v.get('IT', {}).get('pr', '')
+    return v.get('IT', {}).get('pr', [''])
 
 
 def get_animal(v):
-    return v.get('IT', {}).get('an', '')
+    return v.get('IT', {}).get('an', [''])
 
 
 def get_capacities(v):
-    return v.get('IT', {}).get('lc', 0), v.get('IT', {}).get('rc', 0), v.get('IT', {}).get('fc', 0)
+    return v.get('IT', {}).get('lc', [0]), v.get('IT', {}).get('rc', [0]), v.get('IT', {}).get('fc', [0])

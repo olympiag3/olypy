@@ -88,21 +88,17 @@ def get_strength(v):
 
 
 def build_storm_dict(k, v, data):
-    storm_dict = defaultdict(list)
-    storm_dict['oid'].append(get_oid(k))
-    storm_rec = data[k]
-    storm_name = get_name(storm_rec)
-    storm_dict['name'].append(storm_name)
-    storm_dict['type'].append(get_type(v))
-    storm_dict['strength'].append(get_strength(storm_rec))
+    storm_dict = dict(oid = get_oid(k),
+                      name = get_name(v),
+                      type = get_type(v),
+                      strength = get_strength(v))
     return storm_dict
 
 
 def build_loc_dict(k, v, data):
-    loc_dict = defaultdict(list)
-    loc_dict['name'].append(get_name(v))
-    loc_dict['oid'].append(get_oid(k))
-    loc_dict['type'].append(get_type(v))
+    loc_dict = dict(oid = get_oid(k),
+                    name = get_name(v),
+                    type = get_type(v))
     return loc_dict
 
 
@@ -115,10 +111,11 @@ def get_bound_ship(k, storm_chain):
 
 
 def build_ship_dict(k, data, storm_chain):
-    ship_dict = defaultdict(list)
     ship_id = get_bound_ship(k, storm_chain)
     if ship_id is not None:
         ship_rec = data[ship_id]
-        ship_dict['name'].append(get_name(ship_rec))
-        ship_dict['oid'].append(get_oid(ship_id))
+        ship_dict = dict(oid = get_oid(ship_id),
+                         name = get_name(ship_rec))
+    else:
+        ship_dict = None
     return ship_dict

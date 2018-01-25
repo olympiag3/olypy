@@ -733,3 +733,24 @@ def is_concealed(v):
     if 'CH' in v and 'hs' in v['CH'] and v['CH']['hs'][0] == '1':
         return True
     return False
+
+
+def loop_here2(data, where, level=0, fog=False, into_city=False):
+    '''
+    Make a list of everything here: chars, structures, sublocs. Do not descend into big sublocs (cities)
+    If fog, make a list of only the visible things
+    (caller responsible for making sure that fog=True only for provinces)
+    '''
+    hls = []
+    if 'LI' in data[where]:
+        if 'hl' in data[where]['LI']:
+            for w in data[where]['LI']['hl']:
+                if fog and is_char(data, w):
+                    continue
+                hls.append([w, level])
+                firstline = data[w]['firstline'][0]
+                if ' loc city' in firstline and not into_city:
+                    # do not descend into cities
+                    continue
+                [hls.append(x) for x in loop_here2(data, w, level + 1)]
+    return hls

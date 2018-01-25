@@ -1,15 +1,15 @@
 <HTML>
 <HEAD>
-<TITLE>{{ storm.name[0] }} [{{ storm.oid[0] }}]</TITLE>
+<TITLE>{{ storm.name }} [{{ storm.oid }}]</TITLE>
 </HEAD>
 <BODY>
-<H3>{{ storm.name[0] }} [{{ storm.oid[0] }}]</H3>
+<H3>{{ storm.name }} [{{ storm.oid }}]</H3>
 <table>
-<tr><td>Type:</td><td>{{ storm.type[0] }}</td></tr>
-<tr><td>Where:</td><td>{{ loc.name[0] }} [<a href="{{ loc.oid[0] }}.html">{{ loc.oid[0] }}</a>]</td></tr>
-<tr><td>Strength:</td><td>{{ storm.strength[0] }}</td></tr>
+<tr><td>Type:</td><td>{{ storm.type }}</td></tr>
+<tr><td>Where:</td><td>{{ loc.name }} [<a href="{{ loc.oid }}.html">{{ loc.oid }}</a>]</td></tr>
+<tr><td>Strength:</td><td>{{ storm.strength }}</td></tr>
 {% if ship %}
-    <tr><td>Bound Ship:</td><td>{{ ship.name[0] }} [<a href="{{ ship.oid[0] }}.html">{{ ship.oid[0] }}</a>]</td></tr>
+    <tr><td>Bound Ship:</td><td>{{ ship.name }} [<a href="{{ ship.oid }}.html">{{ ship.oid }}</a>]</td></tr>
 {% endif %}
 </table>
 </BODY>
