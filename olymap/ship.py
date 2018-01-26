@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import math
 
-from collections import defaultdict
 import olymap.utilities as u
 from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2
 import pathlib
@@ -234,7 +233,7 @@ def get_damage(v):
 
 def build_ship_dict(k, v, data):
     ship_dict = dict(oid = get_oid(k),
-                     name = get_name(v),
+                     name = get_name(v, data),
                      type = get_type(v),
                      complete = get_complete(v),
                      load = get_load(k, v, data),
@@ -245,7 +244,7 @@ def build_ship_dict(k, v, data):
 
 def build_loc_dict(k, v, data):
     loc_dict = dict(oid = get_oid(k),
-                    name = get_name(v),
+                    name = get_name(v, data),
                     type = get_type(v))
     return loc_dict
 
@@ -262,7 +261,7 @@ def build_owner_dict(k, v, data):
         owner_id = get_owner(v)
         owner_rec = data[owner_id]
         owner_dict = dict(oid = get_oid(owner_id),
-                          name = get_name(owner_rec))
+                          name = get_name(owner_rec, data))
     else:
         owner_dict = None
     return owner_dict
@@ -276,9 +275,8 @@ def build_storm_dict(k, v, data):
     if get_bound_storm(v) is not None:
         storm_id = get_bound_storm(v)
         storm_rec = data[storm_id]
-        storm_name = get_name(storm_rec)
         storm_dict = dict(oid = get_oid(storm_id),
-                          name = get_name(storm_rec),
+                          name = get_name(storm_rec, data),
                           strength = storm.get_strength(storm_rec))
     else:
         storm_dict = None
@@ -294,12 +292,9 @@ def build_seenhere_dict(k, v, data):
     if len(stack_list) > 0:
         for characters in stack_list:
             char_rec = data[characters[0]]
-            char_name = get_name(char_rec)
-            char_oid = get_oid(characters[0])
-            char_detail = get_char_detail(characters[0], char_rec, data)
-            seen_entry = dict(oid = char_oid,
-                              name = char_name,
-                              detail = char_detail,
+            seen_entry = dict(oid = get_oid(characters[0]),
+                              name = get_name(char_rec, data),
+                              detail = get_char_detail(characters[0], char_rec, data),
                               level = characters[1])
             seen_here.append(seen_entry)
     return seen_here

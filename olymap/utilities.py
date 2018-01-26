@@ -686,15 +686,15 @@ def calc_ship_pct_loaded(data, k, v):
     return pct_loaded
 
 
-def get_name(v):
+def get_name(v, data):
     if 'na' in v:
         name = v['na'][0]
     else:
         name = return_type(v)
-        if name.islower():
-            name = name.capitalize()
-        if name == 'Ni':
-            name = data[v['CH']['ni'][0]]['na'][0].capitalize()
+    if name.islower():
+        name = name.capitalize()
+    if name == 'Ni':
+        name = data[v['CH']['ni'][0]]['na'][0].capitalize()
     return name
 
 
@@ -754,3 +754,14 @@ def loop_here2(data, where, level=0, fog=False, into_city=False):
                     continue
                 [hls.append(x) for x in loop_here2(data, w, level + 1)]
     return hls
+
+
+def get_who_has(item_rec, data):
+    if 'un' in item_rec['IT']:
+        who_has = item_rec['IT']['un'][0]
+        who_rec = data[who_has]
+        name = get_name(who_rec, data)
+        if name == 'Ni':
+            name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
+        return to_oid(who_has), name
+    return None, None

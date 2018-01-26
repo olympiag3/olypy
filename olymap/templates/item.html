@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+<TITLE>{{ item.name }} [{{ item.oid }}]</TITLE>
+</HEAD>
+<BODY>
+<H3>{{ item.name }} [{{ item.oid }}]</H3>
+<table>
+{% if item.type != '0' %}
+    <tr><td>Type:</td><td>{{ item.type }}</td></tr>
+{% endif %}
+{% if item.attack %}
+    <tr><td>Attack:</td><td>{{ item.attack }}</td></tr>
+{% endif %}
+{% if item.attack_bonus %}
+    <tr><td>Attack Bonus:</td><td>{{ item.attack_bonus }}</td></tr>
+{% endif %}
+{% if item.aura %}
+    <tr><td>Aura:</td><td>{{ item.aura }}</td></tr>
+{% endif %}
+{% if item.aura_bonus %}
+    <tr><td>Aura Bonus:</td><td>{{ item.aura_bonus }}</td></tr>
+{% endif %}
+{% if item.dead_body_oid %}
+    <tr><td>Dead Body of:</td><td>{{ item.dead_body_name }} [<a href="{{ item.dead_body_oid }}.html">{{ item.dead_body_oid }}</a>]</td></tr>
+{% endif %}
+{% if item.defense %}
+    <tr><td>Defense:</td><td>{{ item.defense }}</td></tr>
+{% endif %}
+{% if item.defense_bonus %}
+    <tr><td>Defense Bonus:</td><td>{{ item.defense_bonus }}</td></tr>
+{% endif %}
+{% if item.fly_capacity %}
+    <tr><td>Fly Capacity:</td><td>{{ item.fly_capacity }}</td></tr>
+{% endif %}
+{% if item.land_capacity %}
+    <tr><td>Land Capacity:</td><td>{{ item.land_capacity }}</td></tr>
+{% endif %}
+{% if item.lore %}
+    <tr><td>Lore:</td><td>{{ item.lore }}</td></tr>
+{% endif %}
+{% if item.may_study %}
+    <tr><td>May Study:</td><td>{{ item.may_study }}</td></tr>
+{% endif %}
+{% if item.missile %}
+    <tr><td>Missile:</td><td>{{ item.missile }}</td></tr>
+{% endif %}
+{% if item.missile_bonus %}
+    <tr><td>Missile Bonus:</td><td>{{ item.missile_bonus }}</td></tr>
+{% endif %}
+{% if item.plural %}
+    <tr><td>Plural Name:</td><td>{{ item.plural }}</td></tr>
+{% endif %}
+{% if item.project_cast %}
+    <tr><td>Project Cast:</td><td>{{ item.project_cast }}</td></tr>
+{% endif %}
+{% if item.Prominent %}
+    <tr><td>Prominent:</td><td>{{ item.prominent }}</td></tr>
+{% endif %}
+{% if item.ride_capacity %}
+    <tr><td>Ride Capacity:</td><td>{{ item.ride_capacity }}</td></tr>
+{% endif %}
+{% if item.use_key %}
+    <tr><td>Use Key:</td><td>{{ item.use_key }}</td></tr>
+{% endif %}
+{% if item.weight %}
+    <tr><td>Weight:</td><td>{{ item.weight }}</td></tr>
+{% endif %}
+{% if item.who_has_oid %}
+    <tr><td>Who Has:</td><td>{{ item.who_has_name }} [<a href="{{ item.who_has_oid }}.html">{{ item.who_has_oid }}</a>]</td></tr>
+{% endif %}
+{% if item.trade_good %}
+    <tr><td>Traded In:</td><td>{{ item.trade_good|safe }}</td></tr>
+{% endif %}
+</table>
+</BODY>
+</HTML>
