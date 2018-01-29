@@ -673,7 +673,7 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
 
 
 def build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain):
-    total_weight, items_list =  get_inventory(v, data)
+    items_total_dict, items_list =  get_inventory(v, data)
     char_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
                  'type' : get_type(v),
@@ -693,8 +693,11 @@ def build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain):
                  'aura_dict' : get_aura(v, data),
                  'prisoner_list' : get_prisoners(k, data, prisoner_chain),
                  'skills_known_list' : get_skills_known(v, data),
-                 'total_weight' : total_weight,
-                 'inventory_list' : total_weight}
+                 'items_total_dict' : items_total_dict,
+                 'inventory_list' : items_list,
+                 'trades_list' : get_pending_trades(v, data),
+                 'visions_list' : get_visions_received(v, data),
+                 'magic_list' : get_magic_stuff(v, data)}
     return char_dict
 
 
@@ -1054,8 +1057,40 @@ def get_skills_known(v, data):
 
 
 def get_inventory(v, data):
-    total_weight = int(0)
+    total_items_weight = int(0)
+    total_char_weight = int(0)
+    land_cap = int(0)
+    land_weight = int(0)
+    ride_cap = int(0)
+    ride_weight = int(0)
+    fly_cap = int(0)
+    fly_weight = int(0)
     items_list = []
+    unit_type = '10'
+    if 'CH' in v and 'ni' in v['CH']:
+        unit_type = v['CH']['ni'][0]
+    base_unit = data[unit_type]
+    item_weight = 0
+    if 'IT' in base_unit and 'wt' in base_unit['IT']:
+        item_weight = int(base_unit['IT']['wt'][0]) * 1
+    if 'IT' in base_unit:
+        if 'lc' in base_unit['IT'] and base_unit['IT']['lc'][0] != '0':
+            land_cap = land_cap + int(base_unit['IT']['lc'][0])
+        else:
+            land_weight = land_weight + item_weight
+        if 'fc' in base_unit['IT'] and base_unit['IT']['fc'][0] != '0':
+            fly_cap = fly_cap + int(base_unit['IT']['fc'][0])
+        else:
+            fly_weight = fly_weight + item_weight
+        if 'rc' in base_unit['IT'] and base_unit['IT']['rc'][0] != '0':
+            ride_cap = ride_cap + int(base_unit['IT']['rc'][0])
+        else:
+            ride_weight = ride_weight + item_weight
+    else:
+        land_weight = land_weight + item_weight
+        fly_weight = fly_weight + item_weight
+        ride_weight = ride_weight + item_weight
+    total_char_weight = total_char_weight + item_weight
     if 'il' in v:
         item_list = v['il']
         if len(item_list) > 0:
@@ -1069,39 +1104,63 @@ def get_inventory(v, data):
                 else:
                     item_weight = int(0)
                 item_ext = int(item_weight * item_qty)
-                total_weight = total_weight + (item_weight * item_qty)
+                total_items_weight = total_items_weight + item_ext
                 fly_ext = None
                 land_ext = None
                 ride_ext = None
+                attack = None
+                defense = None
+                missile = None
+                attack_bonus = None
+                defense_bonus = None
+                missile_bonus = None
+                aura_bonus = None
                 if u.return_type(v) != "garrison":
-                    fly_capacity = int(0)
                     if 'fc' in itemz['IT']:
                         fly_capacity = int(itemz['IT']['fc'][0])
-                    land_capacity = int(0)
-                    if 'lc' in itemz['IT']:
-                        land_capacity = int(itemz['IT']['lc'][0])
-                    ride_capacity = int(0)
+                        if fly_capacity > 0:
+                            fly_ext = fly_capacity * item_qty
+                        if fly_capacity != 0:
+                            fly_cap = fly_cap + (fly_capacity * item_qty)
+                        else:
+                            fly_weight = fly_weight + item_ext
+                    else:
+                        fly_weight = fly_weight + item_ext
                     if 'rc' in itemz['IT']:
                         ride_capacity = int(itemz['IT']['rc'][0])
-                    if fly_capacity > 0:
-                        fly_ext = fly_capacity * item_qty
-                    elif ride_capacity > 0:
-                        ride_ext = ride_capacity * item_qty
-                    elif land_capacity > 0:
-                        land_ext = land_capacity * item_qty
-                    attack = None
-                    defense = None
-                    missile = None
+                        if ride_capacity > 0:
+                            ride_ext = ride_capacity * item_qty
+                        if ride_capacity != 0:
+                            ride_cap = ride_cap + (ride_capacity * item_qty)
+                        else:
+                            ride_weight = ride_weight + item_ext
+                    else:
+                        ride_weight = ride_weight + item_ext
+                    if 'lc' in itemz['IT']:
+                        land_capacity = int(itemz['IT']['lc'][0])
+                        if land_capacity > 0:
+                            land_ext = land_capacity * item_qty
+                        if land_capacity != 0:
+                            land_cap = land_cap + (land_capacity * item_qty)
+                        else:
+                            land_weight = land_weight + item_ext
+                    else:
+                        land_weight = land_weight + item_ext
+                    if 'IT' not in itemz:
+                        land_weight = land_weight + item_ext
+                        fly_weight = fly_weight + item_ext
+                        ride_weight = ride_weight + item_ext
+                    total_char_weight = total_char_weight + item_ext
                     if u.is_fighter(itemz, item_id):
+                        attack = 0
+                        defense = 0
+                        missile = 0
                         if 'at' in itemz['IT']:
                             attack = int(itemz['IT']['at'][0])
                         if 'df' in itemz['IT']:
                             defense = int(itemz['IT']['df'][0])
                         if 'mi' in itemz['IT']:
                             missile = int(itemz['IT']['mi'][0])
-                    attack_bonus = None
-                    defense_bonus = None
-                    missile_bonus = None
                     if 'IM' in itemz:
                         if 'ab' in itemz['IM']:
                             attack_bonus = int(itemz['IM']['ab'][0])
@@ -1109,12 +1168,11 @@ def get_inventory(v, data):
                             defense_bonus = int(itemz['IM']['db'][0])
                         if 'mb' in itemz['IM']:
                             missile_bonus = int(itemz['IM']['mb'][0])
-                    aura_bonus = None
                     if u.is_magician(v):
-                        aura_bonus = 0
                         if 'IM' in itemz and 'ba' in itemz['IM']:
-                            aura_bonus = int(itemz['IM']['ba'][0])
-                items_dict = {'item' : itm,
+                            if int(itemz['IM']['ba'][0]) > 0:
+                                aura_bonus = int(itemz['IM']['ba'][0])
+                items_dict = {'item' : to_oid(item_id),
                               'item_name' : itemz_name,
                               'item_qty' : item_qty,
                               'item_weight' : item_weight,
@@ -1130,20 +1188,163 @@ def get_inventory(v, data):
                               'missile_bonus' : missile_bonus,
                               'aura_bonus' : aura_bonus}
                 items_list.append(items_dict)
-    return total_weight, items_list
+    else:
+        items_list = None
+    land_pct = 0
+    ride_pct = 0
+    fly_pct = 0
+    if u.return_type(v) != "garrison":
+        print_capacity = 'Yes'
+        if land_cap > 0:
+            land_pct = math.floor((land_weight * 100) / land_cap)
+        if ride_cap > 0:
+            ride_pct = math.floor((ride_weight * 100) / ride_cap)
+        if fly_cap > 0:
+            fly_pct = math.floor((fly_weight * 100) / fly_cap)
+    else:
+        print_capacity = None
+    items_total_dict = {'total_items_weight' : total_items_weight,
+                        'total_char_weight' : total_char_weight,
+                        'land_weight' : land_weight,
+                        'ride_weight' : ride_weight,
+                        'fly_weight' : fly_weight,
+                        'land_cap': land_cap,
+                        'ride_cap': ride_cap,
+                        'fly_cap': fly_cap,
+                        'land_pct' : land_pct,
+                        'ride_pct' : ride_pct,
+                        'fly_pct' : fly_pct,
+                        'print_capacity' : print_capacity}
+    return items_total_dict, items_list
 
 
-def get_capacity():
-    pass
+def get_pending_trades(v, data):
+    trades_list = []
+    if 'tl' in v:
+        trade_list = v['tl']
+        if len(trade_list) > 0:
+            for trades in range(0, len(trade_list), 8):
+                try:
+                    itemz = data[trade_list[trades + 1]]
+                except KeyError:
+                    pass
+                else:
+                    direction = 'buy' if trade_list[trades] == '1' else 'sell'
+                    price = int(trade_list[trades + 3])
+                    qty = int(trade_list[trades + 2])
+                    name = u.get_item_name (itemz) if int(trade_list[trades + 2]) == 1 else u.get_item_plural(itemz)
+                    oid = to_oid(trade_list[trades + 1])
+                    trade_dict = {'direction' : direction,
+                                  'price' : price,
+                                  'qty' : qty,
+                                  'oid' : oid,
+                                  'name' : name}
+                    trades_list.append(trade_dict)
+    return trades_list
 
 
-def get_pending_trades():
-    pass
+def get_visions_received(v, data):
+    visions_list = []
+    if 'CM' in v and 'vi' in v['CM']:
+        vision_list = v['CM']['vi']
+        for vision in vision_list:
+            try:
+                visioned = data[vision]
+            except KeyError:
+                vision_name = 'missing'
+            else:
+                vision_name = visioned.get('na', ['missing'])[0]
+            vision_dict = {'oid' : to_oid(vision),
+                           'name' : vision_name}
+            visions_list.append(vision_dict)
+    return visions_list
 
 
-def get_visions_received():
-    pass
-
-
-def get_magic_stuff():
-    pass
+def get_magic_stuff(v, data):
+    magic_list = []
+    if 'il' in v:
+        item_list = v['il']
+        for items in range(0, len(item_list), 2):
+            try:
+                itemz = data[item_list[items]]
+            except KeyError:
+                pass
+            else:
+                magic_type = None
+                item_type = u.return_type(itemz)
+                if item_type == '0':
+                    if 'IM' in itemz and 'uk' in itemz['IM']:
+                        use_key = itemz['IM']['uk'][0]
+                        if use_key == '2':
+                            magic_type = 'Healing Potion'
+                            magic_dict = {'oid': to_oid(item_list[items]),
+                                          'name': None,
+                                          'skill_id': None,
+                                          'required_study': None,
+                                          'required_name': None,
+                                          'loc_kind': None,
+                                          'loc_id' : None,
+                                          'magic_type': magic_type}
+                            magic_list.append(magic_dict)
+                        elif use_key == '5':
+                            loc_kind = 'unknown'
+                            loc_name = 'unknown'
+                            loc_id = ''
+                            if 'IM' in itemz and 'pc' in itemz['IM']:
+                                try:
+                                    location = data[itemz['IM']['pc'][0]]
+                                except KeyError:
+                                    loc_kind = 'unknown'
+                                    loc_name = 'unknown'
+                                    loc_id = to_oid(itemz['IM']['pc'][0])
+                                else:
+                                    loc_id = to_oid(itemz['IM']['pc'][0])
+                                    if u.return_kind(location) != 'loc':
+                                        loc_kind = u.return_kind(location)
+                                    else:
+                                        loc_kind = 'location'
+                                    loc_name = location.get('na', ['unknown'])[0]
+                                    loc_id = to_oid(u.return_unitid(location))
+                            else:
+                                loc_id = '(no id)'
+                            magic_type = 'Projected Cast'
+                            magic_dict = {'oid': to_oid(item_list[items]),
+                                          'name': loc_name,
+                                          'skill_id': None,
+                                          'required_study': None,
+                                          'required_name': None,
+                                          'loc_kind' : loc_kind,
+                                          'loc_id' : loc_id,
+                                          'magic_type': magic_type}
+                            magic_list.append(magic_dict)
+                elif item_type == 'scroll':
+                    if 'IM' in itemz and 'ms' in itemz['IM']:
+                        skill_id = to_oid(itemz['IM']['ms'][0])
+                        scroll_id = to_oid(item_list[items])
+                        required_study = ''
+                        try:
+                            skill = data[itemz['IM']['ms'][0]]
+                        except KeyError:
+                            skill_name = 'unknown'
+                        else:
+                            skill_name = skill['na'][0]
+                            if 'SK' in skill:
+                                if 'rs' in skill['SK']:
+                                    try:
+                                        skill2 = data[skill['SK']['rs'][0]]
+                                    except KeyError:
+                                        required_name = 'unknown'
+                                    else:
+                                        required_name = skill2.get('na', ['unknown'])[0]
+                                        required_study = to_oid(skill['SK']['rs'][0])
+                                        magic_type = 'Scroll'
+                                        magic_dict = {'oid' : scroll_id,
+                                                      'name' : skill_name,
+                                                      'skill_id' : skill_id,
+                                                      'required_study' : required_study,
+                                                      'required_name' : required_name,
+                                                      'loc_kind' : None,
+                                                      'loc_id' : None,
+                                                      'magic_type' : magic_type}
+                                        magic_list.append(magic_dict)
+    return magic_list
