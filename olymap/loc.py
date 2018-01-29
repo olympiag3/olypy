@@ -276,6 +276,7 @@ def write_loc_routes_out(v, data, outf):
                         if not header_printed:
                             outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
                             outf.write('<ul>\n')
+                            header_printed = True
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc)
                         out_distance = u.calc_exit_distance(v, pd_loc)

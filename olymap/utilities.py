@@ -94,13 +94,13 @@ def return_firstline(box):
 #     return seen_here_list
 
 
-def xlate_rank(k):
-    rank = 'Undefined'
-    if 'CH' in k and 'ra' in k['CH']:
+def xlate_rank(v):
+    rank = 'undefined'
+    if 'CH' in v and 'ra' in v['CH']:
         # could be a dict, but doing this for now because
         # rank can be a range??
         try:
-            rank = rank_num_string[k['CH']['ra'][0]]
+            rank = rank_num_string[v['CH']['ra'][0]]
         except KeyError:
             pass
     return rank

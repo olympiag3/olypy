@@ -4,8 +4,9 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor
+from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
 import pathlib
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def write_char_page_header(v, k, outf, data):
@@ -661,6 +662,40 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '_z.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('char.html')
+    char = build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain)
+    outf.write(template.render(char=char))
+
+
+def build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain):
+    total_weight, items_list =  get_inventory(v, data)
+    char_dict = dict(oid=get_oid(k),
+                     name=get_name(v, data),
+                     type=get_type(v),
+                     rank = get_rank(v),
+                     faction = get_faction(v, data),
+                     loc = get_loc(v, data),
+                     loyalty = get_loyalty(v),
+                     stacked_under = get_stacked_under(v, data),
+                     stacked_over_list = get_stacked_over(v, data),
+                     health = get_health(v),
+                     break_point = get_break_point(v, instance),
+                     vision_protection = get_vision_protection(v),
+                     pledged_to = get_pledged_to(v, data),
+                     pledged_to_us_list = get_pledged_to_us(k, data, pledge_chain),
+                     combat_dict = get_combat(v),
+                     concealed = get_concealed(v),
+                     aura_dict = get_aura(v, data),
+                     prisoner_list = get_prisoners(k, data, prisoner_chain),
+                     skills_known_list = get_skills_known(v, data),
+                     total_weight = total_weight,
+                     inventory_list = total_weight)
+    return char_dict
 
 
 def get_char_detail(k, v, data):
@@ -770,3 +805,345 @@ def get_char_accomp_by(v, data):
         ab_str = ab_str + ', accompanied by: '
     # add nsted list
     return ab_str
+
+
+def get_rank(v):
+    rank = u.xlate_rank(v)
+    return rank
+
+
+def get_faction(v, data):
+    faction_oid = v.get('CH', {}).get('lo', [None])
+    if faction_oid[0] is not None:
+        player_rec = data[faction_oid[0]]
+        faction_name = get_name(player_rec, data)
+        faction_dict = dict(oid = to_oid(faction_oid[0]),
+                            name = faction_name)
+        return faction_dict
+    return None
+
+
+def get_loc(v, data):
+    loc_oid = v.get('LI', {}).get('wh', [None])
+    if loc_oid[0] is not None:
+        loc_rec = data[loc_oid[0]]
+        loc_name = get_name(loc_rec, data)
+        loc_dict = dict(oid=to_oid(loc_oid[0]),
+                        name=loc_name)
+        return loc_dict
+    return None
+
+
+def get_loyalty(v):
+    loyalty = u.xlate_loyalty(v)
+    return loyalty
+
+
+def get_stacked_under(v, data):
+    stacked_under_oid = v.get('LI', {}).get('wh', [None])
+    if stacked_under_oid[0] is not None:
+        char_rec = data[stacked_under_oid[0]]
+        if u.return_kind(char_rec) == 'char':
+            char_name = get_name(char_rec, data)
+            stacked_under_dict = dict(oid=to_oid(stacked_under_oid[0]),
+                                      name=char_name)
+            return stacked_under_dict
+    return None
+
+
+def get_stacked_over(v, data):
+    here_list = v.get('LI', {}).get('hl', [None])
+    stacked_over_list = []
+    if here_list[0] is not None:
+        for char in here_list:
+            char_rec = data[char]
+            if u.return_kind(char_rec) == 'char':
+                stacked_over_dict = dict(oid = to_oid(char),
+                                         name = get_name(char_rec, data))
+                stacked_over_list.append(stacked_over_dict)
+        return stacked_over_list
+    return None
+
+
+def get_health(v):
+    health = v.get('CH', {}).get('he', [None])
+    if health[0] is not None:
+        if int(health[0]) < 100:
+            status = ''
+            if 'si' in v['CH']:
+                if v['CH']['si'][0] == '1':
+                    status = '(getting worse)'
+                else:
+                    status = '(getting better)'
+            if int(health[0]) < 0:
+                health_str = ('n/a {}'.format(status))
+            else:
+                health_str = ('{}% {}'.format(health[0], status))
+        else:
+            health_str = ('{}%'.format(health[0]))
+        return health_str
+    return None
+
+
+def get_combat(v):
+    attack = v.get('CH', {}).get('at', ['0'])
+    defense = v.get('CH', {}).get('df', ['0'])
+    missile = v.get('CH', {}).get('mi', ['0'])
+    behind = v.get('CH', {}).get('bh', ['0'])
+    if behind[0] != '0':
+        behind_text = '(stay behind in combat)'
+    else:
+        behind_text = '(front line in combat)'
+    combat_dict = dict(attack = attack[0],
+                       defense = defense[0],
+                       missile = missile[0],
+                       behind = behind[0],
+                       behind_text = behind_text)
+    return combat_dict
+
+
+def get_break_point(v, instance):
+    if instance.lower() in {'g2','qa'}:
+        break_point = '0'
+    else:
+        break_point = '50'
+    if 'CH' in v and 'bp' in v['CH']:
+        break_point = v['CH']['bp'][0]
+    if break_point != '50':
+        break_point_text = ('{}% (fight to the death)'.format(break_point))
+    else:
+        break_point_text = ('{}%'.format(break_point))
+    return break_point_text
+
+
+def get_vision_protection(v):
+    vision_protection = v.get('CM', {}).get('vp', [None])
+    return vision_protection[0]
+
+
+def get_pledged_to(v, data):
+    pledged_to = v.get('CM', {}).get('pl', [None])
+    if pledged_to[0] is not None:
+        char_rec = data[pledged_to[0]]
+        if u.return_kind(char_rec) == 'char':
+            char_name = get_name(char_rec, data)
+            pledged_to_dict = dict(oid=to_oid(pledged_to[0]),
+                                   name=char_name)
+            return pledged_to_dict
+    return None
+
+
+def get_pledged_to_us(k, data, pledge_list):
+    pledged_to_us_list = []
+    try:
+        pledgee_list = pledge_list[k]
+    except:
+        return None
+    for pledgee in pledgee_list:
+        pledgee_rec = data[pledgee]
+        pledgee_dict = dict(oid = to_oid(pledgee),
+                            name = get_name(pledgee_rec, data))
+        pledged_to_us_list.append(pledgee_dict)
+    return pledged_to_us_list
+
+
+def get_concealed(v):
+    concealed = v.get('CM', {}).get('hs', [None])
+    if concealed[0] == '1':
+        return 'Yes'
+    return None
+
+
+def get_aura(v, data):
+    if u.is_magician(v):
+        rank = None
+        if u.xlate_magetype(v, data) not in {'', 'undefined'}:
+            rank = u.xlate_magetype(v, data).capitalize()
+        current_aura = v.get('CM', {}).get('ca', ['0'])
+        max_aura = v.get('CM', {}).get('ma', ['0'])
+        max_aura_str = ''
+        if 'ar' in v['CM']:
+            auraculum = data[v['CM']['ar'][0]]
+            auraculum_amt = '0'
+            if 'IM' in auraculum:
+                if 'au' in auraculum['IM']:
+                    auraculum_amt = auraculum['IM']['au'][0]
+                    max_aura_str = ('{} ({}+{})'.format((int(max_aura[0]) + int(auraculum_amt)),
+                                                          max_aura[0], auraculum_amt))
+        else:
+            max_aura_str = max_aura[0]
+        aura_dict = dict(rank = rank,
+                         current_aura = current_aura[0],
+                         max_aura_str = max_aura_str)
+        return aura_dict
+    return None
+
+
+def get_prisoners(k, data, prisoner_chain):
+    try:
+        char_list = prisoner_chain[k]
+    except:
+        return None
+    prisoner_list = []
+    for prisoner in char_list:
+        prisoner_rec = data[prisoner]
+        prisoner_health_text = ''
+        if 'CH' in prisoner_rec:
+            if 'he' in prisoner_rec['CH']:
+                prisoner_health_text = ' (health {})'.format(prisoner_rec['CH']['he'][0])
+        prisoner_dict = dict(oid = to_oid(prisoner),
+                             name = get_name(prisoner_rec, data),
+                             health_text = prisoner_health_text)
+        prisoner_list.append(prisoner_dict)
+    return prisoner_list
+
+
+def get_skills_known(v, data):
+    skills_list = v.get('CH', {}).get('sl', [None])
+    if skills_list[0] is None:
+        return None
+    skills_dict = defaultdict(list)
+    if len(skills_list) > 0:
+        for skill in range(0, len(skills_list), 5):
+            skills_dict[skills_list[skill]].append(skills_list[skill + 1])
+            skills_dict[skills_list[skill]].append(skills_list[skill + 2])
+            skills_dict[skills_list[skill]].append(skills_list[skill + 3])
+            skills_dict[skills_list[skill]].append(skills_list[skill + 4])
+    sort_list = []
+    for skill in skills_dict:
+        skill_id = skill
+        skills_rec = skills_dict[skill]
+        know = skills_rec[0]
+        sort_list.append([int(know) * -1, skill_id])
+    sort_list.sort()
+    printknown = False
+    printunknown = False
+    skill_list = []
+    for skill in sort_list:
+        skill_id = skill[1]
+        skills_rec = skills_dict[skill_id]
+        know = skills_rec[0]
+        days_studied = skills_rec[1]
+        if know == '2':
+            if not printknown:
+                printknown = True
+            skillz = data[skill_id]
+            if 'SK' in skillz and 'rs' in skillz['SK']:
+                req_skill = skillz['SK']['rs'][0]
+            else:
+                req_skill = '0'
+            skill_dict = dict(oid=to_oid(skill_id),
+                              name=get_name(skillz, data),
+                              req_skill=req_skill,
+                              known='Yes',
+                              days_studied=None,
+                              to_learn=None)
+            skill_list.append(skill_dict)
+        if know == '1':
+            if not printunknown:
+                printunknown = True
+            skillz = data[skill_id]
+            skill_dict = dict(oid=to_oid(skill_id),
+                              name=get_name(skillz, data),
+                              req_skill=None,
+                              known='No',
+                              days_studied=days_studied,
+                              to_learn=skillz['SK']['tl'][0])
+            skill_list.append(skill_dict)
+    return skill_list
+
+
+def get_inventory(v, data):
+    total_weight = int(0)
+    items_list = []
+    if 'il' in v:
+        item_list = v['il']
+        if len(item_list) > 0:
+            for itm in range(0, len(item_list), 2):
+                item_id = item_list[itm]
+                item_qty = int(item_list[itm + 1])
+                itemz = data[item_id]
+                itemz_name = u.get_item_name(itemz) if item_qty == 1 else u.get_item_plural(itemz)
+                if 'wt' in itemz['IT']:
+                    item_weight = int(itemz['IT']['wt'][0])
+                else:
+                    item_weight = int(0)
+                item_ext = int(item_weight * item_qty)
+                total_weight = total_weight + (item_weight * item_qty)
+                fly_ext = None
+                land_ext = None
+                ride_ext = None
+                if u.return_type(v) != "garrison":
+                    fly_capacity = int(0)
+                    if 'fc' in itemz['IT']:
+                        fly_capacity = int(itemz['IT']['fc'][0])
+                    land_capacity = int(0)
+                    if 'lc' in itemz['IT']:
+                        land_capacity = int(itemz['IT']['lc'][0])
+                    ride_capacity = int(0)
+                    if 'rc' in itemz['IT']:
+                        ride_capacity = int(itemz['IT']['rc'][0])
+                    if fly_capacity > 0:
+                        fly_ext = fly_capacity * item_qty
+                    elif ride_capacity > 0:
+                        ride_ext = ride_capacity * item_qty
+                    elif land_capacity > 0:
+                        land_ext = land_capacity * item_qty
+                    attack = None
+                    defense = None
+                    missile = None
+                    if u.is_fighter(itemz, item_id):
+                        if 'at' in itemz['IT']:
+                            attack = int(itemz['IT']['at'][0])
+                        if 'df' in itemz['IT']:
+                            defense = int(itemz['IT']['df'][0])
+                        if 'mi' in itemz['IT']:
+                            missile = int(itemz['IT']['mi'][0])
+                    attack_bonus = None
+                    defense_bonus = None
+                    missile_bonus = None
+                    if 'IM' in itemz:
+                        if 'ab' in itemz['IM']:
+                            attack_bonus = int(itemz['IM']['ab'][0])
+                        if 'db' in itemz['IM']:
+                            defense_bonus = int(itemz['IM']['db'][0])
+                        if 'mb' in itemz['IM']:
+                            missile_bonus = int(itemz['IM']['mb'][0])
+                    aura_bonus = None
+                    if u.is_magician(v):
+                        aura_bonus = 0
+                        if 'IM' in itemz and 'ba' in itemz['IM']:
+                            aura_bonus = int(itemz['IM']['ba'][0])
+                items_dict = dict(item = itm,
+                                  item_name = itemz_name,
+                                  item_qty = item_qty,
+                                  item_weight = item_weight,
+                                  item_ext = item_ext,
+                                  fly_ext = fly_ext,
+                                  land_ext = land_ext,
+                                  ride_ext = ride_ext,
+                                  attack = attack,
+                                  defense = defense,
+                                  missile = missile,
+                                  attack_bonus = attack_bonus,
+                                  defense_bonus = defense_bonus,
+                                  missile_bonus = missile_bonus,
+                                  aura_bonus = aura_bonus)
+                items_list.append(items_dict)
+    return total_weight, items_list
+
+
+def get_capacity():
+    pass
+
+
+def get_pending_trades():
+    pass
+
+
+def get_visions_received():
+    pass
+
+
+def get_magic_stuff():
+    pass

@@ -1,0 +1,128 @@
+<HTML>
+<HEAD>
+<TITLE>{{ char.name }} [{{ char.oid }}]</TITLE>
+</HEAD>
+<BODY>
+<H3>{{ char.name }} [{{ char.oid }}]</H3>
+<table>
+{% if char.type != '0' %}
+    <tr><td>Type:</td><td>{{ char.type }}</td></tr>
+{% endif %}
+{% if char.rank != 'undefined' %}
+    <tr><td>Rank:</td><td>{{ char.rank }}</td></tr>
+{% endif %}
+{% if char.faction %}
+    <tr><td>Faction:</td><td>{{ char.faction.name }} [<a href="{{ char.faction.oid }}.html">{{ char.faction.oid }}</a>]</td></tr>
+{% endif %}
+{% if char.loc %}
+    <tr><td>Where:</td><td>{{ char.loc.name }} [<a href="{{ char.loc.oid }}.html">{{ char.loc.oid }}</a>]</td></tr>
+{% endif %}
+{% if char.loyalty != 'undefined' %}
+    <tr><td>Loyalty:</td><td>{{ char.loyalty }}</td></tr>
+{% endif %}
+{% if char.stacked_under %}
+    <tr><td>Stacked Under:</td><td>{{ char.stacked_under.name }} [<a href="{{ char.stacked_under.oid }}.html">{{ char.stacked_under.oid }}</a>]</td></tr>
+{% endif %}
+{% if char.stacked_over_list %}
+    {% set ns = namespace(title="Stacked Over:") %}
+    {% for entry in char.stacked_over_list %}
+        <tr><td>{{ ns.title }}</td><td>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td></tr>
+        {% set ns.title="" %}
+    {% endfor %}
+{% endif %}
+{% if char.health %}
+    <tr><td>Health:</td><td>{{ char.health }}</td></tr>
+{% endif %}
+{% if char.combat_dict %}
+    <tr><td>Combat:</td><td>attack {{ char.combat_dict.attack }}, defense {{ char.combat_dict.defense }}, missile {{ char.combat_dict.missile }}</td></tr>
+    <tr><td>&nbsp;</td><td>behind {{ char.combat_dict.behind }} {{ char.combat_dict.behind_text }}</td></tr>
+{% endif %}
+<tr><td>Break Point:</td><td>{{ char.break_point }}</td></tr>
+{% if char.vision_protection %}
+    <tr><td>Receive Vision:</td><td>{{ char.vision_protection }} protection</td></tr>
+{% endif %}
+{% if char.pledged_to %}
+    <tr><td>Pledged To:</td><td>{{ char.pledged_to.name }} [<a href="{{ char.pledged_to.oid }}.html">{{ char.pledged_to.oid }}</a>]</td></tr>
+{% endif %}
+{% if char.pledged_to_us_list %}
+    {% set ns = namespace(title="Pledged To Us:") %}
+    {% for entry in char.pledged_to_us_list %}
+        <tr><td>{{ ns.title }}</td><td>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td></tr>
+        {% set ns.title="" %}
+    {% endfor %}
+{% endif %}
+{% if char.concealed %}
+    <tr><td>Concealed:</td><td>{{ char.concealed }}</td></tr>
+{% endif %}
+{% if char.aura_dict %}
+    {% if char.aura_dict.rank %}
+        <tr><td>Mage Rank:</td><td>{{ char.aura_dict.rank }}</td></tr>
+    {% endif %}
+    <tr><td>Current Aura:</td><td>{{ char.aura_dict.current_aura }}</td></tr>
+    <tr><td>Max Aura:</td><td>{{ char.aura_dict.max_aura_str }}</td></tr>
+{% endif %}
+{% if char.prisoner_list %}
+    {% set ns = namespace(title="Prisoners:") %}
+    {% for entry in char.prisoner_list %}
+        <tr><td>{{ ns.title }}</td><td>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] {{ entry.health_text }}</td></tr>
+        {% set ns.title="" %}
+    {% endfor %}
+{% endif %}
+</table>
+{% set ns = namespace() %}
+{% set ns.knownprinted = 'No' %}
+{% set ns.unknownprinted = 'No' %}
+{% set ns.subprinted = 'No' %}
+{% if char.skills_known_list %}
+    {% for entry in char.skills_known_list %}
+        {% if ns.knownprinted == 'No' and entry.known == 'Yes' %}
+            <p>Skills Known:</p>
+            <ul style="list-style-type:none">
+            {% set ns.knownprinted = 'Yes' %}
+        {% endif %}
+        {% if ns.unknownprinted == 'No' and entry.known == 'No' %}
+            {% if ns.subprinted == 'Yes' %}
+                </ul>
+                {% set ns.subprinted = 'No' %}
+            {% endif %}
+            {% if ns.knownprinted == 'Yes' %}
+                </ul>
+            {% endif %}
+            <p>Partially known skills:</p>
+            <ul style="list-style-type:none">
+            {% set ns.unknownprinted = 'Yes' %}
+        {% endif %}
+        {% if entry.req_skill != '0' and entry.known == 'Yes' %}
+            {% if ns.subprinted == 'No' %}
+                <ul style="list-style-type:none">
+                {% set ns.subprinted = 'Yes' %}
+            {% endif %}
+        {% else %}
+            {% if ns.subprinted == 'Yes' %}
+                </ul>
+                {% set ns.subprinted = 'No' %}
+            {% endif %}
+        {% endif %}
+        {% if entry.known == 'Yes' %}
+            <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</li>
+        {% else %}
+            <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.days_studied }}/{{ entry.to_learn }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <ul style="list-style-type:none"><li>none</li></ul>
+{% endif %}
+{% if char.inventory_list %}
+    <p>Inventory:</p>
+    <table>
+        <tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><tdstyle="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>
+        <tr><td style="text-align:right">---</td><td style="text-align:left">----</td><tdstyle="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>
+        {% for entry in char.inventory_list %}
+        {% endfor %}
+        <tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>
+        <tr><td></td><td></td><td style="text-align:right">{total_weight:,d}</td><td>&nbsp;</td></tr>
+    </table>
+{% endif %}
+</BODY>
+</HTML>

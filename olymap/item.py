@@ -119,6 +119,7 @@ def write_item_html(v, k, data, trade_chain, outdir):
 def build_item_dict(k, v, data, trade_chain):
     who_has_id, who_has_name = get_who_has(v, data)
     dead_body_id, dead_body_name = get_dead_body(v, data)
+    may_study_id, may_study_name = get_may_study(v, data)
     item_dict = dict(oid = get_oid(k),
                      name = get_name(v, data),
                      type = get_type(v),
@@ -135,7 +136,8 @@ def build_item_dict(k, v, data, trade_chain):
                      fly_capacity = get_fly_capacity(v)[0],
                      land_capacity = get_land_capacity(v)[0],
                      lore = get_lore(v)[0],
-                     may_study = get_may_study(v)[0],
+                     may_study_oid = may_study_id,
+                     may_study_name = may_study_name,
                      missile = get_missile(v)[0],
                      missile_bonus = get_missile_bonus(v)[0],
                      project_cast = get_project_cast(v)[0],
@@ -206,8 +208,13 @@ def get_man_item(v):
     return v.get('IT', {}).get('mu', [None])
 
 
-def get_may_study(v):
-    return v.get('IM', {}).get('ms', [None])
+def get_may_study(v, data):
+    oid = v.get('IM', {}).get('ms', [None])
+    if oid[0] is not None:
+        skill_rec = data[oid[0]]
+        skill_name = get_name(skill_rec, data)
+        return to_oid(oid[0]), skill_name
+    return None, None
 
 
 def get_missile(v):
