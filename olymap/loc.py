@@ -4,13 +4,14 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor, anchor2, get_name
 import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
 # import olymap.ship as ship
+from olymap.utilities import anchor, anchor2, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
 from olymap.utilities import calc_ship_pct_loaded
 import pathlib
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
@@ -942,3 +943,67 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
     outf.write('</BODY>\n')
     outf.write('</HTML>\n')
     outf.close()
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '_z.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('loc.html')
+    loc = build_loc_dict(k, v, data, instance)
+    outf.write(template.render(loc=loc))
+
+
+def build_loc_dict(k, v, data, instance):
+    where_oid, where_type, where_name = get_where_info(v, data)
+    loc_dict = {'oid' : to_oid(k),
+                'name' : get_name(v, data),
+                'type' : get_type(v),
+                'where_oid' : where_oid,
+                'where_name' : where_name,
+                'safe_haven' : get_safe_haven(v),
+                'hidden' : get_hidden(v),
+                'civ_level' : get_civ_level(k, v, data)}
+    return loc_dict
+
+
+def get_where_info(v, data):
+    where_id = v.get('LI', {}).get('wh', None)
+    if where_id is not None:
+        try:
+            where_rec = data[where_id[0]]
+        except KeyError:
+            where_oid = None
+            where_name = None
+            where_type = None
+        else:
+            where_oid = to_oid(where_id[0])
+            where_name = get_name(where_rec, data)
+            where_type = get_type(where_rec)
+    else:
+        where_oid = None
+        where_name = None
+        where_type = None
+    return where_oid, where_type, where_name
+
+
+def get_safe_haven(v):
+    safe_haven = v.get('SL', {}).get('sh', [None])
+    return safe_haven[0]
+
+
+def get_hidden(v):
+    hidden = v.get('LO', {}).get('hi', [None])
+    return hidden[0]
+
+
+def get_civ_level(k, v, data):
+    civ_level = None
+    if u.return_type(v) != 'ocean' and u.loc_depth(u.return_type(v)) == 2 \
+    and data[u.region(k, data)]['na'][0] != 'faery' and data[u.region(k, data)]['na'][0] != 'hades':
+        civ_level = 'wilderness'
+        if 'LO' in v and 'lc' in v['LO']:
+            if v['LO']['lc'][0] == '0':
+                civ_level = 'wilderness'
+            else:
+                civ_level = 'civ-' + v['LO']['lc'][0]
+    return civ_level

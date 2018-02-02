@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<TITLE>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
+{% if loc.where_name %}
+    in {{ loc.where_name }}
+{% endif %}
+</TITLE>
+</HEAD>
+<BODY>
+<H3>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
+{% if loc.type != 'region' %}
+, in
+    {% if loc.type == 'city' %}
+        province
+    {% endif %}
+    {{ loc.where_name }} [<a href="{{ loc.where_oid }}.html">{{ loc.where_oid }}</a>]
+{% endif %}
+{% if loc.safe_haven %}
+, safe haven
+{% endif %}
+{% if loc.hidden %}
+, hidden
+{% endif %}
+{% if loc.civ_level %}
+, {{ loc.civ_level }}
+{% endif %}
+</H3>
+</BODY>
+</HTML>
