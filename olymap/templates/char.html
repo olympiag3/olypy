@@ -5,10 +5,10 @@
 <BODY>
 <H3>{{ char.name }} [{{ char.oid }}]</H3>
 <table>
-{% if char.type != '0' %}
+{% if char.type != '0' and char_type %}
     <tr><td>Type:</td><td>{{ char.type }}</td></tr>
 {% endif %}
-{% if char.rank != 'undefined' %}
+{% if char.rank != 'undefined' and char.rank %}
     <tr><td>Rank:</td><td>{{ char.rank }}</td></tr>
 {% endif %}
 {% if char.faction %}
@@ -17,7 +17,7 @@
 {% if char.loc %}
     <tr><td>Where:</td><td>{{ char.loc.name }} [<a href="{{ char.loc.oid }}.html">{{ char.loc.oid }}</a>]</td></tr>
 {% endif %}
-{% if char.loyalty != 'undefined' %}
+{% if char.loyalty != 'undefined' and char.loyalty %}
     <tr><td>Loyalty:</td><td>{{ char.loyalty }}</td></tr>
 {% endif %}
 {% if char.stacked_under %}
@@ -37,7 +37,9 @@
     <tr><td>Combat:</td><td>attack {{ char.combat_dict.attack }}, defense {{ char.combat_dict.defense }}, missile {{ char.combat_dict.missile }}</td></tr>
     <tr><td>&nbsp;</td><td>behind {{ char.combat_dict.behind }} {{ char.combat_dict.behind_text }}</td></tr>
 {% endif %}
-<tr><td>Break Point:</td><td>{{ char.break_point }}</td></tr>
+{% if char.break_point %}
+    <tr><td>Break Point:</td><td>{{ char.break_point }}</td></tr>
+{% endif %}
 {% if char.vision_protection %}
     <tr><td>Receive Vision:</td><td>{{ char.vision_protection }} protection</td></tr>
 {% endif %}
@@ -109,9 +111,11 @@
             <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.days_studied }}/{{ entry.to_learn }}</li>
         {% endif %}
     {% endfor %}
+    {% if ns.subprinted == 'Yes' %}
+            </ul>
+            {% set ns.subprinted = 'No' %}
+    {% endif %}
     </ul>
-{% else %}
-    <ul style="list-style-type:none"><li>none</li></ul>
 {% endif %}
 <p>Inventory:</p>
 {% if char.inventory_list %}
@@ -148,8 +152,10 @@
                 </td>
             </tr>
         {% endfor %}
-        <tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>
-        <tr><td></td><td></td><td style="text-align:right">{{ '{0:,d}'.format(char.items_total_dict.total_items_weight) }}</td><td>&nbsp;</td></tr>
+        {% if char.items_total_dict.print_capacity %}
+            <tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>
+            <tr><td></td><td></td><td style="text-align:right">{{ '{0:,d}'.format(char.items_total_dict.total_items_weight) }}</td><td>&nbsp;</td></tr>
+        {% endif %}
     </table>
 {% else %}
     <ul style="list-style-type:none"><li>none</li></ul>
