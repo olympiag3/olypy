@@ -90,7 +90,7 @@ def get_strength(v):
 def build_storm_dict(k, v, data):
     storm_dict = {'oid' : get_oid(k),
                   'name' : get_name(v, data),
-                  'type' : get_type(v),
+                  'type' : get_type(v, data),
                   'strength' : get_strength(v)}
     return storm_dict
 
@@ -98,7 +98,7 @@ def build_storm_dict(k, v, data):
 def build_loc_dict(k, v, data):
     loc_dict = {'oid' : get_oid(k),
                 'name' : get_name(v, data),
-                'type' : get_type(v)}
+                'type' : get_type(v, data)}
     return loc_dict
 
 

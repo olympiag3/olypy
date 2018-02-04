@@ -234,7 +234,7 @@ def get_damage(v):
 def build_ship_dict(k, v, data):
     ship_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
-                 'type' : get_type(v),
+                 'type' : get_type(v, data),
                  'complete' : get_complete(v),
                  'load' : get_load(k, v, data),
                  'defense' : get_defense(v)[0],
@@ -245,7 +245,7 @@ def build_ship_dict(k, v, data):
 def build_loc_dict(k, v, data):
     loc_dict = {'oid' : get_oid(k),
                 'name' : get_name(v, data),
-                'type' : get_type(v)}
+                'type' : get_type(v, data)}
     return loc_dict
 
 

@@ -122,7 +122,7 @@ def build_item_dict(k, v, data, trade_chain):
     may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
-                 'type' : get_type(v),
+                 'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
                  'attack' : get_attack(v)[0],

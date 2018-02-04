@@ -1,0 +1,43 @@
+{% extends "loc.html" %}
+{% block characterlist %}
+<li>
+{% if entry.province_oid %}
+    (<a href="{{ entry.province_oid }}.html">{{ entry.province_oid }}</a>)
+{% endif %}
+{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
+{%- if entry.loyalty == 'Undefined' -%}
+    {%- if entry.absorb_blast -%}
+    (AB)
+    {%- endif -%}
+{%- else -%}
+    ({{ entry.loyalty }}
+    {%- if entry.absorb_blast -%}
+    (AB
+    {%- endif -%}
+    )
+{%- endif -%}
+{%- if entry.type -%}
+    , {{ entry.type }}
+{%- endif -%}
+{%- if entry.prisoner -%}
+    , prisoner
+{%- endif -%}
+{%- if entry.priest -%}
+    , priest
+{%- endif -%}
+{%- if entry.magetype -%}
+    , {{ entry.magetype }}
+{%- endif -%}
+{%- if entry.on_guard -%}
+    , on guard
+{%- endif -%}
+{%- if entry.concealed -%}
+    , concealed
+{%- endif -%}
+{% if entry.items_list %}
+    {%- for item in entry.items_list -%}
+        , {{ item.qty }} {{ item.name }}
+    {%- endfor -%}
+{% endif %}
+</li>
+{% endblock %}

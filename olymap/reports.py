@@ -210,7 +210,7 @@ def build_item_dict(item_list, data, trade_chain):
                       'name' : get_name(item_rec, data),
                       'weight' : get_weight(item_rec)[0],
                       'man_item' : get_man_item(item_rec)[0],
-                      'type' : get_type(item_rec),
+                      'type' : get_type(item_rec, data),
                       'prominent' : get_prominent(item_rec)[0],
                       'animal' : get_animal(item_rec)[0],
                       'land_cap' : land_cap[0],

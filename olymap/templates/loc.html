@@ -8,22 +8,52 @@
 </HEAD>
 <BODY>
 <H3>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
-{% if loc.type != 'region' %}
+{%- if loc.type != 'region' -%}
 , in
     {% if loc.type == 'city' %}
         province
     {% endif %}
     {{ loc.where_name }} [<a href="{{ loc.where_oid }}.html">{{ loc.where_oid }}</a>]
-{% endif %}
-{% if loc.safe_haven %}
+{%- endif -%}
+{%- if loc.safe_haven -%}
 , safe haven
-{% endif %}
-{% if loc.hidden %}
+{%- endif -%}
+{%- if loc.hidden -%}
 , hidden
-{% endif %}
-{% if loc.civ_level %}
+{%- endif -%}
+{%- if loc.civ_level -%}
 , {{ loc.civ_level }}
 {% endif %}
 </H3>
+{% if loc.barrier %}
+    <p>A magical barrier surrounds {{ loc.barrier.name }} [<a href="{{ loc.barrier.oid }}.html">{{ loc.barrier.oid }}</a>].</p>
+{% endif %}
+{% if loc.shroud %}
+    <p>A magical shroud surrounds {{ loc.shroud.name }} [<a href="{{ loc.shroud.oid }}.html">{{ loc.shroud.oid }}</a>].</p>
+{% endif %}
+{%- if loc.controlled_by -%}
+    Province controlled by {{ loc.controlled_by.name }} [<a href="{{ loc.controlled_by.oid }}.html">{{ loc.controlled_by.oid }}</a>], {{ loc.controlled_by.type }}, in {{ loc.controlled_by.loc_name }} [<a href="{{ loc.controlled_by.loc_oid }}.html">{{ loc.controlled_by.loc_oid }}</a>]
+{% endif %}
+{% if loc.controlled_by.ruled_by_oid %}
+    <br>Ruled by {{ loc.controlled_by.ruled_by_name }} [<a href="{{ loc.controlled_by.ruled_by_oid }}.html">{{ loc.controlled_by.ruled_by_oid }}</a>]
+{% endif %}
+{% if loc.hidden_access %}
+    <H4>Hidden location known by:</H4>
+    <ul>
+    {% for entry in loc.hidden_access %}
+        <li>
+            {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if loc.garrisons %}
+    <H4>Garrisons:</H4>
+    <ul>
+    {% for entry in loc.garrisons %}
+        {% block characterlist %}{% endblock %}
+    {% endfor %}
+    </ul>
+{% endif %}
 </BODY>
 </HTML>

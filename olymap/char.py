@@ -677,7 +677,7 @@ def build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain):
     if u.return_type(v) != "garrison":
         char_dict = {'oid' : get_oid(k),
                      'name' : get_name(v, data),
-                     'type' : get_type(v),
+                     'type' : get_type(v, data),
                      'rank' : get_rank(v),
                      'faction' : get_faction(v, data),
                      'loc' : get_loc(v, data),
@@ -820,11 +820,9 @@ def get_char_prominent_items(v, data):
         if len(item_list) > 0:
             for items in range(0, len(item_list), 2):
                 itemz = data[item_list[items]]
-                if 'IT' in itemz:
-                    if 'pr' in itemz['IT']:
-                        if itemz['IT']['pr'][0] == '1':
-                            item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
-                            pi_str = pi_str + ', {} {}'.format(item_list[items + 1], item_name)
+                if u.is_prominent(itemz) == '1':
+                    item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
+                    pi_str = pi_str + ', {} {}'.format(item_list[items + 1], item_name)
     return pi_str
 
 
@@ -1374,3 +1372,21 @@ def get_magic_stuff(v, data):
                                                       'magic_type' : magic_type}
                                         magic_list.append(magic_dict)
     return magic_list
+
+
+def get_items_list(v, data, prominent):
+    items_list = []
+    if 'il' in v:
+        item_list = v['il']
+        for item in range(0, len(item_list), 2):
+            id = item_list[item]
+            item_rec = data[id]
+            if (prominent and u.is_prominent(item_rec)) or prominent is None:
+                oid = to_oid(id)
+                item_qty = int(item_list[item + 1])
+                item_dict = {'id' : id,
+                             'oid' : oid,
+                             'name' : get_name(item_rec, data, item_qty),
+                             'qty' : item_qty}
+                items_list.append(item_dict)
+    return items_list

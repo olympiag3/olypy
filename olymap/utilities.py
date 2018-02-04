@@ -487,39 +487,42 @@ def is_priest(v):
 
 
 def xlate_magetype(v, data):
-    max_aura = 0
-    auraculum_aura = 0
-    if 'CM' in v and 'ma' in v['CM']:
-        max_aura = int(v['CM']['ma'][0])
-        if 'ar' in v['CM']:
-            auraculum = data[v['CM']['ar'][0]]
-            auraculum_id = v['CM']['ar'][0]
-            if 'IM' in auraculum and 'au' in auraculum['IM']:
-                auraculum_aura = int(auraculum['IM']['au'][0])
-        mage_level = max_aura + auraculum_aura
-        if mage_level <= 5:
-            return ''
-        elif mage_level <= 10:
-            return 'conjurer'
-        elif mage_level <= 15:
-            return 'mage'
-        elif mage_level <= 20:
-            return 'wizard'
-        elif mage_level <= 30:
-            return 'sorcerer'
-        elif mage_level <= 40:
-            return '6th black circle'
-        elif mage_level <= 50:
-            return '5th black circle'
-        elif mage_level <= 60:
-            return '4th black circle'
-        elif mage_level <= 70:
-            return '3rd black circle'
-        elif mage_level <= 80:
-            return '2nd black circle'
-        else:
-            return 'master of the black arts'
-    return ''
+    if is_magician(v):
+        max_aura = 0
+        auraculum_aura = 0
+        if 'CM' in v and 'ma' in v['CM']:
+            max_aura = int(v['CM']['ma'][0])
+            if 'ar' in v['CM']:
+                auraculum = data[v['CM']['ar'][0]]
+                auraculum_id = v['CM']['ar'][0]
+                if 'IM' in auraculum and 'au' in auraculum['IM']:
+                    auraculum_aura = int(auraculum['IM']['au'][0])
+            mage_level = max_aura + auraculum_aura
+            if mage_level <= 5:
+                return ''
+            elif mage_level <= 10:
+                return 'conjurer'
+            elif mage_level <= 15:
+                return 'mage'
+            elif mage_level <= 20:
+                return 'wizard'
+            elif mage_level <= 30:
+                return 'sorcerer'
+            elif mage_level <= 40:
+                return '6th black circle'
+            elif mage_level <= 50:
+                return '5th black circle'
+            elif mage_level <= 60:
+                return '4th black circle'
+            elif mage_level <= 70:
+                return '3rd black circle'
+            elif mage_level <= 80:
+                return '2nd black circle'
+            else:
+                return 'master of the black arts'
+        return ''
+    else:
+        return None
 
 
 def anchor(k):
@@ -686,13 +689,15 @@ def calc_ship_pct_loaded(data, k, v):
     return pct_loaded
 
 
-def get_name(v, data):
+def get_name(v, data, qty=None):
     if 'na' in v:
         name = v['na'][0]
+        if qty and qty > 1:
+            name = get_item_plural(v)
     else:
         name = return_type(v)
-    if name.islower():
-        name = name.capitalize()
+        if name.islower():
+            name = name.capitalize()
     if name == 'Ni':
         name = data[v['CH']['ni'][0]]['na'][0].capitalize()
     return name
@@ -702,8 +707,13 @@ def get_oid(k):
     return to_oid(k)
 
 
-def get_type(v):
-    return return_type(v)
+def get_type(v, data):
+    if return_type(v) == 'ni':
+        # char_type = v['na'][0].lower()
+        type = data[v['CH']['ni'][0]]['na'][0]
+    else:
+        type = return_type(v)
+    return type
 
 
 def is_absorb_aura_blast(v, data):
@@ -765,3 +775,17 @@ def get_who_has(item_rec, data):
             name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
         return to_oid(who_has), name
     return None, None
+
+
+def is_prominent(v):
+    if v.get('IT', {}).get('pr', [None])[0] == '1':
+        return True
+    else:
+        return False
+
+
+def is_hidden(v):
+    if v.get('LO', {}).get('hi', [None])[0] == '1':
+        return True
+    else:
+        return False

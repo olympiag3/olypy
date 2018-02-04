@@ -12,13 +12,14 @@ from olymap.utilities import anchor, anchor2, get_oid, get_name, get_type, to_oi
 from olymap.utilities import calc_ship_pct_loaded
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
+from olymap.char import get_items_list
 
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
 
 def write_loc_page_header(v, k, data, outf):
     outf.write('<H3>')
-    loc_type = u.return_type(v)
+    loc_type = get_type(v, data)
     outf.write('{} [{}]'.format(v['na'][0], to_oid(k)))
     outf.write(', {}'.format(loc_type))
     if u.return_type(v) != 'region':
@@ -543,7 +544,7 @@ def write_characters(v, k, data, outf, print_province = False):
         outf.write(')')
     else:
         if u.is_absorb_aura_blast(v, data):
-            outf.write('(AB')
+            outf.write('(AB)')
     if u.return_type(v) != '0':
         if u.return_type(v) == 'ni':
             # char_type = v['na'][0].lower()
@@ -816,7 +817,7 @@ def write_hidden_access(v, k, data, outf, hidden_chain):
                 pass
             else:
                 if len(hidden_list) > 0:
-                    outf.write('Hidden location known by:</H4>\n')
+                    outf.write('<H4>Hidden location known by:</H4>\n')
                     outf.write('<ul>\n')
                     for hidden in hidden_list:
                         hidden_rec = data[hidden]
@@ -949,20 +950,31 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('loc.html')
-    loc = build_loc_dict(k, v, data, instance)
+    loc = build_loc_dict(k, v, data, garrisons_chain, hidden_chain)
     outf.write(template.render(loc=loc))
 
 
-def build_loc_dict(k, v, data, instance):
+def build_loc_dict(k, v, data, garrisons_chain, hidden_chain):
     where_oid, where_type, where_name = get_where_info(v, data)
     loc_dict = {'oid' : to_oid(k),
                 'name' : get_name(v, data),
-                'type' : get_type(v),
+                'type' : get_type(v, data),
                 'where_oid' : where_oid,
                 'where_name' : where_name,
                 'safe_haven' : get_safe_haven(v),
-                'hidden' : get_hidden(v),
-                'civ_level' : get_civ_level(k, v, data)}
+                'hidden' : u.is_hidden(v),
+                'civ_level' : get_civ_level(k, v, data),
+                'barrier' : get_barrier(k, v, data),
+                'shroud' : get_shroud(k, v, data),
+                'anchor' : get_map_anchor(v, k),
+                'controlled_by' : get_controlled_by (v, data),
+                'routes_out' : get_routes_out(v, data),
+                'structures' : get_structures(v, k),
+                'skills' : get_skills_taught(v, k),
+                'markets' : get_markets(v, data),
+                'here_list' : get_here_list(v, data),
+                'hidden_access' : get_hidden_access(k, v, data, hidden_chain),
+                'garrisons' : get_garrisons(k, v, data, garrisons_chain)}
     return loc_dict
 
 
@@ -978,7 +990,7 @@ def get_where_info(v, data):
         else:
             where_oid = to_oid(where_id[0])
             where_name = get_name(where_rec, data)
-            where_type = get_type(where_rec)
+            where_type = get_type(where_rec, data)
     else:
         where_oid = None
         where_name = None
@@ -989,11 +1001,6 @@ def get_where_info(v, data):
 def get_safe_haven(v):
     safe_haven = v.get('SL', {}).get('sh', [None])
     return safe_haven[0]
-
-
-def get_hidden(v):
-    hidden = v.get('LO', {}).get('hi', [None])
-    return hidden[0]
 
 
 def get_civ_level(k, v, data):
@@ -1007,3 +1014,165 @@ def get_civ_level(k, v, data):
             else:
                 civ_level = 'civ-' + v['LO']['lc'][0]
     return civ_level
+
+
+def get_map_anchor(v, data):
+    anchor_dict = {}
+    return anchor_dict
+
+
+def get_barrier(k, v, data):
+    barrier = v.get('LO', {}).get('ba', [None])
+    if barrier[0] is not None and barrier[0] != '0':
+        barrier_dict = {'oid' : to_oid(k),
+                        'name' : get_name(v, data)}
+        return barrier_dict
+    else:
+        return None
+
+
+def get_shroud(k, v, data):
+    shroud = v.get('LO', {}).get('sh', [None])
+    if shroud[0] is not None and shroud[0] != '0':
+        shroud_dict = {'oid': to_oid(k),
+                       'name': get_name(v, data)}
+        return shroud_dict
+    else:
+        return None
+
+
+def get_controlled_by(v, data):
+    controlled_dict = {}
+    here_list = v.get('LI', {}).get('hl', [None])
+    if here_list[0] is not None and len(here_list) > 0:
+        for loc in here_list:
+            garrison_rec = data[loc] # looking for garrisons
+            if get_type(garrison_rec, data) == 'garrison':
+                castle = garrison_rec.get('MI', {}).get('gc', [None])
+                if castle[0] is not None and castle[0] != '0':
+                    castle_rec = data[castle[0]]
+                    castle_name = castle_rec['na'][0]
+                    castle_oid = to_oid(castle[0])
+                    castle_type = u.return_type(castle_rec)
+                    castle_loc_id = castle_rec['LI']['wh'][0]
+                    castle_loc_rec = data[castle_loc_id]
+                    castle_loc_type = get_type(castle_loc_rec, data)
+                    if castle_loc_type == 'city':  # in a city
+                        castle_loc_id = castle_loc_rec['LI']['wh'][0]
+                        castle_loc_rec = data[castle_loc_id]
+                    castle_loc_oid = to_oid(castle_loc_id)
+                    castle_loc_name = castle_loc_rec['na'][0]
+                    # calculate top of pledge chain
+                    castle_here_list = castle_rec.get('LI', {}).get('hl', [None])
+                    ruled_by_oid = None
+                    ruled_by_name = None
+                    if castle_here_list[0] is not None:
+                        top_guy = u.top_ruler(castle_here_list[0], data)
+                        try:
+                            top_dog = data[top_guy]
+                        except KeyError:
+                            pass
+                        else:
+                            ruled_by_oid = to_oid(top_guy)
+                            ruled_by_name = top_dog['na'][0]
+                    controlled_dict = {'oid' : castle_oid,
+                                       'name' : castle_name,
+                                       'type' : castle_type,
+                                       'loc_oid' : castle_loc_oid,
+                                       'loc_name' : castle_loc_name,
+                                       'ruled_by_oid' : ruled_by_oid,
+                                       'ruled_by_name' : ruled_by_name}
+    return controlled_dict
+
+
+def get_routes_out(v, data):
+    routes_out_list = []
+    return routes_out_list
+
+
+def get_structures(v, data):
+    structures_list = []
+    return structures_list
+
+
+def get_skills_taught(v, data):
+    skills_list = []
+    return skills_list
+
+
+def get_markets(v, data):
+    markets_list = []
+    return markets_list
+
+
+def get_here_list(v, data):
+    here_list = []
+    return here_list
+
+
+def get_hidden_access(k, v, data, hidden_chain):
+    hidden_access_list = []
+    if u.is_hidden(v) or u.region(k, data) in {'faery', 'hades'}:
+        # PL/kn
+        try:
+            hidden_list = hidden_chain[k]
+        except:
+            pass
+        else:
+            if len(hidden_list) > 0:
+                for hidden in hidden_list:
+                    hidden_rec = data[hidden]
+                    hidden_dict = {'oid' : to_oid(hidden),
+                                   'name' : get_name(hidden_rec, data)}
+                    hidden_access_list.append(hidden_dict)
+    return hidden_access_list
+
+
+def get_garrisons(k, v, data, garrisons_chain):
+    garrisons_list = []
+    if u.return_type(v) == 'castle':
+        garrison_list = garrisons_chain[k]
+        if len(garrison_list) > 0:
+            province_list = []
+            for garrison in garrison_list:
+                province_rec = data[garrison]
+                province_list.append([province_rec['LI']['wh'][0], garrison])
+            province_list.sort()
+            for province in province_list:
+                garrison_rec = data[province[1]]
+                garrison_dict = get_character_info(province[1], garrison_rec, data, True)
+                garrisons_list.append(garrison_dict)
+    return garrisons_list
+
+
+def get_character_info(k, v, data, print_province):
+    char_dict = {}
+    province_oid = None
+    if print_province:
+        if 'LI' in v and 'wh' in v['LI']:
+            province_rec = data[v['LI']['wh'][0]]
+            province_oid = to_oid(v['LI']['wh'][0])
+    # code fix to bug in lib where garrison name is sometimes missing
+    # print wearing/wielding
+    #print_wearable_wielding(v, data, outf)
+    # print prominent items
+    # if 'LI' in v:
+    #     if 'hl' in v['LI']:
+    #         here_list = v['LI']['hl']
+    #         if len(here_list) > 0:
+    #             for here in here_list:
+    #                 charac = data[here]
+    #                 write_characters(charac, here, data, outf)
+    garrison_dict = {'oid' : to_oid(k),
+                     'name' : get_name(v, data),
+                     'type' : get_type(v, data),
+                     'province_oid' : province_oid,
+                     'absorb_blast' : u.is_absorb_aura_blast(v, data),
+                     'loyalty' : u.xlate_loyalty(v),
+                     'prisoner' : u.is_prisoner(v),
+                     'priest' : u.is_priest(v),
+                     'magetype' : u.is_magician(v),
+                     'on_guard' : u.is_on_guard(v),
+                     'concealed' : u.is_concealed(v),
+                     'items_list' : get_items_list(v, data, True)}
+    return garrison_dict
