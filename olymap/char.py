@@ -675,30 +675,30 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
 def build_char_dict(k, v, data, instance, pledge_chain, prisoner_chain):
     items_total_dict, items_list =  get_inventory(v, data)
     if u.return_type(v) != "garrison":
-        char_dict = {'oid' : get_oid(k),
-                     'name' : get_name(v, data),
-                     'type' : get_type(v, data),
-                     'rank' : get_rank(v),
-                     'faction' : get_faction(v, data),
-                     'loc' : get_loc(v, data),
-                     'loyalty' : get_loyalty(v),
-                     'stacked_under' : get_stacked_under(v, data),
-                     'stacked_over_list' : get_stacked_over(v, data),
-                     'health' : get_health(v),
-                     'break_point' : get_break_point(v, instance),
-                     'vision_protection' : get_vision_protection(v),
-                     'pledged_to' : get_pledged_to(v, data),
-                     'pledged_to_us_list' : get_pledged_to_us(k, data, pledge_chain),
-                     'combat_dict' : get_combat(v),
-                     'concealed' : get_concealed(v),
-                     'aura_dict' : get_aura(v, data),
-                     'prisoner_list' : get_prisoners(k, data, prisoner_chain),
-                     'skills_known_list' : get_skills_known(v, data),
-                     'items_total_dict' : items_total_dict,
-                     'inventory_list' : items_list,
-                     'trades_list' : get_pending_trades(v, data),
-                     'visions_list' : get_visions_received(v, data),
-                     'magic_list' : get_magic_stuff(v, data)}
+        char_dict = {'oid': get_oid(k),
+                     'name': get_name(v, data),
+                     'type': get_type(v, data),
+                     'rank': get_rank(v),
+                     'faction': get_faction(v, data),
+                     'loc': get_loc(v, data),
+                     'loyalty': get_loyalty(v),
+                     'stacked_under': get_stacked_under(v, data),
+                     'stacked_over_list': get_stacked_over(v, data),
+                     'health': get_health(v),
+                     'break_point': get_break_point(v, instance),
+                     'vision_protection': get_vision_protection(v),
+                     'pledged_to': get_pledged_to(v, data),
+                     'pledged_to_us_list': get_pledged_to_us(k, data, pledge_chain),
+                     'combat_dict': get_combat(v),
+                     'concealed': get_concealed(v),
+                     'aura_dict': get_aura(v, data),
+                     'prisoner_list': get_prisoners(k, data, prisoner_chain),
+                     'skills_known_list': get_skills_known(v, data),
+                     'items_total_dict': items_total_dict,
+                     'inventory_list': items_list,
+                     'trades_list': get_pending_trades(v, data),
+                     'visions_list': get_visions_received(v, data),
+                     'magic_list': get_magic_stuff(v, data)}
     else:
         char_dict = {'oid': get_oid(k),
                      'name': get_name(v, data),
@@ -954,8 +954,8 @@ def get_pledged_to(v, data):
         char_rec = data[pledged_to[0]]
         if u.return_kind(char_rec) == 'char':
             char_name = get_name(char_rec, data)
-            pledged_to_dict = {'oid' : to_oid(pledged_to[0]),
-                               'name' : char_name}
+            pledged_to_dict = {'oid': to_oid(pledged_to[0]),
+                               'name': char_name}
             return pledged_to_dict
     return None
 
@@ -968,8 +968,8 @@ def get_pledged_to_us(k, data, pledge_list):
         return None
     for pledgee in pledgee_list:
         pledgee_rec = data[pledgee]
-        pledgee_dict = {'oid' : to_oid(pledgee),
-                        'name' : get_name(pledgee_rec, data)}
+        pledgee_dict = {'oid': to_oid(pledgee),
+                        'name': get_name(pledgee_rec, data)}
         pledged_to_us_list.append(pledgee_dict)
     return pledged_to_us_list
 
@@ -999,9 +999,9 @@ def get_aura(v, data):
                                                           max_aura[0], auraculum_amt))
         else:
             max_aura_str = max_aura[0]
-        aura_dict = {'rank' : rank,
-                     'current_aura' : current_aura[0],
-                     'max_aura_str' : max_aura_str}
+        aura_dict = {'rank': rank,
+                     'current_aura': current_aura[0],
+                     'max_aura_str': max_aura_str}
         return aura_dict
     return None
 
@@ -1018,8 +1018,8 @@ def get_prisoners(k, data, prisoner_chain):
         if 'CH' in prisoner_rec:
             if 'he' in prisoner_rec['CH']:
                 prisoner_health_text = ' (health {})'.format(prisoner_rec['CH']['he'][0])
-        prisoner_dict = {'oid' : to_oid(prisoner),
-                         'name' : get_name(prisoner_rec, data),
+        prisoner_dict = {'oid': to_oid(prisoner),
+                         'name': get_name(prisoner_rec, data),
                          'health_text': prisoner_health_text}
         prisoner_list.append(prisoner_dict)
     return prisoner_list
@@ -1059,23 +1059,23 @@ def get_skills_known(v, data):
                 req_skill = skillz['SK']['rs'][0]
             else:
                 req_skill = '0'
-            skill_dict = {'oid' : to_oid(skill_id),
-                          'name' : get_name(skillz, data),
-                          'req_skill' : req_skill,
-                          'known' : 'Yes',
-                          'days_studied' : None,
-                          'to_lear' : None}
+            skill_dict = {'oid': to_oid(skill_id),
+                          'name': get_name(skillz, data),
+                          'req_skill': req_skill,
+                          'known': 'Yes',
+                          'days_studied': None,
+                          'to_lear': None}
             skill_list.append(skill_dict)
         if know == '1':
             if not printunknown:
                 printunknown = True
             skillz = data[skill_id]
-            skill_dict = {'oid' : to_oid(skill_id),
-                          'name' : get_name(skillz, data),
-                          'req_skill' : None,
-                          'known' : 'No',
-                          'days_studied' : days_studied,
-                          'to_learn' : skillz['SK']['tl'][0]}
+            skill_dict = {'oid': to_oid(skill_id),
+                          'name': get_name(skillz, data),
+                          'req_skill': None,
+                          'known': 'No',
+                          'days_studied': days_studied,
+                          'to_learn': skillz['SK']['tl'][0]}
             skill_list.append(skill_dict)
     return skill_list
 
@@ -1196,21 +1196,21 @@ def get_inventory(v, data):
                         if 'IM' in itemz and 'ba' in itemz['IM']:
                             if int(itemz['IM']['ba'][0]) > 0:
                                 aura_bonus = int(itemz['IM']['ba'][0])
-                items_dict = {'item' : to_oid(item_id),
-                              'item_name' : itemz_name,
-                              'item_qty' : item_qty,
-                              'item_weight' : item_weight,
-                              'item_ext' : item_ext,
-                              'fly_ext' : fly_ext,
-                              'land_ext' : land_ext,
-                              'ride_ext' : ride_ext,
-                              'attack' : attack,
-                              'defense' : defense,
-                              'missile' : missile,
-                              'attack_bonus' : attack_bonus,
-                              'defense_bonus' : defense_bonus,
-                              'missile_bonus' : missile_bonus,
-                              'aura_bonus' : aura_bonus}
+                items_dict = {'item': to_oid(item_id),
+                              'item_name': itemz_name,
+                              'item_qty': item_qty,
+                              'item_weight': item_weight,
+                              'item_ext': item_ext,
+                              'fly_ext': fly_ext,
+                              'land_ext': land_ext,
+                              'ride_ext': ride_ext,
+                              'attack': attack,
+                              'defense': defense,
+                              'missile': missile,
+                              'attack_bonus': attack_bonus,
+                              'defense_bonus': defense_bonus,
+                              'missile_bonus': missile_bonus,
+                              'aura_bonus': aura_bonus}
                 items_list.append(items_dict)
     else:
         items_list = None
@@ -1227,18 +1227,18 @@ def get_inventory(v, data):
             fly_pct = math.floor((fly_weight * 100) / fly_cap)
     else:
         print_capacity = None
-    items_total_dict = {'total_items_weight' : total_items_weight,
-                        'total_char_weight' : total_char_weight,
-                        'land_weight' : land_weight,
-                        'ride_weight' : ride_weight,
-                        'fly_weight' : fly_weight,
+    items_total_dict = {'total_items_weight': total_items_weight,
+                        'total_char_weight': total_char_weight,
+                        'land_weight': land_weight,
+                        'ride_weight': ride_weight,
+                        'fly_weight': fly_weight,
                         'land_cap': land_cap,
                         'ride_cap': ride_cap,
                         'fly_cap': fly_cap,
-                        'land_pct' : land_pct,
-                        'ride_pct' : ride_pct,
-                        'fly_pct' : fly_pct,
-                        'print_capacity' : print_capacity}
+                        'land_pct': land_pct,
+                        'ride_pct': ride_pct,
+                        'fly_pct': fly_pct,
+                        'print_capacity': print_capacity}
     return items_total_dict, items_list
 
 
@@ -1258,11 +1258,11 @@ def get_pending_trades(v, data):
                     qty = int(trade_list[trades + 2])
                     name = u.get_item_name (itemz) if int(trade_list[trades + 2]) == 1 else u.get_item_plural(itemz)
                     oid = to_oid(trade_list[trades + 1])
-                    trade_dict = {'direction' : direction,
-                                  'price' : price,
-                                  'qty' : qty,
-                                  'oid' : oid,
-                                  'name' : name}
+                    trade_dict = {'direction': direction,
+                                  'price': price,
+                                  'qty': qty,
+                                  'oid': oid,
+                                  'name': name}
                     trades_list.append(trade_dict)
     return trades_list
 
@@ -1278,8 +1278,8 @@ def get_visions_received(v, data):
                 vision_name = 'missing'
             else:
                 vision_name = visioned.get('na', ['missing'])[0]
-            vision_dict = {'oid' : to_oid(vision),
-                           'name' : vision_name}
+            vision_dict = {'oid': to_oid(vision),
+                           'name': vision_name}
             visions_list.append(vision_dict)
     return visions_list
 
@@ -1337,8 +1337,8 @@ def get_magic_stuff(v, data):
                                           'skill_id': None,
                                           'required_study': None,
                                           'required_name': None,
-                                          'loc_kind' : loc_kind,
-                                          'loc_id' : loc_id,
+                                          'loc_kind': loc_kind,
+                                          'loc_id': loc_id,
                                           'magic_type': magic_type}
                             magic_list.append(magic_dict)
                 elif item_type == 'scroll':
@@ -1362,14 +1362,14 @@ def get_magic_stuff(v, data):
                                         required_name = skill2.get('na', ['unknown'])[0]
                                         required_study = to_oid(skill['SK']['rs'][0])
                                         magic_type = 'Scroll'
-                                        magic_dict = {'oid' : scroll_id,
-                                                      'name' : skill_name,
-                                                      'skill_id' : skill_id,
-                                                      'required_study' : required_study,
-                                                      'required_name' : required_name,
-                                                      'loc_kind' : None,
-                                                      'loc_id' : None,
-                                                      'magic_type' : magic_type}
+                                        magic_dict = {'oid': scroll_id,
+                                                      'name': skill_name,
+                                                      'skill_id': skill_id,
+                                                      'required_study': required_study,
+                                                      'required_name': required_name,
+                                                      'loc_kind': None,
+                                                      'loc_id': None,
+                                                      'magic_type': magic_type}
                                         magic_list.append(magic_dict)
     return magic_list
 
@@ -1384,9 +1384,9 @@ def get_items_list(v, data, prominent):
             if (prominent and u.is_prominent(item_rec)) or prominent is None:
                 oid = to_oid(id)
                 item_qty = int(item_list[item + 1])
-                item_dict = {'id' : id,
-                             'oid' : oid,
-                             'name' : get_name(item_rec, data, item_qty),
-                             'qty' : item_qty}
+                item_dict = {'id': id,
+                             'oid': oid,
+                             'name': get_name(item_rec, data, item_qty),
+                             'qty': item_qty}
                 items_list.append(item_dict)
     return items_list

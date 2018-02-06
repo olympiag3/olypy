@@ -9,10 +9,11 @@ import olymap.detail as detail
 from operator import itemgetter
 # import olymap.ship as ship
 from olymap.utilities import anchor, anchor2, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
-from olymap.utilities import calc_ship_pct_loaded
+from olymap.utilities import calc_ship_pct_loaded, is_impassable
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.char import get_items_list
+from olymap.item import get_weight
 
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
@@ -116,7 +117,7 @@ def write_loc_controlled_by(v, data, outf):
 
 
 def write_province_destination(loc, dest_loc, direction, data, outf):
-    if (u.is_port_city(dest_loc, data) or u.province_has_port_city(dest_loc, data) != '0') \
+    if (u.is_port_city(dest_loc, data) or u.province_has_port_city(dest_loc, data) is not None) \
             and u.return_type(loc) == 'ocean':
         if not u.is_port_city(dest_loc, data):
             dest_loc = data[u.province_has_port_city(dest_loc, data)]
@@ -222,38 +223,36 @@ def write_province_destinations(v, data, outf):
                                            data,
                                            outf)
     # see if road or gate
-    if 'LI' in v:
-        if 'hl' in v['LI']:
-            here_list = v['LI']['hl']
-            for here in here_list:
-                here_record = data[here]
-                if u.is_road_or_gate(here_record):
-                    to_record = data[here_record['GA']['tl'][0]]
-                    if u.return_kind(here_record) == 'gate':
-                        name = 'Gate'
-                    else:
-                        name = here_record['na'][0]
-                    if not print_header:
-                        print_header = True
-                        outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
-                        outf.write('<ul>\n')
-                    write_province_destination(v,
-                                               to_record,
-                                               name,
-                                               data,
-                                               outf)
-    if 'SL' in v:
-        if 'lt' in v['SL']:
-            link_to_record = data[v['SL']['lt'][0]]
-            if not print_header:
-                print_header = True
-                outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
-                outf.write('<ul>\n')
-            write_province_destination(v,
-                                       link_to_record,
-                                       u.return_type(link_to_record).title(),
-                                       data,
-                                       outf)
+    if 'LI' in v and 'hl' in v['LI']:
+        here_list = v['LI']['hl']
+        for here in here_list:
+            here_record = data[here]
+            if u.is_road_or_gate(here_record):
+                to_record = data[here_record['GA']['tl'][0]]
+                if u.return_kind(here_record) == 'gate':
+                    name = 'Gate'
+                else:
+                    name = here_record['na'][0]
+                if not print_header:
+                    print_header = True
+                    outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+                    outf.write('<ul>\n')
+                write_province_destination(v,
+                                           to_record,
+                                           name,
+                                           data,
+                                           outf)
+    if 'SL' in v and 'lt' in v['SL']:
+        link_to_record = data[v['SL']['lt'][0]]
+        if not print_header:
+            print_header = True
+            outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
+            outf.write('<ul>\n')
+        write_province_destination(v,
+                                   link_to_record,
+                                   u.return_type(link_to_record).title(),
+                                   data,
+                                   outf)
     if print_header:
         outf.write('</ul>\n')
 
@@ -276,7 +275,7 @@ def write_loc_routes_out(v, data, outf):
                 else:
                     if u.return_type(pd_loc) == 'ocean':
                         if not header_printed:
-                            outf.write('<H4>Routes leaving {}:</H4\n'.format(v['na'][0]))
+                            outf.write('<H4>Routes leaving {}:</H4>\n'.format(v['na'][0]))
                             outf.write('<ul>\n')
                             header_printed = True
                         pd_name = pd_loc['na'][0]
@@ -328,7 +327,7 @@ def write_structure_basic_info(v, outf):
     except KeyError:
         defense = '0'
     try:
-        damage = v['SL']['dea'][0]
+        damage = v['SL']['da'][0]
     except KeyError:
         damage = '0'
     try:
@@ -950,31 +949,31 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('loc.html')
-    loc = build_loc_dict(k, v, data, garrisons_chain, hidden_chain)
+    loc = build_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain)
     outf.write(template.render(loc=loc))
 
 
-def build_loc_dict(k, v, data, garrisons_chain, hidden_chain):
+def build_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain):
     where_oid, where_type, where_name = get_where_info(v, data)
-    loc_dict = {'oid' : to_oid(k),
-                'name' : get_name(v, data),
-                'type' : get_type(v, data),
-                'where_oid' : where_oid,
-                'where_name' : where_name,
-                'safe_haven' : get_safe_haven(v),
-                'hidden' : u.is_hidden(v),
-                'civ_level' : get_civ_level(k, v, data),
-                'barrier' : get_barrier(k, v, data),
-                'shroud' : get_shroud(k, v, data),
-                'anchor' : get_map_anchor(v, k),
-                'controlled_by' : get_controlled_by (v, data),
-                'routes_out' : get_routes_out(v, data),
-                'structures' : get_structures(v, k),
-                'skills' : get_skills_taught(v, k),
-                'markets' : get_markets(v, data),
-                'here_list' : get_here_list(v, data),
-                'hidden_access' : get_hidden_access(k, v, data, hidden_chain),
-                'garrisons' : get_garrisons(k, v, data, garrisons_chain)}
+    loc_dict = {'oid': to_oid(k),
+                'name': get_name(v, data),
+                'type': get_type(v, data),
+                'where_oid': where_oid,
+                'where_name': where_name,
+                'safe_haven': get_safe_haven(v),
+                'hidden': u.is_hidden(v),
+                'civ_level': get_civ_level(k, v, data),
+                'barrier': get_barrier(k, v, data),
+                'shroud': get_shroud(k, v, data),
+                'anchor': get_map_anchor(v, k),
+                'controlled_by': get_controlled_by (v, data),
+                'routes_out': get_routes_out(k, v, data),
+                'structure': get_structure_info(v),
+                'skills': get_skills_taught(v, data),
+                'markets': get_markets(k, v, data, trade_chain),
+                'seen_here': get_here_list(k, v, data),
+                'hidden_access': get_hidden_access(k, v, data, hidden_chain),
+                'garrisons': get_garrisons(k, v, data, garrisons_chain)}
     return loc_dict
 
 
@@ -1024,8 +1023,8 @@ def get_map_anchor(v, data):
 def get_barrier(k, v, data):
     barrier = v.get('LO', {}).get('ba', [None])
     if barrier[0] is not None and barrier[0] != '0':
-        barrier_dict = {'oid' : to_oid(k),
-                        'name' : get_name(v, data)}
+        barrier_dict = {'oid': to_oid(k),
+                        'name': get_name(v, data)}
         return barrier_dict
     else:
         return None
@@ -1075,39 +1074,335 @@ def get_controlled_by(v, data):
                         else:
                             ruled_by_oid = to_oid(top_guy)
                             ruled_by_name = top_dog['na'][0]
-                    controlled_dict = {'oid' : castle_oid,
-                                       'name' : castle_name,
-                                       'type' : castle_type,
-                                       'loc_oid' : castle_loc_oid,
-                                       'loc_name' : castle_loc_name,
-                                       'ruled_by_oid' : ruled_by_oid,
-                                       'ruled_by_name' : ruled_by_name}
+                    controlled_dict = {'oid': castle_oid,
+                                       'name': castle_name,
+                                       'type': castle_type,
+                                       'loc_oid': castle_loc_oid,
+                                       'loc_name': castle_loc_name,
+                                       'ruled_by_oid': ruled_by_oid,
+                                       'ruled_by_name': ruled_by_name}
     return controlled_dict
 
 
-def get_routes_out(v, data):
+def get_destinations(k, v, data):
+    dest_list = []
+    if 'LO' in v and 'pd' in v['LO']:
+        pd_list = v['LO']['pd']
+        i = int(0)
+        for pd in pd_list:
+            if pd != '0':
+                direction = pd_directions[i]
+                pd_rec = data[pd]
+                region_id = u.region(pd, data)
+                region_rec = data[region_id]
+                to_dict = create_loc_dict_entry(data, direction, pd_rec, v, region_rec)
+                dest_list.append(to_dict)
+                # see if port city so show province also
+                if u.is_port_city(pd_rec, data):
+                    prov_rec = data[u.province(pd, data)]
+                    to_dict = create_loc_dict_entry(data, direction, prov_rec, v, region_rec)
+                    dest_list.append(to_dict)
+                elif u.province_has_port_city(pd_rec, data) is not None:
+                    city_rec = data[u.province_has_port_city(pd_rec, data)]
+                    to_dict = create_loc_dict_entry(data, direction, city_rec, v, region_rec)
+                    dest_list.append(to_dict)
+            i = i + 1
+    if u.return_type(v) not in details.province_kinds:
+        if 'LI' in v and 'wh' in v['LI']:
+            out_id = v['LI']['wh'][0]
+            out_rec = data[out_id]
+            region_id = u.region(out_id, data)
+            region_rec = data[region_id]
+            to_dict = create_loc_dict_entry(data, 'Out', out_rec, v, region_rec)
+            dest_list.append(to_dict)
+    if 'LI' in v and 'hl' in v['LI']:
+        here_list = v['LI']['hl']
+        for here in here_list:
+            here_record = data[here]
+            if u.is_road_or_gate(here_record):
+                to_id = here_record['GA']['tl'][0]
+                to_rec = data[to_id]
+                region_id = u.region(to_id, data)
+                region_rec = data[region_id]
+                if u.return_kind(here_record) == 'gate':
+                    direction = 'Gate'
+                else:
+                    direction = get_name(here_record, data)
+                to_dict = create_loc_dict_entry(data, direction, to_rec, here_record, region_rec)
+                dest_list.append(to_dict)
+    if 'SL' in v and 'lt' in v['SL']:
+        link_id = v['SL']['lt'][0]
+        link_rec = data[link_id]
+        region_id = u.region(link_id, data)
+        region_rec = data[region_id]
+        to_dict = create_loc_dict_entry(data, get_type(link_id, data).title(), link_rec, v, region_rec)
+        dest_list.append(to_dict)
+    region_id = u.region(k, data)
+    region_rec = data[region_id]
+    dest_dict = {'id': k,
+                 'oid': to_oid(k),
+                 'name': get_name(v, data),
+                 'type': get_type(v, data),
+                 'region_oid': to_oid(region_id),
+                 'region_name': get_name(region_rec, data),
+                 'dest': dest_list}
+    return dest_dict
+
+
+def create_loc_dict_entry(data, direction, to_loc_rec, from_loc_rec, region_rec):
+    to_dict = {'id': u.return_unitid(to_loc_rec),
+               'oid': to_oid(u.return_unitid(to_loc_rec)),
+               'name': get_name(to_loc_rec, data),
+               'type': get_type(to_loc_rec, data),
+               'is_port': u.is_port_city(to_loc_rec, data),
+               'prov_port': u.province_has_port_city(to_loc_rec, data),
+               'region_oid': to_oid(u.return_unitid(region_rec)),
+               'region_name': get_name(region_rec, data),
+               'direction': direction,
+               'barrier': get_barrier(u.return_unitid(to_loc_rec), to_loc_rec, data),
+               'distance': u.calc_exit_distance(from_loc_rec, to_loc_rec),
+               'impassable': is_impassable(from_loc_rec, to_loc_rec, direction, data)}
+    return to_dict
+
+
+def get_routes_out(k, v, data):
     routes_out_list = []
-    return routes_out_list
+    if get_type(v, data) != 'city':
+        dest_dict = get_destinations(k, v, data)
+    else:
+        dest_list = []
+        host_prov_id = v['LI']['wh'][0]
+        host_prov_rec = data[host_prov_id]
+        # If city is in a mountain, can't move from city to ocean
+        if u.return_type(host_prov_rec) != 'mountain':
+            dest_loc_list = host_prov_rec['LO']['pd']
+            i = int(0)
+            for pd in dest_loc_list:
+                if pd != '0':
+                    pd_loc = data[pd]
+                    if u.return_type(pd_loc) == 'ocean':
+                        pd_name = pd_loc['na'][0]
+                        pd_loc_id = u.return_unitid(pd_loc)
+                        pd_rec = data[pd_loc_id]
+                        direction = pd_directions[i]
+                        region_id = u.region(pd_loc_id, data)
+                        region_rec = data[region_id]
+                        to_dict = create_loc_dict_entry(data, direction, pd_rec, v, region_rec)
+                        dest_list.append(to_dict)
+                i = i + 1
+        region_id = u.region(host_prov_id, data)
+        region_rec = data[region_id]
+        direction = 'Out'
+        to_dict = create_loc_dict_entry(data, direction, host_prov_rec, v, region_rec)
+        dest_list.append(to_dict)
+        region_id = u.region(k, data)
+        region_rec = data[region_id]
+        dest_dict = {'id': k,
+                     'oid': to_oid(k),
+                     'name': get_name(v, data),
+                     'type': get_type(v, data),
+                     'region_oid': to_oid(region_id),
+                     'region_name': get_name(region_rec, data),
+                     'dest': dest_list}
+    return dest_dict
 
 
-def get_structures(v, data):
-    structures_list = []
-    return structures_list
+def get_defense(v):
+    defense = v.get('SL', {}).get('de', [None])
+    return defense[0]
+
+
+def get_damage(v):
+    damage = v.get('SL', {}).get('da', [0])
+    return damage[0]
+
+
+def get_effort_given(v):
+    effort_given = v.get('SL', {}).get('eg', [None])
+    if effort_given[0] is not None:
+        return int(effort_given[0])
+    else:
+        return None
+
+
+def get_effort_required(v):
+    effort_required = v.get('SL', {}).get('er', [None])
+    if effort_required[0] is not None:
+        return int(effort_required[0])
+    else:
+        return None
+
+
+def get_depth(v):
+    depth = v.get('SL', {}).get('sd', [None])
+    if depth[0] is not None:
+        return int(depth[0])
+    else:
+        return None
+
+
+def get_level(v):
+    level = v.get('SL', {}).get('cl', [None])
+    return level[0]
+
+
+def get_structure_info(v):
+    structure_dict = {'defense': get_defense(v),
+                      'damage': get_damage(v),
+                      'effort_given': get_effort_given(v),
+                      'effort_required': get_effort_required(v),
+                      'depth': get_depth(v),
+                      'level': get_level(v)}
+    return structure_dict
 
 
 def get_skills_taught(v, data):
-    skills_list = []
-    return skills_list
+    skills_taught_list = []
+    if 'SL' in v and 'te' in v['SL']:
+        skills_list = v['SL']['te']
+        if len(skills_list) > 0:
+            for skill in skills_list:
+                skill_rec = data[skill]
+                skills_dict = {'oid': to_oid(skill),
+                               'name': get_name(skill_rec, data)}
+                skills_taught_list.append(skills_dict)
+    return skills_taught_list
 
 
-def get_markets(v, data):
+def get_markets(k, v, data, trade_chain):
     markets_list = []
-    return markets_list
+    trade_list = []
+    if 'tl' in v:
+        trade_list = v['tl']
+    # load city/character trades
+    if len(trade_list) > 0:
+        # city trades
+        for trade in range(0, len(trade_list), 8):
+            if trade_list[trade] in {'1', '2'}:
+                item_rec = data[trade_list[trade+1]]
+                trade_recip = trade_chain[trade_list[trade + 1]]
+                recip_list = []
+                if len(trade_recip) > 0:
+                    for recip in trade_recip:
+                        if recip[0] != k:
+                            recip_type = recip[1]
+                            if recip_type != trade_list[trade]:
+                                recip_loc = recip[0]
+                                recip_rec = data[recip_loc]
+                                recip_name = get_name(recip_rec, data)
+                                recip_trade_list = recip_rec['tl']
+                                for recip in range(0, len(recip_trade_list), 8):
+                                    if recip_trade_list[recip + 1] == trade_list[trade+1]:
+                                        if recip_trade_list[recip] in {'1', '2'}:
+                                            recip_qty = recip_trade_list[recip + 2]
+                                            recip_price = recip_trade_list[recip + 3]
+                                recip_dict = {'loc_id': recip_loc,
+                                              'loc_oid': to_oid(recip_loc),
+                                              'name': recip_name,
+                                              'qty': recip_qty,
+                                              'price': recip_price}
+                                recip_list.append(recip_dict)
+                market_dict = {'type': trade_list[trade],
+                               'item_id': trade_list[trade + 1],
+                               'item_oid': to_oid(trade_list[trade + 1]),
+                               'item_name': get_name(item_rec, data),
+                               'item_weight': get_weight(item_rec)[0],
+                               'who_id': k,
+                               'who_oid': to_oid(k),
+                               'who_name': get_name(v, data),
+                               'who_qty': trade_list[trade + 2],
+                               'who_price': trade_list[trade + 3],
+                               'recip_list': recip_list}
+                markets_list.append(market_dict)
+        # character trades - needs to be recursive
+        seen_here_list = loop_here2(data, k, 0, False, False, True)
+        if len(seen_here_list) > 1:
+            for un in seen_here_list[1:]:
+                charac_rec = data[un[0]]
+                if u.return_kind(charac_rec) == 'char':
+                    if 'tl' in charac_rec:
+                        trade_list = charac_rec['tl']
+                        if len(trade_list) > 0:
+                            # character trades
+                            for trade in range(0, len(trade_list), 8):
+                                if trade_list[trade] in {'1', '2'}:
+                                    item_rec = data[trade_list[trade + 1]]
+                                    trade_recip = trade_chain[trade_list[trade + 1]]
+                                    recip_list = []
+                                    if len(trade_recip) > 0:
+                                        for recip in trade_recip:
+                                            if recip[0] != k:
+                                                recip_type = recip[1]
+                                                if recip_type != trade_list[trade]:
+                                                    recip_loc = recip[0]
+                                                    recip_rec = data[recip_loc]
+                                                    recip_name = get_name(recip_rec, data)
+                                                    recip_trade_list = recip_rec['tl']
+                                                    for recip in range(0, len(recip_trade_list), 8):
+                                                        if recip_trade_list[recip + 1] == trade_list[trade + 1]:
+                                                            if recip_trade_list[recip] in {'1', '2'}:
+                                                                recip_qty = recip_trade_list[recip + 2]
+                                                                recip_price = recip_trade_list[recip + 3]
+                                                    recip_dict = {'loc_id': recip_loc,
+                                                                  'loc_oid': to_oid(recip_loc),
+                                                                  'name': recip_name,
+                                                                  'qty' : recip_qty,
+                                                                  'price' : recip_price}
+                                                    recip_list.append(recip_dict)
+                                    market_dict = {'type': trade_list[trade],
+                                                   'item_id': trade_list[trade + 1],
+                                                   'item_oid': to_oid(trade_list[trade + 1]),
+                                                   'item_name': get_name(item_rec, data),
+                                                   'item_weight': get_weight(item_rec)[0],
+                                                   'who_id': un[0],
+                                                   'who_oid': to_oid(un[0]),
+                                                   'who_name': get_name(charac_rec, data),
+                                                   'who_qty': trade_list[trade + 2],
+                                                   'who_price': trade_list[trade + 3],
+                                                   'recip_list' : recip_list}
+                                    markets_list.append(market_dict)
+    sorted_list = sorted(markets_list, key=itemgetter('type', 'item_oid', 'who_oid'))
+    return sorted_list
 
 
-def get_here_list(v, data):
-    here_list = []
-    return here_list
+def get_here_list(k, v, data):
+    inner_list = []
+    seen_list = []
+    ships_list = []
+    storms_list = []
+    if 'LI' in v and 'hl' in v['LI']:
+        here_list = v['LI']['hl']
+        for here in here_list:
+            here_rec = data[here]
+            if u.return_kind(here_rec) == 'loc':
+                inner_dict = {'id': here,
+                              'oid': to_oid(here)}
+                inner_list.append(inner_dict)
+            elif u.return_kind(here_rec) == 'char':
+                seen_dict = {'id': here,
+                              'oid': to_oid(here)}
+                seen_list.append(seen_dict)
+            elif u.return_kind(here_rec) == 'ship':
+                ship_dict = {'id': here,
+                              'oid': to_oid(here)}
+                ships_list.append(ship_dict)
+            elif u.return_kind(here_rec) == 'storm':
+                storm_dict = {'id': here,
+                              'oid': to_oid(here)}
+                storms_list.append(storm_dict)
+    if 'SL' in v and 'lf' in v['SL']:
+        here_rec = data[v['SL']['lf']]
+        if u.return_kind(here_rec) == 'loc':
+            inner_dict = {'id': here,
+                          'oid': to_oid(here)}
+            inner_list.append(inner_dict)
+    here_dict = {'id': k,
+                 'oid': to_oid(k),
+                 'inner': inner_list,
+                 'seen': seen_list,
+                 'ships': ships_list,
+                 'storms': storms_list}
+    return here_dict
 
 
 def get_hidden_access(k, v, data, hidden_chain):
@@ -1122,8 +1417,8 @@ def get_hidden_access(k, v, data, hidden_chain):
             if len(hidden_list) > 0:
                 for hidden in hidden_list:
                     hidden_rec = data[hidden]
-                    hidden_dict = {'oid' : to_oid(hidden),
-                                   'name' : get_name(hidden_rec, data)}
+                    hidden_dict = {'oid': to_oid(hidden),
+                                   'name': get_name(hidden_rec, data)}
                     hidden_access_list.append(hidden_dict)
     return hidden_access_list
 
@@ -1145,6 +1440,76 @@ def get_garrisons(k, v, data, garrisons_chain):
     return garrisons_list
 
 
+def get_wearable_wielding(v, data):
+    wearable_dict = {}
+    attack_max = 0
+    missile_max = 0
+    defense_max = 0
+    attack = ''
+    missile = ''
+    defense = ''
+    if 'il' in v:
+        item_list = v['il']
+        if len(item_list) > 0:
+            for items in range(0, len(item_list), 2):
+                itemz = data[item_list[items]]
+                if 'IM' in itemz:
+                    if 'ab' in itemz['IM']:
+                        if int(itemz['IM']['ab'][0]) > attack_max:
+                            attack_max = int(itemz['IM']['ab'][0])
+                            attack = u.return_unitid(itemz)
+                    if 'mb' in itemz['IM']:
+                        if int(itemz['IM']['mb'][0]) > missile_max:
+                            missile_max = int(itemz['IM']['mb'][0])
+                            missile = u.return_unitid(itemz)
+                    if 'db' in itemz['IM']:
+                        if int(itemz['IM']['db'][0]) > defense_max:
+                            defense_max = int(itemz['IM']['db'][0])
+                            defense = u.return_unitid(itemz)
+        # found something
+        if attack != '' or missile != '' or defense != '':
+            if attack == missile:
+                missile = ''
+        if attack == defense:
+            defense = ''
+        if attack != '' or missile != '':
+            if attack == '':
+                missile_rec = data[missile]
+                missile_dict = {'id': missile,
+                                'oid': to_oid(missile),
+                                'name': get_name(missile_rec, data)}
+                attack_dict = {}
+            elif missile == '':
+                attack_rec = data[attack]
+                attack_dict = {'id': attack,
+                               'oid': to_oid(attack),
+                               'name': get_name(attack_rec, data)}
+                missile_dict = {}
+            else:
+                missile_rec = data[missile]
+                missile_dict = {'id': missile,
+                                'oid': to_oid(missile),
+                                'name': get_name(missile_rec, data)}
+                attack_rec = data[attack]
+                attack_dict = {'id': attack,
+                               'oid': to_oid(attack),
+                               'name': get_name(attack_rec, data)}
+        else:
+            attack_dict = {}
+            missile_dict = {}
+        if defense != '':
+            defense_rec = data[defense]
+            defense_dict = {'id': defense,
+                           'oid': to_oid(defense),
+                           'name': get_name(defense_rec, data)}
+        else:
+            defense_dict = {}
+        wearable_dict = {'attack': attack_dict,
+                         'defense': defense_dict,
+                         'missile': missile_dict}
+    return wearable_dict
+
+
 def get_character_info(k, v, data, print_province):
     char_dict = {}
     province_oid = None
@@ -1152,27 +1517,17 @@ def get_character_info(k, v, data, print_province):
         if 'LI' in v and 'wh' in v['LI']:
             province_rec = data[v['LI']['wh'][0]]
             province_oid = to_oid(v['LI']['wh'][0])
-    # code fix to bug in lib where garrison name is sometimes missing
-    # print wearing/wielding
-    #print_wearable_wielding(v, data, outf)
-    # print prominent items
-    # if 'LI' in v:
-    #     if 'hl' in v['LI']:
-    #         here_list = v['LI']['hl']
-    #         if len(here_list) > 0:
-    #             for here in here_list:
-    #                 charac = data[here]
-    #                 write_characters(charac, here, data, outf)
-    garrison_dict = {'oid' : to_oid(k),
-                     'name' : get_name(v, data),
-                     'type' : get_type(v, data),
-                     'province_oid' : province_oid,
-                     'absorb_blast' : u.is_absorb_aura_blast(v, data),
-                     'loyalty' : u.xlate_loyalty(v),
-                     'prisoner' : u.is_prisoner(v),
-                     'priest' : u.is_priest(v),
-                     'magetype' : u.is_magician(v),
-                     'on_guard' : u.is_on_guard(v),
-                     'concealed' : u.is_concealed(v),
-                     'items_list' : get_items_list(v, data, True)}
-    return garrison_dict
+    character_dict = {'oid': to_oid(k),
+                     'name': get_name(v, data),
+                     'type': get_type(v, data),
+                     'province_oid': province_oid,
+                     'absorb_blast': u.is_absorb_aura_blast(v, data),
+                     'loyalty': u.xlate_loyalty(v),
+                     'prisoner': u.is_prisoner(v),
+                     'priest': u.is_priest(v),
+                     'magetype': u.is_magician(v),
+                     'on_guard': u.is_on_guard(v),
+                     'concealed': u.is_concealed(v),
+                     'wearable': get_wearable_wielding(v, data),
+                     'items_list': get_items_list(v, data, True)}
+    return character_dict

@@ -471,7 +471,7 @@ def province_has_port_city(loc, data):
             else:
                 if is_port_city(here_loc, data):
                     return here
-    return '0'
+    return None
 
 
 def is_priest(v):
@@ -745,24 +745,25 @@ def is_concealed(v):
     return False
 
 
-def loop_here2(data, where, level=0, fog=False, into_city=False):
+def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False):
     '''
     Make a list of everything here: chars, structures, sublocs. Do not descend into big sublocs (cities)
     If fog, make a list of only the visible things
     (caller responsible for making sure that fog=True only for provinces)
     '''
     hls = []
-    if 'LI' in data[where]:
-        if 'hl' in data[where]['LI']:
-            for w in data[where]['LI']['hl']:
-                if fog and is_char(data, w):
-                    continue
-                hls.append([w, level])
-                firstline = data[w]['firstline'][0]
-                if ' loc city' in firstline and not into_city:
-                    # do not descend into cities
-                    continue
-                [hls.append(x) for x in loop_here2(data, w, level + 1)]
+    if 'LI' in data[where] and 'hl' in data[where]['LI']:
+        for w in data[where]['LI']['hl']:
+            if char_only and not is_char(data, w):
+                continue
+            if fog and is_char(data, w):
+                continue
+            hls.append([w, level])
+            firstline = data[w]['firstline'][0]
+            if ' loc city' in firstline and not into_city:
+                # do not descend into cities
+                continue
+            [hls.append(x) for x in loop_here2(data, w, level + 1)]
     return hls
 
 
@@ -786,6 +787,16 @@ def is_prominent(v):
 
 def is_hidden(v):
     if v.get('LO', {}).get('hi', [None])[0] == '1':
+        return True
+    else:
+        return False
+
+
+def is_impassable(loc1, loc2, direction, data):
+    if (return_type(loc1) == 'ocean' and return_type(loc2) == 'mountain') or \
+       (return_type(loc1) == 'mountain' and return_type(loc2) == 'ocean') or \
+       (return_type(loc1) == 'ocean' and return_type(loc2) != 'ocean' and province_has_port_city(loc2, data) is not None) and \
+       direction.lower() not in details.road_directions:
         return True
     else:
         return False
