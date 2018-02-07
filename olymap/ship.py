@@ -195,16 +195,7 @@ def write_ship_html(v, k, data, outdir):
     )
     template = env.get_template('ship.html')
     ship = build_ship_dict(k, v, data)
-    loc_id = v['LI']['wh'][0]
-    loc_rec = data[loc_id]
-    loc = build_loc_dict(loc_id, loc_rec, data)
-    owner = build_owner_dict(k, v, data)
-    storm = build_storm_dict(k, v, data)
-    seen_here = build_seenhere_dict(k, v, data)
-    non_prominent_items = build_non_prominent_items_dict(k, v, data)
-    outf.write(template.render(ship=ship, loc=loc, owner=owner, storm=storm,
-                               seen_here=seen_here,
-                               non_prominent_items = non_prominent_items))
+    outf.write(template.render(ship=ship))
 
 
 def get_complete(v):
@@ -232,20 +223,27 @@ def get_damage(v):
 
 
 def build_ship_dict(k, v, data):
-    ship_dict = {'oid' : get_oid(k),
-                 'name' : get_name(v, data),
-                 'type' : get_type(v, data),
-                 'complete' : get_complete(v),
-                 'load' : get_load(k, v, data),
-                 'defense' : get_defense(v)[0],
-                 'damage' : get_damage(v)[0]}
+    ship_dict = {'oid': get_oid(k),
+                 'name': get_name(v, data),
+                 'type': get_type(v, data),
+                 'complete': get_complete(v),
+                 'load': get_load(k, v, data),
+                 'defense': get_defense(v)[0],
+                 'damage': get_damage(v)[0],
+                 'owner': build_owner_dict(v, data),
+                 'storm': build_storm_dict(v, data),
+                 'seen_here': build_seenhere_dict(k, v, data),
+                 'non_prominent_items': build_non_prominent_items_dict(k, v, data),
+                 'loc': build_loc_dict(v, data)}
     return ship_dict
 
 
-def build_loc_dict(k, v, data):
-    loc_dict = {'oid' : get_oid(k),
-                'name' : get_name(v, data),
-                'type' : get_type(v, data)}
+def build_loc_dict(v, data):
+    loc_id = v['LI']['wh'][0]
+    loc_rec = data[loc_id]
+    loc_dict = {'oid': get_oid(loc_id),
+                'name': get_name(loc_rec, data),
+                'type': get_type(loc_rec, data)}
     return loc_dict
 
 
@@ -256,12 +254,12 @@ def get_owner(v):
     return None
 
 
-def build_owner_dict(k, v, data):
+def build_owner_dict(v, data):
     if get_owner(v) is not None:
         owner_id = get_owner(v)
         owner_rec = data[owner_id]
-        owner_dict = {'oid' : get_oid(owner_id),
-                      'name' : get_name(owner_rec, data)}
+        owner_dict = {'oid': get_oid(owner_id),
+                      'name': get_name(owner_rec, data)}
     else:
         owner_dict = None
     return owner_dict
@@ -271,13 +269,13 @@ def get_bound_storm(v):
     return v.get('SL', {}).get('bs', [None])[0]
 
 
-def build_storm_dict(k, v, data):
+def build_storm_dict(v, data):
     if get_bound_storm(v) is not None:
         storm_id = get_bound_storm(v)
         storm_rec = data[storm_id]
-        storm_dict = {'oid' : get_oid(storm_id),
-                      'name' : get_name(storm_rec, data),
-                      'strength' : storm.get_strength(storm_rec)}
+        storm_dict = {'oid': get_oid(storm_id),
+                      'name': get_name(storm_rec, data),
+                      'strength': storm.get_strength(storm_rec)}
     else:
         storm_dict = None
     return storm_dict
@@ -292,10 +290,10 @@ def build_seenhere_dict(k, v, data):
     if len(stack_list) > 0:
         for characters in stack_list:
             char_rec = data[characters[0]]
-            seen_entry = {'oid' : get_oid(characters[0]),
-                          'name' : get_name(char_rec, data),
-                          'detail' : get_char_detail(characters[0], char_rec, data),
-                          'level' : characters[1]}
+            seen_entry = {'oid': get_oid(characters[0]),
+                          'name': get_name(char_rec, data),
+                          'detail': get_char_detail(characters[0], char_rec, data),
+                          'level': characters[1]}
             seen_here.append(seen_entry)
     return seen_here
 
@@ -321,11 +319,11 @@ def build_non_prominent_items_dict(k, v, data):
                                 weight = int(item_rec['IT']['wt'][0])
                             total_weight = int(qty * weight)
                             if total_weight > 0:
-                                npi_entry = {'possessor_oid' : to_oid(un),
-                                             'possessor_name' : unit_rec['na'][0],
-                                             'item_oid' : to_oid(item_list[items]),
-                                             'item_name' : item_rec['na'][0],
-                                             'qty' : qty,
-                                             'weight' : total_weight}
+                                npi_entry = {'possessor_oid': to_oid(un),
+                                             'possessor_name': unit_rec['na'][0],
+                                             'item_oid': to_oid(item_list[items]),
+                                             'item_name': item_rec['na'][0],
+                                             'qty': qty,
+                                             'weight': total_weight}
                                 npi_list.append(npi_entry)
     return npi_list

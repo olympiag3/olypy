@@ -5,27 +5,27 @@
 <BODY>
 <H3>{{ ship.name }} [{{ ship.oid }}], {{ ship.type }}</H3>
 <table>
-<tr><td>Location:</td><td>{{ loc.name }} [<a href="{{ loc.oid }}.html">{{ loc.oid }}</a>]</td></tr>
+<tr><td>Location:</td><td>{{ ship.loc.name }} [<a href="{{ ship.loc.oid }}.html">{{ ship.loc.oid }}</a>]</td></tr>
 {% if ship.complete < 100 %}
     <tr><td>Percent Complete:</td><td>{{ ship.complete }}%</td></tr>
 {% endif %}
 <tr><td>Percent Loaded:</td><td>{{ ship.load }}%</td></tr>
 <tr><td>Defense:</td><td>{{ ship.defense }}</td></tr>
 <tr><td>Damaged:</td><td>{{ ship.damage }}%</td></tr>
-{% if owner %}
-    <tr><td>Owner:</td><td>{{ owner.name }} [<a href="{{ owner.oid }}.html">{{ owner.oid }}</a>]</td></tr>
+{% if ship.owner %}
+    <tr><td>Owner:</td><td>{{ ship.owner.name }} [<a href="{{ ship.owner.oid }}.html">{{ ship.owner.oid }}</a>]</td></tr>
 {% else %}
     <tr><td>Owner:</td><td>unoccupied</td></tr>
 {% endif %}
-{% if storm %}
-    <tr><td>Bound Storm:</td><td>{{ storm.name }} [<a href="{{ storm.oid }}.html">{{ storm.oid }}</a>] (Strength: {{ storm.strength }})</td></tr>
+{% if ship.storm %}
+    <tr><td>Bound Storm:</td><td>{{ ship.storm.name }} [<a href="{{ ship.storm.oid }}.html">{{ ship.storm.oid }}</a>] (Strength: {{ ship.storm.strength }})</td></tr>
 {% endif %}
 </table>
-{% if seen_here %}
+{% if ship.seen_here %}
 <p>Seen Here:</p>
 <ul>
     {% set ns = namespace(save_level=0) %}
-    {% for entry in seen_here %}
+    {% for entry in ship.seen_here %}
         {% if entry.level > ns.save_level %}
                 <ul>
         {% elif entry.level < ns.save_level %}
@@ -42,11 +42,11 @@
     {% endif %}
 </ul>
 {% endif %}
-{% if non_prominent_items %}
+{% if ship.non_prominent_items %}
 <p>Non-Prominent Items Onboard:</p>
 <table border="1" cellpadding="5">
     <tr><th>Possessor</th><th>Item</th><th>Qty</th><th>Weight</th></tr>
-    {% for entry in non_prominent_items %}
+    {% for entry in ship.non_prominent_items %}
         <tr><td>{{ entry.possessor_name }} [<a href="{{ entry.possessor_oid }}.html">{{ entry.possessor_oid }}</a>]</td>
         <td>{{ entry.item_name }} [<a href="{{ entry.item_oid }}.html">{{ entry.item_oid }}</a>]</td>
         <td align="right">{{ entry.qty }}</td>

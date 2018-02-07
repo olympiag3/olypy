@@ -820,7 +820,7 @@ def get_char_prominent_items(v, data):
         if len(item_list) > 0:
             for items in range(0, len(item_list), 2):
                 itemz = data[item_list[items]]
-                if u.is_prominent(itemz) == '1':
+                if u.is_prominent(itemz):
                     item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
                     pi_str = pi_str + ', {} {}'.format(item_list[items + 1], item_name)
     return pi_str

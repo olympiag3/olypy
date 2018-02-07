@@ -73,32 +73,30 @@ def write_storm_html(v, k, data, storm_chain, outdir):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('storm.html')
-    loc_id = v['LI']['wh'][0]
-    loc_rec = data[loc_id]
-    loc = build_loc_dict(loc_id, loc_rec, data)
-    storm = build_storm_dict(k, v, data)
-    ship = build_ship_dict(k, data, storm_chain)
-    outf.write(template.render(loc=loc,
-                               storm=storm,
-                               ship=ship))
+    storm = build_storm_dict(k, v, data, storm_chain)
+    outf.write(template.render(storm=storm))
 
 
 def get_strength(v):
     return v.get('MI', {}).get('ss', [0])[0]
 
 
-def build_storm_dict(k, v, data):
-    storm_dict = {'oid' : get_oid(k),
-                  'name' : get_name(v, data),
-                  'type' : get_type(v, data),
-                  'strength' : get_strength(v)}
+def build_storm_dict(k, v, data, storm_chain):
+    storm_dict = {'oid': get_oid(k),
+                  'name': get_name(v, data),
+                  'type': get_type(v, data),
+                  'strength': get_strength(v),
+                  'loc': build_loc_dict(v, data),
+                  'ship': build_ship_dict(k, data, storm_chain)}
     return storm_dict
 
 
-def build_loc_dict(k, v, data):
-    loc_dict = {'oid' : get_oid(k),
-                'name' : get_name(v, data),
-                'type' : get_type(v, data)}
+def build_loc_dict(v, data):
+    loc_id = v['LI']['wh'][0]
+    loc_rec = data[loc_id]
+    loc_dict = {'oid': get_oid(loc_id),
+                'name': get_name(loc_rec, data),
+                'type': get_type(loc_rec, data)}
     return loc_dict
 
 
@@ -114,8 +112,9 @@ def build_ship_dict(k, data, storm_chain):
     ship_id = get_bound_ship(k, storm_chain)
     if ship_id is not None:
         ship_rec = data[ship_id]
-        ship_dict = {'oid' : get_oid(ship_id),
-                     'name' : get_name(ship_rec, data)}
+        ship_dict = {'id': ship_id,
+                     'oid': get_oid(ship_id),
+                     'name': get_name(ship_rec, data)}
     else:
         ship_dict = None
     return ship_dict
