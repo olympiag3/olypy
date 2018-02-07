@@ -206,19 +206,19 @@ def build_item_dict(item_list, data, trade_chain):
         item_rec = data[item_id]
         land_cap, riding_cap, flying_cap = get_capacities(item_rec)
         who_has_id, who_has_name = get_who_has(item_rec, data)
-        item_entry = {'oid' : get_oid(item_id),
-                      'name' : get_name(item_rec, data),
-                      'weight' : get_weight(item_rec)[0],
-                      'man_item' : get_man_item(item_rec)[0],
-                      'type' : get_type(item_rec, data),
-                      'prominent' : get_prominent(item_rec)[0],
-                      'animal' : get_animal(item_rec)[0],
-                      'land_cap' : land_cap[0],
-                      'riding_cap' : riding_cap[0],
-                      'flying_cap' : flying_cap[0],
-                      'who_has_id' : who_has_id,
-                      'who_has_name' : who_has_name,
-                      'notes' : u.determine_item_use(item_rec, data, trade_chain)}
+        item_entry = {'oid': get_oid(item_id),
+                      'name': get_name(item_rec, data),
+                      'weight': get_weight(item_rec)[0],
+                      'man_item': get_man_item(item_rec)[0],
+                      'type': get_type(item_rec, data),
+                      'prominent': get_prominent(item_rec)[0],
+                      'animal': get_animal(item_rec)[0],
+                      'land_cap': land_cap[0],
+                      'riding_cap': riding_cap[0],
+                      'flying_cap': flying_cap[0],
+                      'who_has_id': who_has_id,
+                      'who_has_name': who_has_name,
+                      'notes': u.determine_item_use(item_rec, data, trade_chain)}
         itemz.append(item_entry)
     return itemz
 
