@@ -47,7 +47,7 @@ def create_map_matrix(data, startingpoint):
     return map_matrix
 
 
-def write_bitmap(outdir, data, upperleft, height, width, prefix, map_matrix):
+def write_legacy_bitmap(outdir, data, upperleft, height, width, prefix, map_matrix):
     BUFSIZE = 8*1024
     color_pallette = {'ocean': (0x00, 0xff, 0xff, 0xff),
                       'plain': (0x90, 0xee, 0x90, 0xff),
@@ -77,7 +77,7 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix, map_matrix):
     outf.close()
 
 
-def write_top_map(outdir, upperleft, height, width, prefix, map_matrix):
+def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
     outf.write('<HTML>\n')
     outf.write('<HEAD>\n')
@@ -166,7 +166,7 @@ def write_top_map(outdir, upperleft, height, width, prefix, map_matrix):
     outf.close()
 
 
-def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance, map_matrix):
+def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance, map_matrix):
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
     rem_height = height % 20

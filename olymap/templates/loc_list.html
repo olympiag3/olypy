@@ -1,0 +1,31 @@
+<li>
+{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.type }}
+{%- if entry.hidden -%}
+    , hidden
+{%- endif -%}
+{%- if entry.distance -%}
+    {%- if entry.distance > 0 -%}
+        , {{ entry.distance}} {% if entry.distance > 1%} days {% else %} day {% endif %}
+    {%- endif -%}
+{%- endif -%}
+{%- if entry.structure -%}
+    {%- if entry.structure.defense -%}
+        , defense {{ entry.structure.defense }}
+    {%- endif -%}
+    {%- if entry.structure.level -%}
+        , level {{ entry.structure.level }}
+    {%- endif -%}
+    {%- if entry.structure.depth -%}
+        , level {{ entry.structure.depth }}
+    {%- endif -%}
+    {%- if entry.structure.completed -%}
+        , {{ entry.structure.depth }}% completed
+    {%- endif -%}
+    {%- if entry.structure.damage -%}
+        , {{ entry.structure.damage }}% damaged
+    {%- endif -%}
+{%- endif -%}
+{%- if entry.seen_here.seen -%}
+    , owner:
+{%- endif -%}
+</li>

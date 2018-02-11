@@ -4,20 +4,23 @@
 #
 
 import olypy.oio as oio
-import olypy.oid as oid
+from olypy.oid import to_oid
 import olypy.dbck as dbck
 
+import pathlib
+from jinja2 import Environment, PackageLoader, select_autoescape
+from olymap.loc import build_complete_loc_dict
+from olymap.ship import build_complete_ship_dict
+from olymap.char import build_complete_char_dict
+from olymap.item import build_complete_item_dict
+
 import olymap.utilities as u
-import olymap.ship as ship
-import olymap.char as char
-import olymap.loc as loc
-import olymap.item as itm
-import olymap.storm as storm
-import olymap.player as player
-import olymap.skill as skill
+from olymap.storm import write_storm_html
+from olymap.player import write_player_html
+from olymap.skill import write_skill_html
 import olymap.reports as reports
-import olymap.maps as maps
-import olymap.legacy as legacy
+from olymap.maps import write_index, write_map_leaves, write_top_map, write_bitmap
+from olymap.legacy import create_map_matrix, write_legacy_bitmap, write_legacy_top_map, write_legacy_map_leaves
 
 
 def make_map(inlib, outdir, instance):
@@ -35,7 +38,7 @@ def make_map(inlib, outdir, instance):
         world_rec = dimensions[world]
         if len(world_rec) > 3:
             if world_rec[3] == 'Y':
-                map_matrices[world] = legacy.create_map_matrix(data, inst_dict[instance][world][0])
+                map_matrices[world] = create_map_matrix(data, inst_dict[instance][world][0])
     chains = resolve_chains(data)
     write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices)
     write_reports(data, chains, outdir)
@@ -62,23 +65,23 @@ def write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices):
     print('Writing box pages')
     for k, v in data.items():
         if u.return_kind(v) == 'loc':
-            loc.write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
+            write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
                                chains['trades'], outdir, instance, inst_dict, map_matrices)
         elif u.return_kind(v) == 'char':
-            char.write_char_html(v, k, data, chains['pledges'],
+            write_char_html(v, k, data, chains['pledges'],
                                  chains['prisoners'], outdir, instance)
         elif u.return_kind(v) == 'player':
-            player.write_player_html(v, k, data, outdir)
+            write_player_html(v, k, data, outdir)
         elif u.return_kind(v) == 'item':
-            itm.write_item_html(v, k, data, chains['trades'], outdir)
+            write_item_html(v, k, data, chains['trades'], outdir)
         elif u.return_kind(v) == 'ship':
-            ship.write_ship_html(v, k, data, outdir)
+            write_ship_html(v, k, data, outdir, instance, chains['pledges'], chains['prisoners'])
         elif u.return_kind(v) == 'skill':
-            skill.write_skill_html(v, k, data, chains['teaches'],
+            write_skill_html(v, k, data, chains['teaches'],
                                    chains['child_skills'], chains['skills_knowns'],
                                    outdir)
         elif u.return_kind(v) == 'storm':
-            storm.write_storm_html(v, k, data, chains['storms'], outdir)
+            write_storm_html(v, k, data, chains['storms'], outdir)
 
 
 def write_reports(data, chains, outdir):
@@ -111,24 +114,24 @@ def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):
     #              'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46], 'cloudlands': [30000, 5, 5]},
     #              'qa': {'main': [10000, 10, 10], 'hades': [14000, 7, 7], 'faery': [12000, 10, 10]}}
     dimensions = inst_dict[instance]
-    maps.write_index(outdir, instance, inst_dict)
+    write_index(outdir, instance, inst_dict)
     for world in dimensions:
         world_rec = dimensions[world]
         if len(world_rec) > 3 and world_rec[3] == 'Y':
-            legacy.write_bitmap(outdir,
+            write_legacy_bitmap(outdir,
                                 data,
                                 world_rec[0],
                                 world_rec[1],
                                 world_rec[2],
                                 world,
                                 map_matrices[world])
-            legacy.write_top_map(outdir,
+            write_legacy_top_map(outdir,
                                  world_rec[0],
                                  world_rec[1],
                                  world_rec[2],
                                  world,
                                  map_matrices[world])
-            legacy.write_map_leaves(data,
+            write_legacy_map_leaves(data,
                                     chains['castles'],
                                     outdir,
                                     world_rec[0],
@@ -138,18 +141,18 @@ def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):
                                     instance,
                                     map_matrices[world])
         else:
-            maps.write_bitmap(outdir,
+            write_bitmap(outdir,
                              data,
                              world_rec[0],
                              world_rec[1],
                              world_rec[2],
                              world)
-            maps.write_top_map(outdir,
+            write_top_map(outdir,
                                world_rec[0],
                                world_rec[1],
                                world_rec[2],
                                world)
-            maps.write_map_leaves(data,
+            write_map_leaves(data,
                                   chains['castles'],
                                   outdir,
                                   world_rec[0],
@@ -157,3 +160,51 @@ def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):
                                   world_rec[2],
                                   world,
                                   instance)
+
+
+def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir, instance, inst_dict, map_matrices):
+    # generate loc page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('loc.html')
+    loc = build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain, instance, inst_dict, map_matrices)
+    outf.write(template.render(loc=loc))
+
+
+def write_ship_html(v, k, data, outdir, instance, pledge_chain, prisoner_chain):
+    # generate ship page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('ship.html')
+    ship = build_complete_ship_dict(k, v, data, instance, pledge_chain, prisoner_chain)
+    outf.write(template.render(ship=ship))
+
+
+def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
+    # generate char page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('char.html')
+    char = build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain, False)
+    outf.write(template.render(char=char))
+
+
+def write_item_html(v, k, data, trade_chain, outdir):
+    # generate item page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('item.html')
+    item = build_complete_item_dict(k, v, data, trade_chain)
+    outf.write(template.render(item=item))

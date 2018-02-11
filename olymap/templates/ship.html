@@ -32,7 +32,7 @@
                 </ul>
         {% endif %}
         {% set ns.save_level = entry.level %}
-        <li>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] {{ entry.detail|safe }}</li>
+        {% include "character_list.html" %}
     {% endfor %}
     {% if ns.save_level > 0 %}
         {% set to_level = ns.save_level %}

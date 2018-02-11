@@ -118,14 +118,14 @@
     </ul>
 {% endif %}
 <p>Inventory:</p>
-{% if char.inventory_list %}
+{% if char.inventory_dict and char.inventory_dict.items_list %}
     <table>
         <tr><td style="text-align:right">qty</td><td style="text-align:left">name</td><td style="text-align:right">weight</td><td style="text-align:left">&nbsp;</td></tr>
         <tr><td style="text-align:right">---</td><td style="text-align:left">----</td><td style="text-align:right">------</td><td style="text-align:left">&nbsp;</td></tr>
-        {% for entry in char.inventory_list %}
-            <tr><td style="text-align:right">{{ '{0:,d}'.format(entry.item_qty) }}</td>
-                <td>{{ entry.item_name }} [<a href="{{ entry.item }}.html">{{ entry.item }}</a>]</td>
-                <td style="text-align:right">{{ '{0:,d}'.format(entry.item_weight) }}</td>
+        {% for entry in char.inventory_dict.items_list %}
+            <tr><td style="text-align:right">{{ '{0:,d}'.format(entry.qty) }}</td>
+                <td>{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+                <td style="text-align:right">{{ '{0:,d}'.format(entry.item_ext) }}</td>
                 <td>
                     {% if entry.fly_ext %}
                         fly {{ '{0:,d}'.format(entry.fly_ext) }}
@@ -135,7 +135,7 @@
                         cap {{ '{0:,d}'.format(entry.land_ext) }}
                     {% endif %}
                     {% if entry.attack or entry.defense or entry.missile %}
-                         ({{ entry.attack }}, {{ entry.defense }}, {{ entry.missile }})
+                         ({{ entry.attack }},{{ entry.defense }},{{ entry.missile }})
                     {% endif %}
                     {% if entry.attack_bonus %}
                         + {{ entry.attack_bonus }} attack
@@ -152,22 +152,22 @@
                 </td>
             </tr>
         {% endfor %}
-        {% if char.items_total_dict.print_capacity %}
+        {% if char.inventory_dict.print_capacity %}
             <tr><td></td><td></td><td style="text-align:right">=====</td><td>&nbsp;</td></tr>
-            <tr><td></td><td></td><td style="text-align:right">{{ '{0:,d}'.format(char.items_total_dict.total_items_weight) }}</td><td>&nbsp;</td></tr>
+            <tr><td></td><td></td><td style="text-align:right">{{ '{0:,d}'.format(char.inventory_dict.total_items_weight) }}</td><td>&nbsp;</td></tr>
         {% endif %}
     </table>
 {% else %}
     <ul style="list-style-type:none"><li>none</li></ul>
 {% endif %}
-{% if char.items_total_dict.print_capacity %}
+{% if char.inventory_dict.print_capacity %}
     <p>Capacity:
-    {{ '{0:,d}'.format(char.items_total_dict.land_weight) }}/{{ '{0:,d}'.format(char.items_total_dict.land_cap) }} land ({{ '{0:,d}'.format(char.items_total_dict.land_pct) }}%)
-    {% if char.items_total_dict.ride_cap > 0 %}
-        {{ '{0:,d}'.format(char.items_total_dict.ride_weight) }}/{{ '{0:,d}'.format(char.items_total_dict.ride_cap) }} ride ({{ '{0:,d}'.format(char.items_total_dict.ride_pct) }}%)
+    {{ '{0:,d}'.format(char.inventory_dict.land_weight) }}/{{ '{0:,d}'.format(char.inventory_dict.land_cap) }} land ({{ '{0:,d}'.format(char.inventory_dict.land_pct) }}%)
+    {% if char.inventory_dict.ride_cap > 0 %}
+        {{ '{0:,d}'.format(char.inventory_dict.ride_weight) }}/{{ '{0:,d}'.format(char.inventory_dict.ride_cap) }} ride ({{ '{0:,d}'.format(char.inventory_dict.ride_pct) }}%)
     {% endif %}
-    {% if char.items_total_dict.fly_cap > 0 %}
-        {{ '{0:,d}'.format(char.items_total_dict.fly_weight) }}/{{ '{0:,d}'.format(char.items_total_dict.fly_cap) }} fly ({{ '{0:,d}'.format(char.items_total_dict.fly_pct) }}%)
+    {% if char.inventory_dict.fly_cap > 0 %}
+        {{ '{0:,d}'.format(char.inventory_dict.fly_weight) }}/{{ '{0:,d}'.format(char.inventory_dict.fly_cap) }} fly ({{ '{0:,d}'.format(char.inventory_dict.fly_pct) }}%)
     {% endif %}
     </p>
 {% endif %}

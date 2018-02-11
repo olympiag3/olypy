@@ -1,0 +1,22 @@
+{% if entry.level > ns.save_level %}
+        <ul>
+{% elif entry.level < ns.save_level %}
+    {% set to_level = ns.save_level - entry.level %}
+    {% for i in range(0, to_level): %}
+        </ul>
+    {% endfor %}
+{% endif %}
+{% set ns.save_level = entry.level %}
+{%- if entry.kind == 'char' -%}
+    {% include "character_list.html" %}
+{%- elif entry.kind == 'loc' -%}
+    {% include "loc_list.html" %}
+{%- elif entry.kind == 'storm' -%}
+    {% include "storm_list.html" %}
+{%- elif entry.kind == 'ship' -%}
+    {% include "ship_list.html" %}
+{% else %}
+    <li>
+        {{ entry.oid }}
+    </li>
+{%- endif -%}

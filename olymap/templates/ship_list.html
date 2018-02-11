@@ -1,0 +1,26 @@
+<li>
+{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.type }}
+{%- if entry.storm -%}
+    , bound {{ entry.storm.type }}-storm {{ entry.storm.name }} [<a href="{{ entry.storm.oid }}.html">{{ entry.storm.oid }}</a>]
+    {% if entry.storm.strength %}
+        (strength:{{ entry.storm.strength }})
+    {% endif %}
+{%- endif -%}
+{%- if entry.defense -%}
+, defense {{ entry.defense }}
+{%- endif -%}
+{%- if entry.complete -%}
+    {%- if entry.complete != 100 -%}
+        , {{ entry.complete }}% completed
+    {%- endif -%}
+{%- endif -%}
+{%- if entry.damage -%}
+    , {{ entry.damage }}% damaged
+{%- endif -%}
+{%- if entry.load -%}
+    , {{ entry.damage }}% loaded
+{%- endif -%}
+{%- if entry.owner -%}
+    , owner:
+{%- endif -%}    
+</li>

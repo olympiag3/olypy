@@ -73,7 +73,7 @@ def write_storm_html(v, k, data, storm_chain, outdir):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('storm.html')
-    storm = build_storm_dict(k, v, data, storm_chain)
+    storm = build_complete_storm_dict(k, v, data, storm_chain)
     outf.write(template.render(storm=storm))
 
 
@@ -81,13 +81,23 @@ def get_strength(v):
     return v.get('MI', {}).get('ss', [0])[0]
 
 
-def build_storm_dict(k, v, data, storm_chain):
+def build_complete_storm_dict(k, v, data, storm_chain):
     storm_dict = {'oid': get_oid(k),
                   'name': get_name(v, data),
                   'type': get_type(v, data),
+                  'kind': 'storm',
                   'strength': get_strength(v),
                   'loc': build_loc_dict(v, data),
                   'ship': build_ship_dict(k, data, storm_chain)}
+    return storm_dict
+
+
+def build_basic_storm_dict(k, v, data):
+    storm_dict = {'oid': get_oid(k),
+                  'name': get_name(v, data),
+                  'type': get_type(v, data),
+                  'kind': 'storm',
+                  'strength': get_strength(v)}
     return storm_dict
 
 

@@ -1,22 +1,22 @@
-{% extends "loc.html" %}
-{% block characterlist %}
 <li>
 {% if entry.province_oid %}
     (<a href="{{ entry.province_oid }}.html">{{ entry.province_oid }}</a>)
 {% endif %}
 {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
-{%- if entry.loyalty == 'Undefined' -%}
-    {%- if entry.absorb_blast -%}
-    (AB)
+{%- if entry.loyalty -%}
+    {%- if entry.loyalty == 'Undefined' -%}
+        {%- if entry.absorb_blast -%}
+        (AB)
+        {%- endif -%}
+    {% else %}
+        ({{ entry.loyalty }}
+        {%- if entry.absorb_blast -%}
+        :AB
+        {%- endif -%}
+        )
     {%- endif -%}
-{%- else -%}
-    ({{ entry.loyalty }}
-    {%- if entry.absorb_blast -%}
-    (AB
-    {%- endif -%}
-    )
 {%- endif -%}
-{%- if entry.type -%}
+{%- if entry.type and entry.type != '0' -%}
     , {{ entry.type }}
 {%- endif -%}
 {%- if entry.prisoner -%}
@@ -34,10 +34,29 @@
 {%- if entry.concealed -%}
     , concealed
 {%- endif -%}
-{% if entry.items_list %}
-    {%- for item in entry.items_list -%}
-        , {{ item.qty }} {{ item.name }}
-    {%- endfor -%}
+{% if entry.wearable %}
+    {%- if entry.wearable.missile or entry.wearable.attack -%}
+        {%- if entry.wearable.missile and entry.wearable.attack -%}
+            , wielding {{ entry.wearable.attack.name }} [<a href="{{ entry.wearable.attack.oid }}.html">{{ entry.wearable.attack.oid }}</a>]
+            and {{ entry.wearable.missile.name }} [<a href="{{ entry.wearable.missile.oid }}.html">{{ entry.wearable.missile.oid }}</a>]
+        {%- elif entry.wearable.attack -%}
+            , wielding {{ entry.wearable.attack.name }} [<a href="{{ entry.wearable.attack.oid }}.html">{{ entry.wearable.attack.oid }}</a>]
+        {%- else -%}
+            , wearing {{ entry.wearable.missile.name }} [<a href="{{ entry.wearable.missile.oid }}.html">{{ entry.wearable.missile.oid }}</a>]
+        {%- endif -%}
+    {%- endif -%}
+    {%- if entry.wearable.defense -%}
+        , wearing {{ entry.wearable.defense.name }} [<a href="{{ entry.wearable.defense.oid }}.html">{{ entry.wearable.defense.oid }}</a>]
+    {%- endif -%}
 {% endif %}
+{%- if entry.inventory_dict -%}
+    {%- if entry.inventory_dict.items_list -%}
+        {%- for item in entry.inventory_dict.items_list -%}
+            , {{ item.qty }} {{ item.name }}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endif -%}
+{%- if entry.stacked_over_list -%}
+    , accompanied by:
+{%- endif -%}
 </li>
-{% endblock %}

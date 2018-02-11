@@ -654,6 +654,8 @@ def determine_item_use(v, data, trade_chain):
 
 
 def calc_ship_pct_loaded(data, k, v):
+    if return_kind(v) != 'ship':
+        return 0
     total_weight = 0
     try:
         damaged = int(v['SL']['da'][0])
@@ -745,7 +747,7 @@ def is_concealed(v):
     return False
 
 
-def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False):
+def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False, kind=None):
     '''
     Make a list of everything here: chars, structures, sublocs. Do not descend into big sublocs (cities)
     If fog, make a list of only the visible things
@@ -754,6 +756,10 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
     hls = []
     if 'LI' in data[where] and 'hl' in data[where]['LI']:
         for w in data[where]['LI']['hl']:
+            if kind is None or (kind is not None and level == 0 and return_kind(data[w]) == kind):
+                pass
+            else:
+                continue
             if char_only and not is_char(data, w):
                 continue
             if fog and is_char(data, w):

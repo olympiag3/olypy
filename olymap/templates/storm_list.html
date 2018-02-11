@@ -1,0 +1,6 @@
+<li>
+{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.type }}
+{% if entry.strength %}
+    (strength:{{ entry.strength }})
+{% endif %}
+</li>
