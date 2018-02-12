@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<TITLE>{{ player.name }} [{{ player.oid }}]</TITLE>
+</HEAD>
+<BODY>
+<H3>{{ player.name }} [{{ player.oid }}]</H3>
+<table>
+{% if player.type %}
+    <tr><td>Type:</td><td>{{ player.type }}</td></tr>
+{% endif %}
+{% if player.email %}
+    <tr><td>Email Address:</td><td>{{ player.email }}</td></tr>
+{% endif %}
+{% if player.fast_study %}
+    <tr><td>Fast Study Points:</td><td>{{ player.fast_study }}</td></tr>
+{% endif %}
+{% if player.first_turn %}
+    <tr><td>First Turn:</td><td>{{ player.first_turn }}</td></tr>
+{% endif %}
+{% if player.full_name %}
+    <tr><td>Full Name:</td><td>{{ player.full_name }}</td></tr>
+{% endif %}
+{% if player.last_turn %}
+    <tr><td>Last Turn:</td><td>{{ player.last_turn }}</td></tr>
+{% endif %}
+{% if player.noble_points %}
+    <tr><td>Noble Points:</td><td>{{ player.noble_points }}</td></tr>
+{% endif %}
+{% if player.unit_list %}
+    <tr><td valign="top">Unit List:</td>
+        <td>
+            <table>
+                {% for i in range(0, ((player.unit_list|length)/3)|round(0,'ceil')|int) %}
+                    <tr>
+                    {% if ((i*3)) <= player.unit_list|length - 1 %}
+                        <td>
+                            {{ player.unit_list[i*3].name }} [<a href="{{ player.unit_list[i*3].oid }}">{{ player.unit_list[i*3].oid }}</a>]
+                        </td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    {% if ((i*3)+1) <= player.unit_list|length - 1 %}
+                        <td>
+                            {{ player.unit_list[(i*3)+1].name }} [<a href="{{ player.unit_list[(i*3)+1].oid }}.html">{{ player.unit_list[(i*3)+1].oid }}</a>]
+                        </td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    {% if ((i*3)+2) <= player.unit_list|length - 1 %}
+                        <td>
+                            {{ player.unit_list[(i*3)+2].name }} [<a href="{{ player.unit_list[(i*3)+2].oid }}.html">{{ player.unit_list[(i*3)+2].oid }}</a>]
+                        </td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    </tr>
+                {% endfor %}    
+            </table>    
+        </td>
+    </tr>
+{% endif %}
+</table>
+</BODY>
+</HTML>

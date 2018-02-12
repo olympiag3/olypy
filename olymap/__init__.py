@@ -15,9 +15,9 @@ from olymap.char import build_complete_char_dict
 from olymap.item import build_complete_item_dict
 from olymap.skill import build_complete_skill_dict
 from olymap.storm import build_complete_storm_dict
+from olymap.player import build_complete_player_dict
 
 import olymap.utilities as u
-from olymap.player import write_player_html
 import olymap.reports as reports
 from olymap.maps import write_index, write_map_leaves, write_top_map, write_bitmap
 from olymap.legacy import create_map_matrix, write_legacy_bitmap, write_legacy_top_map, write_legacy_map_leaves
@@ -231,3 +231,15 @@ def write_storm_html(v, k, data, storm_chain, outdir):
     template = env.get_template('storm.html')
     storm = build_complete_storm_dict(k, v, data, storm_chain)
     outf.write(template.render(storm=storm))
+
+
+def write_player_html(v, k, data, outdir):
+    # generate item page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('player.html')
+    player = build_complete_player_dict(k, v, data)
+    outf.write(template.render(player=player))
