@@ -1,0 +1,94 @@
+<HTML>
+<HEAD>
+<TITLE>{{ skill.name }} [{{ skill.oid }}]</TITLE>
+</HEAD>
+<BODY>
+<H3>{{ skill.name }} [{{ skill.oid }}]</H3>
+<table>
+{% if skill.required_skill %}
+    <tr><td>Required Skill:</td><td>{{ skill.required_skill.name }} [<a href="{{ skill.required_skill.oid }}.html">{{ skill.required_skill.oid }}</a>]</td></tr>
+{% endif %}
+{% if skill.learn_time %}
+    <tr><td>Time to Learn:</td><td>{{ skill.learn_time }}</td></tr>
+{% endif %}
+{% if skill.known_by %}
+    <tr><td valign="top">Known By:</td>
+    <td>
+    <table>
+        {% for i in range(0, ((skill.known_by|length)/3)|round(0,'ceil')|int) %}
+            <tr>
+            {% if ((i*3)) <= skill.known_by|length - 1 %}
+                <td>
+                    {{ skill.known_by[i*3].name }} [<a href="{{ skill.known_by[i*3].oid }}.html">{{ skill.known_by[i*3].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if ((i*3)+1) <= skill.known_by|length - 1 %}
+                <td>
+                    {{ skill.known_by[(i*3)+1].name }} [<a href="{{ skill.known_by[(i*3)+1].oid }}.html">{{ skill.known_by[(i*3)+1].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if ((i*3)+2) <= skill.known_by|length - 1 %}
+                <td>
+                    {{ skill.known_by[(i*3)+2].name }} [<a href="{{ skill.known_by[(i*3)+2].oid }}.html">{{ skill.known_by[(i*3)+2].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    </td></tr>
+{% endif %}
+{% if skill.child_skills %}
+    <tr><td valign="top">Child Skills:</td>
+    <td>
+    <table>
+        {% for i in range(0, ((skill.child_skills|length)/3)|round(0,'ceil')|int) %}
+            <tr>
+            {% if ((i*3)) <= skill.child_skills|length - 1 %}
+                <td>
+                    {{ skill.child_skills[i*3].name }} [<a href="{{ skill.child_skills[i*3].oid }}.html">{{ skill.child_skills[i*3].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if ((i*3)+1) <= skill.child_skills|length - 1 %}
+                <td>
+                    {{ skill.child_skills[(i*3)+1].name }} [<a href="{{ skill.child_skills[(i*3)+1].oid }}.html">{{ skill.child_skills[(i*3)+1].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if ((i*3)+2) <= skill.child_skills|length - 1 %}
+                <td>
+                    {{ skill.child_skills[(i*3)+2].name }} [<a href="{{ skill.child_skills[(i*3)+2].oid }}.html">{{ skill.child_skills[(i*3)+2].oid }}</a>]
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    </td></tr>
+{% endif %}
+{% if skill.taught_in %}
+    <tr><td valign="top">Taught In:</td>
+    <td>
+    <table>
+        {% for entry in skill.taught_in %}
+            <tr>
+            <td>
+                {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.where_name }} [<a href="{{ entry.where_oid }}.html">{{ entry.where_oid }}</a>], in {{ entry.region_name }}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </td></tr>
+{% endif %}
+</table>
+</BODY>
+</HTML>

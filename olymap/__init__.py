@@ -13,11 +13,11 @@ from olymap.loc import build_complete_loc_dict
 from olymap.ship import build_complete_ship_dict
 from olymap.char import build_complete_char_dict
 from olymap.item import build_complete_item_dict
+from olymap.skill import build_complete_skill_dict
 
 import olymap.utilities as u
 from olymap.storm import write_storm_html
 from olymap.player import write_player_html
-from olymap.skill import write_skill_html
 import olymap.reports as reports
 from olymap.maps import write_index, write_map_leaves, write_top_map, write_bitmap
 from olymap.legacy import create_map_matrix, write_legacy_bitmap, write_legacy_top_map, write_legacy_map_leaves
@@ -77,9 +77,8 @@ def write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices):
         elif u.return_kind(v) == 'ship':
             write_ship_html(v, k, data, outdir, instance, chains['pledges'], chains['prisoners'])
         elif u.return_kind(v) == 'skill':
-            write_skill_html(v, k, data, chains['teaches'],
-                                   chains['child_skills'], chains['skills_knowns'],
-                                   outdir)
+            write_skill_html(v, k, data, outdir, chains['teaches'],
+                                   chains['child_skills'], chains['skills_knowns'])
         elif u.return_kind(v) == 'storm':
             write_storm_html(v, k, data, chains['storms'], outdir)
 
@@ -208,3 +207,15 @@ def write_item_html(v, k, data, trade_chain, outdir):
     template = env.get_template('item.html')
     item = build_complete_item_dict(k, v, data, trade_chain)
     outf.write(template.render(item=item))
+
+
+def write_skill_html(v, k, data, outdir, teaches_chain, child_skills_chain, skills_known_chain):
+    # generate item page
+    outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('skill.html')
+    skill = build_complete_skill_dict(k, v, data, teaches_chain, child_skills_chain, skills_known_chain)
+    outf.write(template.render(skill=skill))
