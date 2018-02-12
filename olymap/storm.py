@@ -8,46 +8,6 @@ import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 
-def write_storm_page_header(v, k, outf):
-    if 'na' in v:
-        name = v['na'][0]
-    else:
-        name = u.return_type(v).capitalize()
-    outf.write('<H3>{} [{}]</H3>\n'.format(name, to_oid(k)))
-
-
-def write_storm_basic_info(v, k, data, outf, storm_chain):
-    outf.write('<table>\n')
-    write_type(outf, v)
-    write_where(data, outf, v)
-    write_strength(outf, v)
-    write_bound_ship(data, k, outf, storm_chain)
-    outf.write('</table>\n')
-
-
-def write_bound_ship(data, k, outf, storm_chain):
-    ship_list = storm_chain[k]
-    if len(ship_list) > 0:
-        for ship in ship_list:
-            ship_rec = data[ship]
-            outf.write('<tr><td>Bound Ship: </td><td>{} [{}]</td></tr>\n'.format(ship_rec['na'][0],
-                                                                                 anchor(to_oid(ship))))
-
-
-def write_strength(outf, v):
-    outf.write('<tr><td>Strength: </td><td>{}</td></tr>\n'.format(v['MI']['ss'][0]))
-
-
-def write_where(data, outf, v):
-    where_rec = data[v['LI']['wh'][0]]
-    outf.write('<tr><td>Where: </td><td>{} [{}]</td></tr>\n'.format(where_rec['na'][0],
-                                                                    anchor(to_oid(v['LI']['wh'][0]))))
-
-
-def write_type(outf, v):
-    outf.write('<tr><td>Type: </td><td>{}</td></tr>\n'.format(u.return_type(v)))
-
-
 def get_strength(v):
     return v.get('MI', {}).get('ss', [0])[0]
 
