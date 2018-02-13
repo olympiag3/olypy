@@ -4,18 +4,52 @@
 </HEAD>
 <BODY>
 <H3>Olympia Master Item Report</H3>
-<h5>(Click on table headers to sort)</h5><table border="1" style="border-collapse: collapse" class="sortable">
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
 <tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th><th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th><th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>
 {% for entry in itemz %}
-    <tr><td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        <td>{{ entry.type }}</td><td align="right">{{ entry.weight }}</td><td>{{ entry.man_item }}</td>
-        <td>{{ entry.prominent }}</td><td>{{ entry.animal }}</td>
-        <td align="right">{{ entry.land_cap }}</td><td align="right">{{ entry.riding_cap }}</td>
-        <td align="right">{{ entry.flying_cap }}</td>
-        {% if entry.who_has_name %}
-            <td>{{ entry.who_has_name }} [<a href="{{ entry.who_has_id }}.html">{{ entry.who_has_id }}</a>]</td>
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td>{{ entry.type }}</td>
+        {% if entry.weight %}
+            <td align="right">{{ entry.weight }}</td>
         {% else %}
             <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.man_item %}
+            <td>{{ entry.man_item }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.prominent %}
+            <td>{{ entry.prominent }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.animal %}
+            <td>{{ entry.animal }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.land_capacity %}
+            <td align="right">{{ entry.land_capacity }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.ride_cap %}
+            <td align="right">{{ entry.ride_cap }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.fly_capacity %}
+            <td align="right">{{ entry.fly_capacity }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.who_has_name %}
+            <td>{{ entry.who_has_name }} [<a href="{{ entry.who_has_oid }}.html">{{ entry.who_has_oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp&nbsp;</td>
         {% endif %}
         <td>{{ entry.notes|safe }}</td></tr>
 {% endfor %}

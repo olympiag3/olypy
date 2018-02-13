@@ -1,0 +1,27 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Healing Potion Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Healing Potion Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Item</th><th>Who Has</th><th>Location</th></tr>
+{% for entry in healing_potion %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        {% if entry.unit.kind == 'loc' %}
+            <td sorttable_customkey="">&nbsp;</td>
+            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+        {% elif entry.unit.kind == 'char' %}
+            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+            <td sorttable_customkey="">&nbsp;</td>
+        {% else %}
+            <td sorttable_customkey="">&nbsp;</td>
+            <td sorttable_customkey="">&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

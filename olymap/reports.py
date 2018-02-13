@@ -6,197 +6,55 @@ from olypy.oid import to_oid
 from olypy.oid import to_int
 import olymap.utilities as u
 from olymap.utilities import anchor, get_oid, get_name, get_type, get_who_has
-from olymap.item import get_weight, get_man_item, get_prominent, get_animal, get_capacities
 import olymap.maps as maps
 import pathlib
 from olypy.db import loop_here
 from jinja2 import Environment, PackageLoader, select_autoescape
+from olymap.ship import build_basic_ship_dict
+from olymap.item import build_basic_item_dict
+from olymap.player import build_complete_player_dict
 
 
 def ship_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Ship Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Ship Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th>'
-               '<th>Load</th><th>Storm (Strength)</th></tr>\n')
     ship_list = []
     for unit in data:
         if u.is_ship(data, unit):
             ship_list.append(unit)
-    # ship_list.sort()
-    # for unit in ship_list:
-    for unit in sorted(ship_list, key=lambda x:int(x)):
-        ship_rec = data[unit]
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(to_oid(unit),
-                                                                      ship_rec['na'][0],
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(u.return_type(ship_rec)))
-        captain = '&nbsp;'
-        captainid = ''
-        if 'LI' in ship_rec and 'hl' in ship_rec['LI']:
-            here_list = ship_rec['LI']['hl']
-            for here in here_list:
-                if u.is_char(data, here):
-                    here_rec = data[here]
-                    captain = here_rec['na'][0] + ' [' + anchor(to_oid(here)) + ']'
-                    captainid = to_oid(here)
-                    break
-        outf.write('<td sorttable_customkey="{}">{}</td>'.format(captainid,
-                                                                 captain))
-        location = '&nbsp;'
-        locid = ''
-        if 'LI' in ship_rec and 'wh' in ship_rec['LI']:
-            where_rec = data[ship_rec['LI']['wh'][0]]
-            location = where_rec['na'][0] + ' [' + anchor(to_oid(u.return_unitid(where_rec))) + ']'
-            locid = to_oid(u.return_unitid(where_rec))
-        outf.write('<td sorttable_customkey="{}">{}</td>'.format(locid,
-                                                                 location))
-        if 'SL' in ship_rec and 'da' in ship_rec['SL']:
-            outf.write('<td>{}%</td>'.format(ship_rec['SL']['da'][0]))
-            damaged = int(ship_rec['SL']['da'][0])
-        else:
-            outf.write('<td>0%</td>')
-            damaged = 0
-        total_weight = 0
-        seen_here_list = loop_here(data, str(unit), False, True)
-        list_length = len(seen_here_list)
-        if list_length > 1:
-            for un in seen_here_list:
-                char = data[un]
-                if u.return_kind(char) == 'char':
-                    unit_type = '10'
-                    if 'CH' in char:
-                        if 'ni' in char['CH']:
-                            unit_type = char['CH']['ni'][0]
-                    base_unit = data[unit_type]
-                    if 'IT' in base_unit and 'wt' in base_unit['IT']:
-                        item_weight = int(base_unit['IT']['wt'][0]) * 1
-                        total_weight = total_weight + item_weight
-                    if 'il' in char:
-                        item_list = char['il']
-                        for itm in range(0, len(item_list), 2):
-                            itemz = data[item_list[itm]]
-                            try:
-                                item_weight = int(itemz['IT']['wt'][0])
-                            except KeyError:
-                                item_weight = int(0)
-                            qty = int(item_list[itm + 1])
-                            total_weight = total_weight + int(qty * item_weight)
-        ship_capacity = int(ship_rec['SL']['ca'][0])
-        actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
-        pct_loaded = math.floor((total_weight * 100) / actual_capacity)
-        outf.write('<td>{}%</td>'.format(pct_loaded))
-        storm = ''
-        stormid = ''
-        if 'SL' in ship_rec:
-            if 'bs' in ship_rec['SL']:
-                storm_rec = data[ship_rec['SL']['bs'][0]]
-                storm = u.return_type(storm_rec) + ' [' \
-                        + anchor(to_oid(u.return_unitid(storm_rec))) \
-                        + '] (' + storm_rec['MI']['ss'][0] + ')'
-                stormid = u.return_unitid(storm_rec)
-        outf.write('<td sorttable_customkey="{}">{}</td>'.format(stormid,
-                                                                 storm))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_ship_list = sorted(ship_list, key=lambda x:int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_ship_report.html')
+    ship = build_ship_dict(sort_ship_list, data)
+    outf.write(template.render(ship=ship))
+
+
+def build_ship_dict(ship_list, data):
+    ship = []
+    for ship_id in ship_list:
+        ship_rec = data[ship_id]
+        ship_entry = build_basic_ship_dict(ship_id, ship_rec, data)
+        ship.append(ship_entry)
+    return ship
 
 
 def item_report(data, trade_chain, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_item_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Item Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Item Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Type</th><th>Weight</th><th>Man Item</th>'
-               '<th>Prominent</th><th>Animal</th><th>Land Cap</th><th>Ride Cap</th>'
-               '<th>Flying Cap</th><th>Who Has</th><th>Notes</th></tr>\n')
     item_list = []
     for unit in data:
         if u.is_item(data, unit):
             item_list.append(unit)
     # item_list.sort()
     # for unit in item_list:
-    for unit in sorted(item_list, key=lambda x: int(x)):
-        item_rec = data[unit]
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      item_rec['na'][0],
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(u.return_type(item_rec)))
-        if 'IT' in item_rec:
-            weight = ''
-            if 'wt' in item_rec['IT']:
-                weight = item_rec['IT']['wt'][0]
-            outf.write('<td>{}</td>'.format(weight))
-            man_item = ''
-            if 'mu' in item_rec['IT']:
-                man_item = item_rec['IT']['mu'][0]
-            outf.write('<td>{}</td>'.format(man_item))
-            prominent = ''
-            if 'pr' in item_rec['IT']:
-                prominent = item_rec['IT']['pr'][0]
-            outf.write('<td>{}</td>'.format(prominent))
-            animal = ''
-            if 'an' in item_rec['IT']:
-                animal = item_rec['IT']['an'][0]
-            outf.write('<td>{}</td>'.format(animal))
-            land_cap = ''
-            if 'lc' in item_rec['IT']:
-                land_cap = item_rec['IT']['lc'][0]
-            outf.write('<td>{}</td>'.format(land_cap))
-            ride_cap = ''
-            if 'rc' in item_rec['IT']:
-                ride_cap = item_rec['IT']['rc'][0]
-            outf.write('<td>{}</td>'.format(ride_cap))
-            fly_cap = ''
-            if 'fc' in item_rec['IT']:
-                fly_cap = item_rec['IT']['fc'][0]
-            outf.write('<td>{}</td>'.format(fly_cap))
-            if 'un' in item_rec['IT']:
-                who_has = item_rec['IT']['un'][0]
-                who_rec = data[who_has]
-                if 'na' in who_rec:
-                    name = who_rec['na'][0]
-                else:
-                    name = u.return_type(who_rec).capitalize()
-                if name == 'Ni':
-                    name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
-                who_literal = name + ' [' + anchor(to_oid(who_has)) + ']'
-                outf.write('<td sorttable_customkey="{}">{}</td>'.format(who_has,
-                                                                         who_literal))
-            else:
-                outf.write('<td>&nbsp;</td>')
-        else:
-            outf.write('<td>&nbsp;</td>'*8)
-        outf.write('<td>{}</td>'.format(u.determine_item_use(item_rec, data, trade_chain)))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
-    outf = open(pathlib.Path(outdir).joinpath('master_item_report_z.html'), 'w')
+    sort_item_list =  sorted(item_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_item_report.html'), 'w')
     env = Environment(
         loader=PackageLoader('olymap', 'templates'),
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('master_item_report.html')
-    itemz = build_item_dict(item_list, data, trade_chain)
+    itemz = build_item_dict(sort_item_list, data, trade_chain)
     outf.write(template.render(itemz=itemz))
 
 
@@ -204,111 +62,52 @@ def build_item_dict(item_list, data, trade_chain):
     itemz = []
     for item_id in item_list:
         item_rec = data[item_id]
-        land_cap, riding_cap, flying_cap = get_capacities(item_rec)
-        who_has_id, who_has_name = get_who_has(item_rec, data)
-        item_entry = {'oid': get_oid(item_id),
-                      'name': get_name(item_rec, data),
-                      'weight': get_weight(item_rec)[0],
-                      'man_item': get_man_item(item_rec)[0],
-                      'type': get_type(item_rec, data),
-                      'prominent': get_prominent(item_rec)[0],
-                      'animal': get_animal(item_rec)[0],
-                      'land_cap': land_cap[0],
-                      'riding_cap': riding_cap[0],
-                      'flying_cap': flying_cap[0],
-                      'who_has_id': who_has_id,
-                      'who_has_name': who_has_name,
-                      'notes': u.determine_item_use(item_rec, data, trade_chain)}
+        item_entry = build_basic_item_dict(item_id, item_rec, data, trade_chain)
         itemz.append(item_entry)
     return itemz
 
 
 def player_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_player_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Player Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Player Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Player</th><th>Name</th><th>Type</th><th># Units</th></tr>\n')
     player_list = []
     for unit in data:
         if u.is_player(data, unit):
             player_list.append(unit)
-    # player_list.sort()
-    # for unit in player_list:
-    for unit in sorted(player_list, key=lambda x: int(x)):
-        player_rec = data[unit]
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      player_rec['na'][0],
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(player_rec['na'][0]))
-        outf.write('<td>{}</td>'.format(u.return_type(player_rec)))
-        count = '0'
-        if 'PL' in player_rec and 'un' in player_rec['PL']:
-            count = len(player_rec['PL']['un'])
-        outf.write('<td>{}</td>'.format(count))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_player_list =  sorted(player_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_player_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_player_report.html')
+    player = build_player_dict(sort_player_list, data)
+    outf.write(template.render(player=player))
+
+
+def build_player_dict(player_list, data):
+    player = []
+    for player_id in player_list:
+        player_rec = data[player_id]
+        player_entry = build_complete_player_dict(player_id, player_rec, data)
+        player.append(player_entry)
+    return player
 
 
 def healing_potion_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_healing_potion_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Healing Potion Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Healing Potion Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Who Has</th><th>Location</th></tr>\n')
     healing_potion_list = []
     for unit in data:
         if u.is_item(data, unit) and data[unit].get('IM', {}).get('uk', [''])[0] == '2':
             healing_potion_list.append(unit)
     # healing_potion_list.sort()
     # for unit in healing_potion_list:
-    for unit in sorted(healing_potion_list, key=lambda x: int(x)):
-        itemz = data[unit]
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      itemz['na'][0],
-                                                                      anchor(to_oid(unit))))
-        if 'IT' in itemz and 'un' in itemz['IT']:
-            unit = data[itemz['IT']['un'][0]]
-            if u.return_kind(unit) == 'char':
-                charac = data[itemz['IT']['un'][0]]
-                outf.write('<td sorttable_customkey="">{} [{}]</td>'
-                           '<td sorttable_customkey="">'
-                           '&nbsp;</td>'.format(itemz['IT']['un'][0],
-                                                charac['na'][0],
-                                                anchor(to_oid(itemz['IT']['un'][0]))))
-            elif u.return_kind(unit) == 'loc':
-                loc = data[itemz['IT']['un'][0]]
-                outf.write('<td sorttable_customkey="">&nbsp;</td>'
-                           '<td sorttable_customkey="{}">'
-                           '{} [{}]</td>'.format(itemz['IT']['un'][0],
-                                                 loc['na'][0],
-                                                 anchor(to_oid(itemz['IT']['un'][0]))))
-            else:
-                outf.write('<td sorttable_customkey="">unknown</td><td sorttable_customkey="">unknown</td>')
-        else:
-            outf.write('<td sorttable_customkey="">unknown</td><td sorttable_customkey="">unknown</td>')
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_healing_potion_list = sorted(healing_potion_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_healing_potion_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_healing_potion_report.html')
+    healing_potion = build_item_dict(sort_healing_potion_list, data, [])
+    outf.write(template.render(healing_potion=healing_potion))
 
 
 def orb_report(data, outdir):

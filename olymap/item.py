@@ -8,7 +8,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
-    who_has_id, who_has_name = get_who_has(v, data)
+    who_has_oid, who_has_name = get_who_has(v, data)
     dead_body_id, dead_body_name = get_dead_body(v, data)
     may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
@@ -27,6 +27,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
+                 'man_item': get_man_item(v)[0],
                  'may_study_oid' : may_study_id,
                  'may_study_name' : may_study_name,
                  'missile' : get_missile(v)[0],
@@ -34,11 +35,44 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'project_cast' : get_project_cast(v)[0],
                  'prominent' : get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
+                 'unit': get_unit(v, data),
                  'use_key' : get_use_key(v)[0],
                  'weight' : get_weight(v)[0],
-                 'who_has_oid' : who_has_id,
+                 'who_has_oid' : who_has_oid,
                  'who_has_name' : who_has_name,
-                 'trade_good' : get_trade_good(k, v, data, trade_chain)}
+                 'trade_good' : get_trade_good(k, v, data, trade_chain),
+                 'notes': u.determine_item_use(v, data, trade_chain)}
+    return item_dict
+
+
+def build_basic_item_dict(k, v, data, trade_chain):
+    who_has_oid, who_has_name = get_who_has(v, data)
+    item_dict = {'id': k,
+                 'oid' : get_oid(k),
+                 'name' : get_name(v, data),
+                 'type' : get_type(v, data),
+                 'plural' : get_plural(v, data)[0],
+                 'animal' : get_animal(v)[0],
+                 'attack' : get_attack(v)[0],
+                 'attack_bonus' : get_attack_bonus(v)[0],
+                 'aura' : get_aura(v)[0],
+                 'aura_bonus' : get_aura_bonus(v)[0],
+                 'defense' : get_defense(v)[0],
+                 'defense_bonus' : get_defense_bonus(v)[0],
+                 'fly_capacity' : get_fly_capacity(v)[0],
+                 'land_capacity' : get_land_capacity(v)[0],
+                 'man_item': get_man_item(v)[0],
+                 'missile' : get_missile(v)[0],
+                 'missile_bonus' : get_missile_bonus(v)[0],
+                 'prominent': get_prominent(v)[0],
+                 'ride_capacity' : get_ride_capacity(v)[0],
+                 'unit': get_unit(v, data),
+                 'use_key' : get_use_key(v)[0],
+                 'weight' : get_weight(v)[0],
+                 'who_has_oid' : who_has_oid,
+                 'who_has_name' : who_has_name,
+                 'trade_good' : get_trade_good(k, v, data, trade_chain),
+                 'notes': u.determine_item_use(v, data, trade_chain)}
     return item_dict
 
 
@@ -137,6 +171,18 @@ def get_ride_capacity(v):
 
 def get_use_key(v):
     return v.get('IM', {}).get('uk', [None])
+
+
+def get_unit(v, data):
+    unit_id = v.get('IT', {}).get('un', [None])[0]
+    if unit_id is not None:
+        unit_rec = data[unit_id]
+        unit_dict = {'id': unit_id,
+                     'oid': to_oid(unit_id),
+                     'name': get_name(unit_rec, data),
+                     'kind': u.return_kind(unit_rec)}
+        return unit_dict
+    return None
 
 
 def get_weight(v):

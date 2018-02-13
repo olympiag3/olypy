@@ -39,7 +39,8 @@ def get_damage(v):
 def build_loc_dict(v, data):
     loc_id = v['LI']['wh'][0]
     loc_rec = data[loc_id]
-    loc_dict = {'oid': get_oid(loc_id),
+    loc_dict = {'id': loc_id,
+                'oid': get_oid(loc_id),
                 'name': get_name(loc_rec, data),
                 'type': get_type(loc_rec, data)}
     return loc_dict
@@ -56,7 +57,8 @@ def build_owner_dict(v, data):
     if get_owner(v) is not None:
         owner_id = get_owner(v)
         owner_rec = data[owner_id]
-        owner_dict = {'oid': get_oid(owner_id),
+        owner_dict = {'id': owner_id,
+                      'oid': get_oid(owner_id),
                       'name': get_name(owner_rec, data)}
     else:
         owner_dict = None
@@ -133,7 +135,8 @@ def build_basic_ship_dict(k, v, data):
                  'defense': get_defense(v)[0],
                  'damage': get_damage(v)[0],
                  'owner': build_owner_dict(v, data),
-                 'storm': build_storm_dict(v, data),}
+                 'storm': build_storm_dict(v, data),
+                 'loc': build_loc_dict(v, data)}
     return ship_dict
 
 

@@ -104,15 +104,16 @@ def write_unit_list(data, outf, v):
 
 
 def build_complete_player_dict(k, v, data):
-    storm_dict = {'oid': get_oid(k),
-                  'name': get_name(v, data),
-                  'type': get_type(v, data),
-                  'kind': 'player',
-                  'email': get_email(v),
-                  'fast_study': get_fast_study(v),
-                  'first_turn': get_first_turn(v),
-                  'full_name': get_full_name(v),
-                  'last_turn': get_last_turn(v),
-                  'noble_points': get_noble_points(v),
-                  'unit_list': get_unit_list(v, data)}
-    return storm_dict
+    player_dict = {'id': k,
+                   'oid': get_oid(k),
+                   'name': get_name(v, data),
+                   'type': get_type(v, data),
+                   'kind': 'player',
+                   'email': get_email(v),
+                   'fast_study': get_fast_study(v),
+                   'first_turn': get_first_turn(v),
+                   'full_name': get_full_name(v),
+                   'last_turn': get_last_turn(v),
+                   'noble_points': get_noble_points(v),
+                   'unit_list': get_unit_list(v, data)}
+    return player_dict

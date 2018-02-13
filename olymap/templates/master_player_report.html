@@ -1,0 +1,20 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Player Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Player Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Player</th><th>Name</th><th>Type</th><th># Units</th></tr>
+{% for entry in player %}
+    <tr>
+        <td sorttable_customkey="{{ entry.id }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td>{{ entry.name }}</td>
+        <td>{{ entry.type }}</td>
+        <td>{{ entry.unit_list|length }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

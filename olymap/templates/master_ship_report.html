@@ -1,0 +1,35 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Ship Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Ship Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Id</th><th>Type</th><th>Captain</th><th>Location</th><th>Damage</th><th>Load</th><th>Storm (Strength)</th></tr>
+{% for entry in ship %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td>{{ entry.type }}</td>
+        {% if entry.owner %}
+            <td sorttable_customkey="{{ entry.owner.oid }}">{{ entry.owner.name }} [<a href="{{ entry.owner.oid }}.html">{{ entry.owner.oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.loc %}
+            <td sorttable_customkey="{{ entry.loc.oid }}">{{ entry.loc.name }} [<a href="{{ entry.loc.oid }}.html">{{ entry.loc.oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        <td>{{ entry.damage }}%</td>
+        <td>{{ entry.load }}%</td>
+        {% if entry.storm %}
+            <td sorttable_customkey="{{ entry.storm.oid }}">{{ entry.storm.name }} [<a href="{{ entry.storm.oid }}.html">{{ entry.storm.oid }}</a>] ({{ entry.storm.strength }})</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
