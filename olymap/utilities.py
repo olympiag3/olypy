@@ -635,19 +635,22 @@ def determine_item_use(v, data, trade_chain):
         else:
             ret = ret + 'unknown'
     elif return_type(v) == 'tradegood':
-        trade_list = trade_chain[return_unitid(v)]
-        first = True
-        if len(trade_list) > 0:
-            for trade in trade_list:
-                loc_rec = data[trade[0]]
-                if not first:
-                    ret = ret + '<br>'
-                else:
-                    first = False
-                if trade[1] == '1':
-                    ret = ret + 'buy: ' + loc_rec['na'][0] + ' [' + anchor(to_oid(trade[0])) + ']'
-                if trade[1] == '2':
-                    ret = ret + 'sell: ' + loc_rec['na'][0] + ' [' + anchor(to_oid(trade[0])) + ']'
+        if trade_chain is not None:
+            trade_list = trade_chain[return_unitid(v)]
+            first = True
+            if len(trade_list) > 0:
+                for trade in trade_list:
+                    loc_rec = data[trade[0]]
+                    if not first:
+                        ret = ret + '<br>'
+                    else:
+                        first = False
+                    if trade[1] == '1':
+                        ret = ret + 'buy: ' + loc_rec['na'][0] + ' [' + anchor(to_oid(trade[0])) + ']'
+                    if trade[1] == '2':
+                        ret = ret + 'sell: ' + loc_rec['na'][0] + ' [' + anchor(to_oid(trade[0])) + ']'
+            else:
+                ret = 'inactive tradegood'
         else:
             ret = 'inactive tradegood'
     return ret
@@ -806,3 +809,16 @@ def is_impassable(loc1, loc2, direction, data):
         return True
     else:
         return False
+
+
+def get_use_key(v):
+    return v.get('IM', {}).get('uk', [None])
+
+
+def is_orb(v):
+    orb = get_use_key(v)[0]
+    if orb is None or orb != '9':
+        return False
+    else:
+        return True
+

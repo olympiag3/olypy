@@ -2,7 +2,7 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has, get_use_key
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -169,10 +169,6 @@ def get_ride_capacity(v):
     return v.get('IT', {}).get('rc', [None])
 
 
-def get_use_key(v):
-    return v.get('IM', {}).get('uk', [None])
-
-
 def get_unit(v, data):
     unit_id = v.get('IT', {}).get('un', [None])[0]
     if unit_id is not None:
@@ -190,7 +186,7 @@ def get_weight(v):
 
 
 def get_trade_good(k, v, data, trade_chain):
-    if u.return_type(v) == 'tradegood':
+    if trade_chain is not None and u.return_type(v) == 'tradegood':
         trade_list = trade_chain[k]
         if len(trade_list) > 0:
             first = True

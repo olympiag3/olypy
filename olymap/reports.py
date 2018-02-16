@@ -106,52 +106,27 @@ def healing_potion_report(data, outdir):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('master_healing_potion_report.html')
-    healing_potion = build_item_dict(sort_healing_potion_list, data, [])
+    healing_potion = build_item_dict(sort_healing_potion_list, data, None)
     outf.write(template.render(healing_potion=healing_potion))
 
 
 def orb_report(data, outdir):
     outf = open(pathlib.Path(outdir).joinpath('master_orb_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Orb Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Orb Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Who Has</th></tr>\n')
     orb_list = []
     for unit in data:
         if u.is_item(data, unit):
             orb_list.append(unit)
     # orb_list.sort()
     # for unit in orb_list:
-    for unit in sorted(orb_list, key=lambda x: int(x)):
-        itemz = data[unit]
-        if 'IM' in itemz and 'uk' in itemz['IM']:
-            if itemz['IM']['uk'][0] == '9':
-                outf.write('<tr>')
-                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                              itemz['na'][0],
-                                                                              anchor(to_oid(unit))))
-                if 'IT' in itemz:
-                    if 'un' in itemz['IT']:
-                        charac = data[itemz['IT']['un'][0]]
-                        outf.write('<td sorttable_customkey="{}">'
-                                   '{} [{}]</td>'.format(itemz['IT']['un'][0],
-                                                         charac['na'][0],
-                                                         anchor(to_oid(itemz['IT']['un'][0]))))
-                    else:
-                        outf.write('<td sorttable_customkey="">unknown</td>')
-                else:
-                    outf.write('<td sorttable_customkey="">unknown</td><')
-                outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_orb_list = sorted(orb_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_orb_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_orb_report.html')
+    orb = build_item_dict(sort_orb_list, data, None)
+    outf.write(template.render(orb=orb))
 
 
 def projected_cast_potion_report(data, outdir):
