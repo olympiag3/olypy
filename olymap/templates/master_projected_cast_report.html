@@ -1,34 +1,32 @@
 <HTML>
 <HEAD>
-<script src="sorttable.js"></script><TITLE>Olympia Master Projected Cast Report</TITLE>
+<script src="sorttable.js"></script><TITLE>Olympia Master Projected Cast Potion Report</TITLE>
 </HEAD>
 <BODY>
-<H3>Olympia Master Projected Cast Report</H3>
+<H3>Olympia Master Projected Cast Potion Report</H3>
 <h5>(Click on table headers to sort)</h5>
 <table border="1" style="border-collapse: collapse" class="sortable">
 <tr><th>Item</th><th>Who Has</th><th>Target</th><th>Target Region</th></tr>
 {% for entry in projected_cast %}
-    {% if entry.use_key == '5' %}
-        <tr>
-            <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-            {% if entry.unit %}
-                <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        {% if entry.unit %}
+            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+        {% else %}
+            <td sorttable_customkey="Unknown">Unknown {{ entry.unit.oid }}</td>
+        {% endif %}
+        {% if entry.project_cast.id %}
+            <td sorttable_customkey="{{ entry.project_cast.oid }}">{{ entry.project_cast.kind }} {{ entry.project_cast.name }} [<a href="{{ entry.project_cast.oid }}.html">{{ entry.project_cast.oid }}</a>]</td>
+            {% if entry.project_cast.region_id %}
+                <td sorttable_customkey="{{ entry.project_cast.region_id }}">{{ entry.project_cast.region_name }} [<a href="{{ entry.project_cast.region_oid }}.html">{{ entry.project_cast.region_oid }}</a>]</td>
             {% else %}
-                <td sorttable_customkey="Unknown">Unknown {{ entry.unit.oid }}</td>
-            {% endif %}
-            {% if entry.project_cast.id %}
-                <td sorttable_customkey="{{ entry.project_cast.oid }}">{{ entry.project_cast.kind }} {{ entry.project_cast.name }} [<a href="{{ entry.project_cast.oid }}.html">{{ entry.project_cast.oid }}</a>]</td>
-                {% if entry.project_cast.region_id %}
-                    <td sorttable_customkey="{{ entry.project_cast.region_id }}">{{ entry.project_cast.region_name }} [<a href="{{ entry.project_cast.region_oid }}.html">{{ entry.project_cast.region_oid }}</a>]</td>
-                {% else %}
-                    <td sorttable_customkey="&nbsp;">&nbsp;</td>
-                {% endif %}
-            {% else %}
-                <td sorttable_customkey="Unknown">Unknown {{ entry.project_cast.oid }}</td>
                 <td sorttable_customkey="&nbsp;">&nbsp;</td>
             {% endif %}
-        </tr>
-    {% endif %}
+        {% else %}
+            <td sorttable_customkey="Unknown">Unknown {{ entry.project_cast.oid }}</td>
+            <td sorttable_customkey="&nbsp;">&nbsp;</td>
+        {% endif %}
+    </tr>
 {% endfor %}
 </table>
 </BODY>

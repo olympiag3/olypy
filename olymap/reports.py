@@ -114,7 +114,9 @@ def orb_report(data, outdir):
     orb_list = []
     for unit in data:
         if u.is_item(data, unit):
-            orb_list.append(unit)
+            item_rec = data[unit]
+            if u.is_orb(item_rec):
+                orb_list.append(unit)
     # orb_list.sort()
     # for unit in orb_list:
     sort_orb_list = sorted(orb_list, key=lambda x: int(x))
@@ -132,7 +134,9 @@ def projected_cast_potion_report(data, outdir):
     projected_cast_list = []
     for unit in data:
         if u.is_item(data, unit):
-            projected_cast_list.append(unit)
+            item_rec = data[unit]
+            if u.is_projected_cast(item_rec):
+                projected_cast_list.append(unit)
     # projected_cast_list.sort()
     # for unit in projected_cast_list:
     sort_projected_cast_list = sorted(projected_cast_list, key=lambda x: int(x))

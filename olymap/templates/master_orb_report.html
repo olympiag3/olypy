@@ -8,16 +8,14 @@
 <table border="1" style="border-collapse: collapse" class="sortable">
 <tr><th>Item</th><th>Who Has</th></tr>
 {% for entry in orb %}
-    {% if entry.use_key == '9' %}
-        <tr>
-            <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-            {% if entry.unit %}
-                <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
-            {% else %}
-                <td sorttable_customkey="Unknown">Unknown</td>
-            {% endif %}
-        </tr>
-    {% endif %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        {% if entry.unit %}
+            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+        {% else %}
+            <td sorttable_customkey="Unknown">Unknown</td>
+        {% endif %}
+    </tr>
 {% endfor %}
 </table>
 </BODY>
