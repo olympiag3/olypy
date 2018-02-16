@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Road Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Road Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Type</th><th>Name</th><th>Start</th><th>Destination</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td>{{ entry.kind }}</td>
+        <td>{{ entry.name }}</td>
+        {% if entry.road %}
+            {% if entry.road.from %}
+                <td>{{ entry.road.from.name }} [<a href="{{ entry.road.from.oid }}.html">{{ entry.road.from.oid }}</a>]</td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if entry.road.from %}
+                <td>{{ entry.road.to.name }} [<a href="{{ entry.road.to.oid }}.html">{{ entry.road.to.oid }}</a>]</td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+        {% else %}
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

@@ -13,6 +13,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.ship import build_basic_ship_dict
 from olymap.item import build_basic_item_dict
 from olymap.player import build_complete_player_dict
+from olymap.loc import build_basic_loc_dict, get_gate_road_here, get_gate_start_end
 
 
 def ship_report(data, outdir):
@@ -151,46 +152,33 @@ def projected_cast_potion_report(data, outdir):
 
 
 def location_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_location_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Location Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Location Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Location</th><th>Type</th><th>Region</th><th># Men</th></tr>\n')
     location_list = []
     for unit in data:
         if u.is_loc(data, unit):
             location_list.append(unit)
     # location_list.sort()
     # for unit in location_list:
-    for unit in sorted(location_list, key=lambda x: int(x)):
-        loc = data[str(unit)]
-        if 'na' in loc:
-            name = loc['na'][0]
-        else:
-            name = u.return_type(loc).capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(u.return_type(loc)))
-        region = u.region(str(unit), data)
-        region_rec = data[region]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(region))))
-        nbrmen, _, _ = maps.count_stuff(loc, data)
-        outf.write('<td>{}</td>'.format(nbrmen))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_location_list = sorted(location_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_location_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_location_report.html')
+    loc = build_loc_dict(sort_location_list, data, True)
+    outf.write(template.render(loc=loc))
+
+
+def build_loc_dict(loc_list, data, nbr_men_flag=False):
+    loc = []
+    for loc_id in loc_list:
+        loc_rec = data[loc_id]
+        loc_entry = build_basic_loc_dict(loc_id, loc_rec, data)
+        if nbr_men_flag == True:
+            nbrmen, _, _ = maps.count_stuff(loc_rec, data)
+        loc_entry.update({'nbr_men': nbrmen})
+        loc.append(loc_entry)
+    return loc
 
 
 def skill_xref_report(data, teaches_chain, outdir):
@@ -304,42 +292,35 @@ def trade_report(data, trade_chain, outdir):
 
 
 def road_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_road_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Road Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Road Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Type</th><th>Name</th><th>Start</th><th>Destination</th></tr>\n')
     road_list = []
     for unit in data:
         if u.is_road_or_gate(data[unit]):
-            road_list.append(unit)
+            unit_rec = data[unit]
+            if get_gate_road_here(unit_rec) == True:
+                road_list.append(unit)
     # road_list.sort()
     # for road in road_list:
-    for road in sorted(road_list, key=lambda x: int(x)):
-        road_rec = data[road]
-        if 'GA' in road_rec and 'rh' in road_rec['GA'] and road_rec['GA']['rh'][0] == '1':
-            outf.write('<tr>')
-            outf.write('<td>{}</td>'.format(u.return_kind(road_rec)))
-            outf.write('<td>{}</td>'.format(road_rec['na'][0]))
-            start = road_rec['LI']['wh'][0]
-            start_rec = data[start]
-            outf.write('<td>{} [{}]</td>'.format(start_rec['na'][0],
-                                                 anchor(to_oid(u.return_unitid(start_rec)))))
-            dest = road_rec['GA']['tl'][0]
-            dest_rec = data[dest]
-            outf.write('<td>{} [{}]</td>'.format(dest_rec['na'][0],
-                                                 anchor(to_oid(u.return_unitid(dest_rec)))))
-            outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_road_list =  sorted(road_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_road_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_road_report.html')
+    loc = build_road_dict(sort_road_list, data)
+    outf.write(template.render(loc=loc))
+
+
+def build_road_dict(loc_list, data, nbr_men_flag=False):
+    loc = []
+    for loc_id in loc_list:
+        loc_rec = data[loc_id]
+        loc_entry = build_basic_loc_dict(loc_id, loc_rec, data)
+        if nbr_men_flag == True:
+            nbrmen, _, _ = maps.count_stuff(loc_rec, data)
+        loc_entry.update({'road': get_gate_start_end(loc_rec, data)})
+        loc.append(loc_entry)
+    return loc
 
 
 def gate_report(data, outdir):

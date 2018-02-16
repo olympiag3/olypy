@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Location Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Location Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Location</th><th>Type</th><th>Region</th><th># Men</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td>{{ entry.type }}</td>
+        {% if entry.region %}
+            <td sorttable_customkey="{{ entry.region.oid }}">{{ entry.region.name }} [<a href="{{ entry.region.oid }}.html">{{ entry.region.oid }}</a>]</td>
+        {% else %}
+            <td sorttable_customkey="Unknown">Unknown</td>
+        {% endif %}
+        <td>{{ entry.nbr_men }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

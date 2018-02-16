@@ -21,19 +21,16 @@ pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down
 
 
 def build_basic_loc_dict(k, v, data):
-    where_id, where_type, where_name = get_where_info(v, data)
+    where_dict = get_where_info(v, data)
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v, data),
                 'type': get_type(v, data),
-                'kind': 'loc',
-                'where_id': where_id,
-                'where_oid': to_oid(where_id),
-                'where_name': where_name,
-                'safe_haven': get_safe_haven(v),
+                'kind': u.return_kind(v),
+                'where': where_dict,
                 'hidden': u.is_hidden(v),
                 'structure': get_structure_info(v),
-                'distance': calc_exit_distance(v, data[where_id]),
-                'seen_here': get_here_list(k, v, data),}
+                'seen_here': get_here_list(k, v, data),
+                'region': get_region(k, data)}
     return loc_dict
 
 
@@ -43,18 +40,15 @@ def get_where_info(v, data):
         try:
             where_rec = data[where_id[0]]
         except KeyError:
-            where_id = None
-            where_name = None
-            where_type = None
+            where_dict = None
         else:
-            where_id = where_id[0]
-            where_name = get_name(where_rec, data)
-            where_type = get_type(where_rec, data)
+            where_dict = {'id': where_id[0],
+                          'oid': to_oid(where_id[0]),
+                          'name': get_name(where_rec, data),
+                          'type': get_type(where_rec, data)}
     else:
-        where_id = None
-        where_name = None
-        where_type = None
-    return where_id, where_type, where_name
+        where_dict = None
+    return where_dict
 
 
 def get_safe_haven(v):
@@ -551,17 +545,11 @@ def get_character_info(k, v, data, print_province):
 
 
 def build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain, instance, inst_dict, map_matrices):
-    where_id, where_type, where_name = get_where_info(v, data)
-    if where_id is not None:
-        where_oid = to_oid(where_id)
-    else:
-        where_oid = None
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v, data),
                 'type': get_type(v, data),
                 'kind': 'loc',
-                'where_oid': where_oid,
-                'where_name': where_name,
+                'where': get_where_info(v, data),
                 'safe_haven': get_safe_haven(v),
                 'hidden': u.is_hidden(v),
                 'civ_level': get_civ_level(k, v, data),
@@ -575,8 +563,18 @@ def build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_cha
                 'markets': get_markets(k, v, data, trade_chain),
                 'seen_here': get_here_list(k, v, data),
                 'hidden_access': get_hidden_access(k, v, data, hidden_chain),
-                'garrisons': get_garrisons(k, v, data, garrisons_chain)}
+                'garrisons': get_garrisons(k, v, data, garrisons_chain),
+                'region': get_region(k, data)}
     return loc_dict
+
+
+def get_region(k, data):
+    region_id = u.region(k, data)
+    region_rec = data[region_id]
+    region_dict = {'id': region_id,
+                   'oid': to_oid(region_id),
+                   'name': get_name(region_rec, data)}
+    return region_dict
 
 
 def get_map_anchor(v, k, data, instance, inst_dict, map_matrices):
@@ -640,4 +638,35 @@ def get_map_anchor(v, k, data, instance, inst_dict, map_matrices):
                     break
         anchor_string = world + '_map_leaf_' + to_oid(final_coord)
         return anchor_string
+    return None
+
+
+def get_gate_road_here(v):
+    if 'GA' in v and 'rh' in v['GA']:
+        if v['GA']['rh'][0] == '1':
+            return True
+    return False
+
+
+def get_gate_start_end(v, data):
+    if get_gate_road_here(v):
+        from_loc_dict = None
+        if 'LI' in v and 'wh' in v['LI']:
+            from_loc_id = v['LI']['wh'][0]
+            from_loc_rec = data[from_loc_id]
+            from_loc_name = get_name(from_loc_rec, data)
+            from_loc_dict = {'id': from_loc_id,
+                             'oid': to_oid(from_loc_id),
+                             'name': from_loc_name}
+        to_loc_dict = None
+        if 'GA' in v and 'tl' in v['GA']:
+            to_loc_id = v['GA']['tl'][0]
+            to_loc_rec = data[to_loc_id]
+            to_loc_name = get_name(to_loc_rec, data)
+            to_loc_dict = {'id': to_loc_id,
+                           'oid': to_oid(to_loc_id),
+                           'name': to_loc_name}
+        gate_start_end_dict = {'from': from_loc_dict,
+                               'to': to_loc_dict}
+        return gate_start_end_dict
     return None

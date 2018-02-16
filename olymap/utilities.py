@@ -401,6 +401,8 @@ def top_ruler(k, data):
 
 
 def calc_exit_distance(loc1, loc2):
+    if loc1 is None or loc2 is None:
+        return 0
     if return_type(loc1) == 'pit' or return_type(loc2) == 'pit':
         return 28
     if loc_depth(return_type(loc1)) > loc_depth(return_type(loc2)):

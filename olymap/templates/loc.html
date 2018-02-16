@@ -1,8 +1,8 @@
 <HTML>
 <HEAD>
 <TITLE>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
-{% if loc.where_name %}
-    in {{ loc.where_name }}
+{% if loc.where %}
+    in {{ loc.where.name }}
 {% endif %}
 </TITLE>
 </HEAD>
@@ -13,7 +13,9 @@
     {% if loc.type == 'city' %}
         province
     {% endif %}
-    {{ loc.where_name }} [<a href="{{ loc.where_oid }}.html">{{ loc.where_oid }}</a>]
+    {% if loc.where %}
+        {{ loc.where.name }} [<a href="{{ loc.where.oid }}.html">{{ loc.where.oid }}</a>]
+    {% endif %}
 {%- endif -%}
 {%- if loc.safe_haven -%}
 , safe haven
