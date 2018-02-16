@@ -111,7 +111,6 @@ def healing_potion_report(data, outdir):
 
 
 def orb_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_orb_report.html'), 'w')
     orb_list = []
     for unit in data:
         if u.is_item(data, unit):
@@ -130,67 +129,21 @@ def orb_report(data, outdir):
 
 
 def projected_cast_potion_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_projected_cast_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Projected Cast Potion Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Projected Cast Potion Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Who Has</th><th>Target</th><th>Target Region</th></tr>\n')
     projected_cast_list = []
     for unit in data:
         if u.is_item(data, unit):
             projected_cast_list.append(unit)
     # projected_cast_list.sort()
     # for unit in projected_cast_list:
-    for unit in sorted(projected_cast_list, key=lambda x: int(x)):
-        itemz = data[unit]
-        if 'IM' in itemz and 'uk' in itemz['IM']:
-            if itemz['IM']['uk'][0] == '5':
-                outf.write('<tr>')
-                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                              itemz['na'][0],
-                                                                              anchor(to_oid(unit))))
-                if 'IT' in itemz and 'un' in itemz['IT']:
-                    charac = data[itemz['IT']['un'][0]]
-                    outf.write('<td sorttable_customkey="{}">'
-                               '{} [{}]</td>'.format(itemz['IT']['un'][0],
-                                                     charac['na'][0],
-                                                     anchor(to_oid(itemz['IT']['un'][0]))))
-                else:
-                    outf.write('<td sorttable_customkey="{}">unknown</td><')
-                if 'IM' in itemz and 'pc' in itemz['IM']:
-                    try:
-                        loc = data[itemz['IM']['pc'][0]]
-                    except KeyError:
-                        outf.write('<td sorttable_customkey="">unknown {}</td><td>&nbsp;</td>'.format(itemz['IM']['pc'][0]))
-                    else:
-                        name = loc.get('na', [u.return_kind(loc)])[0]
-                        outf.write('<td sorttable_customkey="{}">'
-                                   '{} {} [{}]</td>'.format(itemz['IM']['pc'],
-                                                            u.return_kind(loc),
-                                                            name,
-                                                            anchor(to_oid(itemz['IM']['pc'][0]))))
-                        try:
-                            region = u.region(str(itemz['IM']['pc'][0]), data)
-                        except KeyError:
-                            outf.write('<td>&nbsp;</td>')
-                        else:
-                            region_rec = data[region]
-                            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                                          region_rec['na'][0],
-                                                                                          anchor(to_oid(region))))
-                else:
-                    outf.write('<td sorttable_customkey="">unknown</td><td>&nbsp;</td>')
-                outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_projected_cast_list = sorted(projected_cast_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_projected_cast_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_projected_cast_report.html')
+    projected_cast = build_item_dict(sort_projected_cast_list, data, None)
+    outf.write(template.render(projected_cast=projected_cast))
 
 
 def location_report(data, outdir):

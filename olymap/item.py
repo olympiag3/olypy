@@ -32,7 +32,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'may_study_name' : may_study_name,
                  'missile' : get_missile(v)[0],
                  'missile_bonus' : get_missile_bonus(v)[0],
-                 'project_cast' : get_project_cast(v)[0],
+                 'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'unit': get_unit(v, data),
@@ -64,6 +64,7 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'man_item': get_man_item(v)[0],
                  'missile' : get_missile(v)[0],
                  'missile_bonus' : get_missile_bonus(v)[0],
+                 'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'unit': get_unit(v, data),
@@ -157,8 +158,33 @@ def get_plural(v, data):
     return plural
 
 
-def get_project_cast(v):
-    return v.get('IM', {}).get('pc', [None])
+def get_project_cast(v, data):
+    projected_cast = v.get('IM', {}).get('pc', [None])
+    projected_cast_id = projected_cast[0]
+    if projected_cast_id is not None:
+        try:
+            projected_cast_rec = data[projected_cast_id]
+            try:
+                region_id = u.region(projected_cast_id, data)
+                region_rec = data[region_id]
+                region_oid = to_oid(region_id)
+                region_name = get_name(region_rec, data)
+            except KeyError:
+                region_id = None
+                region_oid = None
+                region_name = None
+            projected_dict = {'id': projected_cast_id,
+                              'oid': to_oid(projected_cast_id),
+                              'name': get_name(projected_cast_rec, data),
+                              'kind': u.return_kind(projected_cast_rec),
+                              'region_id': region_id,
+                              'region_oid': region_oid,
+                              'region_name': region_name}
+        except KeyError:
+            projected_dict = {'id': None,
+                              'oid': to_oid(projected_cast_id)}
+        return projected_dict
+    return None
 
 
 def get_prominent(v):

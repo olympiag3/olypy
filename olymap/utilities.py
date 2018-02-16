@@ -815,10 +815,17 @@ def get_use_key(v):
     return v.get('IM', {}).get('uk', [None])
 
 
+def is_projected_cast(v):
+    projected_cast = get_use_key(v)[0]
+    if projected_cast is None or projected_cast != '5':
+        return False
+    else:
+        return True
+
+
 def is_orb(v):
     orb = get_use_key(v)[0]
     if orb is None or orb != '9':
         return False
     else:
         return True
-
