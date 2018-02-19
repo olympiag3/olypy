@@ -184,7 +184,7 @@ def get_destinations(k, v, data):
         link_rec = data[link_id]
         region_id = u.region(link_id, data)
         region_rec = data[region_id]
-        to_dict = create_loc_to_dict_entry(data, get_type(link_id, data).title(), link_rec, v, region_rec)
+        to_dict = create_loc_to_dict_entry(data, get_type(link_rec, data).title(), link_rec, v, region_rec)
         dest_list.append(to_dict)
     region_id = u.region(k, data)
     region_rec = data[region_id]
@@ -454,8 +454,8 @@ def get_here_list(k, v, data):
                     inner_dict = build_basic_ship_dict(here[0], here_rec, data)
                     inner_dict.update({'level': here[1]})
                     inner_list_final.append(inner_dict)
-                else:
-                    print('here_list unknown {}'.format(here[0]))
+                # else:
+                #     print('here_list unknown {} {}'.format(here[0], u.return_kind(here_rec)))
         if len(seen_list) > 0:
             for seen in seen_list:
                 seen_rec = data[seen[0]]
@@ -641,15 +641,27 @@ def get_map_anchor(v, k, data, instance, inst_dict, map_matrices):
     return None
 
 
-def get_gate_road_here(v):
+def get_road_here(v):
     if 'GA' in v and 'rh' in v['GA']:
         if v['GA']['rh'][0] == '1':
             return True
     return False
 
 
+def get_gate_here(v):
+    if 'GA' in v:
+        if 'rh' in v['GA']:
+            if v['GA']['rh'][0] == '1':
+                return False
+            else:
+                return True
+        else:
+            return True
+    return False
+
+
 def get_gate_start_end(v, data):
-    if get_gate_road_here(v):
+    if get_road_here(v) or get_gate_here(v):
         from_loc_dict = None
         if 'LI' in v and 'wh' in v['LI']:
             from_loc_id = v['LI']['wh'][0]

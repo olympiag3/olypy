@@ -1,16 +1,15 @@
 <HTML>
 <HEAD>
-<script src="sorttable.js"></script><TITLE>Olympia Master Road Report</TITLE>
+<script src="sorttable.js"></script><TITLE>Olympia Master Gate Report</TITLE>
 </HEAD>
 <BODY>
-<H3>Olympia Master Road Report</H3>
+<H3>Olympia Master Gate Report</H3>
 <h5>(Click on table headers to sort)</h5>
 <table border="1" style="border-collapse: collapse" class="sortable">
-<tr><th>Kind</th><th>Name</th><th>Start</th><th>Destination</th></tr>
+<tr><th>Kind</th><th>Start</th><th>Destination</th></tr>
 {% for entry in loc %}
     <tr>
         <td>{{ entry.kind }}</td>
-        <td>{{ entry.name }}</td>
         {% if entry.road %}
             {% if entry.road.from %}
                 <td>{{ entry.road.from.name }} [<a href="{{ entry.road.from.oid }}.html">{{ entry.road.from.oid }}</a>]</td>
