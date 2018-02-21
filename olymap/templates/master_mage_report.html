@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Mage Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Mage Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Mage</th><th>Mage Name</th><th>Rank</th><th>Curr Aura</th><th>Max Aura</th><th>Auraculum Aura</th><th>Total Aura</th><th>Auraculum</th><th>Player</th></tr>
+{% for entry in char %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.name }}">{{ entry.name }}</td>
+        <td sorttable_customkey="{{ entry.magetype }}">{{ entry.magetype }}</td>
+        <td>{{ entry.aura_dict.current_aura }}</td>
+        <td>{{ entry.aura_dict.max_aura }}</td>
+        <td>{{ entry.aura_dict.auraculum_aura }}</td>
+        <td>{{ entry.aura_dict.total_aura }}</td>
+        {% if entry.aura_dict.auraculum_id %}
+            <td sorttable_customkey="{{ entry.aura_dict.auraculum_oid }}">{{ entry.aura_dict.auraculum_name }} [<a href="{{ entry.aura_dict.auraculum_oid }}.html">{{ entry.aura_dict.auraculum_oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        <td sorttable_customkey="{{ entry.faction.oid }}">{{ entry.faction.name }} [<a href="{{ entry.faction.oid }}.html">{{ entry.faction.oid }}</a>]</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

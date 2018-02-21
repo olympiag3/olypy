@@ -30,7 +30,8 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
                      'wearable': get_wearable_wielding(v, data),
                      'loyalty': get_loyalty(v),
                      'skills_known_list': get_skills_known(v, data),
-                     'inventory_dict': get_inventory(v, data, prominent_only)}
+                     'inventory_dict': get_inventory(v, data, prominent_only),
+                     'aura_dict': get_aura(v, data),}
         return char_dict
     else:
         char_dict = {'id': k,
@@ -286,18 +287,31 @@ def get_aura(v, data):
         current_aura = v.get('CM', {}).get('ca', ['0'])
         max_aura = v.get('CM', {}).get('ma', ['0'])
         max_aura_str = ''
+        auraculum_amt = 0
+        auraculum_name = None
         if 'ar' in v['CM']:
-            auraculum = data[v['CM']['ar'][0]]
-            auraculum_amt = '0'
-            if 'IM' in auraculum:
-                if 'au' in auraculum['IM']:
-                    auraculum_amt = auraculum['IM']['au'][0]
+            auraculum_id = v['CM']['ar'][0]
+            auraculum_oid = to_oid(auraculum_id)
+            auraculum_rec = data[auraculum_id]
+            auraculum_name = None
+            if 'IM' in auraculum_rec:
+                if 'au' in auraculum_rec['IM']:
+                    auraculum_amt = int(auraculum_rec['IM']['au'][0])
                     max_aura_str = ('{} ({}+{})'.format((int(max_aura[0]) + int(auraculum_amt)),
                                                           max_aura[0], auraculum_amt))
+                    auraculum_name = get_name(auraculum_rec, data)
         else:
+            auraculum_id = None
+            auraculum_oid = None
             max_aura_str = max_aura[0]
         aura_dict = {'rank': rank,
                      'current_aura': current_aura[0],
+                     'max_aura': max_aura[0],
+                     'auraculum_aura': auraculum_amt,
+                     'total_aura': int(max_aura[0]) + auraculum_amt,
+                     'auraculum_id': auraculum_id,
+                     'auraculum_oid': auraculum_oid,
+                     'auraculum_name': auraculum_name,
                      'max_aura_str': max_aura_str}
         return aura_dict
     return None
