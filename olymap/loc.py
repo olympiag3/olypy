@@ -21,12 +21,11 @@ pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down
 
 
 def build_basic_loc_dict(k, v, data, garrisons_chain=None):
-    where_dict = get_where_info(v, data)
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v, data),
                 'type': get_type(v, data),
                 'kind': u.return_kind(v),
-                'where': where_dict,
+                'where': get_where_info(v, data),
                 'hidden': u.is_hidden(v),
                 'structure': get_structure_info(v),
                 'seen_here': get_here_list(k, v, data),

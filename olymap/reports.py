@@ -13,7 +13,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.ship import build_basic_ship_dict
 from olymap.item import build_basic_item_dict
 from olymap.player import build_complete_player_dict
-from olymap.loc import build_basic_loc_dict, get_road_here, get_gate_here, get_gate_start_end
+from olymap.loc import build_basic_loc_dict, get_road_here, get_gate_here, get_gate_start_end, get_where_info, get_region
 from olymap.char import build_basic_char_dict, get_items_list, get_loc
 
 
@@ -439,69 +439,44 @@ def graveyard_report(data, outdir):
 
 
 def faeryhill_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_faeryhill_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Faery Hill Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Faery Hill Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Faery Hill</th><th>Province</th><th>Region</th><th>Target</th><th>Target Region</th></tr>\n')
     faeryhill_list = []
     for unit in data:
         if u.is_faeryhill(data, unit):
             faeryhill_list.append(unit)
     # faeryhill_list.sort()
     # for unit in faeryhill_list:
+    sort_faeryhill_list = []
     for unit in sorted(faeryhill_list, key=lambda x: int(x)):
-        faeryhill = data[unit]
-        if 'na' in faeryhill:
-            name = faeryhill['na'][0]
-        else:
-            name = u.return_type(faeryhill).capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        loc_rec = data[faeryhill['LI']['wh'][0]]
-        if 'na' in loc_rec:
-            name_loc = loc_rec['na'][0]
-        else:
-            name_loc = u.return_type(loc_rec).capitalize()
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
-                                                                      name_loc,
-                                                                      anchor(to_oid(u.return_unitid(loc_rec)))))
-        region = u.region(str(unit), data)
-        region_rec = data[region]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(region))))
+        faeryhill_rec = data[unit]
         # SL/lt
-        if 'SL' in faeryhill and 'lt' in faeryhill['SL']:
-            target = data[faeryhill['SL']['lt'][0]]
-            if 'na' in loc_rec:
-                name_target = target['na'][0]
-            else:
-                name_target = u.return_type(target).capitalize()
-            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(target),
-                                                                          name_target,
-                                                                          anchor(to_oid(u.return_unitid(target)))))
-            target_region = u.region(str(faeryhill['SL']['lt'][0]), data)
-            target_region_rec = data[target_region]
-            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(target_region,
-                                                                          target_region_rec['na'][0],
-                                                                          anchor(to_oid(target_region))))
+        if 'SL' in faeryhill_rec and 'lt' in faeryhill_rec['SL']:
+            target_id = faeryhill_rec['SL']['lt'][0]
+            target_rec = data[target_id]
+            target_dict = {'id': target_id,
+                           'oid': to_oid(target_id),
+                           'name': get_name(target_rec, data)}
+            target_region_dict = get_region(target_id, data)
         else:
-            outf.write('<td>&nbsp;</td><td>&nbsp;</td>')
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
-    
+            target_rec = None
+            target_dict = None
+            target_region_dict = None
+        sort_faeryhill_dict = {'id:' : unit,
+                               'oid': to_oid(unit),
+                               'name': get_name(faeryhill_rec, data),
+                               'where_dict': get_where_info(faeryhill_rec, data),
+                               'region_dict': get_region(unit, data),
+                               'target_dict': target_dict,
+                               'target_region_dict': target_region_dict}
+        sort_faeryhill_list.append((sort_faeryhill_dict))
+    outf = open(pathlib.Path(outdir).joinpath('master_faeryhill_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_faeryhill_report.html')
+    loc = sort_faeryhill_list
+    outf.write(template.render(loc=loc))
+
 
 def castle_report(data, outdir, garrisons_chain):
     castle_list = []
@@ -523,17 +498,6 @@ def castle_report(data, outdir, garrisons_chain):
 
 
 def city_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_city_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master City Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master City Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th><th># Men</th></tr>\n')
     city_list = []
     for unit in data:
         if u.is_city(data, unit):
