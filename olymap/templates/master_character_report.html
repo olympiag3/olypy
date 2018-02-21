@@ -1,0 +1,40 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Character Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Character Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Character</th><th>Name</th><th>Faction</th><th>Loyalty</th><th>Health</th><th>Mage</th><th>Priest</th><th># Men</th></tr>
+{% for entry in char %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.name }}">{{ entry.name }}</td>
+        {% if entry.faction %}
+            <td sorttable_customkey="{{ entry.faction.oid }}">{{ entry.faction.name }} [<a href="{{ entry.faction.oid }}.html">{{ entry.faction.oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        <td>{{ entry.loyalty }}</td>
+        {% if entry.health %}
+            <td>{{ entry.health }}</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.magician and entry.magician == True %}
+            <td>Yes</td>
+        {% else %}
+            <td>No</td>
+        {% endif %}
+        {% if entry.priest and entry.priest == True %}
+            <td>Yes</td>
+        {% else %}
+            <td>No</td>
+        {% endif %}
+        <td>{{ entry.nbr_men }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
