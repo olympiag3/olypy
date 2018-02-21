@@ -9,7 +9,7 @@ import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 
-def build_basic_char_dict(k, v, data, prominent_only):
+def build_basic_char_dict(k, v, data, prominent_only=False):
     if u.return_type(v) != "garrison":
         char_dict = {'id': k,
                      'oid': get_oid(k),
@@ -18,6 +18,8 @@ def build_basic_char_dict(k, v, data, prominent_only):
                      'kind': 'char',
                      'rank': get_rank(v),
                      'faction': get_faction(v, data),
+                     'health': get_health(v),
+                     'nbr_men': get_nbr_men(v, data),
                      'absorb_blast': u.is_absorb_aura_blast(v, data),
                      'prisoner': u.is_prisoner(v),
                      'stacked_over_list': get_stacked_over(v, data),
@@ -36,7 +38,11 @@ def build_basic_char_dict(k, v, data, prominent_only):
                      'name': get_name(v, data),
                      'type': get_type(v, data),
                      'kind': 'char',
+                     'faction': get_faction(v, data),
+                     'health': get_health(v),
+                     'nbr_men': get_nbr_men(v, data),
                      'on_guard': u.is_on_guard(v),
+                     'loyalty': get_loyalty(v),
                      'inventory_dict': get_inventory(v, data, prominent_only)}
         return char_dict
 
@@ -207,7 +213,7 @@ def get_health(v):
         else:
             health_str = ('{}%'.format(health[0]))
         return health_str
-    return None
+    return 'n/a'
 
 
 def get_combat(v):
@@ -672,6 +678,18 @@ def get_magic_stuff(v, data):
     return magic_list
 
 
+def get_nbr_men(v, data):
+    nbr_men = 0
+    item_list = get_items_list(v, data, False)
+    for item in item_list:
+        item_dict = item
+        id = item_dict['id']
+        item_rec = data[id]
+        if u.is_man_item(item_rec):
+            nbr_men = nbr_men + item_dict['qty']
+    return nbr_men
+
+
 def get_items_list(v, data, prominent):
     items_list = []
     if 'il' in v:
@@ -679,7 +697,7 @@ def get_items_list(v, data, prominent):
         for item in range(0, len(item_list), 2):
             id = item_list[item]
             item_rec = data[id]
-            if (prominent and u.is_prominent(item_rec)) or prominent is None:
+            if (prominent and u.is_prominent(item_rec)) or prominent == False:
                 oid = to_oid(id)
                 item_qty = int(item_list[item + 1])
                 item_dict = {'id': id,
@@ -729,7 +747,8 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'type': None,
                      'kind': 'char',
                      'rank': None,
-                     'faction': None,
+                     'faction': get_faction(v, data),
+                     'nbr_men': get_nbr_men(v, data),
                      'prisoner': None,
                      'priest': None,
                      'magetype': None,

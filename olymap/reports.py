@@ -14,6 +14,7 @@ from olymap.ship import build_basic_ship_dict
 from olymap.item import build_basic_item_dict
 from olymap.player import build_complete_player_dict
 from olymap.loc import build_basic_loc_dict, get_road_here, get_gate_here, get_gate_start_end
+from olymap.char import build_basic_char_dict
 
 
 def ship_report(data, outdir):
@@ -342,68 +343,30 @@ def gate_report(data, outdir):
 
 
 def character_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_character_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Character Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Character Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Character</th><th>Name</th><th>Faction</th><th>Loyalty</th>'
-               '<th>Health</th><th>Mage</th><th>Priest</th><th># Men</th></tr>\n')
     character_list = []
     for unit in data:
         if u.is_char(data, unit):
             character_list.append(unit)
     # character_list.sort()
     # for unit in character_list:
-    for unit in sorted(character_list, key=lambda x: int(x)):
-        character = data[unit]
-        if 'na' in character:
-            name = character['na'][0]
-        else:
-            name = u.return_type(character).capitalize()
-        if name == 'Ni':
-            name = data[character['CH']['ni'][0]]['na'][0].capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(name))
-        if 'CH' in character and 'lo' in character['CH']:
-            player = data[character['CH']['lo'][0]]
-            outf.write('<td sorttable_customkey="{}">{} [{}]</td>\n'.format(u.return_unitid(player),
-                                                                                 player['na'][0],
-                                                                                 anchor(to_oid(u.return_unitid(player)))))
-        else:
-            outf.write('<td>&nbsp;</td>')
-        outf.write('<td>{}</td>'.format(u.xlate_loyalty(character)))
-        if 'CH' in character and 'he' in character['CH']:
-            if int(character['CH']['he'][0]) < 0:
-                health = 'n/a'
-            else:
-                health = character['CH']['he'][0]
-            outf.write('<td>{}</td>'.format(health))
-        else:
-            outf.write('<td>&nbsp;</td>')
-        if u.is_magician(character):
-            outf.write('<td>Yes</td>')
-        else:
-            outf.write('<td>No</td>')
-        if u.is_priest(character):
-            outf.write('<td>Yes</td>')
-        else:
-            outf.write('<td>No</td>')
-        nbrmen, _, _ = maps.count_stuff(character, data)
-        outf.write('<td>{}</td>'.format(nbrmen))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_character_list =  sorted(character_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_character_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_character_report.html')
+    char = build_char_dict(sort_character_list, data)
+    outf.write(template.render(char=char))
+
+
+def build_char_dict(char_list, data):
+    char = []
+    for char_id in char_list:
+        char_rec = data[char_id]
+        char_entry = build_basic_char_dict(char_id, char_rec, data)
+        char.append(char_entry)
+    return char
 
 
 def graveyard_report(data, outdir):

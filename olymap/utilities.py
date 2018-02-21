@@ -831,3 +831,10 @@ def is_orb(v):
         return False
     else:
         return True
+
+
+def is_man_item(v):
+    if 'IT' in v and 'mu' in v['IT']:
+        if v['IT']['mu'][0] == '1':
+            return True
+    return False
