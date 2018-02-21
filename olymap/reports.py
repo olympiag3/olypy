@@ -170,7 +170,7 @@ def location_report(data, outdir):
     outf.write(template.render(loc=loc))
 
 
-def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None, port_city_flag=False):
+def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None, port_city_flag=False, nbr_provinces_flag=False):
     loc = []
     for loc_id in loc_list:
         loc_rec = data[loc_id]
@@ -181,6 +181,12 @@ def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None, por
         if port_city_flag == True:
             port_city = u.is_port_city(loc_rec, data)
             loc_entry.update({'port_city': port_city})
+        if nbr_provinces_flag == True:
+            nbr_provinces = 0
+            if 'LI' in loc_rec:
+                if 'hl' in loc_rec['LI']:
+                    nbr_provinces = len(loc_rec['LI']['hl'])
+            loc_entry.update({'nbr_provinces': nbr_provinces})
         loc.append(loc_entry)
     return loc
 
@@ -546,39 +552,21 @@ def city_report(data, outdir):
 
 
 def region_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_region_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Region Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Region Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Region</th><th>Provinces</th></tr>\n')
     region_list = []
     for unit in data:
         if u.is_region(data, unit):
             region_list.append(unit)
     # region_list.sort()
     # for unit in region_list:
-    for unit in sorted(region_list, key=lambda x: int(x)):
-        region_rec = data[unit]
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(unit))))
-        nbr_provinces = 0
-        if 'LI' in region_rec:
-            if 'hl' in region_rec['LI']:
-                nbr_provinces = len(region_rec['LI']['hl'])
-        outf.write('<td>{}</td>'.format(nbr_provinces))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_region_list = sorted(region_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_region_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_region_report.html')
+    loc = build_loc_dict(sort_region_list, data, False, None, False, True)
+    outf.write(template.render(loc=loc))
 
 
 def mage_report(data, outdir):

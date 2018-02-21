@@ -1,0 +1,18 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Region Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Region Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Region</th><th>Provinces</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td>{{ entry.nbr_provinces }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
