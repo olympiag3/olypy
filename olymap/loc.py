@@ -20,7 +20,7 @@ from olymap.storm import build_basic_storm_dict
 pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down'}
 
 
-def build_basic_loc_dict(k, v, data):
+def build_basic_loc_dict(k, v, data, garrisons_chain=None):
     where_dict = get_where_info(v, data)
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v, data),
@@ -30,7 +30,8 @@ def build_basic_loc_dict(k, v, data):
                 'hidden': u.is_hidden(v),
                 'structure': get_structure_info(v),
                 'seen_here': get_here_list(k, v, data),
-                'region': get_region(k, data)}
+                'region': get_region(k, data),
+                'garrisons': get_garrisons(k, v, data, garrisons_chain),}
     return loc_dict
 
 
@@ -516,19 +517,21 @@ def get_hidden_access(k, v, data, hidden_chain):
 
 
 def get_garrisons(k, v, data, garrisons_chain):
-    garrisons_list = []
-    if u.return_type(v) == 'castle':
-        garrison_list = garrisons_chain[k]
-        if len(garrison_list) > 0:
-            province_list = []
-            for garrison in garrison_list:
-                province_rec = data[garrison]
-                province_list.append([province_rec['LI']['wh'][0], garrison])
-            province_list.sort()
-            for province in province_list:
-                garrison_rec = data[province[1]]
-                garrison_dict = get_character_info(province[1], garrison_rec, data, True)
-                garrisons_list.append(garrison_dict)
+    garrisons_list = None
+    if garrisons_chain is not None:
+        garrisons_list = []
+        if u.return_type(v) == 'castle':
+            garrison_list = garrisons_chain[k]
+            if len(garrison_list) > 0:
+                province_list = []
+                for garrison in garrison_list:
+                    province_rec = data[garrison]
+                    province_list.append([province_rec['LI']['wh'][0], garrison])
+                province_list.sort()
+                for province in province_list:
+                    garrison_rec = data[province[1]]
+                    garrison_dict = get_character_info(province[1], garrison_rec, data, True)
+                    garrisons_list.append(garrison_dict)
     return garrisons_list
 
 

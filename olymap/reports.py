@@ -166,18 +166,18 @@ def location_report(data, outdir):
         autoescape=select_autoescape(['html', 'xml'])
     )
     template = env.get_template('master_location_report.html')
-    loc = build_loc_dict(sort_location_list, data, True)
+    loc = build_loc_dict(sort_location_list, data, True, None)
     outf.write(template.render(loc=loc))
 
 
-def build_loc_dict(loc_list, data, nbr_men_flag=False):
+def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None):
     loc = []
     for loc_id in loc_list:
         loc_rec = data[loc_id]
-        loc_entry = build_basic_loc_dict(loc_id, loc_rec, data)
+        loc_entry = build_basic_loc_dict(loc_id, loc_rec, data, garrisons_chain)
         if nbr_men_flag == True:
             nbrmen, _, _ = maps.count_stuff(loc_rec, data)
-        loc_entry.update({'nbr_men': nbrmen})
+            loc_entry.update({'nbr_men': nbrmen})
         loc.append(loc_entry)
     return loc
 
@@ -495,55 +495,22 @@ def faeryhill_report(data, outdir):
     
 
 def castle_report(data, outdir, garrisons_chain):
-    outf = open(pathlib.Path(outdir).joinpath('master_castle_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Castle Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Castle Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Castle</th><th>Province</th><th>Region</th><th># Garr</th><th># Men</th></tr>\n')
     castle_list = []
     for unit in data:
         if u.is_castle(data, unit):
             castle_list.append(unit)
     # castle_list.sort()
     # for unit in castle_list:
-    for unit in sorted(castle_list, key=lambda x: int(x)):
-        castle = data[unit]
-        if 'na' in castle:
-            name = castle['na'][0]
-        else:
-            name = u.return_type(castle).capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        loc_rec = data[castle['LI']['wh'][0]]
-        if 'na' in loc_rec:
-            name_loc = loc_rec['na'][0]
-        else:
-            name_loc = u.return_type(loc_rec).capitalize()
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
-                                                                      name_loc,
-                                                                      anchor(to_oid(u.return_unitid(loc_rec)))))
-        region = u.region(str(unit), data)
-        region_rec = data[region]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(region))))
-        garrison_list = garrisons_chain[str(unit)]
-        outf.write('<td>{}</td>'.format(len(garrison_list)))
-        nbrmen, _, _ = maps.count_stuff(castle, data)
-        outf.write('<td>{}</td>'.format(nbrmen))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_castle_list = sorted(castle_list, key=lambda x: int(x))
+    # nbrmen, _, _ = maps.count_stuff(castle, data)
+    outf = open(pathlib.Path(outdir).joinpath('master_castle_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_castle_report.html')
+    loc = build_loc_dict(sort_castle_list, data, True, garrisons_chain)
+    outf.write(template.render(loc=loc))
 
 
 def city_report(data, outdir):
