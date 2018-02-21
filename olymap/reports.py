@@ -170,7 +170,7 @@ def location_report(data, outdir):
     outf.write(template.render(loc=loc))
 
 
-def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None):
+def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None, port_city_flag=False):
     loc = []
     for loc_id in loc_list:
         loc_rec = data[loc_id]
@@ -178,6 +178,9 @@ def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None):
         if nbr_men_flag == True:
             nbrmen, _, _ = maps.count_stuff(loc_rec, data)
             loc_entry.update({'nbr_men': nbrmen})
+        if port_city_flag == True:
+            port_city = u.is_port_city(loc_rec, data)
+            loc_entry.update({'port_city': port_city})
         loc.append(loc_entry)
     return loc
 
@@ -531,37 +534,15 @@ def city_report(data, outdir):
             city_list.append(unit)
     # city_list.sort()
     # for unit in city_list:
-    for unit in sorted(city_list, key=lambda x: int(x)):
-        city = data[unit]
-        if 'na' in city:
-            name = city['na'][0]
-        else:
-            name = u.return_type(city).capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        loc_rec = data[city['LI']['wh'][0]]
-        if 'na' in loc_rec:
-            name_loc = loc_rec['na'][0]
-        else:
-            name_loc = u.return_type(loc_rec).capitalize()
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
-                                                                      name_loc,
-                                                                      anchor(to_oid(u.return_unitid(loc_rec)))))
-        region = u.region(str(unit), data)
-        region_rec = data[region]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(region))))
-        outf.write('<td>{}</td>'.format(u.is_port_city(city, data)))
-        nbrmen, _, _ = maps.count_stuff(city, data)
-        outf.write('<td>{}</td>'.format(nbrmen))
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_city_list = sorted(city_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_city_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_city_report.html')
+    loc = build_loc_dict(sort_city_list, data, True, None, True)
+    outf.write(template.render(loc=loc))
 
 
 def region_report(data, outdir):

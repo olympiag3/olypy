@@ -1,0 +1,25 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master City Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master City Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>City</th><th>Province</th><th>Region</th><th>Port City</th><th># Men</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.where.oid }}">{{ entry.where.name }} [<a href="{{ entry.where.oid }}.html">{{ entry.where.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.region.oid }}">{{ entry.region.name }} [<a href="{{ entry.region.oid }}.html">{{ entry.region.oid }}</a>]</td>
+        {% if entry.port_city and entry.port_city == True %}
+            <td>Yes</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+        <td>{{ entry.nbr_men }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
