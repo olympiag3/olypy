@@ -161,7 +161,8 @@ def get_loc(v, data):
     if loc_oid[0] is not None:
         loc_rec = data[loc_oid[0]]
         loc_name = get_name(loc_rec, data)
-        loc_dict = {'oid' : to_oid(loc_oid[0]),
+        loc_dict = {'id': loc_oid[0],
+                    'oid' : to_oid(loc_oid[0]),
                     'name' : loc_name}
         return loc_dict
     return None
@@ -705,14 +706,15 @@ def get_nbr_men(v, data):
     return nbr_men
 
 
-def get_items_list(v, data, prominent):
+def get_items_list(v, data, prominent, item_select=None):
     items_list = []
     if 'il' in v:
         item_list = v['il']
         for item in range(0, len(item_list), 2):
             id = item_list[item]
             item_rec = data[id]
-            if (prominent and u.is_prominent(item_rec)) or prominent == False:
+            if (prominent and u.is_prominent(item_rec)) or \
+                (prominent == False and item_select is None or id == item_select):
                 oid = to_oid(id)
                 item_qty = int(item_list[item + 1])
                 item_dict = {'id': id,

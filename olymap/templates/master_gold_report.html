@@ -1,0 +1,20 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Gold (> 10k) Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Gold (> 10k) Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Character</th><th>Character Name</th><th>Location</th><th>Gold</th></tr>
+{% for entry in char %}
+    <tr>
+        <td  valign="top" sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td  valign="top" sorttable_customkey="{{ entry.name }}">{{ entry.name }}</td>
+        <td  valign="top" sorttable_customkey="{{ entry.loc.oid }}">{{ entry.loc.name }} [<a href="{{ entry.loc.oid }}.html">{{ entry.loc.oid }}</a>]</td>
+        <td>{{ '{0:,d}'.format(entry.qty) }}</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

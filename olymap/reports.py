@@ -14,7 +14,7 @@ from olymap.ship import build_basic_ship_dict
 from olymap.item import build_basic_item_dict
 from olymap.player import build_complete_player_dict
 from olymap.loc import build_basic_loc_dict, get_road_here, get_gate_here, get_gate_start_end
-from olymap.char import build_basic_char_dict
+from olymap.char import build_basic_char_dict, get_items_list, get_loc
 
 
 def ship_report(data, outdir):
@@ -606,58 +606,29 @@ def priest_report(data, outdir):
 
 
 def gold_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_gold_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Gold (> 10k) Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Gold (> 10k) Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Character</th><th>Character Name</th><th>Location</th><th>Gold</th></tr>\n')
     character_list = []
     for unit in data:
         if u.is_char(data, unit):
             character_list.append(unit)
     # character_list.sort()
     # for unit in character_list:
+    sort_gold_list = []
     for unit in sorted(character_list, key=lambda x: int(x)):
         character_rec = data[unit]
-        if 'il' in character_rec:
-            item_list = character_rec['il']
-            if len(item_list) > 0:
-                for itm in range(0, len(item_list), 2):
-                    item_id = item_list[itm]
-                    if item_id == '1':
-                        item_qty = int(item_list[itm + 1])
-                        if item_qty > 10000:
-                            if 'na' in character_rec:
-                                name = character_rec['na'][0]
-                            else:
-                                name = u.return_type(character_rec).capitalize()
-                            if name == 'Ni':
-                                name = data[character_rec['CH']['ni'][0]]['na'][0].capitalize()
-                            outf.write('<tr>')
-                            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                                          name,
-                                                                                          anchor(to_oid(unit))))
-                            outf.write('<td>{}</td>'.format(name))
-                            loc_rec = data[character_rec['LI']['wh'][0]]
-                            if 'na' in loc_rec:
-                                name_loc = loc_rec['na'][0]
-                            else:
-                                name_loc = u.return_type(loc_rec).capitalize()
-                            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
-                                                                                          name_loc,
-                                                                                          anchor(to_oid(
-                                                                                              u.return_unitid(
-                                                                                                  loc_rec)))))
-                            outf.write(f'<td>{item_qty:,d}</td>')
-                            outf.write('</tr>\n')
-                        break
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+        items_list = get_items_list(character_rec, data, False, '1')
+        if items_list != []:
+            if int(items_list[0]['qty']) > 10000:
+                gold_dict = {'id': unit,
+                             'oid': to_oid(unit),
+                             'name': get_name(character_rec, data),
+                             'loc': get_loc(character_rec, data),
+                             'qty': int(items_list[0]['qty'])}
+                sort_gold_list.append(gold_dict)
+    outf = open(pathlib.Path(outdir).joinpath('master_gold_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_gold_report.html')
+    char = sort_gold_list
+    outf.write(template.render(char=char))
