@@ -1,0 +1,62 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Priest Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Priest Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Priest</th><th>Priest Name</th><th>Can Vision</th><th>Can Resurrect</th><th># Visions</th><th>Visons Received</th></tr>
+{% for entry in char %}
+    <tr>
+        <td  valign="top" sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td  valign="top" sorttable_customkey="{{ entry.name }}">{{ entry.name }}</td>
+        {% if entry.priest_dict %}
+            {% if entry.priest_dict.skill753 %}
+                <td valign="top">{{ entry.priest_dict.skill753 }}</td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if entry.priest_dict.skill755 %}
+                <td valign="top">{{ entry.priest_dict.skill755 }}</td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+            {% if entry.priest_dict.visions %}
+                <td valign="top">{{ entry.priest_dict.visions|length }}</td>
+                <td>
+                    <table>
+                    {% for i in range(0, ((entry.priest_dict.visions|length)/2)|round(0,'ceil')|int) %}
+                        <tr>
+                        {% if ((i*2)) <= entry.priest_dict.visions|length - 1 %}
+                            <td>
+                                {{ entry.priest_dict.visions[i*2].name }} [<a href="{{ entry.priest_dict.visions[i*2].oid }}">{{ entry.priest_dict.visions[i*2].oid }}</a>]
+                            </td>
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+                        {% if ((i*2)+1) <= entry.priest_dict.visions|length - 1 %}
+                            <td>
+                                {{ entry.priest_dict.visions[(i*2)+1].name }} [<a href="{{ entry.priest_dict.visions[(i*2)+1].oid }}.html">{{ entry.priest_dict.visions[(i*2)+1].oid }}</a>]
+                            </td>
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </td>
+            {% else %}
+                <td>&nbsp;</td>
+            {% endif %}
+        {% else %}
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>

@@ -31,7 +31,8 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
                      'loyalty': get_loyalty(v),
                      'skills_known_list': get_skills_known(v, data),
                      'inventory_dict': get_inventory(v, data, prominent_only),
-                     'aura_dict': get_aura(v, data),}
+                     'aura_dict': get_aura(v, data),
+                     'priest_dict': get_priest_skills(v, data)}
         return char_dict
     else:
         char_dict = {'id': k,
@@ -753,7 +754,8 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'inventory_dict': get_inventory(v, data, prominent_only),
                      'trades_list': get_pending_trades(v, data),
                      'visions_list': get_visions_received(v, data),
-                     'magic_list': get_magic_stuff(v, data)}
+                     'magic_list': get_magic_stuff(v, data),
+                     'priest_dict': get_priest_skills(v, data)}
     else:
         char_dict = {'id': k,
                      'oid': get_oid(k),
@@ -787,3 +789,39 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'visions_list': None,
                      'magic_list': get_magic_stuff(v, data)}
     return char_dict
+
+
+def get_priest_skills(v, data):
+    visions_list = []
+    skill_753 = None
+    skill_755 = None
+    if 'CH' in v and 'sl' in v['CH']:
+        skills_list = v['CH']['sl']
+        skills_iteration = int(len(skills_list) / 5)
+        if skills_iteration > 0:
+            for skill in range(0, skills_iteration):
+                if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
+                    skill_753 = 'Yes'
+                if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
+                    skill_755 = 'Yes'
+    if 'CM' in v and 'vi' in v['CM']:
+        vision_list = v['CM']['vi']
+        for vision in vision_list:
+            try:
+                visioned = data[vision]
+            except KeyError:
+                vision_name = 'missing'
+                vision_id = None
+                vision_oid = None
+            else:
+                vision_name = visioned.get('na', [u.return_kind(visioned)])[0]
+                vision_id = vision
+                vision_oid = to_oid(vision)
+            vision_dict = {'id': vision_id,
+                           'oid': vision_oid,
+                           'name': vision_name}
+            visions_list.append(vision_dict)
+    priest_dict = {'skill753': skill_753,
+                   'skill755': skill_755,
+                   'visions': visions_list}
+    return priest_dict

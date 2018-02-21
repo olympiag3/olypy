@@ -588,80 +588,21 @@ def mage_report(data, outdir):
 
 
 def priest_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_priest_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Priest Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Priest Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Priest</th><th>Priest Name</th><th>Can Visison</th><th>Can Resurrect</th>'
-               '<th># Visions</th><th>Visons Received</th></tr>\n')
     priest_list = []
     for unit in data:
         if u.is_priest(data[unit]):
             priest_list.append(unit)
     # priest_list.sort()
     # for unit in priest_list:
-    for unit in sorted(priest_list, key=lambda x: int(x)):
-        priest_rec = data[unit]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      priest_rec['na'][0],
-                                                                      anchor(to_oid(unit))))
-        outf.write('<td>{}</td>'.format(priest_rec['na'][0]))
-        if 'CH' in priest_rec and 'sl' in priest_rec['CH']:
-            skills_list = priest_rec['CH']['sl']
-            skills_iteration = int(len(skills_list) / 5)
-            skill_753 = 'No'
-            skill_755 = 'No'
-            if skills_iteration > 0:
-                for skill in range(0, skills_iteration):
-                    if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
-                        skill_753 = 'Yes'
-                    if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
-                        skill_755 = 'Yes'
-                outf.write('<td>{}</td>'.format(skill_753))
-                outf.write('<td>{}</td>'.format(skill_755))
-        else:
-            outf.write('<td>No</td>')
-            outf.write('<td>No</td>')
-        if 'CM' in priest_rec and 'vi' in priest_rec['CM']:
-            vision_list = priest_rec['CM']['vi']
-            outf.write('<td>{}</td>'.format(len(vision_list)))
-            outf.write('<td>')
-            outf.write('<table>')
-            second = False
-            for vision in vision_list:
-                if not second:
-                    outf.write('<tr>')
-                outf.write('<td>')
-                try:
-                    visioned = data[vision]
-                except KeyError:
-                    vision_name = 'missing'
-                else:
-                    vision_name = visioned.get('na', [u.return_kind(visioned)])[0]
-                outf.write('{} [{}]'.format(vision_name,
-                                            anchor(to_oid(vision))))
-                outf.write('</td>')
-                if second:
-                    outf.write('</tr>\n')
-                    second = False
-                else:
-                    second = True
-            outf.write('</table>')
-            outf.write('</td>')
-        else:
-            outf.write('<td>0</td>')
-            outf.write('<td>&nbsp;</td>')
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+    sort_priest_list = sorted(priest_list, key=lambda x: int(x))
+    outf = open(pathlib.Path(outdir).joinpath('master_priest_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_priest_report.html')
+    char = build_char_dict(sort_priest_list, data)
+    outf.write(template.render(char=char))
 
 
 def gold_report(data, outdir):
