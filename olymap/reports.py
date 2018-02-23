@@ -379,63 +379,41 @@ def build_char_dict(char_list, data):
 
 
 def graveyard_report(data, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_graveyard_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Graveyard Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Graveyard Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Graveyard</th><th>Province</th><th>Region</th><th>Target</th></tr>\n')
     graveyard_list = []
     for unit in data:
         if u.is_graveyard(data, unit):
             graveyard_list.append(unit)
     # graveyard_list.sort()
     # for unit in graveyard_list:
+    sort_graveyard_list = []
     for unit in sorted(graveyard_list, key=lambda x: int(x)):
-        graveyard = data[unit]
-        if 'na' in graveyard:
-            name = graveyard['na'][0]
-        else:
-            name = u.return_type(graveyard).capitalize()
-        outf.write('<tr>')
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                      name,
-                                                                      anchor(to_oid(unit))))
-        loc_rec = data[graveyard['LI']['wh'][0]]
-        if 'na' in loc_rec:
-            name_loc = loc_rec['na'][0]
-        else:
-            name_loc = u.return_type(loc_rec).capitalize()
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(loc_rec),
-                                                                      name_loc,
-                                                                      anchor(to_oid(u.return_unitid(loc_rec)))))
-        region = u.region(str(unit), data)
-        region_rec = data[region]
-        outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                      region_rec['na'][0],
-                                                                      anchor(to_oid(region))))
+        graveyard_rec = data[unit]
         # SL/lt
-        if 'SL' in graveyard and 'lt' in graveyard['SL']:
-            target = data[graveyard['SL']['lt'][0]]
-            if 'na' in loc_rec:
-                name_target = target['na'][0]
-            else:
-                name_target = u.return_type(target).capitalize()
-            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(u.return_unitid(target),
-                                                                          name_target,
-                                                                          anchor(to_oid(u.return_unitid(target)))))
+        if 'SL' in graveyard_rec and 'lt' in graveyard_rec['SL']:
+            target_id = graveyard_rec['SL']['lt'][0]
+            target_rec = data[target_id]
+            target_dict = {'id': target_id,
+                           'oid': to_oid(target_id),
+                           'name': get_name(target_rec, data)}
         else:
-            outf.write('<td>&nbsp;</td>')
-        outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+            target_rec = None
+            target_dict = None
+            target_region_dict = None
+        sort_graveyard_dict = {'id:' : unit,
+                               'oid': to_oid(unit),
+                               'name': get_name(graveyard_rec, data),
+                               'where_dict': get_where_info(graveyard_rec, data),
+                               'region_dict': get_region(unit, data),
+                               'target_dict': target_dict}
+        sort_graveyard_list.append((sort_graveyard_dict))
+    outf = open(pathlib.Path(outdir).joinpath('master_graveyard_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_graveyard_report.html')
+    loc = sort_graveyard_list
+    outf.write(template.render(loc=loc))
 
 
 def faeryhill_report(data, outdir):

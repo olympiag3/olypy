@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Graveyard Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Graveyard Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Graveyard</th><th>Province</th><th>Region</th><th>Target</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.where_dict.oid }}">{{ entry.where_dict.name }} [<a href="{{ entry.where_dict.oid }}.html">{{ entry.where_dict.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.region_dict.oid }}">{{ entry.region_dict.name }} [<a href="{{ entry.region_dict.oid }}.html">{{ entry.region_dict.oid }}</a>]</td>
+        {% if entry.target_dict %}
+            <td sorttable_customkey="{{ entry.target_dict.oid }}">{{ entry.target_dict.name }} [<a href="{{ entry.target_dict.oid }}.html">{{ entry.target_dict.oid }}</a>]</td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
