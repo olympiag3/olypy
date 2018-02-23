@@ -192,45 +192,33 @@ def build_loc_dict(loc_list, data, nbr_men_flag=False, garrisons_chain=None, por
 
 
 def skill_xref_report(data, teaches_chain, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_skill_xref_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Skill Xref Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Skill Xref Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Skill</th><th>Location</th><th>Region</th></tr>\n')
     skill_list = sorted(list(teaches_chain))
+    sort_skill_xref_list = []
     for unit in skill_list:
         city_list = teaches_chain[unit]
         if len(city_list) > 0 and unit is not None:
             skill_rec = data[unit]
             for city in city_list:
-                loc = data[city]
-                where_rec = data[loc['LI']['wh'][0]]
-                outf.write('<tr>')
-                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                              skill_rec['na'][0],
-                                                                              anchor(to_oid(unit))))
-                outf.write('<td sorttable_customkey="{}">'
-                           '{} [{}], {} [{}]</td>'.format(city,
-                                                          loc['na'][0],
-                                                          anchor(to_oid(city)),
-                                                          where_rec['na'][0],
-                                                          anchor(to_oid(loc['LI']['wh'][0]))))
-                region = u.region(city, data)
-                region_rec = data[region]
-                outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(region,
-                                                                              region_rec['na'][0],
-                                                                              anchor(to_oid(region))))
-                outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+                city_rec = data[city]
+                where_rec = data[city_rec['LI']['wh'][0]]
+                loc_dict = {'id': city,
+                            'oid': to_oid(city),
+                            'name': get_name(city_rec, data)}
+                sort_skill_xref_dict = {'id': unit,
+                                        'oid': to_oid(unit),
+                                        'name': get_name(skill_rec, data),
+                                        'loc_dict': loc_dict,
+                                        'where_dict': get_where_info(city_rec, data),
+                                        'region_dict': get_region(city, data)}
+                sort_skill_xref_list.append(sort_skill_xref_dict)
+    outf = open(pathlib.Path(outdir).joinpath('master_skill_xref_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_skill_xref_report.html')
+    loc = sort_skill_xref_list
+    outf.write(template.render(loc=loc))
 
 
 def trade_report(data, trade_chain, outdir):

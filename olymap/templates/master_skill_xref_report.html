@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Skill Xref Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Skill Xref Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Skill</th><th>Location</th><th>Region</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.loc_dict.oid }}">{{ entry.loc_dict.name }} [<a href="{{ entry.loc_dict.oid }}.html">{{ entry.loc_dict.oid }}</a>], {{ entry.where_dict.name }} [<a href="{{ entry.where_dict.oid }}.html">{{ entry.where_dict.oid }}</a>]</td>
+        <td sorttable_customkey="{{ entry.region_dict.oid }}">{{ entry.region_dict.name }} [<a href="{{ entry.region_dict.oid }}.html">{{ entry.region_dict.oid }}</a>]</td>
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
