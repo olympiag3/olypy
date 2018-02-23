@@ -222,71 +222,47 @@ def skill_xref_report(data, teaches_chain, outdir):
 
 
 def trade_report(data, trade_chain, outdir):
-    outf = open(pathlib.Path(outdir).joinpath('master_trade_report.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<script src="sorttable.js"></script>')
-    outf.write('<TITLE>Olympia Master Trade Report</TITLE>\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<H3>Olympia Master Trade Report</H3>\n')
-    outf.write('<h5>(Click on table headers to sort)</h5>')
-    outf.write('<table border="1" style="border-collapse: collapse" class="sortable">\n')
-    outf.write('<tr><th>Item</th><th>Seller</th><th>Buyer</th><th>Sell Region</th><th>Buy Region</th></tr>\n')
     trade_list = sorted(list(trade_chain))
+    sort_trade_list = []
     for unit in trade_list:
         city_list = trade_chain[unit]
         if len(city_list) > 0 and unit is not None:
             item_rec = data[unit]
-            buy_literal = ''
-            buy_id = ''
-            sell_literal = ''
-            sell_id = ''
-            buy_reg_literal = ''
-            buy_reg_id = ''
-            sell_reg_literal = ''
-            sell_reg_id = ''
+            sell_list = []
+            buy_list = []
             for city in city_list:
-                loc = data[city[0]]
+                city_id = city[0]
+                city_rec = data[city_id]
+                region_id = u.region(city_id, data)
+                region_rec = data[region_id]
                 if city[1] == '1':
-                    if len(buy_literal) > 0:
-                        buy_literal = buy_literal + '<br>'
-                        buy_reg_literal = buy_reg_literal + '<br>'
-                    buy_literal = buy_literal + loc['na'][0] + ' [' + anchor(to_oid(city[0])) + ']'
-                    reg_rec = data[u.region(city[0], data)]
-                    buy_reg_literal = buy_reg_literal + reg_rec['na'][0]
-                    buy_reg_literal = buy_reg_literal + ' [' + anchor(to_oid(u.region(city[0], data))) + ']'
-                    if buy_id == '':
-                        buy_id = city[0]
-                        buy_reg_id = u.region(city[0], data)
+                    buy_dict = {'id': city_id,
+                                'oid': to_oid(city_id),
+                                'name': get_name(city_rec, data),
+                                'region_oid': to_oid(region_id),
+                                'region_name': get_name(region_rec, data)}
+                    buy_list.append(buy_dict)
                 else:
-                    if len(sell_literal) > 0:
-                        sell_literal = sell_literal + '<br>'
-                        sell_reg_literal = sell_reg_literal + '<br>'
-                    sell_literal = sell_literal + loc['na'][0] + ' [' + anchor(to_oid(city[0])) + ']'
-                    reg_rec = data[u.region(city[0], data)]
-                    sell_reg_literal = sell_reg_literal + reg_rec['na'][0] + ' ['
-                    sell_reg_literal = sell_reg_literal + anchor(to_oid(u.region(city[0], data))) + ']'
-                    if sell_id == '':
-                        sell_id = city[0]
-                        sell_reg_id = u.region(city[0], data)
-            outf.write('<tr>')
-            outf.write('<td sorttable_customkey="{}">{} [{}]</td>'.format(unit,
-                                                                          item_rec['na'][0],
-                                                                          anchor(to_oid(unit))))
-            outf.write('<td sorttable_customkey="{}">{}</td>'.format(sell_id,
-                                                                     sell_literal))
-            outf.write('<td sorttable_customkey="{}">{}</td>'.format(buy_id,
-                                                                     buy_literal))
-            outf.write('<td sorttable_customkey="{}">{}</td>'.format(sell_reg_id,
-                                                                     sell_reg_literal))
-            outf.write('<td sorttable_customkey="{}">{}</td>'.format(buy_reg_id,
-                                                                     buy_reg_literal))
-            outf.write('</tr>\n')
-    outf.write('</table>\n')
-    outf.write('</BODY>\n')
-    outf.write('</HTML>\n')
-    outf.close()
+                    sell_dict = {'id': city_id,
+                                 'oid': to_oid(city_id),
+                                 'name': get_name(city_rec, data),
+                                 'region_oid': to_oid(region_id),
+                                 'region_name': get_name(region_rec, data)}
+                    sell_list.append(sell_dict)
+            trade_entry = {'id': unit,
+                           'oid': to_oid(unit),
+                           'name': get_name(item_rec, data),
+                           'buy_list': buy_list,
+                           'sell_list': sell_list}
+            sort_trade_list.append((trade_entry))
+    outf = open(pathlib.Path(outdir).joinpath('master_trade_report.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('master_trade_report.html')
+    loc = sort_trade_list
+    outf.write(template.render(loc=loc))
 
 
 def road_report(data, outdir):

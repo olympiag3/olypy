@@ -1,0 +1,47 @@
+<HTML>
+<HEAD>
+<script src="sorttable.js"></script><TITLE>Olympia Master Trade Report</TITLE>
+</HEAD>
+<BODY>
+<H3>Olympia Master Trade Report</H3>
+<h5>(Click on table headers to sort)</h5>
+<table border="1" style="border-collapse: collapse" class="sortable">
+<tr><th>Item</th><th>Seller</th><th>Sell Region</th><th>Buyer</th><th>Buy Region</th></tr>
+{% for entry in loc %}
+    <tr>
+        <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
+        {% if entry.sell_list %}
+            <td>
+            {% for seller in entry.sell_list %}
+                {{ seller.name }} [<a href="{{ seller.oid }}.html">{{ seller.oid }}</a>]<br>
+            {% endfor %}
+            </td>
+            <td>
+            {% for seller in entry.sell_list %}
+                {{ seller.region_name }} [<a href="{{ seller.region_oid }}.html">{{ seller.region_oid }}</a>]<br>
+            {% endfor %}
+            </td>
+        {% else %}
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        {% endif %}
+        {% if entry.buy_list %}
+            <td>
+            {% for buyer in entry.buy_list %}
+                {{ buyer.name }} [<a href="{{ buyer.oid }}.html">{{ buyer.oid }}</a>]<br>
+            {% endfor %}
+            </td>
+            <td>
+            {% for buyer in entry.buy_list %}
+                {{ buyer.region_name }} [<a href="{{ buyer.region_oid }}.html">{{ buyer.region_oid }}</a>]<br>
+            {% endfor %}
+            </td>
+        {% else %}
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</table>
+</BODY>
+</HTML>
