@@ -9,70 +9,34 @@ import pathlib
 from pngcanvas import *
 import math
 from olypy.db import loop_here
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def write_index(outdir, instance, inst_dict):
-    outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<TITLE>Olympia Mapper Tool - {}</TITLE>\n'.format(instance.upper()))
-    outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<h3>Olympia Mapper Tool - {}</h3>\n'.format(instance.upper()))
-    outf.write('<table>')
-    outf.write('<tr>')
-    outf.write('<th>')
-    outf.write('<ul>Maps<br>')
     dimensions = inst_dict[instance]
+    dimensions_list = []
     for world in dimensions:
-        outf.write('<li><a href="{}_map.html">{}</a></li>'.format(world,
-                                                                  world.title()))
-    outf.write('</ul>')
-    outf.write('</th>')
-    outf.write('<th>')
-    outf.write('<ul>Reports<br>')
-    outf.write('<li><a href="master_castle_report.html">Castles</a></li>')
-    outf.write('<li><a href="master_character_report.html">Characters</a></li>')
-    outf.write('<li><a href="master_city_report.html">Citys</a></li>')
-    outf.write('<li><a href="master_faeryhill_report.html">Faery Hills</a></li>')
-    outf.write('<li><a href="master_gate_report.html">Gates</a></li>')
-    outf.write('<li><a href="master_gold_report.html">Gold (> 10k)</a></li>')
-    outf.write('<li><a href="master_graveyard_report.html">Graveyards</a></li>')
-    outf.write('<li><a href="master_healing_potion_report.html">Healing Potions</a></li>')
-    outf.write('<li><a href="master_item_report.html">Items</a></li>')
-    outf.write('<li><a href="master_location_report.html">Locations</a></li>')
-    outf.write('<li><a href="master_mage_report.html">Mages</a></li>')
-    outf.write('<li><a href="master_orb_report.html">Orbs</a></li>')
-    outf.write('<li><a href="master_player_report.html">Players</a></li>')
-    outf.write('<li><a href="master_priest_report.html">Priests</a></li>')
-    outf.write('<li><a href="master_projected_cast_report.html">Projected Casts</a></li>')
-    outf.write('<li><a href="master_region_report.html">Regions</a></li>')
-    outf.write('<li><a href="master_road_report.html">Roads</a></li>')
-    outf.write('<li><a href="master_ship_report.html">Ships</a></li>')
-    outf.write('<li><a href="master_skill_xref_report.html">Skills Xref</a></li>')
-    outf.write('<li><a href="master_trade_report.html">Trades</a></li>')
-    outf.write('</ul>')
-    outf.write('</th>')
-    outf.write('<th>')
-    outf.write('<ul>Links<br>')
-    outf.write('<li><a href="http://shadowlandgames.com/olympia/rules.html">Rules</a></li>')
-    outf.write('<li><a href="http://shadowlandgames.com/olympia/orders.html">Orders</a></li>')
-    outf.write('<li><a href="http://shadowlandgames.com/olympia/skills.html">Skills</a></li>')
-    outf.write('</ul>')
-    outf.write('</th>')
-    outf.write('</tr>')
-    outf.write('</table>\n')
+        dimensions_dict = {'world': world,
+                           'title': world.title()}
+        dimensions_list.append(dimensions_dict)
     try:
         index_file = open('olymap/{}_index.txt'.format(instance), 'r')
     except:
         print('No index file')
+        index_text = None
     else:
         index_text = index_file.read()
-        outf.write(index_text)
-    outf.write('</BODY>\n')
-    outf.write('</html>\n')
-    outf.close()
+    index_dict = {'instance': instance,
+                  'instance_title': instance.title(),
+                  'file': index_text,
+                  'dimensions_list': dimensions_list}
+    outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('index.html')
+    outf.write(template.render(index=index_dict))
 
 
 def write_top_map(outdir, upperleft, height, width, prefix):

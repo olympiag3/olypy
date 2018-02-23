@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+<TITLE>Olympia Mapper Tool - {{ index.instance_title }}</TITLE>
+<link href="map.css" rel="stylesheet" type="text/css">
+</HEAD>
+<BODY>
+<h3>Olympia Mapper Tool - {{ index.instance_title }}</h3>
+<table>
+    <tr>
+        <th>
+            <ul>Maps<br>
+            {% for entry in index.dimensions_list %}
+                <li><a href="{{ entry.world }}_map.html">{{ entry.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </th>
+        <th>
+            <ul>Reports<br>
+                <li><a href="master_castle_report.html">Castles</a></li>
+                <li><a href="master_character_report.html">Characters</a></li>
+                <li><a href="master_city_report.html">Citys</a></li>
+                <li><a href="master_faeryhill_report.html">Faery Hills</a></li>
+                <li><a href="master_gate_report.html">Gates</a></li>
+                <li><a href="master_gold_report.html">Gold (> 10k)</a></li>
+                <li><a href="master_graveyard_report.html">Graveyards</a></li>
+                <li><a href="master_healing_potion_report.html">Healing Potions</a></li>
+                <li><a href="master_item_report.html">Items</a></li>
+                <li><a href="master_location_report.html">Locations</a></li>
+                <li><a href="master_mage_report.html">Mages</a></li>
+                <li><a href="master_orb_report.html">Orbs</a></li>
+                <li><a href="master_player_report.html">Players</a></li>
+                <li><a href="master_priest_report.html">Priests</a></li>
+                <li><a href="master_projected_cast_report.html">Projected Casts</a></li>
+                <li><a href="master_region_report.html">Regions</a></li>
+                <li><a href="master_road_report.html">Roads</a></li>
+                <li><a href="master_ship_report.html">Ships</a></li>
+                <li><a href="master_skill_xref_report.html">Skills Xref</a></li>
+                <li><a href="master_trade_report.html">Trades</a></li>
+            </ul>
+        </th>
+        <th>
+            <ul>Links<br>
+                <li><a href="http://shadowlandgames.com/olympia/rules.html">Rules</a></li>
+                <li><a href="http://shadowlandgames.com/olympia/orders.html">Orders</a></li>
+                <li><a href="http://shadowlandgames.com/olympia/skills.html">Skills</a></li>
+            </ul>
+        </th>
+    </tr>
+</table>
+{{ index.file|safe }}
+</BODY>
+</html>
