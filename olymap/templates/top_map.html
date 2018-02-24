@@ -1,0 +1,15 @@
+<HTML>
+<HEAD>
+<TITLE>{{ map.prefix_title }} Map</TITLE>
+<link href="map.css" rel="stylesheet" type="text/css">
+</HEAD>
+<BODY>
+<h3>Olympia {{map.prefix_title }} Map</h3>
+<img height="{{ map.height }}" width="{{ map.width }}" src="{{ map.prefix }}_thumbnail.png" usemap="#oly"/>
+<map name="oly" id="oly">
+{% for entry in map.coords_list %}
+    <area shape="rect" coords="{{ entry.left }}, {{ entry.top }}, {{ entry.right }}, {{ entry.bottom }}" href="{{ map.prefix }}_map_leaf_{{ entry.oid }}.html"/>
+{% endfor %}
+</map>
+</BODY>
+</html>

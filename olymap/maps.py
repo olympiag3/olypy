@@ -40,14 +40,6 @@ def write_index(outdir, instance, inst_dict):
 
 
 def write_top_map(outdir, upperleft, height, width, prefix):
-    outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<TITLE>{} Map</TITLE>\n'.format(prefix.capitalize()))
-    outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
     if height <= 50 and width <= 50:
         multiple = 12
     elif height <= 80 and width <= 80:
@@ -64,10 +56,6 @@ def write_top_map(outdir, upperleft, height, width, prefix):
         iwidth = (multiple * (width - 10)) + (rem_width * multiple)
     else:
         iwidth = (multiple * width)
-    outf.write('<img height="{}" width="{}" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(iheight,
-                                                                                             iwidth,
-                                                                                             prefix))
-    outf.write('<map name="oly" id="oly">\n')
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
     if x_max == 1:
@@ -80,6 +68,7 @@ def write_top_map(outdir, upperleft, height, width, prefix):
         lheight = int(iheight / (y_max - 1))
     tp = 0
     bt = lheight
+    coords_list = []
     for outery in range(0, y_max):
         if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0) or y_max == 1:
             startingpoint = upperleft + (outery * 1000)
@@ -114,17 +103,24 @@ def write_top_map(outdir, upperleft, height, width, prefix):
                     else:
                         lt = lt + lwidth
                         rt = rt + lwidth
-                    outf.write('<area shape="rect" '
-                               'coords="{}, {}, {}, {}" href="{}_map_leaf_{}.html"/>\n'.format(lt,
-                                                                                               tp,
-                                                                                               rt,
-                                                                                               bt,
-                                                                                               prefix,
-                                                                                               to_oid(currentpoint)))
-    outf.write('</map>\n')
-    outf.write('</BODY>\n')
-    outf.write('</html>\n')
-    outf.close()
+                    coords_entry = {'left': lt,
+                                    'top': tp,
+                                    'right': rt,
+                                    'bottom': bt,
+                                    'oid': to_oid(currentpoint)}
+                    coords_list.append(coords_entry)
+    map_dict = {'prefix': prefix,
+                'prefix_title': prefix.title(),
+                'height': iheight,
+                'width': iwidth,
+                'coords_list': coords_list}
+    outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('top_map.html')
+    outf.write(template.render(map=map_dict))
 
 
 def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance):
