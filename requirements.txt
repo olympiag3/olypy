@@ -11,9 +11,9 @@ Jinja2==2.10
 pur==4.0.3
 
 # used by Makefile
-coverage==4.5
+coverage==4.5.1
 pylint==1.8.2
-pytest==3.4.0
+pytest==3.4.1
 pytest-cov==2.5.1
 pytest-sugar==0.9.1
 coveralls==1.2.0
