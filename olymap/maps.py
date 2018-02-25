@@ -4,6 +4,7 @@ from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import anchor
 from olymap.utilities import anchor2
+from olymap.loc import get_barrier, get_civ_level
 import olypy.details as details
 import pathlib
 from pngcanvas import *
@@ -141,8 +142,6 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                                                               '_map_leaf_'
                                                               + u.to_oid(printpoint) +
                                                               '.html'), 'w')
-                    write_leaf_header(printpoint, outdir, prefix, outf)
-                    outf.write('<TABLE>\n')
                     topnav = False
                     botnav = False
                     leftnav = False
@@ -177,152 +176,151 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                             upperrightnav = True
                         if botnav:
                             lowerrightnav = True
+                    top_nav_dict = {}
                     if topnav:
-                        generate_topnav(currentpoint, outf, prefix,
-                                        upperleftnav, upperrightnav)
+                        top_nav_dict = generate_topnav(currentpoint, outf, prefix,
+                                                       upperleftnav, upperrightnav)
+                    cell_list = []
+                    row_list = []
                     for y in range(0, 20):
                         if (rem_height == 0 or outery <= y_max - 3) or \
                             (outery == y_max - 2 and y < rem_height + 10) or \
                             (y_max == 1 and y < rem_height):
-                            outf.write('<tr>\n')
                             for x in range(0, 20):
                                 if (rem_width == 0 or outerx <= x_max - 3) or \
                                     (outerx == x_max - 2 and x < rem_width + 10) or \
                                     (x_max == 1 and x < rem_width):
-                                    write_cell(castle_chain,
-                                               currentpoint,
-                                               data,
-                                               leftnav,
-                                               outf,
-                                               prefix,
-                                               rightnav,
-                                               x,
-                                               y,
-                                               rem_width,
-                                               rem_height,
-                                               instance)
-                            outf.write('</tr>\n')
+                                    cell_dict = write_cell(castle_chain,
+                                                           currentpoint,
+                                                           data,
+                                                           leftnav,
+                                                           outf,
+                                                           prefix,
+                                                           rightnav,
+                                                           x,
+                                                           y,
+                                                           rem_width,
+                                                           rem_height,
+                                                           instance)
+                                    cell_list.append(cell_dict)
+                            row_list.append(cell_list)
+                            cell_list = []
+                    bot_nav_dict = {}
                     if botnav:
-                        generate_botnav(currentpoint, lowerleftnav,
-                                        lowerrightnav, outf, prefix)
-                    outf.write('</TABLE>\n')
-                    outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
-                                                                                   prefix.capitalize()))
-                    outf.write('</BODY>\n')
-                    outf.write('</HTML>')
-                    outf.close()
+                        bot_nav_dict = generate_botnav(currentpoint, lowerleftnav,
+                                                       lowerrightnav, outf, prefix)
+                    map_dict = {'prefix': prefix,
+                                'prefix_title': prefix.title(),
+                                'oid': to_oid(printpoint),
+                                'top': topnav,
+                                'bot': botnav,
+                                'left': leftnav,
+                                'right': rightnav,
+                                'topnav_dict': top_nav_dict,
+                                'botnav_dict': bot_nav_dict,
+                                'row_list': row_list}
+                    outf = open(pathlib.Path(outdir).joinpath(prefix +
+                                                              '_map_leaf_'
+                                                              + u.to_oid(printpoint) +
+                                                              '.html'), 'w')
+                    env = Environment(
+                        loader=PackageLoader('olymap', 'templates'),
+                        autoescape=select_autoescape(['html', 'xml'])
+                    )
+                    template = env.get_template('map_leaf.html')
+                    outf.write(template.render(map=map_dict))
 
 
 def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, rem_width, rem_height, instance):
+    left_nav_dict = {}
     if x == 0 and y == 0:
         if leftnav:
             printpoint = currentpoint - 10
-            outf.write('<td rowspan="20" class="left">')
-            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(printpoint)))
-            outf.write('<img src="grey.gif" width="20" height="840">')
-            outf.write('</a></td>\n')
+            left_nav_dict = {'oid': to_oid(printpoint),
+                             'width': 20,
+                             'height': 840}
     cell = currentpoint + (x + (y * 100))
-    printpoint = cell
+    printpoint = str(cell)
     try:
         loc_rec = data[str(printpoint)]
     except:
-        outf.write('<td id ="{}" class="{}">'.format(to_oid(printpoint),
-                                                     'undefined'))
-        outf.write('{}'.format(to_oid(printpoint)))
-        outf.write('<br>{}'.format('&nbsp;' * 8))
-        outf.write('<br>{}'.format('&nbsp;' * 8))
-        outf.write('</td>\n')
+        type = 'undefined'
+        border_dict = {}
+        contents_dict = {}
     else:
-        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
-                                                    u.return_type(loc_rec)))
-        generate_border(data, loc_rec, outf, instance)
-        outf.write('>')
-        generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
-        outf.write('</td>\n')
+        type = u.return_type(loc_rec)
+        border_dict = generate_border(data, loc_rec, outf, instance)
+        contents_dict = generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
+    cell_dict = {'oid': to_oid(printpoint),
+                 'type': type,
+                 'border_dict': border_dict,
+                 'contents_dict': contents_dict}
     # except KeyError:
     #    outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(printpoint), to_oid(printpoint)))
+    right_nav_dict = {}
     if x == 19 and y == 0:
         if rightnav:
             printpoint = currentpoint + 10
-            outf.write('<td rowspan="20" class="right">')
-            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(printpoint)))
-            outf.write('<img src="grey.gif" width="20" height="840">')
-            outf.write('</a></td>\n')
-
-
-def write_leaf_header(currentpoint, outdir, prefix, outf):
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<TITLE>{} Map Leaf {}</TITLE>\n'.format(prefix.capitalize(),
-                                                        to_oid(currentpoint)))
-    outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
-                                                                   prefix.capitalize()))
+            right_nav_dict = {'oid': to_oid(printpoint),
+                              'width': 20,
+                              'height': 840}
+    nav_dict = {'left_nav_dict': left_nav_dict,
+                'cell_dict': cell_dict,
+                'right_nav_dict': right_nav_dict}
+    return nav_dict
 
 
 def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix):
     outf.write('<tr>\n')
+    lower_left_nav_dict = {}
     if lowerleftnav:
         printpoint = currentpoint + 990
-        outf.write('<td class="corner">')
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
+        lower_left_nav_dict = {'oid': to_oid(printpoint),
+                               'width': 20,
+                               'height': 20}
     printpoint = currentpoint + 1000
-    outf.write('<td colspan="20" class="bottom">')
-    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(printpoint)))
-    outf.write('<img src="grey.gif" width="840" height="20">')
-    outf.write('</a></td>\n')
+    lower_nav_dict = {'oid': to_oid(printpoint),
+                      'width': 840,
+                      'height': 20}
+    lower_right_nav_dict = {}
     if lowerrightnav:
         printpoint = currentpoint + 1010
-        outf.write('<td class="corner">')
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
+        lower_right_nav_dict = {'oid': to_oid(printpoint),
+                                'width': 20,
+                                'height': 20}
     outf.write('</tr>\n')
+    bot_nav_dict = {'lower_left_nav_dict': lower_left_nav_dict,
+                    'lower_nav_dict': lower_nav_dict,
+                    'lower_right_nav_dict': lower_right_nav_dict}
+    return bot_nav_dict
 
 
 def generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav):
-    outf.write('<tr>\n')
+    upper_left_nav_dict = {}
     if upperleftnav:
-        outf.write('<td class="corner">')
         printpoint = currentpoint - 1010
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
-    outf.write('<td colspan="20" class="top">')
+        upper_left_nav_dict = {'oid': to_oid(printpoint),
+                               'width': 20,
+                               'height': 20}
     printpoint = currentpoint - 1000
-    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(printpoint)))
-    outf.write('<img src="grey.gif" width="840" height="20">')
-    outf.write('</a></td>\n')
+    upper_nav_dict = {'oid': to_oid(printpoint),
+                      'width': 840,
+                      'height': 20}
+    upper_right_nav_dict = {}
     if upperrightnav:
-        outf.write('<td class="corner">')
         printpoint = currentpoint - 990
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
-    outf.write('</tr>\n')
+        upper_right_nav_dict = {'oid': to_oid(printpoint),
+                                'width': 20,
+                                'height': 20}
+    top_nav_dict = {'upper_left_nav_dict': upper_left_nav_dict,
+                    'upper_nav_dict': upper_nav_dict,
+                    'upper_right_nav_dict': upper_right_nav_dict}
+    return top_nav_dict
 
 
 def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
-    if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
-        if loc_rec['LO']['lc'][0] != '0':
-            outf.write('<b>')
     a = to_oid(cell)
-    outf.write('{}'.format(anchor(to_oid(cell))))
-    if 'LO' in loc_rec and 'lc' in loc_rec['LO']:
-        if loc_rec['LO']['lc'][0] != '0':
-            outf.write('</b>')
+    castle_icon = None
     if 'LI' in loc_rec and 'hl' in loc_rec['LI']:
         here_list = loc_rec['LI']['hl']
         for garr in here_list:
@@ -331,7 +329,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 if 'MI' in garr_rec:
                     if 'gc' in garr_rec['MI']:
                         castle_id = garr_rec['MI']['gc'][0]
-                        outf.write('{}'.format(castle_chain[castle_id][0]))
+                        castle_icon = castle_chain[castle_id][0]
     loc1 = ''
     loc2 = ''
     city = ''
@@ -371,6 +369,9 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 loc1 = here_rec
             elif loc2 == '':
                 loc2 = here_rec
+    many = False
+    loc1_dict = {}
+    loc2_dict = {}
     if loc1 != '' or loc2 != '' or city != '' or graveyard != ''or road_or_gate != '':
         if city != '':
             if loc2 == '':
@@ -393,62 +394,42 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 if loc2 == '':
                     loc2 = road_or_gate
         if count > 2:
-            outf.write('<br />many')
+            many = True
         else:
             if loc2 != '':
+                loc2_oid = ''
                 if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard' or u.return_type(loc2) == 'faery hill':
-                    outf.write('<br />')
-                    outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc2)),
-                                                   u.return_short_type(loc2))))
-                else:
-                    outf.write('<br />')
-                    if 'LO' in loc2 and 'hi' in loc2['LO']:
-                        if loc2['LO']['hi'][0] == '1':
-                            outf.write('<i>')
-                    outf.write(u.return_short_type(loc2))
-                    if 'LO' in loc2:
-                        if 'hi' in loc2['LO'] and loc2['LO']['hi'][0] == '1':
-                            outf.write('</i>')
-            else:
-                outf.write('<br />&nbsp;')
+                    loc2_oid = to_oid(u.return_unitid(loc2))
+                loc2_dict = {'oid': loc2_oid,
+                             'type': u.return_short_type(loc2),
+                             'hidden': u.is_hidden(loc2)}
         if loc1 != '':
-            if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard' or u.return_type(loc1) == 'faery hill':
-                outf.write('<br />')
-                outf.write('{}'.format(anchor2(to_oid(u.return_unitid(loc1)),
-                                               u.return_short_type(loc1))))
-            else:
-                outf.write('<br />')
-                if 'LO' in loc1 and 'hi' in loc1['LO']:
-                    if loc1['LO']['hi'][0] == '1':
-                        outf.write('<i>')
-                outf.write(u.return_short_type(loc1))
-                if 'LO' in loc1 and 'hi' in loc1['LO']:
-                    if loc1['LO']['hi'][0] == '1':
-                        outf.write('</i>')
-        else:
-            outf.write('<br />&nbsp;')
+            loc1_oid = ''
+            if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard' or u.return_type(
+                    loc1) == 'faery hill':
+                loc1_oid = to_oid(u.return_unitid(loc1))
+            loc1_dict = {'oid': loc1_oid,
+                         'type': u.return_short_type(loc1),
+                         'hidden': u.is_hidden(loc1)}
+    contents_dict = {'oid': to_oid(cell),
+                     'civ_level': get_civ_level(cell, loc_rec, data),
+                     'many': many,
+                     'castle_icon': castle_icon,
+                     'loc1_dict': loc1_dict,
+                     'loc2_dict': loc2_dict}
+    return contents_dict
 
 
 def generate_border(data, loc_rec, outf, instance):
-    if barrier(loc_rec):
-        outf.write(' style="border: 2px solid blue" ')
-    else:
-        nbr_men, enemy_found, ships_found = count_stuff(loc_rec, data)
-        if nbr_men > 50:
-            outf.write(' style="border: 2px solid red" ')
-        elif ships_found:
-            outf.write(' style="border: 2px solid yellow" ')
-        elif enemy_found:
-            if instance not in {'g2', 'qa'}:
-                outf.write(' style="outline: 2px solid orange" ')
-
-
-def barrier(v):
-    ret = False
-    if 'LO' in v:
-        if 'ba' in v['LO'] and v['LO']['ba'][0] != '0':
-            ret = True
-    return ret
+    nbr_men, enemy_found, ships_found = count_stuff(loc_rec, data)
+    if enemy_found:
+        if instance in {'g2', 'qa'}:
+            enemy_found = False
+    border_dict = {'barrier': get_barrier(u.return_unitid(loc_rec), loc_rec, data),
+                   'nbr_men': int(nbr_men),
+                   'ships_found': ships_found,
+                   'enemy_found': enemy_found}
+    return border_dict
 
 
 def count_stuff(v, data):

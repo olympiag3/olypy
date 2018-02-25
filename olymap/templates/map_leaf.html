@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+<TITLE>{{ map.prefix_title }} Map Leaf {{ map.oid }}</TITLE>
+<link href="map.css" rel="stylesheet" type="text/css">
+</HEAD>
+<BODY>
+<a href="{{ map.prefix }}_map.html">Return to {{ map.prefix_title }} Map</a>
+<table>
+    {% if map.topnav_dict.upper_nav_dict %}
+        <tr>
+             {% if map.topnav_dict.upper_left_nav_dict %}
+                <td class="corner"><a href="{{ map.prefix }}_map_leaf_{{ map.topnav_dict.upper_left_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.topnav_dict.upper_left_nav_dict.width }}" height="{{ map.topnav_dict.upper_left_nav_dict.height }}"></a></td>
+             {% endif %}
+             <td colspan="20" class="top"><a href="{{ map.prefix }}_map_leaf_{{ map.topnav_dict.upper_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.topnav_dict.upper_nav_dict.width }}" height="{{ map.topnav_dict.upper_nav_dict.height }}"></a></td>
+             {% if map.topnav_dict.upper_right_nav_dict %}
+                <td class="corner"><a href="{{ map.prefix }}_map_leaf_{{ map.topnav_dict.upper_right_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.topnav_dict.upper_right_nav_dict.width }}" height="{{ map.topnav_dict.upper_right_nav_dict.height }}"></a></td>
+             {% endif %}
+        </tr>
+    {% endif %}
+    {% for row in map.row_list %}
+        <tr>
+            {% for col in row %}
+            {% if col.left_nav_dict %}
+                <td rowspan="20" class="left"><a href="{{ map.prefix }}_map_leaf_{{ col.left_nav_dict.oid }}.html"><img src="grey.gif" width="{{ col.left_nav_dict.width }}" height="{{ col.left_nav_dict.height }}"></a></td>
+            {% endif %}
+            <td id ="{{ col.cell_dict.oid }}" class="{{ col.cell_dict.type }}"
+            {% if col.cell_dict.border_dict %}
+                {% if col.cell_dict.border_dict.barrier %}
+                style="border: 2px solid blue"
+                {% elif col.cell_dict.border_dict.nbr_men > 50 %}
+                    style="border: 2px solid red"
+                {% elif col.cell_dict.border_dict.ships_found %}
+                    style="border: 2px solid yellow"
+                {% elif col.cell_dict.border_dict.enemy_found %}
+                    style="border: 2px solid orange"
+                {% endif %}
+            {% endif %}
+            >
+            {%- if col.cell_dict.contents_dict.civ_level and col.cell_dict.contents_dict.civ_level != 'wilderness' -%}
+                <b>
+            {%- endif -%}
+            <a href="{{ col.cell_dict.oid }}.html">{{ col.cell_dict.oid }}</a>
+            {%- if col.cell_dict.contents_dict.civ_level and col.cell_dict.contents_dict.civ_level != 'wilderness' -%}
+                </b>
+            {%- endif -%}
+            {%- if col.cell_dict.contents_dict.castle_icon -%}
+                {{ col.cell_dict.contents_dict.castle_icon }}
+            {%- endif -%}
+            <br>
+            {% if col.cell_dict.contents_dict.many or col.cell_dict.contents_dict.loc2_dict %}
+                {%- if col.cell_dict.contents_dict.many -%}
+                many
+                {% elif col.cell_dict.contents_dict.loc2_dict.oid %}
+                    <a href="{{ col.cell_dict.contents_dict.loc2_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc2_dict.type }}</a>
+                {% else %}
+                    {{ col.cell_dict.contents_dict.loc2_dict.type }}
+                {%- endif -%}
+            {% endif %}
+            <br>
+            {% if col.cell_dict.contents_dict.loc1_dict %}
+                {%- if col.cell_dict.contents_dict.loc1_dict.oid %}
+                    <a href="{{ col.cell_dict.contents_dict.loc1_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc1_dict.type }}</a>
+                {% else %}
+                    {{ col.cell_dict.contents_dict.loc1_dict.type }}
+                {%- endif -%}
+            {% endif %}
+            <br>
+            </td>
+            {% if col.right_nav_dict %}
+                <td rowspan="20" class="right"><a href="{{ map.prefix }}_map_leaf_{{ col.right_nav_dict.oid }}.html"><img src="grey.gif" width="{{ col.right_nav_dict.width }}" height="{{ col.right_nav_dict.height }}"></a></td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    {% if map.botnav_dict.lower_nav_dict %}
+        <tr>
+             {% if map.botnav_dict.lower_left_nav_dict %}
+                <td class="corner"><a href="{{ map.prefix }}_map_leaf_{{ map.botnav_dict.lower_left_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.botnav_dict.lower_left_nav_dict.width }}" height="{{ map.botnav_dict.lower_left_nav_dict.height }}"></a></td>
+             {% endif %}
+             <td colspan="20" class="bottom"><a href="{{ map.prefix }}_map_leaf_{{ map.botnav_dict.lower_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.botnav_dict.lower_nav_dict.width }}" height="{{ map.botnav_dict.lower_nav_dict.height }}"></a></td>
+             {% if map.botnav_dict.lower_right_nav_dict %}
+                <td class="corner"><a href="{{ map.prefix }}_map_leaf_{{ map.botnav_dict.lower_right_nav_dict.oid }}.html"><img src="grey.gif" width="{{ map.botnav_dict.lower_right_nav_dict.width }}" height="{{ map.botnav_dict.lower_right_nav_dict.height }}"></a></td>
+             {% endif %}
+        </tr>
+    {% endif %}
+</table>
+<a href="{{ map.prefix }}_map.html">Return to {{ map.prefix_title }} Map</a>
+</BODY>
+</HTML>
