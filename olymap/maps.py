@@ -271,7 +271,6 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
 
 
 def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix):
-    outf.write('<tr>\n')
     lower_left_nav_dict = {}
     if lowerleftnav:
         printpoint = currentpoint + 990
@@ -288,7 +287,6 @@ def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix):
         lower_right_nav_dict = {'oid': to_oid(printpoint),
                                 'width': 20,
                                 'height': 20}
-    outf.write('</tr>\n')
     bot_nav_dict = {'lower_left_nav_dict': lower_left_nav_dict,
                     'lower_nav_dict': lower_nav_dict,
                     'lower_right_nav_dict': lower_right_nav_dict}

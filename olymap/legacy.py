@@ -5,6 +5,8 @@ import olymap.utilities as u
 import olymap.maps as maps
 import math
 from olypy.oid import to_oid
+from olymap.loc import get_barrier, get_civ_level
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 def create_map_matrix(data, startingpoint):
     # startingpoint = '24251'
@@ -78,14 +80,6 @@ def write_legacy_bitmap(outdir, data, upperleft, height, width, prefix, map_matr
 
 
 def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
-    outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
-    outf.write('<HTML>\n')
-    outf.write('<HEAD>\n')
-    outf.write('<TITLE>{} Map</TITLE>\n'.format(prefix.capitalize()))
-    outf.write('<link href="map.css" rel="stylesheet" type="text/css">\n')
-    outf.write('</HEAD>\n')
-    outf.write('<BODY>\n')
-    outf.write('<h3>Olympia {} Map</h3>\n'.format(prefix.capitalize()))
     if height <= 50 and width <= 50:
         multiple = 12
     elif height <= 80 and width <= 80:
@@ -102,10 +96,6 @@ def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
         iwidth = (multiple * (width - 10)) + (rem_width * multiple)
     else:
         iwidth = (multiple * width)
-    outf.write('<img height="{}" width="{}" src="{}_thumbnail.png" usemap="#oly"/>\n'.format(iheight,
-                                                                                             iwidth,
-                                                                                             prefix))
-    outf.write('<map name="oly" id="oly">\n')
     x_max = math.ceil(width / 10)
     y_max = math.ceil(height / 10)
     if x_max == 1:
@@ -118,6 +108,7 @@ def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
         lheight = int(iheight / (y_max - 1))
     tp = 0
     bt = lheight
+    coords_list = []
     for outery in range(0, y_max):
         if outery < y_max - 1 or (outery == y_max - 1 and rem_height > 0) or y_max == 1:
             lt = 0
@@ -153,17 +144,24 @@ def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
                     xx = outerx * 10
                     yy = outery * 10
                     currentpoint = map_matrix[yy][xx]
-                    outf.write('<area shape="rect" '
-                               'coords="{}, {}, {}, {}" href="{}_map_leaf_{}.html"/>\n'.format(lt,
-                                                                                               tp,
-                                                                                               rt,
-                                                                                               bt,
-                                                                                               prefix,
-                                                                                               to_oid(currentpoint)))
-    outf.write('</map>\n')
-    outf.write('</BODY>\n')
-    outf.write('</html>\n')
-    outf.close()
+                    coords_entry = {'left': lt,
+                                    'top': tp,
+                                    'right': rt,
+                                    'bottom': bt,
+                                    'oid': to_oid(currentpoint)}
+                    coords_list.append(coords_entry)
+    map_dict = {'prefix': prefix,
+                'prefix_title': prefix.title(),
+                'height': iheight,
+                'width': iwidth,
+                'coords_list': coords_list}
+    outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('top_map.html')
+    outf.write(template.render(map=map_dict))
 
 
 def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefix, instance, map_matrix):
@@ -185,8 +183,6 @@ def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width
                                                               '_map_leaf_'
                                                               + u.to_oid(printpoint) +
                                                               '.html'), 'w')
-                    maps.write_leaf_header(printpoint, outdir, prefix, outf)
-                    outf.write('<TABLE>\n')
                     topnav = False
                     botnav = False
                     leftnav = False
@@ -212,123 +208,140 @@ def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width
                             upperrightnav = True
                         if botnav:
                             lowerrightnav = True
+                    top_nav_dict = {}
                     if topnav:
-                        generate_topnav(currentpoint, outf, prefix,
-                                        upperleftnav, upperrightnav, xx, yy, map_matrix)
+                        top_nav_dict = generate_topnav(currentpoint, outf, prefix,
+                                                       upperleftnav, upperrightnav, xx, yy, map_matrix)
+                    cell_list = []
+                    row_list = []
                     for y in range(0, 20):
                         if yy + y < height:
                             outf.write('<tr>\n')
                             for x in range(0, 20):
                                 if xx + x < width:
-                                    write_cell(castle_chain,
-                                               currentpoint,
-                                               data,
-                                               leftnav,
-                                               outf,
-                                               prefix,
-                                               rightnav,
-                                               x,
-                                               y,
-                                               xx,
-                                               yy,
-                                               instance,
-                                               map_matrix)
-                            outf.write('</tr>\n')
+                                    cell_dict = write_cell(castle_chain,
+                                                           currentpoint,
+                                                           data,
+                                                           leftnav,
+                                                           outf,
+                                                           prefix,
+                                                           rightnav,
+                                                           x,
+                                                           y,
+                                                           xx,
+                                                           yy,
+                                                           instance,
+                                                           map_matrix)
+                                    cell_list.append(cell_dict)
+                            row_list.append(cell_list)
+                            cell_list = []
+                    bot_nav_dict = {}
                     if botnav:
-                        generate_botnav(currentpoint, lowerleftnav,
-                                        lowerrightnav, outf, prefix, xx, yy, map_matrix)
-                    outf.write('</TABLE>\n')
-                    outf.write('<a href="{}_map.html">Return to {} Map</a>'.format(prefix,
-                                                                                   prefix.capitalize()))
-                    outf.write('</BODY>\n')
-                    outf.write('</HTML>')
-                    outf.close()
+                        bot_nav_dict = generate_botnav(currentpoint, lowerleftnav,
+                                                       lowerrightnav, outf, prefix, xx, yy, map_matrix)
+                    map_dict = {'prefix': prefix,
+                                'prefix_title': prefix.title(),
+                                'oid': to_oid(printpoint),
+                                'top': topnav,
+                                'bot': botnav,
+                                'left': leftnav,
+                                'right': rightnav,
+                                'topnav_dict': top_nav_dict,
+                                'botnav_dict': bot_nav_dict,
+                                'row_list': row_list}
+                    outf = open(pathlib.Path(outdir).joinpath(prefix +
+                                                              '_map_leaf_'
+                                                              + u.to_oid(printpoint) +
+                                                              '.html'), 'w')
+                    env = Environment(
+                        loader=PackageLoader('olymap', 'templates'),
+                        autoescape=select_autoescape(['html', 'xml'])
+                    )
+                    template = env.get_template('map_leaf.html')
+                    outf.write(template.render(map=map_dict))
 
 
 def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav, x, y, xx, yy, instance, map_matrix):
+    left_nav_dict = {}
     if x == 0 and y == 0:
         if leftnav:
             printpoint = map_matrix[yy][xx - 10]
-            outf.write('<td rowspan="20" class="left">')
-            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(printpoint)))
-            outf.write('<img src="grey.gif" width="20" height="840">')
-            outf.write('</a></td>\n')
+            left_nav_dict = {'oid': to_oid(printpoint),
+                             'width': 20,
+                             'height': 840}
     cell = map_matrix[yy+y][xx+x]
     printpoint = cell
     try:
         loc_rec = data[str(printpoint)]
     except:
-        outf.write('<td id ="{}" class="{}">'.format(to_oid(printpoint),
-                                                     'undefined'))
-        outf.write('{}'.format(to_oid(printpoint)))
-        outf.write('<br>{}'.format('&nbsp;' * 8))
-        outf.write('<br>{}'.format('&nbsp;' * 8))
+        type = 'undefined'
+        border_dict = {}
+        contents_dict = {}
         outf.write('</td>\n')
     else:
-        outf.write('<td id ="{}" class="{}"'.format(to_oid(printpoint),
-                                                    u.return_type(loc_rec)))
-        maps.generate_border(data, loc_rec, outf, instance)
-        outf.write('>')
-        maps.generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
-        outf.write('</td>\n')
+        type = u.return_type(loc_rec)
+        border_dict = maps.generate_border(data, loc_rec, outf, instance)
+        contents_dict = maps.generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
+    cell_dict = {'oid': to_oid(printpoint),
+                 'type': type,
+                 'border_dict': border_dict,
+                 'contents_dict': contents_dict}
     # except KeyError:
     #    outf.write('<td id="{}" class="x-sea">{}</td>\n'.format(to_oid(printpoint), to_oid(printpoint)))
+    right_nav_dict = {}
     if x == 19 and y == 0:
         if rightnav:
             printpoint = map_matrix[yy][xx + 10]
-            outf.write('<td rowspan="20" class="right">')
-            outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                               to_oid(printpoint)))
-            outf.write('<img src="grey.gif" width="20" height="840">')
-            outf.write('</a></td>\n')
+            right_nav_dict = {'oid': to_oid(printpoint),
+                              'width': 20,
+                              'height': 840}
+    nav_dict = {'left_nav_dict': left_nav_dict,
+                'cell_dict': cell_dict,
+                'right_nav_dict': right_nav_dict}
+    return nav_dict
 
 
 def generate_botnav(currentpoint, lowerleftnav, lowerrightnav, outf, prefix, xx, yy, map_matrix):
-    outf.write('<tr>\n')
+    lower_left_nav_dict = {}
     if lowerleftnav:
         printpoint = map_matrix[yy + 10][xx - 10]
-        outf.write('<td class="corner">')
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
+        lower_left_nav_dict = {'oid': to_oid(printpoint),
+                               'width': 20,
+                               'height': 20}
     printpoint = map_matrix[yy + 10][xx]
-    outf.write('<td colspan="20" class="bottom">')
-    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(printpoint)))
-    outf.write('<img src="grey.gif" width="840" height="20">')
-    outf.write('</a></td>\n')
+    lower_nav_dict = {'oid': to_oid(printpoint),
+                      'width': 840,
+                      'height': 20}
+    lower_right_nav_dict = {}
     if lowerrightnav:
         printpoint = map_matrix[yy + 10][xx + 10]
-        outf.write('<td class="corner">')
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
-    outf.write('</tr>\n')
+        lower_right_nav_dict = {'oid': to_oid(printpoint),
+                                'width': 20,
+                                'height': 20}
+    bot_nav_dict = {'lower_left_nav_dict': lower_left_nav_dict,
+                    'lower_nav_dict': lower_nav_dict,
+                    'lower_right_nav_dict': lower_right_nav_dict}
+    return bot_nav_dict
 
 
 def generate_topnav(currentpoint, outf, prefix, upperleftnav, upperrightnav, xx, yy, map_matrix):
-    outf.write('<tr>\n')
+    upper_left_nav_dict = {}
     if upperleftnav:
-        outf.write('<td class="corner">')
         printpoint = map_matrix[yy - 10][xx - 10]
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
-    outf.write('<td colspan="20" class="top">')
+        upper_left_nav_dict = {'oid': to_oid(printpoint),
+                               'width': 20,
+                               'height': 20}
     printpoint = map_matrix[yy - 10][xx]
-    outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                       to_oid(printpoint)))
-    outf.write('<img src="grey.gif" width="840" height="20">')
-    outf.write('</a></td>\n')
+    upper_nav_dict = {'oid': to_oid(printpoint),
+                      'width': 840,
+                      'height': 20}
+    upper_right_nav_dict = {}
     if upperrightnav:
-        outf.write('<td class="corner">')
         printpoint = map_matrix[yy - 10][xx + 10]
-        outf.write('<a href="{}_map_leaf_{}.html">'.format(prefix,
-                                                           to_oid(printpoint)))
-        outf.write('<img src="grey.gif" width="20" height="20">')
-        outf.write('</a></td>\n')
-    outf.write('</tr>\n')
+        upper_right_nav_dict = {'oid': to_oid(printpoint),
+                                'width': 20,
+                                'height': 20}
+    top_nav_dict = {'upper_left_nav_dict': upper_left_nav_dict,
+                    'upper_nav_dict': upper_nav_dict,
+                    'upper_right_nav_dict': upper_right_nav_dict}
+    return top_nav_dict
