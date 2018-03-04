@@ -51,6 +51,69 @@
         {% else %}
             <td>&nbsp&nbsp;</td>
         {% endif %}
+        {% if entry.magic_info or entry.trade_good or entry.type == 'tradegood' %}
+            <td>
+                {% if entry.use_key == '2' %}
+                    Healing Potion
+                {% elif entry.use_key == '5' %}
+                    Projected Cast: {{ entry.magic_info.loc_kind }} {{ entry.magic_info.loc_name }}
+                    {% if entry.magic_info.loc_kind != 'unknown' %}
+                        [<a href="{{ entry.magic_info.loc_oid }}.html">{{ entry.magic_info.loc_oid }}</a>]
+                    {% else %}
+                        [{{ entry.magic_info.loc_oid }}]
+                    {% endif %}
+                {% elif entry.magic_info.magic_type == 'Scroll' %}
+                    Scroll: {{ entry.magic_info.name }}
+                    {% if entry.magic_info.name != 'unknown' %}
+                        [<a href="{{ entry.magic_info.skill_id }}.html">{{ entry.magic_info.skill_id }}</a>]
+                    {% endif %}
+                {% elif entry.magic_info.magic_type == 'Artifact' %}
+                    {% if entry.magic_info.artifact_dict.attack %}
+                        attack +{{ entry.magic_info.artifact_dict.attack }}
+                    {% endif %}
+                    {% if entry.magic_info.artifact_dict.defense %}
+                        defense +{{ entry.magic_info.artifact_dict.defense }}
+                    {% endif %}
+                    {% if entry.magic_info.artifact_dict.missile %}
+                        missile +{{ entry.magic_info.artifact_dict.missile }}
+                    {% endif %}
+                    {% if entry.magic_info.artifact_dict.aura %}
+                        aura +{{ entry.magic_info.artifact_dict.aura }}
+                    {% endif %}
+                {% elif entry.magic_info.magic_type == 'Dead Body' %}
+                    {% if entry.magic_info.db_oid %}
+                        {{ entry.magic_info.db_name }} [<a href="{{ entry.magic_info.db_oid }}.html">{{ entry.magic_info.db_oid }}</a>]
+                    {% else %}
+                        unknown dead guy
+                    {% endif %}
+                {% elif entry.magic_info.magic_type == 'Auraculum' %}
+                    Aura:
+                    {% if entry.magic_info.aura %}
+                        {{ entry.magic_info.aura }}
+                    {% else %}
+                        unknown
+                    {% endif %}
+                {% endif %}
+                {% if entry.type == 'tradegood' %}
+                    {% if entry.trade_good %}
+                        {% if entry.trade_good.sell %}
+                            {% for sell_item in entry.trade_good.sell %}
+                                sell: {{ sell_item.name }} [<a href="{{ sell_item.oid }}.html">{{ sell_item.oid }}</a>]<br>
+                            {% endfor %}
+                        {% endif %}
+                        {% if entry.trade_good.buy %}
+                            {% for buy_item in entry.trade_good.buy %}
+                                buy: {{ buy_item.name }} [<a href="{{ buy_item.oid }}.html">{{ buy_item.oid }}</a>]<br>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        inactive tradegood
+                    {% endif %}
+                {% endif %}
+            </td>
+        {% else %}
+            <td>&nbsp;</td>
+        {% endif %}
         <td>{{ entry.notes|safe }}</td></tr>
 {% endfor %}
 </table>

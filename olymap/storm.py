@@ -3,7 +3,7 @@
 from collections import defaultdict
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type
+from olymap.utilities import get_oid, get_name, get_type
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 

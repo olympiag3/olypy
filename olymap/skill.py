@@ -4,7 +4,6 @@ import math
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import get_name
-from olymap.utilities import anchor
 import pathlib
 
 

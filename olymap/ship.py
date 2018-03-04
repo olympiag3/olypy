@@ -3,7 +3,7 @@ import math
 from collections import defaultdict
 
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2
+from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2
 import pathlib
 from olypy.db import loop_here
 from olymap.utilities import calc_ship_pct_loaded

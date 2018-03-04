@@ -7,7 +7,7 @@ import olymap.utilities as u
 import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
-from olymap.utilities import anchor, anchor2, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
 from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape

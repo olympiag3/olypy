@@ -5,13 +5,13 @@ from collections import defaultdict
 from olypy.oid import to_oid
 from olypy.oid import to_int
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type, get_who_has
+from olymap.utilities import get_oid, get_name, get_type, get_who_has
 import olymap.maps as maps
 import pathlib
 from olypy.db import loop_here
 from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.ship import build_basic_ship_dict
-from olymap.item import build_basic_item_dict
+from olymap.item import build_basic_item_dict, get_magic_item
 from olymap.player import build_complete_player_dict
 from olymap.loc import build_basic_loc_dict, get_road_here, get_gate_here, get_gate_start_end, get_where_info, get_region
 from olymap.char import build_basic_char_dict, get_items_list, get_loc
@@ -65,6 +65,7 @@ def build_item_dict(item_list, data, trade_chain):
     for item_id in item_list:
         item_rec = data[item_id]
         item_entry = build_basic_item_dict(item_id, item_rec, data, trade_chain)
+        item_entry.update({'magic_item': get_magic_item(data, item_id, item_rec)})
         itemz.append(item_entry)
     return itemz
 

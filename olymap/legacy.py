@@ -216,7 +216,6 @@ def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width
                     row_list = []
                     for y in range(0, 20):
                         if yy + y < height:
-                            outf.write('<tr>\n')
                             for x in range(0, 20):
                                 if xx + x < width:
                                     cell_dict = write_cell(castle_chain,
@@ -277,7 +276,6 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
         type = 'undefined'
         border_dict = {}
         contents_dict = {}
-        outf.write('</td>\n')
     else:
         type = u.return_type(loc_rec)
         border_dict = maps.generate_border(data, loc_rec, outf, instance)

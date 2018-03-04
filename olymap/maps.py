@@ -2,8 +2,6 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor
-from olymap.utilities import anchor2
 from olymap.loc import get_barrier, get_civ_level
 import olypy.details as details
 import pathlib

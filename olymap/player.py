@@ -4,7 +4,7 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type
+from olymap.utilities import get_oid, get_name, get_type
 import pathlib
 
 
@@ -51,56 +51,6 @@ def get_unit_list(v, data):
                        'name': get_name(unit_rec, data)}
             units_list.append(unit_dict)
     return units_list
-
-
-def write_unit_list(data, outf, v):
-    if 'PL' in v and 'un' in v['PL']:
-        unit_list = v['PL']['un']
-        unit_list.sort()
-        outf.write('<tr><td valign="top">Unit List:</td><td>')
-        outf.write('<table>\n')
-        columns = int(math.ceil(len(unit_list) / 3))
-        for unit in range(0, columns):
-            outf.write('<tr>')
-            if (columns * 0) + unit < len(unit_list):
-                char = data[unit_list[(columns * 0) + unit]]
-                if 'na' in char:
-                    name = char['na'][0]
-                else:
-                    name = u.return_type(char).capitalize()
-                if name == 'Ni':
-                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
-                outf.write('<td>{} [{}]</td>'.format(name,
-                                                     anchor(to_oid(u.return_unitid(char)))))
-            else:
-                outf.write('<td></td>')
-            if (columns * 1) + unit < len(unit_list):
-                char = data[unit_list[(columns * 1) + unit]]
-                if 'na' in char:
-                    name = char['na'][0]
-                else:
-                    name = u.return_type(char).capitalize()
-                if name == 'Ni':
-                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
-                outf.write('<td>{} [{}]</td>'.format(name,
-                                                     anchor(to_oid(u.return_unitid(char)))))
-            else:
-                outf.write('<td></td><td></td>')
-            if (columns * 2) + unit < len(unit_list):
-                char = data[unit_list[(columns * 2) + unit]]
-                if 'na' in char:
-                    name = char['na'][0]
-                else:
-                    name = u.return_type(char).capitalize()
-                if name == 'Ni':
-                    name = data[char['CH']['ni'][0]]['na'][0].capitalize()
-                outf.write('<td>{} [{}]</td>'.format(name,
-                                                     anchor(to_oid(u.return_unitid(char)))))
-            else:
-                outf.write('<td></td><td></td>')
-            outf.write('</tr>\n')
-        outf.write('</table>\n')
-        outf.write('</td></tr>')
 
 
 def build_complete_player_dict(k, v, data):

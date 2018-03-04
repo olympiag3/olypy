@@ -4,7 +4,8 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import anchor, get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.item import get_magic_item
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -609,88 +610,16 @@ def get_magic_stuff(v, data):
     if 'il' in v:
         item_list = v['il']
         for items in range(0, len(item_list), 2):
+            item_id = item_list[items]
             try:
-                itemz = data[item_list[items]]
+                item_rec = data[item_id]
             except KeyError:
                 pass
             else:
                 magic_type = None
-                item_type = u.return_type(itemz)
-                if item_type == '0':
-                    if 'IM' in itemz and 'uk' in itemz['IM']:
-                        use_key = itemz['IM']['uk'][0]
-                        if use_key == '2':
-                            magic_type = 'Healing Potion'
-                            magic_dict = {'oid': to_oid(item_list[items]),
-                                          'name': None,
-                                          'skill_id': None,
-                                          'required_study': None,
-                                          'required_name': None,
-                                          'loc_kind': None,
-                                          'loc_id' : None,
-                                          'magic_type': magic_type}
-                            magic_list.append(magic_dict)
-                        elif use_key == '5':
-                            loc_kind = 'unknown'
-                            loc_name = 'unknown'
-                            loc_id = ''
-                            if 'IM' in itemz and 'pc' in itemz['IM']:
-                                try:
-                                    location = data[itemz['IM']['pc'][0]]
-                                except KeyError:
-                                    loc_kind = 'unknown'
-                                    loc_name = 'unknown'
-                                    loc_id = to_oid(itemz['IM']['pc'][0])
-                                else:
-                                    loc_id = to_oid(itemz['IM']['pc'][0])
-                                    if u.return_kind(location) != 'loc':
-                                        loc_kind = u.return_kind(location)
-                                    else:
-                                        loc_kind = 'location'
-                                    loc_name = location.get('na', ['unknown'])[0]
-                                    loc_id = to_oid(u.return_unitid(location))
-                            else:
-                                loc_id = '(no id)'
-                            magic_type = 'Projected Cast'
-                            magic_dict = {'oid': to_oid(item_list[items]),
-                                          'name': loc_name,
-                                          'skill_id': None,
-                                          'required_study': None,
-                                          'required_name': None,
-                                          'loc_kind': loc_kind,
-                                          'loc_id': loc_id,
-                                          'magic_type': magic_type}
-                            magic_list.append(magic_dict)
-                elif item_type == 'scroll':
-                    if 'IM' in itemz and 'ms' in itemz['IM']:
-                        skill_id = to_oid(itemz['IM']['ms'][0])
-                        scroll_id = to_oid(item_list[items])
-                        required_study = ''
-                        try:
-                            skill = data[itemz['IM']['ms'][0]]
-                        except KeyError:
-                            skill_name = 'unknown'
-                        else:
-                            skill_name = skill['na'][0]
-                            if 'SK' in skill:
-                                if 'rs' in skill['SK']:
-                                    try:
-                                        skill2 = data[skill['SK']['rs'][0]]
-                                    except KeyError:
-                                        required_name = 'unknown'
-                                    else:
-                                        required_name = skill2.get('na', ['unknown'])[0]
-                                        required_study = to_oid(skill['SK']['rs'][0])
-                                        magic_type = 'Scroll'
-                                        magic_dict = {'oid': scroll_id,
-                                                      'name': skill_name,
-                                                      'skill_id': skill_id,
-                                                      'required_study': required_study,
-                                                      'required_name': required_name,
-                                                      'loc_kind': None,
-                                                      'loc_id': None,
-                                                      'magic_type': magic_type}
-                                        magic_list.append(magic_dict)
+                magic_item_dict = get_magic_item(data, item_id, item_rec)
+                if magic_item_dict is not None:
+                    magic_list.append(magic_item_dict)
     return magic_list
 
 

@@ -69,7 +69,21 @@
     <tr><td>Who Has:</td><td>{{ item.who_has_name }} [<a href="{{ item.who_has_oid }}.html">{{ item.who_has_oid }}</a>]</td></tr>
 {% endif %}
 {% if item.trade_good %}
-    <tr><td>Traded In:</td><td>{{ item.trade_good|safe }}</td></tr>
+    <tr>
+        <td valign="top">Traded In:</td>
+        <td>
+        {% if item.trade_good.sell %}
+            {% for good in item.trade_good.sell %}
+                sell: {{ good.name }} [<a href="{{ good.oid }}.html">{{ good.oid }}</a>] <br>
+            {% endfor %}
+        {% endif %}
+        {% if item.trade_good.buy %}
+            {% for good in item.trade_good.buy %}
+                buy: {{ good.name }} [<a href="{{ good.oid }}.html">{{ good.oid }}</a>] <br>
+            {% endfor %}
+        {% endif %}
+        </td>
+    </tr>
 {% endif %}
 </table>
 </BODY>
