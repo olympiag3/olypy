@@ -20,6 +20,7 @@ def _i(c):
     return ord(c) - 97
 
 
+@lru_cache(maxsize=None)
 def to_oid(oid_int):
     oid_int = str(oid_int)
     if not oid_int.isdigit():
