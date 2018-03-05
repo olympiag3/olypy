@@ -10,6 +10,7 @@ import olymap.maps as maps
 import pathlib
 from olypy.db import loop_here
 from jinja2 import Environment, PackageLoader, select_autoescape
+import olymap
 from olymap.ship import build_basic_ship_dict
 from olymap.item import build_basic_item_dict, get_magic_item
 from olymap.player import build_complete_player_dict
@@ -24,11 +25,7 @@ def ship_report(data, outdir):
             ship_list.append(unit)
     sort_ship_list = sorted(ship_list, key=lambda x:int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_ship_report.html')
+    template = olymap.env.get_template('master_ship_report.html')
     ship = build_ship_dict(sort_ship_list, data)
     outf.write(template.render(ship=ship))
 
@@ -51,11 +48,7 @@ def item_report(data, trade_chain, outdir):
     # for unit in item_list:
     sort_item_list =  sorted(item_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_item_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_item_report.html')
+    template = olymap.env.get_template('master_item_report.html')
     itemz = build_item_dict(sort_item_list, data, trade_chain)
     outf.write(template.render(itemz=itemz))
 
@@ -77,11 +70,7 @@ def player_report(data, outdir):
             player_list.append(unit)
     sort_player_list =  sorted(player_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_player_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_player_report.html')
+    template = olymap.env.get_template('master_player_report.html')
     player = build_player_dict(sort_player_list, data)
     outf.write(template.render(player=player))
 
@@ -104,11 +93,7 @@ def healing_potion_report(data, outdir):
     # for unit in healing_potion_list:
     sort_healing_potion_list = sorted(healing_potion_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_healing_potion_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_healing_potion_report.html')
+    template = olymap.env.get_template('master_healing_potion_report.html')
     healing_potion = build_item_dict(sort_healing_potion_list, data, None)
     outf.write(template.render(healing_potion=healing_potion))
 
@@ -124,11 +109,7 @@ def orb_report(data, outdir):
     # for unit in orb_list:
     sort_orb_list = sorted(orb_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_orb_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_orb_report.html')
+    template = olymap.env.get_template('master_orb_report.html')
     orb = build_item_dict(sort_orb_list, data, None)
     outf.write(template.render(orb=orb))
 
@@ -144,11 +125,7 @@ def projected_cast_potion_report(data, outdir):
     # for unit in projected_cast_list:
     sort_projected_cast_list = sorted(projected_cast_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_projected_cast_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_projected_cast_report.html')
+    template = olymap.env.get_template('master_projected_cast_report.html')
     projected_cast = build_item_dict(sort_projected_cast_list, data, None)
     outf.write(template.render(projected_cast=projected_cast))
 
@@ -162,11 +139,7 @@ def location_report(data, outdir):
     # for unit in location_list:
     sort_location_list = sorted(location_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_location_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_location_report.html')
+    template = olymap.env.get_template('master_location_report.html')
     loc = build_loc_dict(sort_location_list, data, True, None)
     outf.write(template.render(loc=loc))
 
@@ -213,11 +186,7 @@ def skill_xref_report(data, teaches_chain, outdir):
                                         'region_dict': get_region(city, data)}
                 sort_skill_xref_list.append(sort_skill_xref_dict)
     outf = open(pathlib.Path(outdir).joinpath('master_skill_xref_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_skill_xref_report.html')
+    template = olymap.env.get_template('master_skill_xref_report.html')
     loc = sort_skill_xref_list
     outf.write(template.render(loc=loc))
 
@@ -257,11 +226,7 @@ def trade_report(data, trade_chain, outdir):
                            'sell_list': sell_list}
             sort_trade_list.append((trade_entry))
     outf = open(pathlib.Path(outdir).joinpath('master_trade_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_trade_report.html')
+    template = olymap.env.get_template('master_trade_report.html')
     loc = sort_trade_list
     outf.write(template.render(loc=loc))
 
@@ -277,11 +242,7 @@ def road_report(data, outdir):
     # for road in road_list:
     sort_road_list =  sorted(road_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_road_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_road_report.html')
+    template = olymap.env.get_template('master_road_report.html')
     loc = build_road_dict(sort_road_list, data)
     outf.write(template.render(loc=loc))
 
@@ -307,11 +268,7 @@ def gate_report(data, outdir):
     # for road in road_list:
     sort_gate_list =  sorted(gate_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_gate_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_gate_report.html')
+    template = olymap.env.get_template('master_gate_report.html')
     loc = build_road_dict(sort_gate_list, data)
     outf.write(template.render(loc=loc))
 
@@ -325,11 +282,7 @@ def character_report(data, outdir):
     # for unit in character_list:
     sort_character_list =  sorted(character_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_character_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_character_report.html')
+    template = olymap.env.get_template('master_character_report.html')
     char = build_char_dict(sort_character_list, data)
     outf.write(template.render(char=char))
 
@@ -372,11 +325,7 @@ def graveyard_report(data, outdir):
                                'target_dict': target_dict}
         sort_graveyard_list.append((sort_graveyard_dict))
     outf = open(pathlib.Path(outdir).joinpath('master_graveyard_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_graveyard_report.html')
+    template = olymap.env.get_template('master_graveyard_report.html')
     loc = sort_graveyard_list
     outf.write(template.render(loc=loc))
 
@@ -412,11 +361,7 @@ def faeryhill_report(data, outdir):
                                'target_region_dict': target_region_dict}
         sort_faeryhill_list.append((sort_faeryhill_dict))
     outf = open(pathlib.Path(outdir).joinpath('master_faeryhill_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_faeryhill_report.html')
+    template = olymap.env.get_template('master_faeryhill_report.html')
     loc = sort_faeryhill_list
     outf.write(template.render(loc=loc))
 
@@ -431,11 +376,7 @@ def castle_report(data, outdir, garrisons_chain):
     sort_castle_list = sorted(castle_list, key=lambda x: int(x))
     # nbrmen, _, _ = maps.count_stuff(castle, data)
     outf = open(pathlib.Path(outdir).joinpath('master_castle_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_castle_report.html')
+    template = olymap.env.get_template('master_castle_report.html')
     loc = build_loc_dict(sort_castle_list, data, True, garrisons_chain)
     outf.write(template.render(loc=loc))
 
@@ -449,11 +390,7 @@ def city_report(data, outdir):
     # for unit in city_list:
     sort_city_list = sorted(city_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_city_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_city_report.html')
+    template = olymap.env.get_template('master_city_report.html')
     loc = build_loc_dict(sort_city_list, data, True, None, True)
     outf.write(template.render(loc=loc))
 
@@ -467,11 +404,7 @@ def region_report(data, outdir):
     # for unit in region_list:
     sort_region_list = sorted(region_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_region_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_region_report.html')
+    template = olymap.env.get_template('master_region_report.html')
     loc = build_loc_dict(sort_region_list, data, False, None, False, True)
     outf.write(template.render(loc=loc))
 
@@ -485,11 +418,7 @@ def mage_report(data, outdir):
     # for unit in mage_list:
     sort_mage_list = sorted(mage_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_mage_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_mage_report.html')
+    template = olymap.env.get_template('master_mage_report.html')
     char = build_char_dict(sort_mage_list, data)
     outf.write(template.render(char=char))
 
@@ -503,11 +432,7 @@ def priest_report(data, outdir):
     # for unit in priest_list:
     sort_priest_list = sorted(priest_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_priest_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_priest_report.html')
+    template = olymap.env.get_template('master_priest_report.html')
     char = build_char_dict(sort_priest_list, data)
     outf.write(template.render(char=char))
 
@@ -532,10 +457,6 @@ def gold_report(data, outdir):
                              'qty': int(items_list[0]['qty'])}
                 sort_gold_list.append(gold_dict)
     outf = open(pathlib.Path(outdir).joinpath('master_gold_report.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('master_gold_report.html')
+    template = olymap.env.get_template('master_gold_report.html')
     char = sort_gold_list
     outf.write(template.render(char=char))

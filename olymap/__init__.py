@@ -23,7 +23,15 @@ from olymap.maps import write_index, write_map_leaves, write_top_map, write_bitm
 from olymap.legacy import create_map_matrix, write_legacy_bitmap, write_legacy_top_map, write_legacy_map_leaves
 
 
+env = None
+
+
 def make_map(inlib, outdir, instance):
+    global env
+    env = Environment(
+        loader=PackageLoader('olymap', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
     inst_dict = {'g2': {'main': [10000, 100, 100], 'hades': [24251, 76, 76, 'Y'], 'faery': [20013, 7, 938, 'Y'],
                         'cloudlands': [23184, 5, 5, 'Y'], 'subworld': [39167, 11, 11, 'Y']},
                  'g4': {'main': [10000, 80, 80], 'hades': [24000, 50, 50], 'faery': [18000, 46, 46],
@@ -164,10 +172,6 @@ def write_maps(data, chains, outdir, instance, inst_dict, map_matrices):
 def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdir, instance, inst_dict, map_matrices):
     # generate loc page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('loc.html')
     loc = build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain, instance, inst_dict, map_matrices)
     outf.write(template.render(loc=loc))
@@ -176,10 +180,6 @@ def write_loc_html(v, k, data, hidden_chain, garrisons_chain, trade_chain, outdi
 def write_ship_html(v, k, data, outdir, instance, pledge_chain, prisoner_chain):
     # generate ship page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('ship.html')
     ship = build_complete_ship_dict(k, v, data, instance, pledge_chain, prisoner_chain)
     outf.write(template.render(ship=ship))
@@ -188,10 +188,6 @@ def write_ship_html(v, k, data, outdir, instance, pledge_chain, prisoner_chain):
 def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
     # generate char page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('char.html')
     char = build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain, False)
     outf.write(template.render(char=char))
@@ -200,10 +196,6 @@ def write_char_html(v, k, data, pledge_chain, prisoner_chain, outdir, instance):
 def write_item_html(v, k, data, trade_chain, outdir):
     # generate item page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('item.html')
     item = build_complete_item_dict(k, v, data, trade_chain)
     outf.write(template.render(item=item))
@@ -212,10 +204,6 @@ def write_item_html(v, k, data, trade_chain, outdir):
 def write_skill_html(v, k, data, outdir, teaches_chain, child_skills_chain, skills_known_chain):
     # generate item page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('skill.html')
     skill = build_complete_skill_dict(k, v, data, teaches_chain, child_skills_chain, skills_known_chain)
     outf.write(template.render(skill=skill))
@@ -224,10 +212,6 @@ def write_skill_html(v, k, data, outdir, teaches_chain, child_skills_chain, skil
 def write_storm_html(v, k, data, storm_chain, outdir):
     # generate item page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('storm.html')
     storm = build_complete_storm_dict(k, v, data, storm_chain)
     outf.write(template.render(storm=storm))
@@ -236,10 +220,6 @@ def write_storm_html(v, k, data, storm_chain, outdir):
 def write_player_html(v, k, data, outdir):
     # generate item page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
     template = env.get_template('player.html')
     player = build_complete_player_dict(k, v, data)
     outf.write(template.render(player=player))

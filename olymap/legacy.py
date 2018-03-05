@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import pathlib
 from pngcanvas import *
+import olymap
 import olymap.utilities as u
 import olymap.maps as maps
 import math
@@ -156,11 +157,7 @@ def write_legacy_top_map(outdir, upperleft, height, width, prefix, map_matrix):
                 'width': iwidth,
                 'coords_list': coords_list}
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('top_map.html')
+    template = olymap.env.get_template('top_map.html')
     outf.write(template.render(map=map_dict))
 
 
@@ -252,11 +249,7 @@ def write_legacy_map_leaves(data, castle_chain, outdir, upperleft, height, width
                                                               '_map_leaf_'
                                                               + u.to_oid(printpoint) +
                                                               '.html'), 'w')
-                    env = Environment(
-                        loader=PackageLoader('olymap', 'templates'),
-                        autoescape=select_autoescape(['html', 'xml'])
-                    )
-                    template = env.get_template('map_leaf.html')
+                    template = olymap.env.get_template('map_leaf.html')
                     outf.write(template.render(map=map_dict))
 
 

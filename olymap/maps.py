@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import olymap
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.loc import get_barrier, get_civ_level
@@ -30,11 +31,7 @@ def write_index(outdir, instance, inst_dict):
                   'file': index_text,
                   'dimensions_list': dimensions_list}
     outf = open(pathlib.Path(outdir).joinpath('index.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('index.html')
+    template = olymap.env.get_template('index.html')
     outf.write(template.render(index=index_dict))
 
 
@@ -114,11 +111,7 @@ def write_top_map(outdir, upperleft, height, width, prefix):
                 'width': iwidth,
                 'coords_list': coords_list}
     outf = open(pathlib.Path(outdir).joinpath(prefix + '_map.html'), 'w')
-    env = Environment(
-        loader=PackageLoader('olymap', 'templates'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('top_map.html')
+    template = olymap.env.get_template('top_map.html')
     outf.write(template.render(map=map_dict))
 
 
@@ -221,11 +214,7 @@ def write_map_leaves(data, castle_chain, outdir, upperleft, height, width, prefi
                                                               '_map_leaf_'
                                                               + u.to_oid(printpoint) +
                                                               '.html'), 'w')
-                    env = Environment(
-                        loader=PackageLoader('olymap', 'templates'),
-                        autoescape=select_autoescape(['html', 'xml'])
-                    )
-                    template = env.get_template('map_leaf.html')
+                    template = olymap.env.get_template('map_leaf.html')
                     outf.write(template.render(map=map_dict))
 
 
