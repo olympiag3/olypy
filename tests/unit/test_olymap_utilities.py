@@ -1,6 +1,57 @@
 import olymap.utilities
 
 
+# def test_is_fighter()
+
+
+def test_is_hidden():
+    tests = (
+        ({}, False),
+        ({'LO': {'hi': [0]}}, False),
+        ({'LO': {'hi': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_hidden(v) == answer
+
+
+# def test_is_impassable()
+
+
+def test_is_magician():
+    tests = (
+        ({}, False),
+        ({'CM': {'im': [0]}}, False),
+        ({'CM': {'im': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_magician(v) == answer
+
+
+def test_is_man_item():
+    tests = (
+        ({}, False),
+        ({'IT': {'mu': [0]}}, False),
+        ({'IT': {'mu': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_man_item(v) == answer
+
+
+def test_is_orb():
+    tests = (
+        ({}, False),
+        ({'IM': {'uk': [0]}}, False),
+        ({'IM': {'uk': ['9']}}, True),
+        ({'IM': {'uk': ['5']}}, False),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_orb(v) == answer
+
+
 def test_is_prisoner():
     tests = (
         ({}, False),
@@ -13,3 +64,26 @@ def test_is_prisoner():
 
     for v, answer in tests:
         assert olymap.utilities.is_prisoner(v) == answer
+
+
+def test_is_prominent():
+    tests = (
+        ({}, False),
+        ({'IT': {'pr': [0]}}, False),
+        ({'IT': {'pr': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_prominent(v) == answer
+
+
+def test_is_projected_cast():
+    tests = (
+        ({}, False),
+        ({'IM': {'uk': [0]}}, False),
+        ({'IM': {'uk': ['9']}}, False),
+        ({'IM': {'uk': ['5']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_projected_cast(v) == answer
