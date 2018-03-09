@@ -8,11 +8,22 @@ def test_is_concealed():
         ({'CH': {'hs': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_concealed(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_concealed(box) == answer
 
 
-# def test_is_fighter()
+def test_is_fighter():
+    tests = (
+        ({'firstline': ['10 item 0']}, False),
+        ({'firstline': ['10 item 0'], 'IT': {'hi': [0]}}, False),
+        ({'firstline': ['10 item 0'], 'IT': {'at': ['1']}}, True),
+        ({'firstline': ['10 item 0'], 'IT': {'df': ['1']}}, True),
+        ({'firstline': ['10 item 0'], 'IT': {'mi': ['1']}}, True),
+        ({'firstline': ['18 item 0']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_fighter(box) == answer
 
 
 def test_is_hidden():
@@ -22,8 +33,8 @@ def test_is_hidden():
         ({'LO': {'hi': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_hidden(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_hidden(box) == answer
 
 
 # def test_is_impassable()
@@ -36,8 +47,8 @@ def test_is_magician():
         ({'CM': {'im': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_magician(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_magician(box) == answer
 
 
 def test_is_man_item():
@@ -47,8 +58,8 @@ def test_is_man_item():
         ({'IT': {'mu': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_man_item(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_man_item(box) == answer
 
 
 def test_is_on_guard():
@@ -58,8 +69,8 @@ def test_is_on_guard():
         ({'CH': {'gu': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_on_guard(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_on_guard(box) == answer
 
 
 def test_is_orb():
@@ -70,8 +81,8 @@ def test_is_orb():
         ({'IM': {'uk': ['5']}}, False),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_orb(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_orb(box) == answer
 
 
 def test_is_priest():
@@ -82,8 +93,8 @@ def test_is_priest():
         ({'CH': {'sl': ['750', '2']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_priest(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_priest(box) == answer
 
 
 def test_is_prisoner():
@@ -96,8 +107,8 @@ def test_is_prisoner():
         #({'CH': {'pr': ['3']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_prisoner(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_prisoner(box) == answer
 
 
 def test_is_prominent():
@@ -107,8 +118,8 @@ def test_is_prominent():
         ({'IT': {'pr': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_prominent(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_prominent(box) == answer
 
 
 def test_is_projected_cast():
@@ -119,8 +130,8 @@ def test_is_projected_cast():
         ({'IM': {'uk': ['5']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_projected_cast(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_projected_cast(box) == answer
 
 
 def test_is_road_or_gate():
@@ -130,5 +141,5 @@ def test_is_road_or_gate():
         ({'GA': {'tl': ['1']}}, True),
     )
 
-    for v, answer in tests:
-        assert olymap.utilities.is_road_or_gate(v) == answer
+    for box, answer in tests:
+        assert olymap.utilities.is_road_or_gate(box) == answer

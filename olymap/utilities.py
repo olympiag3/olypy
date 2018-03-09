@@ -116,12 +116,13 @@ def is_fighter(box):
     attack = ''
     defense = ''
     missile = ''
-    if 'at' in box['IT']:
-        attack = box['IT']['at'][0]
-    if 'df' in box['IT']:
-        defense = box['IT']['df'][0]
-    if 'mi' in box['IT']:
-        missile = box['IT']['mi'][0]
+    if 'IT' in box:
+        if 'at' in box['IT']:
+            attack = box['IT']['at'][0]
+        if 'df' in box['IT']:
+            defense = box['IT']['df'][0]
+        if 'mi' in box['IT']:
+            missile = box['IT']['mi'][0]
     if attack != '' or defense != '' or missile != '' or return_unitid(box) == '18':
         return True
     return False
