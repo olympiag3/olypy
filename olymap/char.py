@@ -20,7 +20,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
                      'faction': get_faction(v, data),
                      'health': get_health(v),
                      'nbr_men': get_nbr_men(v, data),
-                     'absorb_blast': u.is_absorb_aura_blast(v, data),
+                     'absorb_blast': u.is_absorb_aura_blast(v),
                      'prisoner': u.is_prisoner(v),
                      'stacked_over_list': get_stacked_over(v, data),
                      'priest': u.is_priest(v),
@@ -494,7 +494,7 @@ def get_inventory(v, data, prominent_only):
                         fly_weight = fly_weight + item_ext
                         ride_weight = ride_weight + item_ext
                     total_char_weight = total_char_weight + item_ext
-                    if u.is_fighter(itemz, item_id):
+                    if u.is_fighter(itemz):
                         attack = 0
                         defense = 0
                         missile = 0

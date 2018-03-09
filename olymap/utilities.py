@@ -79,73 +79,58 @@ def return_firstline(box):
     return firstline
 
 
-# def chase_structure(k, data, level, seen_here_list):
-#     try:
-#         z = data[k]
-#     except KeyError:
-#         return seen_here_list
-#     else:
-#         seen_here_list.append((return_unitid(z), level))
-#         if 'LI' in z:
-#             if 'hl' in z['LI']:
-#                 level = level + 1
-#                 for here in z['LI']['hl']:
-#                     seen_here_list = chase_structure(here, data, level, seen_here_list)
-#     return seen_here_list
-
-
-def xlate_rank(v):
+def xlate_rank(box):
     rank = 'undefined'
-    if 'CH' in v and 'ra' in v['CH']:
+    if 'CH' in box and 'ra' in box['CH']:
         # could be a dict, but doing this for now because
         # rank can be a range??
         try:
-            rank = rank_num_string[v['CH']['ra'][0]]
+            rank = rank_num_string[box['CH']['ra'][0]]
         except KeyError:
             pass
     return rank
 
 
-def xlate_loyalty(v):
+def xlate_loyalty(box):
     # translate loyalty
     loyalty = 'Undefined'
-    if 'CH' in v and 'lk' in v['CH']:
-        if v['CH']['lk'][0] == '0':
+    if 'CH' in box and 'lk' in box['CH']:
+        if box['CH']['lk'][0] == '0':
             loyalty = 'Unsworn'
-        elif v['CH']['lk'][0] == '1' and 'lr' in v['CH']:
-            loyalty = 'Contract-' + v['CH']['lr'][0]
-        elif v['CH']['lk'][0] == '2' and 'lr' in v['CH']:
-            loyalty = 'Oath-' + v['CH']['lr'][0]
-        elif v['CH']['lk'][0] == '3' and 'lr' in v['CH']:
-            loyalty = 'Fear-' + v['CH']['lr'][0]
-        elif v['CH']['lk'][0] == '4' and 'lr' in v['CH']:
-            loyalty = 'Npc-' + v['CH']['lr'][0]
-        elif v['CH']['lk'][0] == '5':
+        elif box['CH']['lk'][0] == '1' and 'lr' in box['CH']:
+            loyalty = 'Contract-' + box['CH']['lr'][0]
+        elif box['CH']['lk'][0] == '2' and 'lr' in box['CH']:
+            loyalty = 'Oath-' + box['CH']['lr'][0]
+        elif box['CH']['lk'][0] == '3' and 'lr' in box['CH']:
+            loyalty = 'Fear-' + box['CH']['lr'][0]
+        elif box['CH']['lk'][0] == '4' and 'lr' in box['CH']:
+            loyalty = 'Npc-' + box['CH']['lr'][0]
+        elif box['CH']['lk'][0] == '5':
             loyalty = 'Summon'
         else:
             loyalty = 'Undefined'
     return loyalty
 
 
-def is_fighter(item_record, item_id):
+def is_fighter(box):
     attack = ''
     defense = ''
     missile = ''
-    if 'at' in item_record['IT']:
-        attack = item_record['IT']['at'][0]
-    if 'df' in item_record['IT']:
-        defense = item_record['IT']['df'][0]
-    if 'mi' in item_record['IT']:
-        missile = item_record['IT']['mi'][0]
-    if attack != '' or defense != '' or missile != '' or item_id == '18':
+    if 'at' in box['IT']:
+        attack = box['IT']['at'][0]
+    if 'df' in box['IT']:
+        defense = box['IT']['df'][0]
+    if 'mi' in box['IT']:
+        missile = box['IT']['mi'][0]
+    if attack != '' or defense != '' or missile != '' or return_unitid(box) == '18':
         return True
     return False
 
 
-def is_magician(char_record):
-    if 'CM' in char_record:
-        if 'im' in char_record['CM']:
-            if char_record['CM']['im'][0] == '1':
+def is_magician(box):
+    if 'CM' in box:
+        if 'im' in box['CM']:
+            if box['CM']['im'][0] == '1':
                 return True
     return False
 
@@ -447,39 +432,39 @@ def calc_exit_distance(loc1, loc2):
     return 0
 
 
-def is_port_city(loc, data):
-    if return_type(loc) != 'city':
+def is_port_city(box, data):
+    if return_type(box) != 'city':
         return False
-    province = data[loc['LI']['wh'][0]]
+    province = data[box['LI']['wh'][0]]
     if return_type(province) == 'mountain':
         return False
     province_list = province['LO']['pd']
     for pd in province_list:
         if int(pd) > 0:
-            dest_loc = data[pd]
-            if return_type(dest_loc) == 'ocean':
+            dest_box = data[pd]
+            if return_type(dest_box) == 'ocean':
                 return True
     return False
 
 
-def province_has_port_city(loc, data):
-    if 'LI' in loc and 'hl' in loc['LI']:
-        here_list = loc['LI']['hl']
+def province_has_port_city(box, data):
+    if 'LI' in box and 'hl' in box['LI']:
+        here_list = box['LI']['hl']
         for here in here_list:
             try:
-                here_loc = data[here]
+                here_box = data[here]
             except KeyError:
                 pass
             else:
-                if is_port_city(here_loc, data):
+                if is_port_city(here_box, data):
                     return here
     return None
 
 
-def is_priest(v):
-    if 'CH' in v:
-        if 'sl' in v['CH']:
-            skills_list = v['CH']['sl']
+def is_priest(box):
+    if 'CH' in box:
+        if 'sl' in box['CH']:
+            skills_list = box['CH']['sl']
             if len(skills_list) > 0:
                 for skill in range(0, len(skills_list), 5):
                     if skills_list[skill] == '750':
@@ -488,37 +473,37 @@ def is_priest(v):
     return False
 
 
-def xlate_magetype(v, data):
-    if is_magician(v):
+def xlate_magetype(box, data):
+    if is_magician(box):
         max_aura = 0
         auraculum_aura = 0
-        if 'CM' in v and 'ma' in v['CM']:
-            max_aura = int(v['CM']['ma'][0])
-            if 'ar' in v['CM']:
-                auraculum = data[v['CM']['ar'][0]]
-                auraculum_id = v['CM']['ar'][0]
+        if 'CM' in box and 'ma' in box['CM']:
+            max_aura = int(box['CM']['ma'][0])
+            if 'ar' in box['CM']:
+                auraculum = data[box['CM']['ar'][0]]
+                auraculum_id = box['CM']['ar'][0]
                 if 'IM' in auraculum and 'au' in auraculum['IM']:
                     auraculum_aura = int(auraculum['IM']['au'][0])
-            mage_level = max_aura + auraculum_aura
-            if mage_level <= 5:
+            mage_leboxel = max_aura + auraculum_aura
+            if mage_leboxel <= 5:
                 return ''
-            elif mage_level <= 10:
+            elif mage_leboxel <= 10:
                 return 'conjurer'
-            elif mage_level <= 15:
+            elif mage_leboxel <= 15:
                 return 'mage'
-            elif mage_level <= 20:
+            elif mage_leboxel <= 20:
                 return 'wizard'
-            elif mage_level <= 30:
+            elif mage_leboxel <= 30:
                 return 'sorcerer'
-            elif mage_level <= 40:
+            elif mage_leboxel <= 40:
                 return '6th black circle'
-            elif mage_level <= 50:
+            elif mage_leboxel <= 50:
                 return '5th black circle'
-            elif mage_level <= 60:
+            elif mage_leboxel <= 60:
                 return '4th black circle'
-            elif mage_level <= 70:
+            elif mage_leboxel <= 70:
                 return '3rd black circle'
-            elif mage_level <= 80:
+            elif mage_leboxel <= 80:
                 return '2nd black circle'
             else:
                 return 'master of the black arts'
@@ -535,12 +520,12 @@ def xlate_use_key(k):
     return ret
 
 
-def calc_ship_pct_loaded(data, k, v):
-    if return_kind(v) != 'ship':
+def calc_ship_pct_loaded(data, k, box):
+    if return_kind(box) != 'ship':
         return 0
     total_weight = 0
     try:
-        damaged = int(v['SL']['da'][0])
+        damaged = int(box['SL']['da'][0])
     except KeyError:
         damaged = 0
     level = 0
@@ -567,23 +552,23 @@ def calc_ship_pct_loaded(data, k, v):
                             item_weight = int(0)
                         qty = int(item_list[itm + 1])
                         total_weight = total_weight + int(qty * item_weight)
-    ship_capacity = int(v['SL']['ca'][0])
+    ship_capacity = int(box['SL']['ca'][0])
     actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
     pct_loaded = math.floor((total_weight * 100) / actual_capacity)
     return pct_loaded
 
 
-def get_name(v, data, qty=None):
-    if 'na' in v:
-        name = v['na'][0]
+def get_name(box, data, qty=None):
+    if 'na' in box:
+        name = box['na'][0]
         if qty and qty > 1:
-            name = get_item_plural(v)
+            name = get_item_plural(box)
     else:
-        name = return_type(v)
+        name = return_type(box)
         if name.islower():
             name = name.capitalize()
     if name == 'Ni':
-        name = data[v['CH']['ni'][0]]['na'][0].capitalize()
+        name = data[box['CH']['ni'][0]]['na'][0].capitalize()
     return name
 
 
@@ -591,18 +576,18 @@ def get_oid(k):
     return to_oid(k)
 
 
-def get_type(v, data):
-    if return_type(v) == 'ni':
-        # char_type = v['na'][0].lower()
-        type = data[v['CH']['ni'][0]]['na'][0]
+def get_type(box, data):
+    if return_type(box) == 'ni':
+        # char_type = box['na'][0].lower()
+        type = data[box['CH']['ni'][0]]['na'][0]
     else:
-        type = return_type(v)
+        type = return_type(box)
     return type
 
 
-def is_absorb_aura_blast(v, data):
-    if 'CH' in v and 'sl' in v['CH']:
-        skills_list = v['CH']['sl']
+def is_absorb_aura_blast(box):
+    if 'CH' in box and 'sl' in box['CH']:
+        skills_list = box['CH']['sl']
         if int(len(skills_list)) > 0:
             for skill in range(0, len(skills_list), 5):
                 if skills_list[skill] == '909':
@@ -611,20 +596,20 @@ def is_absorb_aura_blast(v, data):
     return False
 
 
-def is_prisoner(v):
-    if 'CH' in v and 'pr' in v['CH'] and v['CH']['pr'][0] == '1':
+def is_prisoner(box):
+    if 'CH' in box and 'pr' in box['CH'] and box['CH']['pr'][0] == '1':
         return True
     return False
 
 
-def is_on_guard(v):
-    if 'CH' in v and  'gu' in v['CH'] and v['CH']['gu'][0] == '1':
+def is_on_guard(box):
+    if 'CH' in box and  'gu' in box['CH'] and box['CH']['gu'][0] == '1':
         return True
     return False
 
 
-def is_concealed(v):
-    if 'CH' in v and 'hs' in v['CH'] and v['CH']['hs'][0] == '1':
+def is_concealed(box):
+    if 'CH' in box and 'hs' in box['CH'] and box['CH']['hs'][0] == '1':
         return True
     return False
 
@@ -655,63 +640,63 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
     return hls
 
 
-def get_who_has(item_rec, data):
-    if 'un' in item_rec['IT']:
-        who_has = item_rec['IT']['un'][0]
-        who_rec = data[who_has]
-        name = get_name(who_rec, data)
+def get_who_has(box, data):
+    if 'un' in box['IT']:
+        who_has = box['IT']['un'][0]
+        who_box = data[who_has]
+        name = get_name(who_box, data)
         if name == 'Ni':
-            name = data[who_rec['CH']['ni'][0]]['na'][0].capitalize()
+            name = data[who_box['CH']['ni'][0]]['na'][0].capitalize()
         return to_oid(who_has), name
     return None, None
 
 
-def is_prominent(v):
-    if v.get('IT', {}).get('pr', [None])[0] == '1':
+def is_prominent(box):
+    if box.get('IT', {}).get('pr', [None])[0] == '1':
         return True
     else:
         return False
 
 
-def is_hidden(v):
-    if v.get('LO', {}).get('hi', [None])[0] == '1':
+def is_hidden(box):
+    if box.get('LO', {}).get('hi', [None])[0] == '1':
         return True
     else:
         return False
 
 
-def is_impassable(loc1, loc2, direction, data):
-    if (return_type(loc1) == 'ocean' and return_type(loc2) == 'mountain') or \
-       (return_type(loc1) == 'mountain' and return_type(loc2) == 'ocean') or \
-       (return_type(loc1) == 'ocean' and return_type(loc2) != 'ocean' and province_has_port_city(loc2, data) is not None) and \
+def is_impassable(box1, box2, direction, data):
+    if (return_type(box1) == 'ocean' and return_type(box2) == 'mountain') or \
+       (return_type(box1) == 'mountain' and return_type(box2) == 'ocean') or \
+       (return_type(box1) == 'ocean' and return_type(box2) != 'ocean' and province_has_port_city(box2, data) is not None) and \
        direction.lower() not in details.road_directions:
         return True
     else:
         return False
 
 
-def get_use_key(v):
-    return v.get('IM', {}).get('uk', [None])
+def get_use_key(box):
+    return box.get('IM', {}).get('uk', [None])
 
 
-def is_projected_cast(v):
-    projected_cast = get_use_key(v)[0]
+def is_projected_cast(box):
+    projected_cast = get_use_key(box)[0]
     if projected_cast is None or projected_cast != '5':
         return False
     else:
         return True
 
 
-def is_orb(v):
-    orb = get_use_key(v)[0]
+def is_orb(box):
+    orb = get_use_key(box)[0]
     if orb is None or orb != '9':
         return False
     else:
         return True
 
 
-def is_man_item(v):
-    if 'IT' in v and 'mu' in v['IT']:
-        if v['IT']['mu'][0] == '1':
+def is_man_item(box):
+    if 'IT' in box and 'mu' in box['IT']:
+        if box['IT']['mu'][0] == '1':
             return True
     return False
