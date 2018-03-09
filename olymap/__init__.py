@@ -202,7 +202,7 @@ def write_item_html(v, k, data, trade_chain, outdir):
 
 
 def write_skill_html(v, k, data, outdir, teaches_chain, child_skills_chain, skills_known_chain):
-    # generate item page
+    # generate skill page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     template = env.get_template('skill.html')
     skill = build_complete_skill_dict(k, v, data, teaches_chain, child_skills_chain, skills_known_chain)
@@ -210,7 +210,7 @@ def write_skill_html(v, k, data, outdir, teaches_chain, child_skills_chain, skil
 
 
 def write_storm_html(v, k, data, storm_chain, outdir):
-    # generate item page
+    # generate storm page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     template = env.get_template('storm.html')
     storm = build_complete_storm_dict(k, v, data, storm_chain)
@@ -218,7 +218,7 @@ def write_storm_html(v, k, data, storm_chain, outdir):
 
 
 def write_player_html(v, k, data, outdir):
-    # generate item page
+    # generate player page
     outf = open(pathlib.Path(outdir).joinpath(to_oid(k) + '.html'), 'w')
     template = env.get_template('player.html')
     player = build_complete_player_dict(k, v, data)
