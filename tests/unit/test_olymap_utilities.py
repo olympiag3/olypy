@@ -1,6 +1,17 @@
 import olymap.utilities
 
 
+def test_is_concealed():
+    tests = (
+        ({}, False),
+        ({'CH': {'hs': [0]}}, False),
+        ({'CH': {'hs': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_concealed(v) == answer
+
+
 # def test_is_fighter()
 
 
@@ -40,6 +51,17 @@ def test_is_man_item():
         assert olymap.utilities.is_man_item(v) == answer
 
 
+def test_is_on_guard():
+    tests = (
+        ({}, False),
+        ({'CH': {'gu': [0]}}, False),
+        ({'CH': {'gu': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_on_guard(v) == answer
+
+
 def test_is_orb():
     tests = (
         ({}, False),
@@ -52,13 +74,25 @@ def test_is_orb():
         assert olymap.utilities.is_orb(v) == answer
 
 
+def test_is_priest():
+    tests = (
+        ({}, False),
+        ({'CH': {'sl': ['800', '2']}}, False),
+        ({'CH': {'sl': ['750', '1']}}, False),
+        ({'CH': {'sl': ['750', '2']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_priest(v) == answer
+
+
 def test_is_prisoner():
     tests = (
         ({}, False),
         ({'CH': {'pr': [0]}}, False),
         # g2 has 1,2,3 here, game code only sets TRUE/FALSE, meh
-        #({'CH': {'pr': ['1']}}, True),
-        ({'CH': {'pr': ['2']}}, True),
+        ({'CH': {'pr': ['1']}}, True),
+        ({'CH': {'pr': ['2']}}, False),
         #({'CH': {'pr': ['3']}}, True),
     )
 
@@ -87,3 +121,14 @@ def test_is_projected_cast():
 
     for v, answer in tests:
         assert olymap.utilities.is_projected_cast(v) == answer
+
+
+def test_is_road_or_gate():
+    tests = (
+        ({}, False),
+        ({'GA': {'tl': [0]}}, True),
+        ({'GA': {'tl': ['1']}}, True),
+    )
+
+    for v, answer in tests:
+        assert olymap.utilities.is_road_or_gate(v) == answer
