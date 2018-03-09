@@ -612,7 +612,7 @@ def is_absorb_aura_blast(v, data):
 
 
 def is_prisoner(v):
-    if 'CH' in v and 'pr' in v['CH'] and v['CH']['pr'][0] == '2':
+    if 'CH' in v and 'pr' in v['CH'] and v['CH']['pr'][0] == '1':
         return True
     return False
 

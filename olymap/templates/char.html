@@ -4,6 +4,9 @@
 </HEAD>
 <BODY>
 <H3>{{ char.name }} [{{ char.oid }}]</H3>
+{% if char.prisoner %}
+    <h4>Help, I'm a prisoner!!!</h4>
+{% endif %}
 <table>
 {% if char.type != '0' and char_type %}
     <tr><td>Type:</td><td>{{ char.type }}</td></tr>
@@ -15,7 +18,11 @@
     <tr><td>Faction:</td><td>{{ char.faction.name }} [<a href="{{ char.faction.oid }}.html">{{ char.faction.oid }}</a>]</td></tr>
 {% endif %}
 {% if char.loc %}
-    <tr><td>Where:</td><td>{{ char.loc.name }} [<a href="{{ char.loc.oid }}.html">{{ char.loc.oid }}</a>]</td></tr>
+    <tr><td>Where:</td><td>{{ char.loc.name }} [<a href="{{ char.loc.oid }}.html">{{ char.loc.oid }}</a>]
+    {% if char.where %}
+        in province {{ char.where.name }} [<a href="{{ char.where.oid }}.html">{{ char.where.oid }}</a>]
+    {% endif %}
+    </td></tr>
 {% endif %}
 {% if char.loyalty != 'undefined' and char.loyalty %}
     <tr><td>Loyalty:</td><td>{{ char.loyalty }}</td></tr>

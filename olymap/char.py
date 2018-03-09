@@ -6,8 +6,7 @@ from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
 from olymap.item import get_magic_item
-import pathlib
-from jinja2 import Environment, PackageLoader, select_autoescape
+import olypy.details as details
 
 
 def build_basic_char_dict(k, v, data, prominent_only=False):
@@ -164,7 +163,8 @@ def get_loc(v, data):
         loc_name = get_name(loc_rec, data)
         loc_dict = {'id': loc_oid[0],
                     'oid' : to_oid(loc_oid[0]),
-                    'name' : loc_name}
+                    'name' : loc_name,
+                    'type': u.return_type(loc_rec)}
         return loc_dict
     return None
 
@@ -670,6 +670,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'concealed': u.is_concealed(v),
                      'wearable': get_wearable_wielding(v, data),
                      'loc': get_loc(v, data),
+                     'where': get_where(v, data),
                      'loyalty': get_loyalty(v),
                      'stacked_under': get_stacked_under(v, data),
                      'stacked_over_list': get_stacked_over(v, data),
@@ -756,3 +757,14 @@ def get_priest_skills(v, data):
                    'skill755': skill_755,
                    'visions': visions_list}
     return priest_dict
+
+
+def get_where(v, data):
+    if get_loc(v, data)['type'] not in details.province_kinds:
+        where_id = u.province(u.return_unitid(v), data)
+        where_rec = data[where_id]
+        where_dict = {'id': where_id,
+                      'oid': to_oid(where_id),
+                      'name': get_name(where_rec, data)}
+        return where_dict
+    return None
