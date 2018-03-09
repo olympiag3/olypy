@@ -47,6 +47,8 @@
         </th>
     </tr>
 </table>
-{{ index.file|safe }}
+{% if index.file %}
+    {{ index.file|safe }}
+{% endif %}
 </BODY>
 </html>
