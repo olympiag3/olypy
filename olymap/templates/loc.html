@@ -13,19 +13,19 @@
     {% if loc.type == 'city' %}
         province
     {% endif %}
-    {% if loc.where %}
+    {%- if loc.where -%}
         {{ loc.where.name }} [<a href="{{ loc.where.oid }}.html">{{ loc.where.oid }}</a>]
-    {% endif %}
+    {%- endif -%}
 {%- endif -%}
 {%- if loc.safe_haven -%}
-, safe haven
+    , safe haven
 {%- endif -%}
 {%- if loc.hidden -%}
-, hidden
+    , hidden
 {%- endif -%}
 {%- if loc.civ_level -%}
-, {{ loc.civ_level }}
-{% endif %}
+    , {{ loc.civ_level }}
+{%- endif -%}
 </H3>
 {% if loc.anchor %}
     <p><a href="{{ loc.anchor }}.html">Return to Map</a></p>
