@@ -313,6 +313,8 @@ def get_structure_info(v):
                       'completed': get_completed(v),
                       'depth': get_depth(v),
                       'level': get_level(v)}
+    if structure_dict['defense'] is None and structure_dict['effort_given'] is None and structure_dict['effort_required'] is None and structure_dict['completed'] is None and structure_dict['depth'] is None and structure_dict['level'] is None:
+        return None
     return structure_dict
 
 

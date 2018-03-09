@@ -80,10 +80,16 @@
 {% endif %}
 {% if loc.structure %}
     <table>
+        {{ loc.structure.effort_given }}
+        {{ loc.structure.effort_required }}
+        {{ loc.structure.damage }}
+        {{ loc.structure.defense }}
+        {{ loc.structure.depth }}
+        {{ loc.structure.level }}
         {% if loc.structure.effort_given and loc.structure.effort_required %}
             {% if loc.structure.effort_given < loc.structure.effort_required %}
                 <tr><td>Percent Complete:</td>
-                    <td>({{ loc.structure.effort_given }} // {{ loc.structure.effort_required }}) * 100</td></tr>
+                    <td>({{ loc.structure.completed }}%</td></tr>
             {% endif %}
         {% endif %}
         {% if loc.structure.defense %}
@@ -192,7 +198,6 @@
             {% include "loc_list_common.html" %}
         {% endfor %}
         {% if ns.save_level > 0 %}
-            {% print(ns.save_level) %}
             {% set to_level = ns.save_level %}
             {% for i in range(0, to_level): %}
                 </ul>
