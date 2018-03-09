@@ -271,6 +271,7 @@ def get_magic_item(data, item_id, item_rec):
                     loc_oid = '(no id)'
                 magic_type = 'Projected Cast'
                 magic_dict = {'oid': to_oid(item_id),
+                              'name': get_name(item_rec, data),
                               'loc_name': loc_name,
                               'loc_kind': loc_kind,
                               'loc_id': loc_id,

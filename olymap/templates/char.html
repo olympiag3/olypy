@@ -197,12 +197,13 @@
     </table>
 {% endif %}
 {% if char.magic_list %}
+    <p>Magical Items:</p>
     {% for entry in char.magic_list %}
         {% if entry.magic_type == 'Healing Potion' %}
-            <p>{{ entry.magic_type }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</p>
+            <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</p>
         {% elif entry.magic_type == 'Projected Cast' %}
-            <p>{{ entry.magic_type }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] to
-                {{ entry.loc_kind }} {{ entry.name }}
+            <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] to
+                {{ entry.loc_kind }} {{ entry.loc_name }}
                 {% if entry.loc_kind == 'unknown' %}
                     [{{ entry.loc_id }}]</p>
                 {% else %}
@@ -212,6 +213,20 @@
             <p>{{ entry.magic_type }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] permits the study of the following skills:<br>
             &nbsp;&nbsp;&nbsp;{{ entry.name }} [<a href="{{ entry.skill_id }}.html">{{ entry.skill_id }}</a>] requires
             {{ entry.required_name }} [<a href="{{ entry.required_study }}.html">{{ entry.required_study }}</a>]</p>
+        {% elif entry.magic_type == 'Artifact' %}
+            <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
+            {% if entry.artifact_dict.attack %}+{{ entry.artifact_dict.attack }} attack{% endif %}
+            {% if entry.artifact_dict.defense %}+{{ entry.artifact_dict.defense }} defense{% endif %}
+            {% if entry.artifact_dict.missile %}+{{ entry.artifact_dict.missile }} missile{% endif %}
+            {% if entry.artifact_dict.aura %}+{{ entry.artifact_dict.aura }} aura{% endif %}
+            </p>
+        {% elif entry.magic_type == 'NPC_Token' %}
+            <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] controls:<br>
+            &nbsp;&nbsp;&nbsp;{{ entry.npc_name }} [<a href="{{ entry.npc_oid }}.html">{{ entry.npc_oid }}</a>]</p>
+        {% elif entry.magic_type == 'Auraculum' %}
+            <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
+            (Aura: {{ entry.aura }})
+            </p>
         {% else %}
             <p>{{ entry.magic_type }} {{ entry.oid }}</p>
         {% endif %}
