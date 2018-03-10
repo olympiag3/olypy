@@ -83,6 +83,7 @@ def return_firstline(box):
     return firstline
 
 
+# unit tested
 def xlate_rank(box):
     rank = 'undefined'
     if 'CH' in box and 'ra' in box['CH']:
@@ -95,6 +96,7 @@ def xlate_rank(box):
     return rank
 
 
+# unit tested
 def xlate_loyalty(box):
     # translate loyalty
     loyalty = 'Undefined'
@@ -117,6 +119,7 @@ def xlate_loyalty(box):
     return loyalty
 
 
+# unit tested
 def is_fighter(box):
     attack = ''
     defense = ''
@@ -133,6 +136,7 @@ def is_fighter(box):
     return False
 
 
+# unit tested
 def is_magician(box):
     if box.get('CM', {}).get('im', [None]):
         if box.get('CM', {}).get('im', [None])[0] == '1':
@@ -140,78 +144,91 @@ def is_magician(box):
     return False
 
 
+# unit tested
 def is_char(box):
     if return_kind(box) == 'char':
         return True
     return False
 
 
+# unit tested
 def is_graveyard(box):
     if is_loc(box) and return_type(box) == 'graveyard':
         return True
     return False
 
 
+# unit tested
 def is_faeryhill(box):
     if is_loc(box) and return_type(box) == 'faery hill':
         return True
     return False
 
 
+# unit tested
 def is_loc(box):
     if return_kind(box) == 'loc':
         return True
     return False
 
 
+# unit tested
 def is_item(box):
     if return_kind(box) == 'item':
         return True
     return False
 
 
+# unit tested
 def is_ship(box):
     if return_kind(box) == 'ship':
         return True
     return False
 
 
+# unit tested
 def is_player(box):
     if return_kind(box) == 'player':
         return True
     return False
 
 
+# unit tested
 def is_city(box):
     if is_loc(box) and return_type(box) == 'city':
         return True
     return False
 
 
+# unit tested
 def is_skill(box):
     if return_kind(box) == 'skill':
         return True
     return False
 
 
+# unit tested
 def is_garrison(box):
     if is_char(box) and return_type(box) == 'garrison':
         return True
     return False
 
 
+# unit tested
 def is_castle(box):
     if is_loc(box) and return_type(box) == 'castle':
         return True
     return False
 
 
+# unit tested
 def is_region(box):
     if is_loc(box) and return_type(box) == 'region':
         return True
     return False
 
 
+# unit tested
 def is_road_or_gate(box):
     if 'GA' in box:
         if 'tl' in box['GA']:
@@ -476,6 +493,7 @@ def province_has_port_city(box, data):
     return None
 
 
+# unit tested
 def is_priest(box):
     if 'CH' in box:
         if 'sl' in box['CH']:
@@ -499,26 +517,26 @@ def xlate_magetype(box, data):
                 auraculum_id = box['CM']['ar'][0]
                 if 'IM' in auraculum and 'au' in auraculum['IM']:
                     auraculum_aura = int(auraculum['IM']['au'][0])
-            mage_leboxel = max_aura + auraculum_aura
-            if mage_leboxel <= 5:
+            mage_level = max_aura + auraculum_aura
+            if mage_level <= 5:
                 return ''
-            elif mage_leboxel <= 10:
+            elif mage_level <= 10:
                 return 'conjurer'
-            elif mage_leboxel <= 15:
+            elif mage_level <= 15:
                 return 'mage'
-            elif mage_leboxel <= 20:
+            elif mage_level <= 20:
                 return 'wizard'
-            elif mage_leboxel <= 30:
+            elif mage_level <= 30:
                 return 'sorcerer'
-            elif mage_leboxel <= 40:
+            elif mage_level <= 40:
                 return '6th black circle'
-            elif mage_leboxel <= 50:
+            elif mage_level <= 50:
                 return '5th black circle'
-            elif mage_leboxel <= 60:
+            elif mage_level <= 60:
                 return '4th black circle'
-            elif mage_leboxel <= 70:
+            elif mage_level <= 70:
                 return '3rd black circle'
-            elif mage_leboxel <= 80:
+            elif mage_level <= 80:
                 return '2nd black circle'
             else:
                 return 'master of the black arts'
@@ -527,6 +545,7 @@ def xlate_magetype(box, data):
         return None
 
 
+# unit tested
 def xlate_use_key(k):
     try:
         ret = use_key[k]
@@ -600,6 +619,7 @@ def get_type(box, data):
     return type
 
 
+# unit tested
 def is_absorb_aura_blast(box):
     if 'CH' in box and 'sl' in box['CH']:
         skills_list = box['CH']['sl']
@@ -611,18 +631,21 @@ def is_absorb_aura_blast(box):
     return False
 
 
+# unit tested
 def is_prisoner(box):
     if 'CH' in box and 'pr' in box['CH'] and box['CH']['pr'][0] == '1':
         return True
     return False
 
 
+# unit tested
 def is_on_guard(box):
     if 'CH' in box and  'gu' in box['CH'] and box['CH']['gu'][0] == '1':
         return True
     return False
 
 
+# unit tested
 def is_concealed(box):
     if 'CH' in box and 'hs' in box['CH'] and box['CH']['hs'][0] == '1':
         return True
@@ -667,12 +690,14 @@ def get_who_has(box, data):
     return None, None
 
 
+# unit tested
 def is_prominent(box):
     if box.get('IT', {}).get('pr', [None])[0] == '1':
         return True
     return False
 
 
+# unit tested
 def is_hidden(box):
     if box.get('LO', {}).get('hi', [None])[0] == '1':
         return True
@@ -688,10 +713,12 @@ def is_impassable(box1, box2, direction, data):
     return False
 
 
+# unit tested
 def get_use_key(box):
     return box.get('IM', {}).get('uk', [None])[0]
 
 
+# unit tested
 def is_projected_cast(box):
     projected_cast = get_use_key(box)
     if projected_cast is None or projected_cast != '5':
@@ -699,6 +726,7 @@ def is_projected_cast(box):
     return True
 
 
+# unit tested
 def is_orb(box):
     orb = get_use_key(box)
     if orb is None or orb != '9':
@@ -706,18 +734,21 @@ def is_orb(box):
     return True
 
 
+# unit tested
 def is_man_item(box):
     if box.get('IT', {}).get('mu', [None])[0] == '1':
         return True
     return False
 
 
+# unit tested
 def is_ocean(box):
     if is_loc(box) and return_type(box) == 'ocean':
         return True
     return False
 
 
+# unit tested
 def is_mountain(box):
     if is_loc(box) and return_type(box) == 'mountain':
         return True

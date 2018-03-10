@@ -1,6 +1,18 @@
 import olymap.utilities
 
 
+def test_get_use_key():
+    tests = (
+        ({}, None),
+        ({'IM': {'uk': ['1']}}, '1'),
+        ({'IM': {'uk': ['2']}}, '2'),
+        ({'IM': {'ut': ['2']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_use_key(box) == answer
+
+
 def test_is_absorb_aura_blast():
     tests = (
         ({}, False),
@@ -349,3 +361,22 @@ def test_xlate_rank():
 
     for box, answer in tests:
         assert olymap.utilities.xlate_rank(box) == answer
+
+
+def test_xlate_usekey():
+    tests = (
+        ('z', 'undefined'),
+        ('1', 'Death Potion'),
+        ('2', 'Healing Potion'),
+        ('3', 'Slave Potion'),
+        ('4', 'Palantir'),
+        ('5', 'Projected Cast'),
+        ('6', 'Quick Cast Potion'),
+        ('7', 'Drum'),
+        ('8', 'Elf Stone'),
+        ('9', 'Orb'),
+        ('10', 'undefined'),
+    )
+
+    for value, answer in tests:
+        assert olymap.utilities.xlate_use_key(value) == answer
