@@ -387,6 +387,7 @@ def loc_depth(loc_type):
     return 0
 
 
+# unit tested
 def region(who, data):
     v = data[who]
     while (int(who) > 0 and
@@ -396,6 +397,7 @@ def region(who, data):
     return who
 
 
+# unit tested
 def province(who, data):
     v = data[who]
     if loc_depth(return_type(v)) == 1:

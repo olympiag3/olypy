@@ -339,6 +339,46 @@ def test_loc_depth():
         assert olymap.utilities.loc_depth(loc_type) == answer
 
 
+def test_province():
+    data = {'12536': {'firstline': ['12536 loc forest'], 'LI': {'wh': ['58767']}},
+            '57068': {'firstline': ['57068 loc city'], 'LI': {'wh': ['12536']}},
+            '58767': {'firstline': ['58767 loc region']},
+            '1775': {'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}},
+            '8578': {'firstline': ['8578 char 0'], 'LI': {'wh': ['1775']}},
+            '5301': {'firstline': ['5301 loc tower'], 'LI': {'wh': ['1775']}}}
+    tests = (
+        ('1775', '12536'), # castle in city
+        ('57068', '12536'), # city d08 in province
+        ('12536', '12536'), # forest bg36
+        ('58767', 0), # region
+        ('8578', '12536'), # character in castle
+        ('5301', '12536'),  # tower in castle
+    )
+
+    for who, answer in tests:
+        assert olymap.utilities.province(who, data) == answer
+
+
+def test_region():
+    data = {'12536': {'firstline': ['12536 loc forest'], 'LI': {'wh': ['58767']}},
+            '57068': {'firstline': ['57068 loc city'], 'LI': {'wh': ['12536']}},
+            '58767': {'firstline': ['58767 loc region']},
+            '1775': {'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}},
+            '8578': {'firstline': ['8578 char 0'], 'LI': {'wh': ['1775']}},
+            '5301': {'firstline': ['5301 loc tower'], 'LI': {'wh': ['1775']}}}
+    tests = (
+        ('1775', '58767'), # castle in city
+        ('57068', '58767'), # city d08 in province
+        ('12536', '58767'), # forest bg36
+        ('58767', '58767'), # region
+        ('8578', '58767'), # character in castle
+        ('5301', '58767'),  # tower in castle
+    )
+
+    for who, answer in tests:
+        assert olymap.utilities.region(who, data) == answer
+
+
 def test_return_firstline():
     tests = (
         ({'firstline': ['6614 char 0']}, '6614 char 0'),
