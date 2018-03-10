@@ -133,8 +133,9 @@ def is_fighter(box):
 
 
 def is_magician(box):
-    if box.get('CM', {}).get('im', [None])[0] == '1':
-        return True
+    if box.get('CM', {}).get('im', [None]):
+        if box.get('CM', {}).get('im', [None])[0] == '1':
+            return True
     return False
 
 
@@ -193,7 +194,7 @@ def is_skill(box):
 
 
 def is_garrison(box):
-    if is_loc(box) and return_type(box) == 'garrison':
+    if is_char(box) and return_type(box) == 'garrison':
         return True
     return False
 

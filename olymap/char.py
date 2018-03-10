@@ -10,7 +10,7 @@ import olypy.details as details
 
 
 def build_basic_char_dict(k, v, data, prominent_only=False):
-    if u.is_garrison(v):
+    if not u.is_garrison(v):
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v, data),

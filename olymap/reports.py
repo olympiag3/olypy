@@ -424,7 +424,8 @@ def region_report(data, outdir):
 def mage_report(data, outdir):
     mage_list = []
     for unit in data:
-        if u.is_magician(data[unit]):
+        unit_rec = data[unit]
+        if u.is_magician(unit_rec):
             mage_list.append(unit)
     # mage_list.sort()
     # for unit in mage_list:

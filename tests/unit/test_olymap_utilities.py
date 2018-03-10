@@ -71,9 +71,9 @@ def test_is_fighter():
 
 def test_is_garrison():
     tests = (
-        ({'firstline': ['10 loc garrison']}, True),
-        ({'firstline': ['10 char garrison']}, False),
-        ({'firstline': ['1234 loc garrison']}, True),
+        ({'firstline': ['10 loc 0']}, False),
+        ({'firstline': ['10 char garrison']}, True),
+        ({'firstline': ['1234 loc garrison']}, False),
     )
 
     for box, answer in tests:
