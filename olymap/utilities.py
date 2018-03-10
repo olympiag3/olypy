@@ -7,7 +7,7 @@ from olymap.detail import long_type_to_display_type
 from olymap.detail import long_kind_to_display_kind
 from olymap.detail import rank_num_string
 from olymap.detail import castle_ind
-from olymap.detail import loc_types
+from olymap.detail import structure_kinds
 from olymap.detail import use_key
 from olypy.db import loop_here
 import math
@@ -101,7 +101,6 @@ def xlate_loyalty(box):
     # translate loyalty
     loyalty = 'Undefined'
     if 'CH' in box and 'lk' in box['CH']:
-        print(box['CH'])
         if box['CH']['lk'][0] == '0':
             loyalty = 'Unsworn'
         elif box['CH']['lk'][0] == '1' and 'lr' in box['CH']:
@@ -374,10 +373,11 @@ def loc_depth(loc_type):
         return 1
     elif loc_type in details.province_kinds:
         return 2
-    elif loc_type in details.subloc_kinds:
+    # line below contains code to work around issue in details.subloc_kinds
+    elif loc_type in details.subloc_kinds and loc_type != 'sewer':
         return 3
     # details.structure_type does not include 'in-progress' or could use it
-    elif loc_type in loc_types:
+    elif loc_type in structure_kinds:
         return 4
     return 0
 

@@ -38,7 +38,7 @@ castle_ind = ['!', '@', '#', '%', '^', '*', '-', '+', 'a',
               'A', 'B', 'C', 'D','G', 'H', 'J','K', 'M',
               'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Z']
 
-loc_types = ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
+structure_kinds = ['temple', 'galley', 'roundship', 'castle', 'galley-in-progress',
              'roundship-in-progress', 'ghost ship', 'temple-in-progress', 'inn',
              'inn-in-progress', 'castle-in-progress', 'mine', 'mine-in-progress',
              'collapsed mine', 'tower', 'tower-in-progress', 'sewer']

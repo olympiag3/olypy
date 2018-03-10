@@ -323,6 +323,22 @@ def test_is_skill():
         assert olymap.utilities.is_skill(box) == answer
 
 
+def test_loc_depth():
+    tests = (
+        ('rubbish', 0),
+        ('region', 1),
+        ('mountain', 2),
+        ('ocean', 2),
+        ('bog', 3),
+        ('city', 3),
+        ('temple', 4),
+        ('sewer', 4),
+    )
+
+    for loc_type, answer in tests:
+        assert olymap.utilities.loc_depth(loc_type) == answer
+
+
 def test_xlate_loyalty():
     tests = (
         ({}, 'Undefined'),
