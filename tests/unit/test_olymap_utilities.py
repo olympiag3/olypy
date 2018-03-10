@@ -1,6 +1,19 @@
 import olymap.utilities
 
 
+def test_is_absorb_aura_blast():
+    tests = (
+        ({}, False),
+        ({'CH': {'sl': [0]}}, False),
+        ({'CH': {'sl': ['909', '2']}}, True),
+        ({'CH': {'sl': ['909', '1']}}, False),
+        ({'CH': {'sl': ['908', '2']}}, False),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_absorb_aura_blast(box) == answer
+
+
 def test_is_castle():
     tests = (
         ({'firstline': ['10 loc 0']}, False),
@@ -230,6 +243,17 @@ def test_is_projected_cast():
 
     for box, answer in tests:
         assert olymap.utilities.is_projected_cast(box) == answer
+
+
+def test_is_region():
+    tests = (
+        ({'firstline': ['10 loc 0']}, False),
+        ({'firstline': ['10 char region']}, False),
+        ({'firstline': ['1234 loc region']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_region(box) == answer
 
 
 def test_is_road_or_gate():

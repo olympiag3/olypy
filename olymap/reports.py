@@ -410,7 +410,8 @@ def city_report(data, outdir):
 def region_report(data, outdir):
     region_list = []
     for unit in data:
-        if u.is_region(data, unit):
+        unit_box = data[unit]
+        if u.is_region(unit_box):
             region_list.append(unit)
     # region_list.sort()
     # for unit in region_list:

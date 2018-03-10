@@ -205,15 +205,15 @@ def is_castle(box):
     return False
 
 
-def is_region(data, unit):
-    if return_type(data[unit]) == 'region':
+def is_region(box):
+    if is_loc(box) and return_type(box) == 'region':
         return True
     return False
 
 
-def is_road_or_gate(loc_record):
-    if 'GA' in loc_record:
-        if 'tl' in loc_record['GA']:
+def is_road_or_gate(box):
+    if 'GA' in box:
+        if 'tl' in box['GA']:
             return True
     return False
 
