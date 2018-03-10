@@ -668,15 +668,13 @@ def get_who_has(box, data):
 def is_prominent(box):
     if box.get('IT', {}).get('pr', [None])[0] == '1':
         return True
-    else:
-        return False
+    return False
 
 
 def is_hidden(box):
     if box.get('LO', {}).get('hi', [None])[0] == '1':
         return True
-    else:
-        return False
+    return False
 
 
 def is_impassable(box1, box2, direction, data):
@@ -685,8 +683,7 @@ def is_impassable(box1, box2, direction, data):
        (return_type(box1) == 'ocean' and return_type(box2) != 'ocean' and province_has_port_city(box2, data) is not None) and \
        direction.lower() not in details.road_directions:
         return True
-    else:
-        return False
+    return False
 
 
 def get_use_key(box):
@@ -697,20 +694,17 @@ def is_projected_cast(box):
     projected_cast = get_use_key(box)
     if projected_cast is None or projected_cast != '5':
         return False
-    else:
-        return True
+    return True
 
 
 def is_orb(box):
     orb = get_use_key(box)
     if orb is None or orb != '9':
         return False
-    else:
-        return True
+    return True
 
 
 def is_man_item(box):
-    if 'IT' in box and 'mu' in box['IT']:
-        if box['IT']['mu'][0] == '1':
-            return True
+    if box.get('IT', {}).get('mu', [None])[0] == '1':
+        return True
     return False
