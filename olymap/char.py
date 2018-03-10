@@ -178,7 +178,7 @@ def get_stacked_under(v, data):
     stacked_under_oid = v.get('LI', {}).get('wh', [None])
     if stacked_under_oid[0] is not None:
         char_rec = data[stacked_under_oid[0]]
-        if u.return_kind(char_rec) == 'char':
+        if u.is_char(char_rec):
             char_name = get_name(char_rec, data)
             stacked_under_dict = {'oid' : to_oid(stacked_under_oid[0]),
                                   'name' : char_name}
@@ -192,7 +192,7 @@ def get_stacked_over(v, data):
     if here_list[0] is not None:
         for char in here_list:
             char_rec = data[char]
-            if u.return_kind(char_rec) == 'char':
+            if u.is_char(char_rec):
                 stacked_over_dict = {'oid' : to_oid(char),
                                      'name' : get_name(char_rec, data)}
                 stacked_over_list.append(stacked_over_dict)
@@ -260,7 +260,7 @@ def get_pledged_to(v, data):
     pledged_to = v.get('CM', {}).get('pl', [None])
     if pledged_to[0] is not None:
         char_rec = data[pledged_to[0]]
-        if u.return_kind(char_rec) == 'char':
+        if u.is_char(char_rec):
             char_name = get_name(char_rec, data)
             pledged_to_dict = {'oid': to_oid(pledged_to[0]),
                                'name': char_name}

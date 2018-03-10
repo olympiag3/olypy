@@ -216,7 +216,7 @@ def create_loc_to_dict_entry(data, direction, to_loc_rec, from_loc_rec, region_r
 
 def get_routes_out(k, v, data):
     routes_out_list = []
-    if get_type(v, data) != 'city':
+    if not u.is_city(v):
         dest_dict = get_destinations(k, v, data)
     else:
         dest_list = []
@@ -452,7 +452,7 @@ def get_here_list(k, v, data):
                     inner_dict = build_basic_storm_dict(here[0], here_rec, data)
                     inner_dict.update({'level': here[1]})
                     inner_list_final.append(inner_dict)
-                elif u.return_kind(here_rec) == 'ship':
+                elif u.is_ship(here_rec):
                     inner_dict = build_basic_ship_dict(here[0], here_rec, data)
                     inner_dict.update({'level': here[1]})
                     inner_list_final.append(inner_dict)
@@ -467,11 +467,11 @@ def get_here_list(k, v, data):
         if len(ship_list) > 0:
             for ship in ship_list:
                 ship_rec = data[ship[0]]
-                if u.return_kind(ship_rec) == 'ship':
+                if u.is_ship(ship_rec):
                     ship_dict = build_basic_ship_dict(ship[0], ship_rec, data)
                     ship_dict.update({'level': ship[1]})
                     ships_list_final.append(ship_dict)
-                elif u.return_kind(ship_rec) == 'char':
+                elif u.is_char(ship_rec):
                     ship_dict = build_basic_char_dict(ship[0], ship_rec, data, True)
                     ship_dict.update({'level': ship[1]})
                     ships_list_final.append(ship_dict)

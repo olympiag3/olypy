@@ -72,19 +72,19 @@ def resolve_chains(data):
 def write_box_pages(data, chains, outdir, instance, inst_dict, map_matrices):
     print('Writing box pages')
     for k, v in data.items():
-        if u.return_kind(v) == 'loc':
+        if u.is_loc(v):
             write_loc_html(v, k, data, chains['hidden'], chains['garrisons'],
                                chains['trades'], outdir, instance, inst_dict, map_matrices)
-        elif u.return_kind(v) == 'char':
+        elif u.is_char(v):
             write_char_html(v, k, data, chains['pledges'],
                                  chains['prisoners'], outdir, instance)
-        elif u.return_kind(v) == 'player':
+        elif u.is_player(v) :
             write_player_html(v, k, data, outdir)
-        elif u.return_kind(v) == 'item':
+        elif u.is_item(v):
             write_item_html(v, k, data, chains['trades'], outdir)
-        elif u.return_kind(v) == 'ship':
+        elif u.is_ship(v):
             write_ship_html(v, k, data, outdir, instance, chains['pledges'], chains['prisoners'])
-        elif u.return_kind(v) == 'skill':
+        elif u.is_skill(v):
             write_skill_html(v, k, data, outdir, chains['teaches'],
                                    chains['child_skills'], chains['skills_knowns'])
         elif u.return_kind(v) == 'storm':

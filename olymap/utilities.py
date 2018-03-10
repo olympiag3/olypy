@@ -164,32 +164,32 @@ def is_loc(box):
     return False
 
 
-def is_item(data, unit):
-    if return_kind(data[unit]) == 'item':
+def is_item(box):
+    if return_kind(box) == 'item':
         return True
     return False
 
 
-def is_ship(data, unit):
-    if return_kind(data[unit]) == 'ship':
+def is_ship(box):
+    if return_kind(box) == 'ship':
         return True
     return False
 
 
-def is_player(data, unit):
-    if return_kind(data[unit]) == 'player':
+def is_player(box):
+    if return_kind(box) == 'player':
         return True
     return False
 
 
-def is_city(data, unit):
-    if return_type(data[unit]) == 'city':
+def is_city(box):
+    if return_type(box) == 'city':
         return True
     return False
 
 
-def is_skill(data, unit):
-    if return_kind(data[unit]) == 'skill':
+def is_skill(box):
+    if return_kind(box) == 'skill':
         return True
     return False
 
@@ -250,7 +250,8 @@ def resolve_castles(data):
 def resolve_bound_storms(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_ship(data, unit):
+        unit_box = data[unit]
+        if is_ship(unit_box):
             pl = data[unit].get('SL', {}).get('bs', [None])[0]
             if pl and pl is not [None]:
                 ret[pl].append(unit)
@@ -271,7 +272,8 @@ def resolve_all_prisoners(data):
 def resolve_hidden_locs(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_player(data, unit):
+        unit_box = data[unit]
+        if is_player(unit_box):
             pl = data[unit].get('PL', {}).get('kn', None)
             if pl and pl is not None:
                 for loc in pl:
@@ -288,7 +290,8 @@ def resolve_hidden_locs(data):
 def resolve_teaches(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_city(data, unit):
+        unit_box = data[unit]
+        if is_city(unit_box):
             pl = data[unit].get('SL', {}).get('te', None)
             if pl and pl is not None:
                 for skill in pl:
@@ -299,7 +302,8 @@ def resolve_teaches(data):
 def resolve_child_skills(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_skill(data, unit):
+        unit_box = data[unit]
+        if is_skill(unit_box):
             pl = data[unit].get('SK', {}).get('rs', None)
             if pl and pl is not None:
                 for skill in pl:
@@ -335,7 +339,8 @@ def resolve_skills_known(data):
 def resolve_trades(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_city(data, unit):
+        unit_box = data[unit]
+        if is_city(unit_box):
             pl = data[unit].get('tl', None)
             if pl is not None:
                 for goods in range(0, len(pl), 8):
@@ -441,7 +446,7 @@ def calc_exit_distance(loc1, loc2):
 
 
 def is_port_city(box, data):
-    if return_type(box) != 'city':
+    if not is_city(box):
         return False
     province = data[box['LI']['wh'][0]]
     if return_type(province) == 'mountain':
@@ -529,7 +534,7 @@ def xlate_use_key(k):
 
 
 def calc_ship_pct_loaded(data, k, box):
-    if return_kind(box) != 'ship':
+    if not is_ship(box):
         return 0
     total_weight = 0
     try:
@@ -685,11 +690,11 @@ def is_impassable(box1, box2, direction, data):
 
 
 def get_use_key(box):
-    return box.get('IM', {}).get('uk', [None])
+    return box.get('IM', {}).get('uk', [None])[0]
 
 
 def is_projected_cast(box):
-    projected_cast = get_use_key(box)[0]
+    projected_cast = get_use_key(box)
     if projected_cast is None or projected_cast != '5':
         return False
     else:
@@ -697,7 +702,7 @@ def is_projected_cast(box):
 
 
 def is_orb(box):
-    orb = get_use_key(box)[0]
+    orb = get_use_key(box)
     if orb is None or orb != '9':
         return False
     else:

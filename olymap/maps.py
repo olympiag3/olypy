@@ -329,7 +329,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 here_rec = data[here]
                 if u.return_type(here_rec) in details.subloc_kinds or u.is_road_or_gate(here_rec):
                     count = count + 1
-                    if u.return_type(here_rec) == 'city':
+                    if u.is_city(here_rec):
                         city = here_rec
                     elif u.is_graveyard(here_rec):
                         graveyard = here_rec
@@ -383,15 +383,14 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
         else:
             if loc2 != '':
                 loc2_oid = ''
-                if u.return_type(loc2) == 'city' or u.is_graveyard(loc2) or u.is_faeryhill(loc2):
+                if u.is_city(loc2) or u.is_graveyard(loc2) or u.is_faeryhill(loc2):
                     loc2_oid = to_oid(u.return_unitid(loc2))
                 loc2_dict = {'oid': loc2_oid,
                              'type': u.return_short_type(loc2),
                              'hidden': u.is_hidden(loc2)}
         if loc1 != '':
             loc1_oid = ''
-            if u.return_type(loc1) == 'city' or u.is_graveyard(loc1) or u.return_type(
-                    loc1) == 'faery hill':
+            if u.is_city(loc1) or u.is_graveyard(loc1) or u.is_faeryhill(loc1):
                 loc1_oid = to_oid(u.return_unitid(loc1))
             loc1_dict = {'oid': loc1_oid,
                          'type': u.return_short_type(loc1),
@@ -429,7 +428,7 @@ def count_stuff(v, data):
     if list_length >= 1:
         for un in seen_here_list:
             unit = data[un]
-            if 'char' in u.return_kind(unit):
+            if u.is_char(unit):
                 if'il' in unit:
                     item_list = unit['il']
                     if len(item_list) > 0:
@@ -445,7 +444,7 @@ def count_stuff(v, data):
                 if 'CH' in unit:
                     if 'lo' in unit['CH'] and unit['CH']['lo'][0] == '100':
                         enemy_found = True
-            elif u.return_kind(unit) == 'ship':
+            elif u.is_ship(unit):
                 ships_found = True
     return nbr_men, enemy_found, ships_found
 

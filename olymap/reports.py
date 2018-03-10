@@ -21,7 +21,8 @@ from olymap.char import build_basic_char_dict, get_items_list, get_loc
 def ship_report(data, outdir):
     ship_list = []
     for unit in data:
-        if u.is_ship(data, unit):
+        unit_box = data[unit]
+        if u.is_ship(unit_box):
             ship_list.append(unit)
     sort_ship_list = sorted(ship_list, key=lambda x:int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_ship_report.html'), 'w')
@@ -42,7 +43,8 @@ def build_ship_dict(ship_list, data):
 def item_report(data, trade_chain, outdir):
     item_list = []
     for unit in data:
-        if u.is_item(data, unit):
+        unit_box = data[unit]
+        if u.is_item(unit_box):
             item_list.append(unit)
     # item_list.sort()
     # for unit in item_list:
@@ -66,7 +68,8 @@ def build_item_dict(item_list, data, trade_chain):
 def player_report(data, outdir):
     player_list = []
     for unit in data:
-        if u.is_player(data, unit):
+        unit_box = data[unit]
+        if u.is_player(unit_box):
             player_list.append(unit)
     sort_player_list =  sorted(player_list, key=lambda x: int(x))
     outf = open(pathlib.Path(outdir).joinpath('master_player_report.html'), 'w')
@@ -87,7 +90,8 @@ def build_player_dict(player_list, data):
 def healing_potion_report(data, outdir):
     healing_potion_list = []
     for unit in data:
-        if u.is_item(data, unit) and data[unit].get('IM', {}).get('uk', [''])[0] == '2':
+        unit_box = data[unit]
+        if u.is_item(unit_box) and u.get_use_key(unit_box) == '2':
             healing_potion_list.append(unit)
     # healing_potion_list.sort()
     # for unit in healing_potion_list:
@@ -101,7 +105,8 @@ def healing_potion_report(data, outdir):
 def orb_report(data, outdir):
     orb_list = []
     for unit in data:
-        if u.is_item(data, unit):
+        unit_box = data[unit]
+        if u.is_item(unit_box):
             item_rec = data[unit]
             if u.is_orb(item_rec):
                 orb_list.append(unit)
@@ -117,7 +122,8 @@ def orb_report(data, outdir):
 def projected_cast_potion_report(data, outdir):
     projected_cast_list = []
     for unit in data:
-        if u.is_item(data, unit):
+        unit_box = data[unit]
+        if u.is_item(unit_box):
             item_rec = data[unit]
             if u.is_projected_cast(item_rec):
                 projected_cast_list.append(unit)
@@ -388,7 +394,8 @@ def castle_report(data, outdir, garrisons_chain):
 def city_report(data, outdir):
     city_list = []
     for unit in data:
-        if u.is_city(data, unit):
+        unit_box = data[unit]
+        if u.is_city(unit_box):
             city_list.append(unit)
     # city_list.sort()
     # for unit in city_list:
