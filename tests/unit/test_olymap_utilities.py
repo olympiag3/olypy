@@ -339,6 +339,62 @@ def test_loc_depth():
         assert olymap.utilities.loc_depth(loc_type) == answer
 
 
+def test_return_firstline():
+    tests = (
+        ({'firstline': ['6614 char 0']}, '6614 char 0'),
+        ({'firstline': ['54289 player pl_regular']}, '54289 player pl_regular'),
+        ({'firstline': ['32132 loc tunnel']}, '32132 loc tunnel'),
+        ({'firstline': ['1074 ship roundship']}, '1074 ship roundship'),
+        ({'firstline': ['600 skill 0']}, '600 skill 0'),
+        ({'firstline': ['1 item 0']}, '1 item 0'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.return_firstline(box) == answer
+
+
+def test_return_kind():
+    tests = (
+        ({'firstline': ['6614 char 0']}, 'char'),
+        ({'firstline': ['54289 player pl_regular']}, 'player'),
+        ({'firstline': ['32132 loc tunnel']}, 'loc'),
+        ({'firstline': ['1074 ship roundship']}, 'ship'),
+        ({'firstline': ['600 skill 0']}, 'skill'),
+        ({'firstline': ['1 item 0']}, 'item'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.return_kind(box) == answer
+
+
+def test_return_type():
+    tests = (
+        ({'firstline': ['6614 char 0']}, '0'),
+        ({'firstline': ['54289 player pl_regular']}, 'pl_regular'),
+        ({'firstline': ['32132 loc tunnel']}, 'tunnel'),
+        ({'firstline': ['1074 ship roundship']}, 'roundship'),
+        ({'firstline': ['600 skill 0']}, '0'),
+        ({'firstline': ['1 item 0']}, '0'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.return_type(box) == answer
+
+
+def test_return_unitid():
+    tests = (
+        ({'firstline': ['6614 char 0']}, '6614'),
+        ({'firstline': ['54289 player pl_regular']}, '54289'),
+        ({'firstline': ['32132 loc tunnel']}, '32132'),
+        ({'firstline': ['1074 ship roundship']}, '1074'),
+        ({'firstline': ['600 skill 0']}, '600'),
+        ({'firstline': ['1 item 0']}, '1'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.return_unitid(box) == answer
+
+
 def test_xlate_loyalty():
     tests = (
         ({}, 'Undefined'),

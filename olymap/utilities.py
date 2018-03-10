@@ -29,6 +29,7 @@ def get_item_plural(box):
     return itemz_plural
 
 
+# unit tested
 def return_type(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
@@ -62,6 +63,7 @@ def return_short_type(box):
     return short_type
 
 
+# unit tested
 def return_kind(box):
     # return 2nd argument of firstlist
     firstline = return_firstline(box)
@@ -69,6 +71,7 @@ def return_kind(box):
     return kind
 
 
+# unit tested
 def return_unitid(box):
     # return 1st argument of firstlist
     firstline = return_firstline(box)
@@ -76,6 +79,7 @@ def return_unitid(box):
     return unitid
 
 
+# unit tested
 def return_firstline(box):
     # return firstlist from lib entry
     # firstline
@@ -368,6 +372,7 @@ def resolve_trades(data):
     return ret
 
 
+# unit tested
 def loc_depth(loc_type):
     if loc_type == 'region':
         return 1
