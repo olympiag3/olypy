@@ -1,6 +1,38 @@
 import olymap.utilities
 
 
+def test_is_castle():
+    tests = (
+        ({'firstline': ['10 loc 0']}, False),
+        ({'firstline': ['10 char castle']}, False),
+        ({'firstline': ['1234 loc castle']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_castle(box) == answer
+
+
+def test_is_char():
+    tests = (
+        ({'firstline': ['10 item 0']}, False),
+        ({'firstline': ['1234 char 0']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_char(box) == answer
+
+
+def test_is_city():
+    tests = (
+        ({'firstline': ['10 loc 0']}, True),
+        ({'firstline': ['10 char city']}, False),
+        ({'firstline': ['1234 loc city']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_loc(box) == answer
+
+
 def test_is_concealed():
     tests = (
         ({}, False),
@@ -10,6 +42,17 @@ def test_is_concealed():
 
     for box, answer in tests:
         assert olymap.utilities.is_concealed(box) == answer
+
+
+def test_is_faeryhill():
+    tests = (
+        ({'firstline': ['10 loc 0']}, False),
+        ({'firstline': ['10 char faery hill']}, False),
+        ({'firstline': ['1234 loc faery hill']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_faeryhill(box) == answer
 
 
 def test_is_fighter():
@@ -26,6 +69,28 @@ def test_is_fighter():
         assert olymap.utilities.is_fighter(box) == answer
 
 
+def test_is_garrison():
+    tests = (
+        ({'firstline': ['10 loc garrison']}, True),
+        ({'firstline': ['10 char garrison']}, False),
+        ({'firstline': ['1234 loc garrison']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_garrison(box) == answer
+
+
+def test_is_graveyard():
+    tests = (
+        ({'firstline': ['10 loc 0']}, False),
+        ({'firstline': ['10 char graveyard']}, False),
+        ({'firstline': ['1234 loc graveyard']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_graveyard(box) == answer
+
+
 def test_is_hidden():
     tests = (
         ({}, False),
@@ -38,6 +103,28 @@ def test_is_hidden():
 
 
 # def test_is_impassable()
+
+
+def test_is_item():
+    tests = (
+        ({'firstline': ['10 item 0']}, True),
+        ({'firstline': ['10 char graveyard']}, False),
+        ({'firstline': ['1234 item 0']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_item(box) == answer
+
+
+def test_is_loc():
+    tests = (
+        ({'firstline': ['10 loc 0']}, True),
+        ({'firstline': ['10 char graveyard']}, False),
+        ({'firstline': ['1234 loc graveyard']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_loc(box) == answer
 
 
 def test_is_magician():
@@ -83,6 +170,17 @@ def test_is_orb():
 
     for box, answer in tests:
         assert olymap.utilities.is_orb(box) == answer
+
+
+def test_is_player():
+    tests = (
+        ({'firstline': ['zb1 player 0']}, True),
+        ({'firstline': ['zb1 char graveyard']}, False),
+        ({'firstline': ['zb1 player graveyard']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_player(box) == answer
 
 
 def test_is_priest():
@@ -143,3 +241,25 @@ def test_is_road_or_gate():
 
     for box, answer in tests:
         assert olymap.utilities.is_road_or_gate(box) == answer
+
+
+def test_is_ship():
+    tests = (
+        ({'firstline': ['10 ship 0']}, True),
+        ({'firstline': ['10 char graveyard']}, False),
+        ({'firstline': ['1234 ship roundship']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_ship(box) == answer
+
+
+def test_is_skill():
+    tests = (
+        ({'firstline': ['10 skill 0']}, True),
+        ({'firstline': ['10 char skill']}, False),
+        ({'firstline': ['1234 skill Ship']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_skill(box) == answer

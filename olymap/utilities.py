@@ -133,10 +133,8 @@ def is_fighter(box):
 
 
 def is_magician(box):
-    if 'CM' in box:
-        if 'im' in box['CM']:
-            if box['CM']['im'][0] == '1':
-                return True
+    if box.get('CM', {}).get('im', [None])[0] == '1':
+        return True
     return False
 
 
@@ -147,13 +145,13 @@ def is_char(box):
 
 
 def is_graveyard(box):
-    if return_type(box) == 'graveyard':
+    if is_loc(box) and return_type(box) == 'graveyard':
         return True
     return False
 
 
 def is_faeryhill(box):
-    if return_type(box) == 'faery hill':
+    if is_loc(box) and return_type(box) == 'faery hill':
         return True
     return False
 
@@ -183,7 +181,7 @@ def is_player(box):
 
 
 def is_city(box):
-    if return_type(box) == 'city':
+    if is_loc(box) and return_type(box) == 'city':
         return True
     return False
 
@@ -194,14 +192,14 @@ def is_skill(box):
     return False
 
 
-def is_garrison(data, unit):
-    if return_type(data[unit]) == 'garrison':
+def is_garrison(box):
+    if is_loc(box) and return_type(box) == 'garrison':
         return True
     return False
 
 
-def is_castle(data, unit):
-    if return_type(data[unit]) == 'castle':
+def is_castle(box):
+    if is_loc(box) and return_type(box) == 'castle':
         return True
     return False
 
@@ -233,7 +231,8 @@ def resolve_all_pledges(data):
 def resolve_castles(data):
     ret2 = defaultdict(list)
     for unit in data:
-        if is_castle(data, unit):
+        unit_rec = data[unit]
+        if is_castle(unit_rec):
             pl = data[unit]
             if pl:
                 ret2[region(unit, data)].append(unit)
@@ -314,7 +313,8 @@ def resolve_child_skills(data):
 def resolve_garrisons(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_garrison(data, unit):
+        unit_box = data[unit]
+        if is_garrison(unit_box):
             pl = data[unit].get('MI', {}).get('gc', None)
             if pl and pl is not None:
                 for skill in pl:

@@ -310,7 +310,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
         here_list = loc_rec['LI']['hl']
         for garr in here_list:
             garr_rec = data[garr]
-            if u.return_type(garr_rec) == 'garrison':
+            if u.is_garrison(garr_rec):
                 if 'MI' in garr_rec:
                     if 'gc' in garr_rec['MI']:
                         castle_id = garr_rec['MI']['gc'][0]

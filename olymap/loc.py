@@ -95,7 +95,7 @@ def get_controlled_by(v, data):
     if here_list[0] is not None and len(here_list) > 0:
         for loc in here_list:
             garrison_rec = data[loc] # looking for garrisons
-            if get_type(garrison_rec, data) == 'garrison':
+            if u.is_garrison(garrison_rec):
                 castle = garrison_rec.get('MI', {}).get('gc', [None])
                 if castle[0] is not None and castle[0] != '0':
                     castle_rec = data[castle[0]]
@@ -521,7 +521,7 @@ def get_garrisons(k, v, data, garrisons_chain):
     garrisons_list = None
     if garrisons_chain is not None:
         garrisons_list = []
-        if u.return_type(v) == 'castle':
+        if u.is_castle(v):
             garrison_list = garrisons_chain[k]
             if len(garrison_list) > 0:
                 province_list = []

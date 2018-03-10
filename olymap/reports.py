@@ -379,7 +379,8 @@ def faeryhill_report(data, outdir):
 def castle_report(data, outdir, garrisons_chain):
     castle_list = []
     for unit in data:
-        if u.is_castle(data, unit):
+        unit_box = data[unit]
+        if u.is_castle(unit_box):
             castle_list.append(unit)
     # castle_list.sort()
     # for unit in castle_list:

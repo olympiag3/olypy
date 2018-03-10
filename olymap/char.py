@@ -10,7 +10,7 @@ import olypy.details as details
 
 
 def build_basic_char_dict(k, v, data, prominent_only=False):
-    if u.return_type(v) != "garrison":
+    if u.is_garrison(v):
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v, data),
@@ -458,7 +458,7 @@ def get_inventory(v, data, prominent_only):
                 defense_bonus = None
                 missile_bonus = None
                 aura_bonus = None
-                if u.return_type(v) != "garrison":
+                if not u.is_garrison(v):
                     if 'fc' in itemz['IT']:
                         fly_capacity = int(itemz['IT']['fc'][0])
                         if fly_capacity > 0:
@@ -537,7 +537,7 @@ def get_inventory(v, data, prominent_only):
     land_pct = 0
     ride_pct = 0
     fly_pct = 0
-    if u.return_type(v) != "garrison":
+    if not u.is_garrison(v):
         print_capacity = 'Yes'
         if land_cap > 0:
             land_pct = math.floor((land_weight * 100) / land_cap)
@@ -655,7 +655,7 @@ def get_items_list(v, data, prominent, item_select=None):
 
 
 def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain, prominent_only):
-    if u.return_type(v) != "garrison":
+    if not u.is_garrison(v):
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v, data),
