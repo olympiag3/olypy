@@ -440,11 +440,11 @@ def get_here_list(k, v, data):
         if len(inner_list) > 0:
             for here in inner_list:
                 here_rec = data[here[0]]
-                if u.return_kind(here_rec) == 'loc':
+                if u.is_loc(here_rec):
                     inner_dict = build_basic_loc_dict(here[0], here_rec, data)
                     inner_dict.update({'level': here[1]})
                     inner_list_final.append(inner_dict)
-                elif u.return_kind(here_rec) == 'char':
+                elif u.is_char(here_rec):
                     inner_dict = build_basic_char_dict(here[0], here_rec, data, True)
                     inner_dict.update({'level': here[1]})
                     inner_list_final.append(inner_dict)
@@ -486,7 +486,7 @@ def get_here_list(k, v, data):
     if 'SL' in v and 'lf' in v['SL']:
         here = v['SL']['lf'][0]
         here_rec = data[here]
-        if u.return_kind(here_rec) == 'loc':
+        if u.is_loc(here_rec):
             inner_dict = build_basic_loc_dict(here, here_rec, data)
             inner_dict.update({'level': 0})
             inner_list_final.append(inner_dict)

@@ -133,7 +133,8 @@ def projected_cast_potion_report(data, outdir):
 def location_report(data, outdir):
     location_list = []
     for unit in data:
-        if u.is_loc(data, unit):
+        unit_box = data[unit]
+        if u.is_loc(unit_box):
             location_list.append(unit)
     # location_list.sort()
     # for unit in location_list:
@@ -276,7 +277,8 @@ def gate_report(data, outdir):
 def character_report(data, outdir):
     character_list = []
     for unit in data:
-        if u.is_char(data, unit):
+        unit_box = data[unit]
+        if u.is_char(unit_box):
             character_list.append(unit)
     # character_list.sort()
     # for unit in character_list:
@@ -299,7 +301,8 @@ def build_char_dict(char_list, data):
 def graveyard_report(data, outdir):
     graveyard_list = []
     for unit in data:
-        if u.is_graveyard(data, unit):
+        unit_box = data[unit]
+        if u.is_graveyard(unit_box):
             graveyard_list.append(unit)
     # graveyard_list.sort()
     # for unit in graveyard_list:
@@ -333,7 +336,8 @@ def graveyard_report(data, outdir):
 def faeryhill_report(data, outdir):
     faeryhill_list = []
     for unit in data:
-        if u.is_faeryhill(data, unit):
+        unit_box = data[unit]
+        if u.is_faeryhill(unit_box):
             faeryhill_list.append(unit)
     # faeryhill_list.sort()
     # for unit in faeryhill_list:
@@ -440,7 +444,8 @@ def priest_report(data, outdir):
 def gold_report(data, outdir):
     character_list = []
     for unit in data:
-        if u.is_char(data, unit):
+        unit_box = data[unit]
+        if u.is_char(unit_box):
             character_list.append(unit)
     # character_list.sort()
     # for unit in character_list:

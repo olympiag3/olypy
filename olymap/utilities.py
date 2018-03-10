@@ -54,7 +54,11 @@ def return_short_type(box):
                     try:
                         short_type = long_kind_to_display_kind[name]
                     except KeyError:
+                        print('missing short_type for {}'.format(name))
                         pass
+        else:
+            if len(short_type) > 7:
+                print('missing short_type for {}'.format(sub_loc))
     return short_type
 
 
@@ -136,26 +140,26 @@ def is_magician(box):
     return False
 
 
-def is_char(data, unit):
-    if return_kind(data[unit]) == 'char':
+def is_char(box):
+    if return_kind(box) == 'char':
         return True
     return False
 
 
-def is_graveyard(data, unit):
-    if return_type(data[unit]) == 'graveyard':
+def is_graveyard(box):
+    if return_type(box) == 'graveyard':
         return True
     return False
 
 
-def is_faeryhill(data, unit):
-    if return_type(data[unit]) == 'faery hill':
+def is_faeryhill(box):
+    if return_type(box) == 'faery hill':
         return True
     return False
 
 
-def is_loc(data, unit):
-    if return_kind(data[unit]) == 'loc':
+def is_loc(box):
+    if return_kind(box) == 'loc':
         return True
     return False
 
@@ -218,7 +222,8 @@ def is_road_or_gate(loc_record):
 def resolve_all_pledges(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_char(data, unit):
+        unit_box = data[unit]
+        if is_char(unit_box):
             pl = data[unit].get('CM', {}).get('pl', [None])[0]
             if pl and pl is not [None]:
                 ret[pl].append(unit)
@@ -255,7 +260,8 @@ def resolve_bound_storms(data):
 def resolve_all_prisoners(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_char(data, unit):
+        unit_box = data[unit]
+        if is_char(unit_box):
             pl = data[unit].get('CH', {}).get('pr', [None])[0]
             if pl and pl is not [None]:
                 ret[data[unit].get('LI', {}).get('wh', [None])[0]].append(unit)
@@ -274,7 +280,7 @@ def resolve_hidden_locs(data):
                     except KeyError:
                         pass
                     else:
-                        if return_kind(loc_rec) == 'loc':
+                        if is_loc(loc_rec):
                             ret[loc].append(unit)
     return ret
 
@@ -315,7 +321,8 @@ def resolve_garrisons(data):
 def resolve_skills_known(data):
     ret = defaultdict(list)
     for unit in data:
-        if is_char(data, unit):
+        unit_box = data[unit]
+        if is_char(unit_box):
             pl = data[unit].get('CH', {}).get('sl', None)
             if pl and pl is not None:
                 for skill in range(0, len(pl), 5):
@@ -354,7 +361,7 @@ def loc_depth(loc_type):
 def region(who, data):
     v = data[who]
     while (int(who) > 0 and
-            (return_kind(v) != 'loc' or loc_depth(return_type(v)) != 1)):
+            (not is_loc(v) or loc_depth(return_type(v)) != 1)):
         v = data[v['LI']['wh'][0]]
         who = return_unitid(v)
     return who
@@ -365,7 +372,7 @@ def province(who, data):
     if loc_depth(return_type(v)) == 1:
         return 0
     while (int(who) > 0 and
-            (return_kind(v) != 'loc' or loc_depth(return_type(v)) != 2)):
+            (not is_loc(v) or loc_depth(return_type(v)) != 2)):
         v = data[v['LI']['wh'][0]]
         who = return_unitid(v)
     return who
@@ -624,13 +631,14 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
     hls = []
     if 'LI' in data[where] and 'hl' in data[where]['LI']:
         for w in data[where]['LI']['hl']:
+            w_box = data[w]
             if kind is None or (kind is not None and level == 0 and return_kind(data[w]) == kind):
                 pass
             else:
                 continue
-            if char_only and not is_char(data, w):
+            if char_only and not is_char(w_box):
                 continue
-            if fog and is_char(data, w):
+            if fog and is_char(w_box):
                 continue
             hls.append([w, level])
             firstline = data[w]['firstline'][0]

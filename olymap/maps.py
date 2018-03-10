@@ -331,13 +331,13 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                     count = count + 1
                     if u.return_type(here_rec) == 'city':
                         city = here_rec
-                    elif u.return_type(here_rec) == 'graveyard':
+                    elif u.is_graveyard(here_rec):
                         graveyard = here_rec
                     elif u.is_road_or_gate(here_rec):
                         road_or_gate = here_rec
-                    elif loc1 == '' and u.return_kind(here_rec) == 'loc':
+                    elif loc1 == '' and u.is_loc(here_rec):
                         loc1 = here_rec
-                    elif loc2 == '' and u.return_kind(here_rec) == 'loc':
+                    elif loc2 == '' and u.is_loc(here_rec):
                         loc2 = here_rec
     if 'SL' in loc_rec:
         if 'lt' in loc_rec['SL']:
@@ -357,7 +357,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
     many = False
     loc1_dict = {}
     loc2_dict = {}
-    if loc1 != '' or loc2 != '' or city != '' or graveyard != ''or road_or_gate != '':
+    if loc1 != '' or loc2 != '' or city != '' or graveyard != '' or road_or_gate != '':
         if city != '':
             if loc2 == '':
                 loc2 = loc1
@@ -383,14 +383,14 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
         else:
             if loc2 != '':
                 loc2_oid = ''
-                if u.return_type(loc2) == 'city' or u.return_type(loc2) == 'graveyard' or u.return_type(loc2) == 'faery hill':
+                if u.return_type(loc2) == 'city' or u.is_graveyard(loc2) or u.is_faeryhill(loc2):
                     loc2_oid = to_oid(u.return_unitid(loc2))
                 loc2_dict = {'oid': loc2_oid,
                              'type': u.return_short_type(loc2),
                              'hidden': u.is_hidden(loc2)}
         if loc1 != '':
             loc1_oid = ''
-            if u.return_type(loc1) == 'city' or u.return_type(loc1) == 'graveyard' or u.return_type(
+            if u.return_type(loc1) == 'city' or u.is_graveyard(loc1) or u.return_type(
                     loc1) == 'faery hill':
                 loc1_oid = to_oid(u.return_unitid(loc1))
             loc1_dict = {'oid': loc1_oid,
