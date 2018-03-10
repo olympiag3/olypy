@@ -264,6 +264,30 @@ def test_is_player():
         assert olymap.utilities.is_player(box) == answer
 
 
+def test_is_port_city():
+    data = {'12536': {'firstline': ['12536 loc forest'], 'LI': {'wh': ['58767']}, 'LO': {'pd': ['12436', '12537', '12636', '12535']}},
+            '57068': {'firstline': ['57068 loc city'], 'LI': {'wh': ['12536']}},
+            '1775': {'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}},
+            '12436': {'firstline': ['12436 loc ocean']},
+            '57579': {'firstline': ['57579 loc city'], 'LI': {'wh': ['11154']}},
+            '11154': {'firstline': ['11154 loc plain'], 'LO': {'pd': ['11054', '11155', '11254', '11153']}},
+            '11054': {'firstline': ['11054 loc swamp']},
+            '11155': {'firstline': ['11155 loc plain']},
+            '11254': {'firstline': ['11254 loc plain']},
+            '11153': {'firstline': ['11153 loc plain']},
+            '56777': {'firstline': ['56777 loc city'], 'LI': {'wh': ['11729']}},
+            '11729': {'firstline': ['11729 loc mountain'], 'LO': {'pd': ['11629', '11730', '11829', '11728'], 'lc': ['1']}}}
+    tests = (
+        ({'firstline': ['57068 loc city'], 'LI': {'wh': ['12536']}}, True),
+        ({'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}}, False),
+        ({'firstline': ['57579 loc city'], 'LI': {'wh': ['11154']}}, False),
+        ({'firstline': ['56777 loc city'], 'LI': {'wh': ['11729']}}, False)
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_port_city(box, data) == answer
+
+
 def test_is_priest():
     tests = (
         ({}, False),
@@ -391,6 +415,30 @@ def test_province():
 
     for who, answer in tests:
         assert olymap.utilities.province(who, data) == answer
+
+
+def test_province_has_port_city():
+    data = {'12536': {'firstline': ['12536 loc forest'], 'LI': {'wh': ['58767'], 'hl': ['8241', '57068', '77868', '78071', '144999']}, 'LO': {'pd': ['12436', '12537', '12636', '12535']}},
+            '57068': {'firstline': ['57068 loc city'], 'LI': {'wh': ['12536']}},
+            '1775': {'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}},
+            '12436': {'firstline': ['12436 loc ocean']},
+            '57579': {'firstline': ['57579 loc city'], 'LI': {'wh': ['11154']}},
+            '11154': {'firstline': ['11154 loc plain'], 'LI': {'hl': ['57579', '60861']},'LO': {'pd': ['11054', '11155', '11254', '11153']}},
+            '11054': {'firstline': ['11054 loc swamp']},
+            '11155': {'firstline': ['11155 loc plain']},
+            '11254': {'firstline': ['11254 loc plain']},
+            '11153': {'firstline': ['11153 loc plain']},
+            '56777': {'firstline': ['56777 loc city'], 'LI': {'wh': ['11729']}},
+            '11729': {'firstline': ['11729 loc mountain'], 'LI': {'hl': ['56777', '9261']}, 'LO': {'pd': ['11629', '11730', '11829', '11728']}}}
+    tests = (
+        ({'firstline': ['12536 loc forest'], 'LI': {'wh': ['58767'], 'hl': ['8241', '57068', '77868', '78071', '144999']}}, '57068'),
+        ({'firstline': ['1775 loc castle'], 'LI': {'wh': ['57068']}}, None),
+        ({'firstline': ['11154 loc plain'], 'LI': {'hl': ['57579', '60861']}}, None),
+        ({'firstline': ['11729 loc mountain'], 'LI': {'hl': ['56777', '9261']}}, None)
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.province_has_port_city(box, data) == answer
 
 
 def test_region():

@@ -425,53 +425,54 @@ def top_ruler(k, data):
 
 
 # unit tested
-def calc_exit_distance(loc1, loc2):
-    if loc1 is None or loc2 is None:
+def calc_exit_distance(box1, box2):
+    if box1 is None or box2 is None:
         return 0
-    if return_type(loc1) == 'pit' or return_type(loc2) == 'pit':
+    if return_type(box1) == 'pit' or return_type(box2) == 'pit':
         return 28
-    if loc_depth(return_type(loc1)) > loc_depth(return_type(loc2)):
-        tmp = loc1
-        loc1 = loc2
-        loc2 = tmp
-    loc1_return_type = return_type(loc1)
-    loc2_return_type = return_type(loc2)
-    # w_d = loc_depth(loc1_return_type)
-    d_d = loc_depth(loc2_return_type)
+    if loc_depth(return_type(box1)) > loc_depth(return_type(box2)):
+        tmp = box1
+        box1 = box2
+        box2 = tmp
+    box1_return_type = return_type(box1)
+    box2_return_type = return_type(box2)
+    # w_d = loc_depth(box1_return_type)
+    d_d = loc_depth(box2_return_type)
     if d_d == 4:
         return 0
     if d_d == 3:
         return 1
-    if is_ocean(loc1) and not is_ocean(loc2):
+    if is_ocean(box1) and not is_ocean(box2):
         return 2
-    if not is_ocean(loc1) and is_ocean(loc2):
+    if not is_ocean(box1) and is_ocean(box2):
         return 2
     #
     # skipping province logic for now
     #
-    if is_ocean(loc2):
+    if is_ocean(box2):
         return 3
-    elif is_mountain(loc2):
+    elif is_mountain(box2):
         return 10
-    elif loc2_return_type == 'forest':
+    elif box2_return_type == 'forest':
         return 8
-    elif loc2_return_type == 'swamp':
+    elif box2_return_type == 'swamp':
         return 14
-    elif loc2_return_type == 'desert':
+    elif box2_return_type == 'desert':
         return 8
-    elif loc2_return_type == 'plain':
+    elif box2_return_type == 'plain':
         return 7
-    elif loc2_return_type == 'underground':
+    elif box2_return_type == 'underground':
         return 7
-    elif loc2_return_type == 'cloud':
+    elif box2_return_type == 'cloud':
         return 7
-    elif loc2_return_type == 'tunnel':
+    elif box2_return_type == 'tunnel':
         return 5
-    elif loc2_return_type == 'chamber':
+    elif box2_return_type == 'chamber':
         return 5
     return 0
 
 
+# unit tested
 def is_port_city(box, data):
     if not is_city(box):
         return False
@@ -487,6 +488,7 @@ def is_port_city(box, data):
     return False
 
 
+# unit tested
 def province_has_port_city(box, data):
     if 'LI' in box and 'hl' in box['LI']:
         here_list = box['LI']['hl']
