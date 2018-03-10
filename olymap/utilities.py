@@ -416,16 +416,16 @@ def calc_exit_distance(loc1, loc2):
         return 0
     if d_d == 3:
         return 1
-    if loc1_return_type == 'ocean' and loc2_return_type != 'ocean':
+    if is_ocean(loc1) and not is_ocean(loc2):
         return 2
-    if loc1_return_type != 'ocean' and loc2_return_type == 'ocean':
+    if not is_ocean(loc1) and is_ocean(loc2):
         return 2
     #
     # skipping province logic for now
     #
-    if loc2_return_type == 'ocean':
+    if is_ocean(loc2):
         return 3
-    elif loc2_return_type == 'mountain':
+    elif is_mountain(loc2):
         return 10
     elif loc2_return_type == 'forest':
         return 8
@@ -450,13 +450,13 @@ def is_port_city(box, data):
     if not is_city(box):
         return False
     province = data[box['LI']['wh'][0]]
-    if return_type(province) == 'mountain':
+    if is_mountain(province):
         return False
     province_list = province['LO']['pd']
     for pd in province_list:
         if int(pd) > 0:
             dest_box = data[pd]
-            if return_type(dest_box) == 'ocean':
+            if is_ocean(dest_box):
                 return True
     return False
 
@@ -679,9 +679,9 @@ def is_hidden(box):
 
 
 def is_impassable(box1, box2, direction, data):
-    if (return_type(box1) == 'ocean' and return_type(box2) == 'mountain') or \
-       (return_type(box1) == 'mountain' and return_type(box2) == 'ocean') or \
-       (return_type(box1) == 'ocean' and return_type(box2) != 'ocean' and province_has_port_city(box2, data) is not None) and \
+    if (is_ocean(box1) and is_mountain(box2)) or \
+       (is_mountain(box1) and is_ocean(box2)) or \
+       (is_ocean(box1) and not is_ocean(box2) and province_has_port_city(box2, data) is not None) and \
        direction.lower() not in details.road_directions:
         return True
     return False
@@ -707,5 +707,17 @@ def is_orb(box):
 
 def is_man_item(box):
     if box.get('IT', {}).get('mu', [None])[0] == '1':
+        return True
+    return False
+
+
+def is_ocean(box):
+    if is_loc(box) and return_type(box) == 'ocean':
+        return True
+    return False
+
+
+def is_mountain(box):
+    if is_loc(box) and return_type(box) == 'mountain':
         return True
     return False

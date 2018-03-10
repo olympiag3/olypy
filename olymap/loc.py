@@ -58,7 +58,7 @@ def get_safe_haven(v):
 
 def get_civ_level(k, v, data):
     civ_level = None
-    if u.return_type(v) != 'ocean' and u.loc_depth(u.return_type(v)) == 2 \
+    if not u.is_ocean(v) and u.loc_depth(u.return_type(v)) == 2 \
     and data[u.region(k, data)]['na'][0] != 'faery' and data[u.region(k, data)]['na'][0] != 'hades':
         civ_level = 'wilderness'
         if 'LO' in v and 'lc' in v['LO']:
@@ -223,13 +223,13 @@ def get_routes_out(k, v, data):
         host_prov_id = v['LI']['wh'][0]
         host_prov_rec = data[host_prov_id]
         # If city is in a mountain, can't move from city to ocean
-        if u.return_type(host_prov_rec) != 'mountain':
+        if not u.is_mountain(host_prov_rec):
             dest_loc_list = host_prov_rec['LO']['pd']
             i = int(0)
             for pd in dest_loc_list:
                 if pd != '0':
                     pd_loc = data[pd]
-                    if u.return_type(pd_loc) == 'ocean':
+                    if u.is_ocean(pd_loc):
                         pd_name = pd_loc['na'][0]
                         pd_loc_id = u.return_unitid(pd_loc)
                         pd_rec = data[pd_loc_id]

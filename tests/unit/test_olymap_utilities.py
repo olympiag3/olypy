@@ -162,6 +162,28 @@ def test_is_man_item():
         assert olymap.utilities.is_man_item(box) == answer
 
 
+def test_is_mountain():
+    tests = (
+        ({'firstline': ['10 item 0']}, False),
+        ({'firstline': ['10 char mountain']}, False),
+        ({'firstline': ['1234 loc mountain']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_mountain(box) == answer
+
+
+def test_is_ocean():
+    tests = (
+        ({'firstline': ['10 item 0']}, False),
+        ({'firstline': ['10 char ocean']}, False),
+        ({'firstline': ['1234 loc ocean']}, True),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.is_ocean(box) == answer
+
+
 def test_is_on_guard():
     tests = (
         ({}, False),
