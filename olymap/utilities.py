@@ -424,6 +424,7 @@ def top_ruler(k, data):
     return top_dog
 
 
+# unit tested
 def calc_exit_distance(loc1, loc2):
     if loc1 is None or loc2 is None:
         return 0

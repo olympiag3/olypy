@@ -1,6 +1,40 @@
 import olymap.utilities
 
 
+def test_calc_exit_distance():
+    tests = (
+        (None, None, 0),  # None=>None
+        (None, {'firstline': ['12536 loc mountain']}, 0),  # forest=>None
+        ({'firstline': ['12536 loc forest']}, None, 0),  # None=>mountain
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc mountain']}, 10), # forest=>mountain
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc ocean']}, 2), # forest=>ocean
+        ({'firstline': ['12536 loc ocean']}, {'firstline': ['12536 loc forest']}, 2),  # ocean=>forest
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc swamp']}, 14),  # forest=>swamp
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc desert']}, 8),  # forest=>desert
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc plain']}, 7),  # forest=>plain
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc pit']}, 28),  # forest=>pit
+        ({'firstline': ['12536 loc pit']}, {'firstline': ['12536 loc mountain']}, 28),  # pit=>mountain
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc tower']}, 0),  # forest=>tower
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc yew grove']}, 1),  # forest=>yew grove
+        ({'firstline': ['12536 loc yew grove']}, {'firstline': ['12536 loc forest']}, 1),  # yew grove=>forest
+        ({'firstline': ['12536 loc city']}, {'firstline': ['12536 loc castle']}, 0),  # city=>castle
+        ({'firstline': ['12536 loc castle']}, {'firstline': ['12536 loc tower']}, 0),  # castle=>tower
+        ({'firstline': ['12536 loc city']}, {'firstline': ['12536 loc sewer']}, 0),  # city=>sewer
+        ({'firstline': ['12536 loc sewer']}, {'firstline': ['12536 loc city']}, 0),  # sewer=>city
+        ({'firstline': ['12536 loc ocean']}, {'firstline': ['12536 loc city']}, 1),  # ocean=>city
+        ({'firstline': ['12536 loc city']}, {'firstline': ['12536 loc ocean']}, 1),  # city=>ocean
+        ({'firstline': ['12536 loc forest']}, {'firstline': ['12536 loc city']}, 1),  # forest=>city
+        ({'firstline': ['12536 loc city']}, {'firstline': ['12536 loc forest']}, 1),  # city=>forest
+        ({'firstline': ['12536 loc sewer']}, {'firstline': ['12536 loc tunnel']}, 0),  # sewer=>tunnel
+        ({'firstline': ['12536 loc tunnel']}, {'firstline': ['12536 loc sewer']}, 0),  # tunnel=>sewer
+        ({'firstline': ['12536 loc tunnel']}, {'firstline': ['12536 loc tunnel']}, 5),  # tunnel=>tunnel
+        ({'firstline': ['12536 loc tunnel']}, {'firstline': ['12536 loc chamber']}, 5),  # tunnel=>chamber
+    )
+
+    for loc1, loc2, answer in tests:
+        assert olymap.utilities.calc_exit_distance(loc1, loc2) == answer
+
+
 def test_get_use_key():
     tests = (
         ({}, None),
