@@ -99,6 +99,7 @@ def xlate_loyalty(box):
     # translate loyalty
     loyalty = 'Undefined'
     if 'CH' in box and 'lk' in box['CH']:
+        print(box['CH'])
         if box['CH']['lk'][0] == '0':
             loyalty = 'Unsworn'
         elif box['CH']['lk'][0] == '1' and 'lr' in box['CH']:

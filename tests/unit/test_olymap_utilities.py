@@ -309,3 +309,43 @@ def test_is_skill():
 
     for box, answer in tests:
         assert olymap.utilities.is_skill(box) == answer
+
+
+def test_xlate_loyalty():
+    tests = (
+        ({}, 'Undefined'),
+        ({'CH': {'lk': [0], 'lr': [0]}}, 'Undefined'),
+        ({'CH': {'lk': ['0'], 'lr': ['0']}}, 'Unsworn'),
+        ({'CH': {'lk': ['1'], 'lp': ['250']}}, 'Undefined'),
+        ({'CH': {'lk': ['1'], 'lr': ['250']}}, 'Contract-250'),
+        ({'CH': {'lk': ['2'], 'lp': ['1']}}, 'Undefined'),
+        ({'CH': {'lk': ['2'], 'lr': ['1']}}, 'Oath-1'),
+        ({'CH': {'lk': ['3'], 'lp': ['10']}}, 'Undefined'),
+        ({'CH': {'lk': ['3'], 'lr': ['10']}}, 'Fear-10'),
+        ({'CH': {'lk': ['4'], 'lp': ['10']}}, 'Undefined'),
+        ({'CH': {'lk': ['4'], 'lr': ['10']}}, 'Npc-10'),
+        ({'CH': {'lk': ['5']}}, 'Summon'),
+        ({'CH': {'lk': ['6']}}, 'Undefined'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.xlate_loyalty(box) == answer
+
+
+def test_xlate_rank():
+    tests = (
+        ({}, 'undefined'),
+        ({'CH': {'ra': [0]}}, 'undefined'),
+        ({'CH': {'ra': ['10']}}, 'lord'),
+        ({'CH': {'ra': ['20']}}, 'knight'),
+        ({'CH': {'ra': ['30']}}, 'baron'),
+        ({'CH': {'ra': ['40']}}, 'count'),
+        ({'CH': {'ra': ['50']}}, 'earl'),
+        ({'CH': {'ra': ['60']}}, 'marquess'),
+        ({'CH': {'ra': ['70']}}, 'duke'),
+        ({'CH': {'ra': ['80']}}, 'king'),
+        ({'CH': {'rb': ['80']}}, 'undefined'),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.xlate_rank(box) == answer
