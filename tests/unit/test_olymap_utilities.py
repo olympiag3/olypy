@@ -35,6 +35,43 @@ def test_calc_exit_distance():
         assert olymap.utilities.calc_exit_distance(loc1, loc2) == answer
 
 
+def test_get_auraculum_aura():
+    tests = (
+        ({}, 0),
+        ({'IM': {'au': ['10']}}, 10),
+        ({'IM': {'uk': ['2']}}, 0),
+        ({'IM': {'au': ['0']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_auraculum_aura(box) == answer
+
+
+def test_get_auraculum_id():
+    tests = (
+        ({}, None),
+        ({'CM': {'ar': ['1234']}}, '1234'),
+        ({'CM': {'uk': ['1234']}}, None),
+        ({'IM': {'ar': ['1234']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_auraculum_id(box) == answer
+
+
+def test_get_max_aura():
+    tests = (
+        ({}, 0),
+        ({'CM': {'ma': ['10']}}, 10),
+        ({'CM': {'ma': ['0']}}, 0),
+        ({'CM': {'uk': ['2']}}, 0),
+        ({'IM': {'au': ['0']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_max_aura(box) == answer
+
+
 def test_get_use_key():
     tests = (
         ({}, None),
@@ -536,6 +573,29 @@ def test_xlate_loyalty():
 
     for box, answer in tests:
         assert olymap.utilities.xlate_loyalty(box) == answer
+
+
+def test_xlate_magetype():
+    data = {'61282': {'firstline': ['61282 item auraculum'], 'na': ['Jeweled crown'], 'IT': {'wt': ['2'], 'un': ['8747']}, 'IM': {'au': ['60']}},
+            '61283': {'firstline': ['61283 item auraculum'], 'na': ['Jeweled crown 2'], 'IT': {'wt': ['2'], 'un': ['8747']}, 'IM': {'au': ['10']}},
+            '61284': {'firstline': ['61283 item auraculum'], 'na': ['Jeweled crown 3'], 'IT': {'wt': ['2'], 'un': ['8747']}}
+            }
+    tests = (
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit']}, None),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['0']}}, None),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['0'], 'ma': ['4']}}, None),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'ma': ['4']}}, None),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['4']}}, None),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['9']}}, 'Conjurer'),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['11']}}, 'Mage'),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['11'], 'ar': ['61282']}}, '2nd Black Circle'),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['11'], 'ar': ['61283']}}, 'Sorcerer'),
+        ({'firstline': ['8747 char 0'], 'na': ['Test Unit'], 'CM': {'im': ['1'], 'ma': ['11'], 'ar': ['61284']}}, 'Mage'),
+    )
+
+    for box, answer in tests:
+        print('{} {}'.format(box, data))
+        assert olymap.utilities.xlate_magetype(box, data) == answer
 
 
 def test_xlate_rank():

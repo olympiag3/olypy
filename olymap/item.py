@@ -2,7 +2,7 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has, get_use_key
+from olymap.utilities import get_oid, get_name, get_type, to_oid, get_who_has, get_use_key, get_auraculum_aura
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -18,8 +18,8 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'animal' : get_animal(v)[0],
                  'attack' : get_attack(v)[0],
                  'attack_bonus' : get_attack_bonus(v)[0],
-                 'aura' : get_aura(v)[0],
-                 'aura_bonus' : get_aura_bonus(v)[0],
+                 'aura' : get_auraculum_aura(v),
+                 'aura_bonus' : get_aura_bonus(v),
                  'dead_body_oid' : dead_body_id,
                  'dead_body_name' : dead_body_name,
                  'defense' : get_defense(v)[0],
@@ -55,8 +55,8 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'animal' : get_animal(v)[0],
                  'attack' : get_attack(v)[0],
                  'attack_bonus' : get_attack_bonus(v)[0],
-                 'aura' : get_aura(v)[0],
-                 'aura_bonus' : get_aura_bonus(v)[0],
+                 'aura' : get_auraculum_aura(v),
+                 'aura_bonus' : get_aura_bonus(v),
                  'defense' : get_defense(v)[0],
                  'defense_bonus' : get_defense_bonus(v)[0],
                  'fly_capacity' : get_fly_capacity(v)[0],
@@ -89,12 +89,8 @@ def get_attack_bonus(v):
     return v.get('IM', {}).get('ab', [None])
 
 
-def get_aura(v):
-    return v.get('IM', {}).get('au', [None])
-
-
 def get_aura_bonus(v):
-    return v.get('IM', {}).get('ba', [None])
+    return v.get('IM', {}).get('ba', [None])[0]
 
 
 def get_capacities(v):
@@ -312,7 +308,7 @@ def get_magic_item(data, item_id, item_rec):
         artifact_dict = {'attack': get_attack_bonus(item_rec)[0],
                          'defense': get_defense_bonus(item_rec)[0],
                          'missile': get_missile_bonus(item_rec)[0],
-                         'aura': get_aura_bonus(item_rec)[0]}
+                         'aura': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
@@ -342,6 +338,6 @@ def get_magic_item(data, item_id, item_rec):
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'aura': get_aura(item_rec)[0]}
+                      'aura': get_auraculum_aura(item_rec)}
         return magic_dict
     return None

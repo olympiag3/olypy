@@ -14,10 +14,16 @@
         <td sorttable_customkey="{{ entry.magetype }}">{{ entry.magetype }}</td>
         <td>{{ entry.aura_dict.current_aura }}</td>
         <td>{{ entry.aura_dict.max_aura }}</td>
-        <td>{{ entry.aura_dict.auraculum_aura }}</td>
+        <td>
+        {% if entry.aura_dict.auraculum_dict %}
+            {{ entry.aura_dict.auraculum_dict.aura }}
+        {% else %}
+            &nbsp;
+        {% endif %}
+        </td>
         <td>{{ entry.aura_dict.total_aura }}</td>
-        {% if entry.aura_dict.auraculum_id %}
-            <td sorttable_customkey="{{ entry.aura_dict.auraculum_oid }}">{{ entry.aura_dict.auraculum_name }} [<a href="{{ entry.aura_dict.auraculum_oid }}.html">{{ entry.aura_dict.auraculum_oid }}</a>]</td>
+        {% if entry.aura_dict.auraculum_dict %}
+            <td sorttable_customkey="{{ entry.aura_dict.auraculum_dict.oid }}">{{ entry.aura_dict.auraculum_dict.name }} [<a href="{{ entry.aura_dict.auraculum_dict.oid }}.html">{{ entry.aura_dict.auraculum_dict.oid }}</a>]</td>
         {% else %}
             <td>&nbsp;</td>
         {% endif %}

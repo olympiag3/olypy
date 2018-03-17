@@ -284,38 +284,25 @@ def get_pledged_to_us(k, data, pledge_list):
 
 def get_aura(v, data):
     if u.is_magician(v):
-        rank = None
-        if u.xlate_magetype(v, data) not in {'', 'undefined'}:
-            rank = u.xlate_magetype(v, data).capitalize()
-        current_aura = v.get('CM', {}).get('ca', ['0'])
-        max_aura = v.get('CM', {}).get('ma', ['0'])
-        max_aura_str = ''
-        auraculum_amt = 0
-        auraculum_name = None
-        if 'ar' in v['CM']:
-            auraculum_id = v['CM']['ar'][0]
-            auraculum_oid = to_oid(auraculum_id)
-            auraculum_rec = data[auraculum_id]
-            auraculum_name = None
-            if 'IM' in auraculum_rec:
-                if 'au' in auraculum_rec['IM']:
-                    auraculum_amt = int(auraculum_rec['IM']['au'][0])
-                    max_aura_str = ('{} ({}+{})'.format((int(max_aura[0]) + int(auraculum_amt)),
-                                                          max_aura[0], auraculum_amt))
-                    auraculum_name = get_name(auraculum_rec, data)
+        rank = u.xlate_magetype(v, data)
+        current_aura = get_current_aura(v)
+        max_aura = u.get_max_aura(v)
+        auraculum_aura = 0
+        if u.get_auraculum_id(v) is not None:
+            auraculum_id = u.get_auraculum_id(v)
+            auraculum_box = data[auraculum_id]
+            auraculum_aura = u.get_auraculum_aura(auraculum_box)
+            auraculum_dict = {'id': auraculum_id,
+                              'oid': to_oid(auraculum_id),
+                              'name': get_name(auraculum_box, data),
+                              'aura': auraculum_aura}
         else:
-            auraculum_id = None
-            auraculum_oid = None
-            max_aura_str = max_aura[0]
+            auraculum_dict = None
         aura_dict = {'rank': rank,
-                     'current_aura': current_aura[0],
-                     'max_aura': max_aura[0],
-                     'auraculum_aura': auraculum_amt,
-                     'total_aura': int(max_aura[0]) + auraculum_amt,
-                     'auraculum_id': auraculum_id,
-                     'auraculum_oid': auraculum_oid,
-                     'auraculum_name': auraculum_name,
-                     'max_aura_str': max_aura_str}
+                     'current_aura': current_aura,
+                     'max_aura': max_aura,
+                     'total_aura': max_aura + auraculum_aura,
+                     'auraculum_dict': auraculum_dict}
         return aura_dict
     return None
 
@@ -458,6 +445,7 @@ def get_inventory(v, data, prominent_only):
                 defense_bonus = None
                 missile_bonus = None
                 aura_bonus = None
+                auraculum_aura = 0
                 if not u.is_garrison(v):
                     if 'fc' in itemz['IT']:
                         fly_capacity = int(itemz['IT']['fc'][0])
@@ -515,6 +503,7 @@ def get_inventory(v, data, prominent_only):
                         if 'IM' in itemz and 'ba' in itemz['IM']:
                             if int(itemz['IM']['ba'][0]) > 0:
                                 aura_bonus = int(itemz['IM']['ba'][0])
+                    auraculum_aura = u.get_auraculum_aura(itemz)
                 items_dict = {'id': item_id,
                               'oid': to_oid(item_id),
                               'name': itemz_name,
@@ -530,7 +519,8 @@ def get_inventory(v, data, prominent_only):
                               'attack_bonus': attack_bonus,
                               'defense_bonus': defense_bonus,
                               'missile_bonus': missile_bonus,
-                              'aura_bonus': aura_bonus}
+                              'aura_bonus': aura_bonus,
+                              'auraculum_aura': auraculum_aura}
                 items_list.append(items_dict)
     else:
         items_list = None
@@ -768,3 +758,7 @@ def get_where(v, data):
                       'name': get_name(where_rec, data)}
         return where_dict
     return None
+
+
+def get_current_aura(box):
+    return int(box.get('CM', {}).get('ca', [0])[0])

@@ -68,7 +68,13 @@
         <tr><td>Mage Rank:</td><td>{{ char.aura_dict.rank }}</td></tr>
     {% endif %}
     <tr><td>Current Aura:</td><td>{{ char.aura_dict.current_aura }}</td></tr>
-    <tr><td>Max Aura:</td><td>{{ char.aura_dict.max_aura_str }}</td></tr>
+    <tr><td>Max Aura:</td><td>
+        {% if char.aura_dict.auraculum_dict %}
+            {{ char.aura_dict.total_aura }} ({{ char.aura_dict.max_aura }} + {{ char.aura_dict.auraculum_dict.aura }})
+        {% else %}
+            {{ char.aura_dict.total_aura }}
+        {% endif %}
+    </td></tr>
 {% endif %}
 {% if char.prisoner_list %}
     {% set ns = namespace(title="Prisoners:") %}
@@ -155,6 +161,9 @@
                     {% endif %}
                     {% if entry.aura_bonus %}
                         + {{ entry.aura_bonus }} aura
+                    {% endif %}
+                    {% if entry.auraculum_aura > 0 %}
+                        (Aura: {{ entry.auraculum_aura }})
                     {% endif %}
                 </td>
             </tr>

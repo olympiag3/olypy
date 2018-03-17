@@ -516,40 +516,41 @@ def is_priest(box):
     return False
 
 
+# unit tested
 def xlate_magetype(box, data):
     if is_magician(box):
-        max_aura = 0
+        max_aura = get_max_aura(box)
         auraculum_aura = 0
-        if 'CM' in box and 'ma' in box['CM']:
-            max_aura = int(box['CM']['ma'][0])
-            if 'ar' in box['CM']:
-                auraculum = data[box['CM']['ar'][0]]
-                auraculum_id = box['CM']['ar'][0]
-                if 'IM' in auraculum and 'au' in auraculum['IM']:
-                    auraculum_aura = int(auraculum['IM']['au'][0])
-            mage_level = max_aura + auraculum_aura
-            if mage_level <= 5:
-                return ''
-            elif mage_level <= 10:
-                return 'conjurer'
-            elif mage_level <= 15:
-                return 'mage'
-            elif mage_level <= 20:
-                return 'wizard'
-            elif mage_level <= 30:
-                return 'sorcerer'
-            elif mage_level <= 40:
-                return '6th black circle'
-            elif mage_level <= 50:
-                return '5th black circle'
-            elif mage_level <= 60:
-                return '4th black circle'
-            elif mage_level <= 70:
-                return '3rd black circle'
-            elif mage_level <= 80:
-                return '2nd black circle'
+        if get_auraculum_id(box) is not None:
+            auraculum_box = data[get_auraculum_id(box)]
+            auraculum_aura = get_auraculum_aura(auraculum_box)
+            if auraculum_aura is None:
+                auraculum_aura = 0
             else:
-                return 'master of the black arts'
+                auraculum_aura = int(auraculum_aura)
+        mage_level = max_aura + auraculum_aura
+        if mage_level <= 5:
+            return None
+        elif mage_level <= 10:
+            return 'Conjurer'
+        elif mage_level <= 15:
+            return 'Mage'
+        elif mage_level <= 20:
+            return 'Wizard'
+        elif mage_level <= 30:
+            return 'Sorcerer'
+        elif mage_level <= 40:
+            return '6th Black Circle'
+        elif mage_level <= 50:
+            return '5th Black Circle'
+        elif mage_level <= 60:
+            return '4th Black Circle'
+        elif mage_level <= 70:
+            return '3rd Black Circle'
+        elif mage_level <= 80:
+            return '2nd Black Circle'
+        else:
+            return 'Master of the Black Arts'
         return ''
     else:
         return None
@@ -763,3 +764,18 @@ def is_mountain(box):
     if is_loc(box) and return_type(box) == 'mountain':
         return True
     return False
+
+
+# unit tested
+def get_auraculum_aura(box):
+    return int(box.get('IM', {}).get('au', ['0'])[0])
+
+
+# unit tested
+def get_max_aura(box):
+    return int(box.get('CM', {}).get('ma', ['0'])[0])
+
+
+# unit tested
+def get_auraculum_id(box):
+    return box.get('CM', {}).get('ar', [None])[0]
