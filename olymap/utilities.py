@@ -690,7 +690,8 @@ def get_who_has(box, data):
         who_has_box = data[who_has_id]
         who_has_dict = {'id': who_has_id,
                         'oid': to_oid(who_has_id),
-                        'name': get_name(who_has_box, data)}
+                        'name': get_name(who_has_box, data),
+                        'kind': return_kind(who_has_box)}
         return who_has_dict
     return None
 

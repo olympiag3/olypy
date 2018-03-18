@@ -10,11 +10,11 @@
 {% for entry in healing_potion %}
     <tr>
         <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        {% if entry.unit.kind == 'loc' %}
+        {% if entry.who_has_dict.kind == 'loc' %}
             <td sorttable_customkey="">&nbsp;</td>
-            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
-        {% elif entry.unit.kind == 'char' %}
-            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+            <td sorttable_customkey="{{ entry.who_has_dict.oid }}">{{ entry.who_has_dict.name }} [<a href="{{ entry.who_has_dict.oid }}.html">{{ entry.who_has_dict.oid }}</a>]</td>
+        {% elif entry.who_has_dict.kind == 'char' %}
+            <td sorttable_customkey="{{ entry.who_has_dict.oid }}">{{ entry.who_has_dict.name }} [<a href="{{ entry.who_has_dict.oid }}.html">{{ entry.who_has_dict.oid }}</a>]</td>
             <td sorttable_customkey="">&nbsp;</td>
         {% else %}
             <td sorttable_customkey="">&nbsp;</td>

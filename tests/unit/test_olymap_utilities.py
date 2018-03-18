@@ -124,7 +124,7 @@ def test_get_who_has():
     data = {'1234': {'firstline': ['1234 char 0'], 'na': ['Test Unit']}}
     tests = (
         ({}, None),
-        ({'IT': {'un': ['1234']}}, {'id': '1234', 'oid': '1234', 'name': 'Test Unit'}),
+        ({'IT': {'un': ['1234']}}, {'id': '1234', 'oid': '1234', 'name': 'Test Unit', 'kind': 'char'}),
         ({'CM': {'un': ['1234']}}, None),
         ({'IT': {'ga': ['1234']}}, None),
     )

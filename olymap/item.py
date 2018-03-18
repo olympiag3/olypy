@@ -33,7 +33,6 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
-                 'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
                  'who_has_dict': get_who_has(v, data),
@@ -63,7 +62,6 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
-                 'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
                  'who_has_dict': get_who_has(v, data),
@@ -184,18 +182,6 @@ def get_prominent(v):
 
 def get_ride_capacity(v):
     return v.get('IT', {}).get('rc', [None])
-
-
-def get_unit(v, data):
-    unit_id = v.get('IT', {}).get('un', [None])[0]
-    if unit_id is not None:
-        unit_rec = data[unit_id]
-        unit_dict = {'id': unit_id,
-                     'oid': to_oid(unit_id),
-                     'name': get_name(unit_rec, data),
-                     'kind': u.return_kind(unit_rec)}
-        return unit_dict
-    return None
 
 
 def get_trade_good(k, v, data, trade_chain):
