@@ -120,6 +120,19 @@ def test_get_use_key():
         assert olymap.utilities.get_use_key(box) == answer
 
 
+def test_get_who_has():
+    data = {'1234': {'firstline': ['1234 char 0'], 'na': ['Test Unit']}}
+    tests = (
+        ({}, None),
+        ({'IT': {'un': ['1234']}}, {'id': '1234', 'oid': '1234', 'name': 'Test Unit'}),
+        ({'CM': {'un': ['1234']}}, None),
+        ({'IT': {'ga': ['1234']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_who_has(box, data) == answer
+
+
 def test_is_absorb_aura_blast():
     tests = (
         ({}, False),

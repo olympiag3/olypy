@@ -683,9 +683,10 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
     return hls
 
 
+# unit tested
 def get_who_has(box, data):
-    if 'un' in box['IT']:
-        who_has_id = box['IT']['un'][0]
+    who_has_id = box.get('IT', {}).get('un', [None])[0]
+    if who_has_id is not None:
         who_has_box = data[who_has_id]
         who_has_dict = {'id': who_has_id,
                         'oid': to_oid(who_has_id),
