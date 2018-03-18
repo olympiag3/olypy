@@ -198,7 +198,30 @@ def test_is_hidden():
         assert olymap.utilities.is_hidden(box) == answer
 
 
-# def test_is_impassable()
+def test_is_impassable():
+    data = {'11416': {'firstline': ['11416 loc ocean'], 'na': ['Ocean'], 'LI': {'wh': ['58760']}, 'LO': {'pd': ['56980', '11417', '11516', '11415']}},
+            '11316': {'firstline': ['11316 loc plain'], 'na': ['Plain'], 'LI': {'wh': ['58762'], 'hl': ['3545', '56980', '148781', '138710']}, 'LO': {'pd': ['0', '0', '11416', '0']}},
+            '56980': {'firstline': ['56980 loc city'], 'na': ['Skyllith'], 'LI': {'wh': ['11316']}},
+            '11398': {'firstline': ['11398 loc mountain'], 'LI': {'wh': ['58764'], 'hl': ['74172', '63682', '78615', '70776', '89613']}, 'LO': {'pd': ['11298', '11399', '11498', '11397'], 'dg': ['3'], 'lc': ['1']}, 'na': ['Mountain']},
+            '11298': {'firstline': ['11298 loc mountain'], 'LI': {'wh': ['58764'], 'hl': ['60692', '58415', '76459', '118952']}, 'LO': {'pd': ['11198', '11299', '11398', '11297'], 'dg': ['3'], 'lc': ['3']}, 'na': ['Mountain']},
+            '11299': {'firstline': ['11299 loc ocean'], 'LI': {'wh': ['58761'], 'hl': ['59143', '93515']}, 'LO': {'pd': ['11199', '11200', '11399', '11298'], 'dg': ['2']}, 'na': ['Ocean']},
+            '59143': {'firstline': ['59143 road 0'], 'na': ['Secret sea route'], 'LI': {'wh': ['11299']}, 'GA': {'tl': ['11398'], 'rh': ['1']}},
+            '63682': {'firstline': ['63682 road 0'], 'na': ['Secret sea route'], 'LI': {'wh': ['11398']}, 'GA': {'tl': ['11299'], 'rh': ['1']}}
+}
+    tests = (
+        ({'firstline': ['12536 loc ocean']}, {'firstline': ['12537 loc mountain']}, 'north', True),
+        ({'firstline': ['12537 loc mountain']}, {'firstline': ['12536 loc ocean']}, 'south', True),
+        ({'firstline': ['12536 loc ocean']}, {'firstline': ['12540 loc ocean']}, 'north', False),
+        ({'firstline': ['12541 loc forest']}, {'firstline': ['12537 loc mountain']}, 'north', False),
+        ({'firstline': ['12536 loc ocean']}, {'firstline': ['57068 loc city']}, 'north', False),
+        ({'firstline': ['11416 loc ocean']},{'firstline': ['11316 loc plain'], 'na': ['Plain'], 'LI': {'wh': ['58762'], 'hl': ['3545', '56980', '148781', '138710']}},'North', True),
+        ({'firstline': ['59143 road 0'], 'na': ['Secret sea route'], 'LI': {'wh': ['11299']}, 'GA': {'tl': ['11398'], 'rh': ['1']}}, {'firstline': ['11298 loc mountain'], 'LI': {'wh': ['58764'], 'hl': ['60692', '58415', '76459', '118952']}, 'LO': {'pd': ['11198', '11299', '11398', '11297'], 'dg': ['3'], 'lc': ['3']}, 'na': ['Mountain']}, 'Secret sea route', False),
+        ({'firstline': ['11299 loc ocean']}, {'firstline': ['11298 loc mountain']}, 'West', True),
+        ({'firstline': ['63682 road 0'], 'na': ['Secret sea route'], 'LI': {'wh': ['11398']}, 'GA': {'tl': ['11299'], 'rh': ['1']}}, {'firstline': ['11299 loc ocean']}, 'Secret sea route', False)
+    )
+
+    for loc1, loc2, direction, answer in tests:
+        assert olymap.utilities.is_impassable(loc1, loc2, direction, data) == answer
 
 
 def test_is_item():

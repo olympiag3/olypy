@@ -2,7 +2,7 @@
 
 import olypy.details as details
 from collections import defaultdict
-from olypy.oid import to_oid
+from olypy.oid import to_oid, to_int
 from olymap.detail import long_type_to_display_type
 from olymap.detail import long_kind_to_display_kind
 from olymap.detail import rank_num_string
@@ -715,6 +715,7 @@ def is_hidden(box):
     return False
 
 
+# unit tested
 def is_impassable(box1, box2, direction, data):
     if (is_ocean(box1) and is_mountain(box2)) or \
        (is_mountain(box1) and is_ocean(box2)) or \

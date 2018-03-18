@@ -12,7 +12,7 @@ from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_dist
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.char import get_items_list, get_wearable_wielding, get_inventory, build_basic_char_dict
-from olymap.item import get_weight
+from olymap.item import get_item_weight
 from olymap.ship import build_basic_ship_dict
 from olymap.storm import build_basic_storm_dict
 
@@ -368,7 +368,7 @@ def get_markets(k, v, data, trade_chain):
                                'item_id': trade_list[trade + 1],
                                'item_oid': to_oid(trade_list[trade + 1]),
                                'item_name': get_name(item_rec, data),
-                               'item_weight': get_weight(item_rec)[0],
+                               'item_weight': get_item_weight(item_rec),
                                'who_id': k,
                                'who_oid': to_oid(k),
                                'who_name': get_name(v, data),
@@ -415,7 +415,7 @@ def get_markets(k, v, data, trade_chain):
                                                    'item_id': trade_list[trade + 1],
                                                    'item_oid': to_oid(trade_list[trade + 1]),
                                                    'item_name': get_name(item_rec, data),
-                                                   'item_weight': get_weight(item_rec)[0],
+                                                   'item_weight': get_item_weight(item_rec),
                                                    'who_id': un[0],
                                                    'who_oid': to_oid(un[0]),
                                                    'who_name': get_name(charac_rec, data),

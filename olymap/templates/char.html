@@ -148,7 +148,23 @@
                         cap {{ '{0:,d}'.format(entry.land_ext) }}
                     {% endif %}
                     {% if entry.attack or entry.defense or entry.missile %}
-                         ({{ entry.attack }},{{ entry.defense }},{{ entry.missile }})
+                        (
+                        {%- if entry.attack -%}
+                            {{ entry.attack }}
+                        {%- else -%}
+                            0
+                        {%- endif -%}
+                        {%- if entry.defense -%}
+                            ,{{ entry.defense }}
+                        {%- else -%}
+                            ,0
+                        {%- endif -%}
+                        {%- if entry.missile -%}
+                            ,{{ entry.missile }}
+                        {%- else -%}
+                            ,0
+                        {%- endif -%}
+                        )
                     {% endif %}
                     {% if entry.attack_bonus %}
                         + {{ entry.attack_bonus }} attack

@@ -16,28 +16,28 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
-                 'attack' : get_attack(v)[0],
-                 'attack_bonus' : get_attack_bonus(v)[0],
+                 'attack' : get_item_attack(v),
+                 'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
                  'aura_bonus' : get_aura_bonus(v),
                  'dead_body_oid' : dead_body_id,
                  'dead_body_name' : dead_body_name,
-                 'defense' : get_defense(v)[0],
-                 'defense_bonus' : get_defense_bonus(v)[0],
+                 'defense' : get_item_defense(v),
+                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
                  'man_item': get_man_item(v)[0],
                  'may_study_oid' : may_study_id,
                  'may_study_name' : may_study_name,
-                 'missile' : get_missile(v)[0],
-                 'missile_bonus' : get_missile_bonus(v)[0],
+                 'missile' : get_item_missile(v),
+                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
-                 'weight' : get_weight(v)[0],
+                 'weight' : get_item_weight(v),
                  'who_has_oid' : who_has_oid,
                  'who_has_name' : who_has_name,
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
@@ -53,23 +53,23 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
-                 'attack' : get_attack(v)[0],
-                 'attack_bonus' : get_attack_bonus(v)[0],
+                 'attack' : get_item_attack(v),
+                 'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
                  'aura_bonus' : get_aura_bonus(v),
-                 'defense' : get_defense(v)[0],
-                 'defense_bonus' : get_defense_bonus(v)[0],
+                 'defense' : get_item_defense(v),
+                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'man_item': get_man_item(v)[0],
-                 'missile' : get_missile(v)[0],
-                 'missile_bonus' : get_missile_bonus(v)[0],
+                 'missile' : get_item_missile(v),
+                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
-                 'weight' : get_weight(v)[0],
+                 'weight' : get_item_weight(v),
                  'who_has_oid' : who_has_oid,
                  'who_has_name' : who_has_name,
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
@@ -81,12 +81,12 @@ def get_animal(v):
     return v.get('IT', {}).get('an', [None])
 
 
-def get_attack(v):
-    return v.get('IT', {}).get('at', [None])
+def get_item_attack(v):
+    return v.get('IT', {}).get('at', [None])[0]
 
 
 def get_attack_bonus(v):
-    return v.get('IM', {}).get('ab', [None])
+    return v.get('IM', {}).get('ab', [None])[0]
 
 
 def get_aura_bonus(v):
@@ -106,12 +106,12 @@ def get_dead_body(v, data):
     return None, None
 
 
-def get_defense(v):
-    return v.get('IT', {}).get('de', [None])
+def get_item_defense(v):
+    return v.get('IT', {}).get('de', [None])[0]
 
 
 def get_defense_bonus(v):
-    return v.get('IM', {}).get('db', [None])
+    return v.get('IM', {}).get('db', [None])[0]
 
 
 def get_fly_capacity(v):
@@ -139,12 +139,12 @@ def get_may_study(v, data):
     return None, None
 
 
-def get_missile(v):
-    return v.get('IT', {}).get('mi', [None])
+def get_item_missile(v):
+    return v.get('IT', {}).get('mi', [None])[0]
 
 
 def get_missile_bonus(v):
-    return v.get('IM', {}).get('mb', [None])
+    return v.get('IM', {}).get('mb', [None])[0]
 
 
 def get_plural(v, data):
@@ -203,8 +203,8 @@ def get_unit(v, data):
     return None
 
 
-def get_weight(v):
-    return v.get('IT', {}).get('wt', [None])
+def get_item_weight(box):
+    return int(box.get('IT', {}).get('wt', ['0'])[0])
 
 
 def get_trade_good(k, v, data, trade_chain):
@@ -305,9 +305,9 @@ def get_magic_item(data, item_id, item_rec):
                       'magic_type': magic_type}
         return magic_dict
     elif item_type == 'artifact':
-        artifact_dict = {'attack': get_attack_bonus(item_rec)[0],
-                         'defense': get_defense_bonus(item_rec)[0],
-                         'missile': get_missile_bonus(item_rec)[0],
+        artifact_dict = {'attack': get_attack_bonus(item_rec),
+                         'defense': get_defense_bonus(item_rec),
+                         'missile': get_missile_bonus(item_rec),
                          'aura': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),

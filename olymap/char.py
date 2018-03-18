@@ -5,7 +5,8 @@ from collections import defaultdict
 from olypy.oid import to_oid
 import olymap.utilities as u
 from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
-from olymap.item import get_magic_item
+from olymap.item import get_magic_item, get_item_attack, get_attack_bonus, get_aura_bonus, get_item_defense
+from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus, get_item_weight
 import olypy.details as details
 
 
@@ -221,18 +222,14 @@ def get_health(v):
 
 
 def get_combat(v):
-    attack = v.get('CH', {}).get('at', ['0'])
-    defense = v.get('CH', {}).get('df', ['0'])
-    missile = v.get('CH', {}).get('mi', ['0'])
-    behind = v.get('CH', {}).get('bh', ['0'])
-    if behind[0] != '0':
+    if get_char_behind(v) != '0':
         behind_text = '(stay behind in combat)'
     else:
         behind_text = '(front line in combat)'
-    combat_dict = {'attack' : attack[0],
-                   'defense' : defense[0],
-                   'missile' : missile[0],
-                   'behind' : behind[0],
+    combat_dict = {'attack' : get_char_attack(v),
+                   'defense' : get_char_defense(v),
+                   'missile' : get_char_missile(v),
+                   'behind' : get_char_behind(v),
                    'behind_text' : behind_text}
     return combat_dict
 
@@ -396,9 +393,7 @@ def get_inventory(v, data, prominent_only):
     if 'CH' in v and 'ni' in v['CH']:
         unit_type = v['CH']['ni'][0]
     base_unit = data[unit_type]
-    item_weight = 0
-    if 'IT' in base_unit and 'wt' in base_unit['IT']:
-        item_weight = int(base_unit['IT']['wt'][0]) * 1
+    item_weight = get_item_weight(base_unit)
     if 'IT' in base_unit:
         if 'lc' in base_unit['IT'] and base_unit['IT']['lc'][0] != '0':
             land_cap = land_cap + int(base_unit['IT']['lc'][0])
@@ -429,23 +424,12 @@ def get_inventory(v, data, prominent_only):
                 else:
                     continue
                 itemz_name = u.get_item_name(itemz) if item_qty == 1 else u.get_item_plural(itemz)
-                if 'wt' in itemz['IT']:
-                    item_weight = int(itemz['IT']['wt'][0])
-                else:
-                    item_weight = int(0)
+                item_weight = get_item_weight(itemz)
                 item_ext = int(item_weight * item_qty)
                 total_items_weight = total_items_weight + item_ext
                 fly_ext = None
                 land_ext = None
                 ride_ext = None
-                attack = None
-                defense = None
-                missile = None
-                attack_bonus = None
-                defense_bonus = None
-                missile_bonus = None
-                aura_bonus = None
-                auraculum_aura = 0
                 if not u.is_garrison(v):
                     if 'fc' in itemz['IT']:
                         fly_capacity = int(itemz['IT']['fc'][0])
@@ -482,28 +466,6 @@ def get_inventory(v, data, prominent_only):
                         fly_weight = fly_weight + item_ext
                         ride_weight = ride_weight + item_ext
                     total_char_weight = total_char_weight + item_ext
-                    if u.is_fighter(itemz):
-                        attack = 0
-                        defense = 0
-                        missile = 0
-                        if 'at' in itemz['IT']:
-                            attack = int(itemz['IT']['at'][0])
-                        if 'df' in itemz['IT']:
-                            defense = int(itemz['IT']['df'][0])
-                        if 'mi' in itemz['IT']:
-                            missile = int(itemz['IT']['mi'][0])
-                    if 'IM' in itemz:
-                        if 'ab' in itemz['IM']:
-                            attack_bonus = int(itemz['IM']['ab'][0])
-                        if 'db' in itemz['IM']:
-                            defense_bonus = int(itemz['IM']['db'][0])
-                        if 'mb' in itemz['IM']:
-                            missile_bonus = int(itemz['IM']['mb'][0])
-                    if u.is_magician(v):
-                        if 'IM' in itemz and 'ba' in itemz['IM']:
-                            if int(itemz['IM']['ba'][0]) > 0:
-                                aura_bonus = int(itemz['IM']['ba'][0])
-                    auraculum_aura = u.get_auraculum_aura(itemz)
                 items_dict = {'id': item_id,
                               'oid': to_oid(item_id),
                               'name': itemz_name,
@@ -513,14 +475,14 @@ def get_inventory(v, data, prominent_only):
                               'fly_ext': fly_ext,
                               'land_ext': land_ext,
                               'ride_ext': ride_ext,
-                              'attack': attack,
-                              'defense': defense,
-                              'missile': missile,
-                              'attack_bonus': attack_bonus,
-                              'defense_bonus': defense_bonus,
-                              'missile_bonus': missile_bonus,
-                              'aura_bonus': aura_bonus,
-                              'auraculum_aura': auraculum_aura}
+                              'attack': get_item_attack(itemz),
+                              'defense': get_item_defense(itemz),
+                              'missile': get_item_missile(itemz),
+                              'attack_bonus': get_attack_bonus(itemz),
+                              'defense_bonus': get_defense_bonus(itemz),
+                              'missile_bonus': get_missile_bonus(itemz),
+                              'aura_bonus': get_aura_bonus(itemz),
+                              'auraculum_aura': u.get_auraculum_aura(itemz)}
                 items_list.append(items_dict)
     else:
         items_list = None
@@ -762,3 +724,19 @@ def get_where(v, data):
 
 def get_current_aura(box):
     return int(box.get('CM', {}).get('ca', [0])[0])
+
+
+def get_char_attack(box):
+    return box.get('CH', {}).get('at', ['0'])[0]
+
+
+def get_char_behind(box):
+    return box.get('CH', {}).get('bh', ['0'])[0]
+
+
+def get_char_defense(box):
+    return box.get('CH', {}).get('df', ['0'])[0]
+
+
+def get_char_missile(box):
+    return box.get('CH', {}).get('mi', ['0'])[0]
