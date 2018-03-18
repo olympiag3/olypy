@@ -7,7 +7,6 @@ from olymap.utilities import get_auraculum_aura, get_item_weight
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
-    may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
                  'type' : get_type(v, data),
@@ -24,8 +23,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
                  'man_item': get_man_item(v)[0],
-                 'may_study_oid' : may_study_id,
-                 'may_study_name' : may_study_name,
+                 'may_study_dict': get_may_study(v, data),
                  'missile' : get_item_missile(v),
                  'missile_bonus' : get_missile_bonus(v),
                  'project_cast' : get_project_cast(v, data),
@@ -124,13 +122,14 @@ def get_man_item(v):
 
 
 def get_may_study(v, data):
-    oid = v.get('IM', {}).get('ms', [None])
-    if oid[0] is not None:
-        skill_rec = data[oid[0]]
-        skill_name = get_name(skill_rec, data)
-        return to_oid(oid[0]), skill_name
-    return None, None
-
+    may_study_id = v.get('IM', {}).get('ms', [None])[0]
+    if may_study_id is not None:
+        skill_box = data[may_study_id]
+        may_study_dict = {'id': may_study_id,
+                          'oid': to_oid(may_study_id),
+                          'name': get_name(skill_box, data)}
+        return may_study_dict
+    return None
 
 def get_item_missile(v):
     return v.get('IT', {}).get('mi', [None])[0]

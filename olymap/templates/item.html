@@ -38,8 +38,8 @@
 {% if item.lore %}
     <tr><td>Lore:</td><td>{{ item.lore }}</td></tr>
 {% endif %}
-{% if item.may_study_oid %}
-    <tr><td>May Study:</td><td>{{ item.may_study_name }} [<a href="{{ item.may_study_oid }}.html">{{ item.may_study_oid }}</a>]</td></tr>
+{% if item.may_study_dict %}
+    <tr><td>May Study:</td><td>{{ item.may_study_dict.name }} [<a href="{{ item.may_study_dict.oid }}.html">{{ item.may_study_dict.oid }}</a>]</td></tr>
 {% endif %}
 {% if item.missile %}
     <tr><td>Missile:</td><td>{{ item.missile }}</td></tr>
