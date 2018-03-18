@@ -4,9 +4,9 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.utilities import get_oid, get_name, get_type, to_oid, get_item_weight
 from olymap.item import get_magic_item, get_item_attack, get_attack_bonus, get_aura_bonus, get_item_defense
-from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus, get_item_weight
+from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus
 import olypy.details as details
 
 

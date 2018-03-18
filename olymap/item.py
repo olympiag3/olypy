@@ -2,13 +2,11 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, get_who_has, get_use_key, get_auraculum_aura
-import pathlib
-from jinja2 import Environment, PackageLoader, select_autoescape
+from olymap.utilities import get_oid, get_name, get_type, to_oid, get_who_has, get_use_key
+from olymap.utilities import get_auraculum_aura, get_item_weight
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
-    who_has_oid, who_has_name = get_who_has(v, data)
     dead_body_id, dead_body_name = get_dead_body(v, data)
     may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
@@ -38,15 +36,13 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
-                 'who_has_oid' : who_has_oid,
-                 'who_has_name' : who_has_name,
+                 'who_has_dict': get_who_has(v, data),
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
                  'magic_info': get_magic_item(data, k, v)}
     return item_dict
 
 
 def build_basic_item_dict(k, v, data, trade_chain):
-    who_has_oid, who_has_name = get_who_has(v, data)
     item_dict = {'id': k,
                  'oid' : get_oid(k),
                  'name' : get_name(v, data),
@@ -70,8 +66,7 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
-                 'who_has_oid' : who_has_oid,
-                 'who_has_name' : who_has_name,
+                 'who_has_dict': get_who_has(v, data),
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
                  'magic_info': get_magic_item(data, k, v)}
     return item_dict
@@ -201,10 +196,6 @@ def get_unit(v, data):
                      'kind': u.return_kind(unit_rec)}
         return unit_dict
     return None
-
-
-def get_item_weight(box):
-    return int(box.get('IT', {}).get('wt', ['0'])[0])
 
 
 def get_trade_good(k, v, data, trade_chain):

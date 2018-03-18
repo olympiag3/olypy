@@ -8,11 +8,10 @@ import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
 from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
-from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance
+from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance, get_item_weight
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.char import get_items_list, get_wearable_wielding, get_inventory, build_basic_char_dict
-from olymap.item import get_item_weight
 from olymap.ship import build_basic_ship_dict
 from olymap.storm import build_basic_storm_dict
 

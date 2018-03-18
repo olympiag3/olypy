@@ -2,7 +2,7 @@
 
 import olypy.details as details
 from collections import defaultdict
-from olypy.oid import to_oid, to_int
+from olypy.oid import to_oid
 from olymap.detail import long_type_to_display_type
 from olymap.detail import long_kind_to_display_kind
 from olymap.detail import rank_num_string
@@ -569,36 +569,29 @@ def calc_ship_pct_loaded(data, k, box):
     if not is_ship(box):
         return 0
     total_weight = 0
-    try:
-        damaged = int(box['SL']['da'][0])
-    except KeyError:
-        damaged = 0
+    damaged = get_ship_damage(box)
     level = 0
     seen_here_list = loop_here(data, k, False, True)
     list_length = len(seen_here_list)
     if list_length > 1:
         for un in seen_here_list:
             char = data[un]
-            if return_kind(char) == 'char':
+            if is_char(char):
                 unit_type = '10'
                 if 'CH' in char and 'ni' in char['CH']:
                     unit_type = char['CH']['ni'][0]
                 base_unit = data[unit_type]
-                if 'IT' in base_unit and 'wt' in base_unit['IT']:
-                    item_weight = int(base_unit['IT']['wt'][0]) * 1
-                    total_weight = total_weight + item_weight
+                item_weight = get_item_weight(base_unit)
+                total_weight = total_weight + item_weight
                 if 'il' in char:
                     item_list = char['il']
                     for itm in range(0, len(item_list), 2):
                         itemz = data[item_list[itm]]
-                        try:
-                            item_weight = int(itemz['IT']['wt'][0])
-                        except KeyError:
-                            item_weight = int(0)
+                        item_weight = get_item_weight(itemz)
                         qty = int(item_list[itm + 1])
                         total_weight = total_weight + int(qty * item_weight)
-    ship_capacity = int(box['SL']['ca'][0])
-    actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
+    ship_capacity = get_ship_capacity(box)
+    actual_capacity = ship_capacity - ((ship_capacity * damaged) // 100)
     pct_loaded = math.floor((total_weight * 100) / actual_capacity)
     return pct_loaded
 
@@ -692,13 +685,13 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
 
 def get_who_has(box, data):
     if 'un' in box['IT']:
-        who_has = box['IT']['un'][0]
-        who_box = data[who_has]
-        name = get_name(who_box, data)
-        if name == 'Ni':
-            name = data[who_box['CH']['ni'][0]]['na'][0].capitalize()
-        return to_oid(who_has), name
-    return None, None
+        who_has_id = box['IT']['un'][0]
+        who_has_box = data[who_has_id]
+        who_has_dict = {'id': who_has_id,
+                        'oid': to_oid(who_has_id),
+                        'name': get_name(who_has_box, data)}
+        return who_has_dict
+    return None
 
 
 # unit tested
@@ -780,3 +773,18 @@ def get_max_aura(box):
 # unit tested
 def get_auraculum_id(box):
     return box.get('CM', {}).get('ar', [None])[0]
+
+
+# unit tested
+def get_ship_capacity(v):
+    return int(v.get('SL', {}).get('ca', ['0'])[0])
+
+
+# unit tested
+def get_ship_damage(v):
+    return int(v.get('SL', {}).get('da', [0])[0])
+
+
+# unit tested
+def get_item_weight(box):
+    return int(box.get('IT', {}).get('wt', ['0'])[0])

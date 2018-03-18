@@ -59,6 +59,18 @@ def test_get_auraculum_id():
         assert olymap.utilities.get_auraculum_id(box) == answer
 
 
+def test_get_item_weight():
+    tests = (
+        ({}, 0),
+        ({'IT': {'wt': ['24']}}, 24),
+        ({'CM': {'wt': ['24']}}, 0),
+        ({'IT': {'ga': ['24']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_item_weight(box) == answer
+
+
 def test_get_max_aura():
     tests = (
         ({}, 0),
@@ -70,6 +82,30 @@ def test_get_max_aura():
 
     for box, answer in tests:
         assert olymap.utilities.get_max_aura(box) == answer
+
+
+def test_get_ship_capacity():
+    tests = (
+        ({}, 0),
+        ({'SL': {'ca': ['25000']}}, 25000),
+        ({'CM': {'ca': ['25000']}}, 0),
+        ({'SL': {'ga': ['25000']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_ship_capacity(box) == answer
+
+
+def test_get_ship_damage():
+    tests = (
+        ({}, 0),
+        ({'SL': {'da': ['10']}}, 10),
+        ({'CM': {'da': ['10']}}, 0),
+        ({'SL': {'ga': ['10']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_ship_damage(box) == answer
 
 
 def test_get_use_key():
@@ -657,3 +693,13 @@ def test_xlate_usekey():
 
     for value, answer in tests:
         assert olymap.utilities.xlate_use_key(value) == answer
+
+
+# def test_who_has():
+#     data = {}
+#     tests = (
+#         ({}, None, None),
+#     )
+#
+#     for box, answer1, answer2 in tests:
+#         assert olymap.utilities.who_has(box, data) == answer1

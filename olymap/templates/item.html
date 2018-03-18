@@ -65,8 +65,8 @@
 {% if item.weight %}
     <tr><td>Weight:</td><td>{{ item.weight }}</td></tr>
 {% endif %}
-{% if item.who_has_oid %}
-    <tr><td>Who Has:</td><td>{{ item.who_has_name }} [<a href="{{ item.who_has_oid }}.html">{{ item.who_has_oid }}</a>]</td></tr>
+{% if item.who_has_dict %}
+    <tr><td>Who Has:</td><td>{{ item.who_has_dict.name }} [<a href="{{ item.who_has_dict.oid }}.html">{{ item.who_has_dict.oid }}</a>]</td></tr>
 {% endif %}
 {% if item.trade_good %}
     <tr>
