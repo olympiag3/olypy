@@ -20,8 +20,8 @@
 {% if item.aura_bonus %}
     <tr><td>Aura Bonus:</td><td>{{ item.aura_bonus }}</td></tr>
 {% endif %}
-{% if item.dead_body_oid %}
-    <tr><td>Dead Body of:</td><td>{{ item.dead_body_name }} [<a href="{{ item.dead_body_oid }}.html">{{ item.dead_body_oid }}</a>]</td></tr>
+{% if item.dead_body_dict %}
+    <tr><td>Dead Body of:</td><td>{{ item.dead_body_dict.name }} [<a href="{{ item.dead_body_dict.oid }}.html">{{ item.dead_body_dict.oid }}</a>]</td></tr>
 {% endif %}
 {% if item.defense %}
     <tr><td>Defense:</td><td>{{ item.defense }}</td></tr>

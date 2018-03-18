@@ -7,7 +7,6 @@ from olymap.utilities import get_auraculum_aura, get_item_weight
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
-    dead_body_id, dead_body_name = get_dead_body(v, data)
     may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
@@ -18,8 +17,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
                  'aura_bonus' : get_aura_bonus(v),
-                 'dead_body_oid' : dead_body_id,
-                 'dead_body_name' : dead_body_name,
+                 'dead_body_dict': get_dead_body(v, data),
                  'defense' : get_item_defense(v),
                  'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
@@ -91,12 +89,14 @@ def get_capacities(v):
 
 
 def get_dead_body(v, data):
-    oid =  v.get('PL', {}).get('un', [None])
-    if oid[0] is not None:
-        dead_body_rec = data[oid[0]]
-        dead_body_name = get_name (dead_body_rec, data)
-        return to_oid(oid[0]), dead_body_name
-    return None, None
+    dead_body_id =  v.get('PL', {}).get('un', [None])[0]
+    if dead_body_id is not None:
+        dead_body_box = data[dead_body_id]
+        dead_body_dict = {'id': dead_body_id,
+                          'oid': to_oid(dead_body_id),
+                          'name': get_name(dead_body_box, data)}
+        return dead_body_dict
+    return None
 
 
 def get_item_defense(v):
@@ -294,21 +294,17 @@ def get_magic_item(data, item_id, item_rec):
         return magic_dict
     elif item_type == 'dead body':
         magic_type = 'Dead Body'
-        db_oid, db_name = get_dead_body(item_rec, data)
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'dead_oid': db_oid,
-                      'dead_name': db_name}
+                      'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'npc_token':
         magic_type = 'NPC_Token'
-        npc_oid, npc_name = get_dead_body(item_rec, data)
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'npc_oid': npc_oid,
-                      'npc_name': npc_name}
+                      'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'auraculum':
         magic_type = 'Auraculum'
