@@ -39,8 +39,8 @@
 {%- if loc.controlled_by -%}
     Province controlled by {{ loc.controlled_by.name }} [<a href="{{ loc.controlled_by.oid }}.html">{{ loc.controlled_by.oid }}</a>], {{ loc.controlled_by.type }}, in {{ loc.controlled_by.loc_name }} [<a href="{{ loc.controlled_by.loc_oid }}.html">{{ loc.controlled_by.loc_oid }}</a>]
 {% endif %}
-{% if loc.controlled_by.ruled_by_oid %}
-    <br>Ruled by {{ loc.controlled_by.ruled_by_name }} [<a href="{{ loc.controlled_by.ruled_by_oid }}.html">{{ loc.controlled_by.ruled_by_oid }}</a>]
+{% if loc.controlled_by.ruled_by_dict %}
+    <br>Ruled by {{ loc.controlled_by.ruled_by_dict.name }} [<a href="{{ loc.controlled_by.ruled_by_dict.oid }}.html">{{ loc.controlled_by.ruled_by_dict.oid }}</a>]
 {% endif %}
 {% if loc.routes_out %}
     <H4>Routes leaving {{ loc.routes_out.name }}:</H4>

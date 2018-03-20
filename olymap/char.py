@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, get_item_weight
+from olymap.utilities import get_oid, get_name, get_type, to_oid, get_item_weight, get_pledged_to
 from olymap.item import get_magic_item, get_item_attack, get_attack_bonus, get_aura_bonus, get_item_defense
 from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus
 import olypy.details as details
@@ -251,18 +251,6 @@ def get_break_point(v, instance):
 def get_vision_protection(v):
     vision_protection = v.get('CM', {}).get('vp', [None])
     return vision_protection[0]
-
-
-def get_pledged_to(v, data):
-    pledged_to = v.get('CM', {}).get('pl', [None])
-    if pledged_to[0] is not None:
-        char_rec = data[pledged_to[0]]
-        if u.is_char(char_rec):
-            char_name = get_name(char_rec, data)
-            pledged_to_dict = {'oid': to_oid(pledged_to[0]),
-                               'name': char_name}
-            return pledged_to_dict
-    return None
 
 
 def get_pledged_to_us(k, data, pledge_list):

@@ -84,6 +84,19 @@ def test_get_max_aura():
         assert olymap.utilities.get_max_aura(box) == answer
 
 
+def test_get_pledged_to():
+    data = {'7271': {'firstline': ['7271 char 0'], 'na': ['Osswid the Destroyer']}}
+    tests = (
+        ({}, None),
+        ({'CM': {'pl': ['7271']}}, {'id': '7271', 'oid': '7271', 'name': 'Osswid the Destroyer'}),
+        ({'CM': {'un': ['7271']}}, None),
+        ({'IT': {'pl': ['1234']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.utilities.get_pledged_to(box, data) == answer
+
+
 def test_get_ship_capacity():
     tests = (
         ({}, 0),

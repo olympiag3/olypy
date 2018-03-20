@@ -409,19 +409,32 @@ def province(who, data):
     return who
 
 
-def top_ruler(k, data):
+# def top_ruler(k, data):
+#     cont = True
+#     while cont:
+#         top_dog = k
+#         try:
+#             v = data[k]
+#         except KeyError:
+#             return top_dog
+#         if 'CM' in v and 'pl' in v['CM']:
+#                 k = v['CM']['pl'][0]
+#         else:
+#             cont = False
+#     return top_dog
+def top_ruler(box, data):
     cont = True
+    top_dog_id = None
+    top_dog_box = None
     while cont:
-        top_dog = k
-        try:
-            v = data[k]
-        except KeyError:
-            return top_dog
-        if 'CM' in v and 'pl' in v['CM']:
-                k = v['CM']['pl'][0]
-        else:
+        top_dog_dict = get_pledged_to(box, data)
+        if top_dog_dict is None:
             cont = False
-    return top_dog
+        else:
+            top_dog_id = top_dog_dict['id']
+            top_dog_box = data[top_dog_id]
+            box = top_dog_box
+    return top_dog_box
 
 
 # unit tested
@@ -790,3 +803,17 @@ def get_ship_damage(v):
 # unit tested
 def get_item_weight(box):
     return int(box.get('IT', {}).get('wt', ['0'])[0])
+
+
+# unit tested
+def get_pledged_to(v, data):
+    pledged_to = v.get('CM', {}).get('pl', [None])[0]
+    if pledged_to is not None:
+        char_rec = data[pledged_to]
+        if is_char(char_rec):
+            char_name = get_name(char_rec, data)
+            pledged_to_dict = {'id': pledged_to,
+                               'oid': to_oid(pledged_to),
+                               'name': char_name}
+            return pledged_to_dict
+    return None
