@@ -424,6 +424,9 @@ def province(who, data):
 #     return top_dog
 def top_ruler(box, data):
     cont = True
+    save_box = box
+    # if return_unitid(box) == '7271':
+    #     print(save_box)
     top_dog_id = None
     top_dog_box = None
     while cont:
@@ -433,6 +436,8 @@ def top_ruler(box, data):
         else:
             top_dog_id = top_dog_dict['id']
             top_dog_box = data[top_dog_id]
+            # if return_unitid(save_box) == '7271':
+            #     print(top_dog_box)
             box = top_dog_box
     return top_dog_box
 
@@ -615,11 +620,14 @@ def get_name(box, data, qty=None):
         if qty and qty > 1:
             name = get_item_plural(box)
     else:
-        name = return_type(box)
+        if return_type(box) != '0':
+            name = return_type(box)
+        else:
+            name = return_kind(box)
         if name.islower():
             name = name.capitalize()
-    if name == 'Ni':
-        name = data[box['CH']['ni'][0]]['na'][0].capitalize()
+    # if name == 'Ni':
+    #     name = data[box['CH']['ni'][0]]['na'][0].capitalize()
     return name
 
 

@@ -80,12 +80,6 @@
 {% endif %}
 {% if loc.structure %}
     <table>
-        {{ loc.structure.effort_given }}
-        {{ loc.structure.effort_required }}
-        {{ loc.structure.damage }}
-        {{ loc.structure.defense }}
-        {{ loc.structure.depth }}
-        {{ loc.structure.level }}
         {% if loc.structure.effort_given and loc.structure.effort_required %}
             {% if loc.structure.effort_given < loc.structure.effort_required %}
                 <tr><td>Percent Complete:</td>
