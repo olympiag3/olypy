@@ -110,8 +110,8 @@ def get_wearable_wielding(v, data):
         if defense != '':
             defense_rec = data[defense]
             defense_dict = {'id': defense,
-                           'oid': to_oid(defense),
-                           'name': get_name(defense_rec, data)}
+                            'oid': to_oid(defense),
+                            'name': get_name(defense_rec, data)}
         else:
             defense_dict = {}
         wearable_dict = {'attack': attack_dict,
@@ -176,12 +176,13 @@ def get_loyalty(v):
 
 
 def get_stacked_under(v, data):
-    stacked_under_oid = v.get('LI', {}).get('wh', [None])
-    if stacked_under_oid[0] is not None:
-        char_rec = data[stacked_under_oid[0]]
+    stacked_under_id = v.get('LI', {}).get('wh', [None])[0]
+    if stacked_under_id is not None:
+        char_rec = data[stacked_under_id]
         if u.is_char(char_rec):
             char_name = get_name(char_rec, data)
-            stacked_under_dict = {'oid' : to_oid(stacked_under_oid[0]),
+            stacked_under_dict = {'id': stacked_under_id,
+                                  'oid' : to_oid(stacked_under_id),
                                   'name' : char_name}
             return stacked_under_dict
     return None
@@ -194,7 +195,8 @@ def get_stacked_over(v, data):
         for char in here_list:
             char_rec = data[char]
             if u.is_char(char_rec):
-                stacked_over_dict = {'oid' : to_oid(char),
+                stacked_over_dict = {'id': char,
+                                     'oid' : to_oid(char),
                                      'name' : get_name(char_rec, data)}
                 stacked_over_list.append(stacked_over_dict)
         return stacked_over_list
@@ -202,21 +204,21 @@ def get_stacked_over(v, data):
 
 
 def get_health(v):
-    health = v.get('CH', {}).get('he', [None])
-    if health[0] is not None:
-        if int(health[0]) < 100:
+    health = v.get('CH', {}).get('he', [None])[0]
+    if health is not None:
+        if int(health) < 100:
             status = ''
             if 'si' in v['CH']:
                 if v['CH']['si'][0] == '1':
                     status = '(getting worse)'
                 else:
                     status = '(getting better)'
-            if int(health[0]) < 0:
+            if int(health) < 0:
                 health_str = ('n/a {}'.format(status))
             else:
-                health_str = ('{}% {}'.format(health[0], status))
+                health_str = ('{}% {}'.format(health, status))
         else:
-            health_str = ('{}%'.format(health[0]))
+            health_str = ('{}%'.format(health))
         return health_str
     return 'n/a'
 
@@ -249,8 +251,8 @@ def get_break_point(v, instance):
 
 
 def get_vision_protection(v):
-    vision_protection = v.get('CM', {}).get('vp', [None])
-    return vision_protection[0]
+    vision_protection = v.get('CM', {}).get('vp', [None])[0]
+    return vision_protection
 
 
 def get_pledged_to_us(k, data, pledge_list):
@@ -261,7 +263,8 @@ def get_pledged_to_us(k, data, pledge_list):
         return None
     for pledgee in pledgee_list:
         pledgee_rec = data[pledgee]
-        pledgee_dict = {'oid': to_oid(pledgee),
+        pledgee_dict = {'id': pledgee,
+                        'oid': to_oid(pledgee),
                         'name': get_name(pledgee_rec, data)}
         pledged_to_us_list.append(pledgee_dict)
     return pledged_to_us_list
@@ -368,14 +371,14 @@ def get_skills_known(v, data):
 
 def get_inventory(v, data, prominent_only):
     inventory_dict = {}
-    total_items_weight = int(0)
-    total_char_weight = int(0)
-    land_cap = int(0)
-    land_weight = int(0)
-    ride_cap = int(0)
-    ride_weight = int(0)
-    fly_cap = int(0)
-    fly_weight = int(0)
+    total_items_weight = 0
+    total_char_weight = 0
+    land_cap = 0
+    land_weight = 0
+    ride_cap = 0
+    ride_weight = 0
+    fly_cap = 0
+    fly_weight = 0
     items_list = []
     unit_type = '10'
     if 'CH' in v and 'ni' in v['CH']:
