@@ -14,7 +14,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
     if not u.is_garrison(v):
         char_dict = {'id': k,
                      'oid': get_oid(k),
-                     'name': get_name(v, data),
+                     'name': get_name(v),
                      'type': get_type(v, data),
                      'kind': 'char',
                      'rank': get_rank(v),
@@ -38,7 +38,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
     else:
         char_dict = {'id': k,
                      'oid': get_oid(k),
-                     'name': get_name(v, data),
+                     'name': get_name(v),
                      'type': get_type(v, data),
                      'kind': 'char',
                      'faction': get_faction(v, data),
@@ -87,23 +87,23 @@ def get_wearable_wielding(v, data):
                 missile_rec = data[missile]
                 missile_dict = {'id': missile,
                                 'oid': to_oid(missile),
-                                'name': get_name(missile_rec, data)}
+                                'name': get_name(missile_rec)}
                 attack_dict = {}
             elif missile == '':
                 attack_rec = data[attack]
                 attack_dict = {'id': attack,
                                'oid': to_oid(attack),
-                               'name': get_name(attack_rec, data)}
+                               'name': get_name(attack_rec)}
                 missile_dict = {}
             else:
                 missile_rec = data[missile]
                 missile_dict = {'id': missile,
                                 'oid': to_oid(missile),
-                                'name': get_name(missile_rec, data)}
+                                'name': get_name(missile_rec)}
                 attack_rec = data[attack]
                 attack_dict = {'id': attack,
                                'oid': to_oid(attack),
-                               'name': get_name(attack_rec, data)}
+                               'name': get_name(attack_rec)}
         else:
             attack_dict = {}
             missile_dict = {}
@@ -111,7 +111,7 @@ def get_wearable_wielding(v, data):
             defense_rec = data[defense]
             defense_dict = {'id': defense,
                             'oid': to_oid(defense),
-                            'name': get_name(defense_rec, data)}
+                            'name': get_name(defense_rec)}
         else:
             defense_dict = {}
         wearable_dict = {'attack': attack_dict,
@@ -150,7 +150,7 @@ def get_faction(v, data):
     faction_oid = v.get('CH', {}).get('lo', [None])
     if faction_oid[0] is not None:
         player_rec = data[faction_oid[0]]
-        faction_name = get_name(player_rec, data)
+        faction_name = get_name(player_rec)
         faction_dict = {'oid' : to_oid(faction_oid[0]),
                         'name' : faction_name}
         return faction_dict
@@ -161,7 +161,7 @@ def get_loc(v, data):
     loc_oid = v.get('LI', {}).get('wh', [None])
     if loc_oid[0] is not None:
         loc_rec = data[loc_oid[0]]
-        loc_name = get_name(loc_rec, data)
+        loc_name = get_name(loc_rec)
         loc_dict = {'id': loc_oid[0],
                     'oid' : to_oid(loc_oid[0]),
                     'name' : loc_name,
@@ -180,7 +180,7 @@ def get_stacked_under(v, data):
     if stacked_under_id is not None:
         char_rec = data[stacked_under_id]
         if u.is_char(char_rec):
-            char_name = get_name(char_rec, data)
+            char_name = get_name(char_rec)
             stacked_under_dict = {'id': stacked_under_id,
                                   'oid' : to_oid(stacked_under_id),
                                   'name' : char_name}
@@ -197,7 +197,7 @@ def get_stacked_over(v, data):
             if u.is_char(char_rec):
                 stacked_over_dict = {'id': char,
                                      'oid' : to_oid(char),
-                                     'name' : get_name(char_rec, data)}
+                                     'name' : get_name(char_rec)}
                 stacked_over_list.append(stacked_over_dict)
         return stacked_over_list
     return None
@@ -265,7 +265,7 @@ def get_pledged_to_us(k, data, pledge_list):
         pledgee_rec = data[pledgee]
         pledgee_dict = {'id': pledgee,
                         'oid': to_oid(pledgee),
-                        'name': get_name(pledgee_rec, data)}
+                        'name': get_name(pledgee_rec)}
         pledged_to_us_list.append(pledgee_dict)
     return pledged_to_us_list
 
@@ -282,7 +282,7 @@ def get_aura(v, data):
             auraculum_aura = u.get_auraculum_aura(auraculum_box)
             auraculum_dict = {'id': auraculum_id,
                               'oid': to_oid(auraculum_id),
-                              'name': get_name(auraculum_box, data),
+                              'name': get_name(auraculum_box),
                               'aura': auraculum_aura}
         else:
             auraculum_dict = None
@@ -308,7 +308,7 @@ def get_prisoners(k, data, prisoner_chain):
             if 'he' in prisoner_rec['CH']:
                 prisoner_health_text = ' (health {})'.format(prisoner_rec['CH']['he'][0])
         prisoner_dict = {'oid': to_oid(prisoner),
-                         'name': get_name(prisoner_rec, data),
+                         'name': get_name(prisoner_rec),
                          'health_text': prisoner_health_text}
         prisoner_list.append(prisoner_dict)
     return prisoner_list
@@ -349,7 +349,7 @@ def get_skills_known(v, data):
             else:
                 req_skill = '0'
             skill_dict = {'oid': to_oid(skill_id),
-                          'name': get_name(skillz, data),
+                          'name': get_name(skillz),
                           'req_skill': req_skill,
                           'known': 'Yes',
                           'days_studied': None,
@@ -360,7 +360,7 @@ def get_skills_known(v, data):
                 printunknown = True
             skillz = data[skill_id]
             skill_dict = {'oid': to_oid(skill_id),
-                          'name': get_name(skillz, data),
+                          'name': get_name(skillz),
                           'req_skill': None,
                           'known': 'No',
                           'days_studied': days_studied,
@@ -591,7 +591,7 @@ def get_items_list(v, data, prominent, item_select=None):
                 item_qty = int(item_list[item + 1])
                 item_dict = {'id': id,
                              'oid': oid,
-                             'name': get_name(item_rec, data, item_qty),
+                             'name': get_name(item_rec, item_qty),
                              'qty': item_qty}
                 items_list.append(item_dict)
     return items_list
@@ -601,7 +601,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
     if not u.is_garrison(v):
         char_dict = {'id': k,
                      'oid': get_oid(k),
-                     'name': get_name(v, data),
+                     'name': get_name(v),
                      'type': get_type(v, data),
                      'kind': 'char',
                      'rank': get_rank(v),
@@ -634,7 +634,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
     else:
         char_dict = {'id': k,
                      'oid': get_oid(k),
-                     'name': get_name(v, data),
+                     'name': get_name(v),
                      'type': None,
                      'kind': 'char',
                      'rank': None,
@@ -708,7 +708,7 @@ def get_where(v, data):
         where_rec = data[where_id]
         where_dict = {'id': where_id,
                       'oid': to_oid(where_id),
-                      'name': get_name(where_rec, data)}
+                      'name': get_name(where_rec)}
         return where_dict
     return None
 

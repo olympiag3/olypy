@@ -34,7 +34,7 @@ def build_loc_dict(v, data):
     loc_rec = data[loc_id]
     loc_dict = {'id': loc_id,
                 'oid': get_oid(loc_id),
-                'name': get_name(loc_rec, data),
+                'name': get_name(loc_rec),
                 'type': get_type(loc_rec, data)}
     return loc_dict
 
@@ -52,7 +52,7 @@ def build_owner_dict(v, data):
         owner_rec = data[owner_id]
         owner_dict = {'id': owner_id,
                       'oid': get_oid(owner_id),
-                      'name': get_name(owner_rec, data)}
+                      'name': get_name(owner_rec)}
     else:
         owner_dict = None
     return owner_dict
@@ -120,7 +120,7 @@ def build_non_prominent_items_dict(k, v, data):
 
 def build_basic_ship_dict(k, v, data):
     ship_dict = {'oid': get_oid(k),
-                 'name': get_name(v, data),
+                 'name': get_name(v),
                  'type': get_type(v, data),
                  'kind': 'ship',
                  'complete': get_complete(v),
@@ -135,7 +135,7 @@ def build_basic_ship_dict(k, v, data):
 
 def build_complete_ship_dict(k, v, data, instance, pledge_chain, prisoner_chain):
     ship_dict = {'oid': get_oid(k),
-                 'name': get_name(v, data),
+                 'name': get_name(v),
                  'type': get_type(v, data),
                  'kind': 'kind',
                  'complete': get_complete(v),

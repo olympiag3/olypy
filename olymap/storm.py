@@ -14,7 +14,7 @@ def get_strength(v):
 
 def build_complete_storm_dict(k, v, data, storm_chain):
     storm_dict = {'oid': get_oid(k),
-                  'name': get_name(v, data),
+                  'name': get_name(v),
                   'type': get_type(v, data),
                   'kind': 'storm',
                   'strength': get_strength(v),
@@ -25,7 +25,7 @@ def build_complete_storm_dict(k, v, data, storm_chain):
 
 def build_basic_storm_dict(k, v, data):
     storm_dict = {'oid': get_oid(k),
-                  'name': get_name(v, data),
+                  'name': get_name(v),
                   'type': get_type(v, data),
                   'kind': 'storm',
                   'strength': get_strength(v)}
@@ -36,7 +36,7 @@ def build_loc_dict(v, data):
     loc_id = v['LI']['wh'][0]
     loc_rec = data[loc_id]
     loc_dict = {'oid': get_oid(loc_id),
-                'name': get_name(loc_rec, data),
+                'name': get_name(loc_rec),
                 'type': get_type(loc_rec, data)}
     return loc_dict
 
@@ -55,7 +55,7 @@ def build_ship_dict(k, data, storm_chain):
         ship_rec = data[ship_id]
         ship_dict = {'id': ship_id,
                      'oid': get_oid(ship_id),
-                     'name': get_name(ship_rec, data)}
+                     'name': get_name(ship_rec)}
     else:
         ship_dict = None
     return ship_dict

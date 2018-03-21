@@ -614,7 +614,7 @@ def calc_ship_pct_loaded(data, k, box):
     return pct_loaded
 
 
-def get_name(box, data, qty=None):
+def get_name(box, qty=None):
     if 'na' in box:
         name = box['na'][0]
         if qty and qty > 1:
@@ -711,7 +711,7 @@ def get_who_has(box, data):
         who_has_box = data[who_has_id]
         who_has_dict = {'id': who_has_id,
                         'oid': to_oid(who_has_id),
-                        'name': get_name(who_has_box, data),
+                        'name': get_name(who_has_box),
                         'kind': return_kind(who_has_box)}
         return who_has_dict
     return None
@@ -819,7 +819,7 @@ def get_pledged_to(v, data):
     if pledged_to is not None:
         char_rec = data[pledged_to]
         if is_char(char_rec):
-            char_name = get_name(char_rec, data)
+            char_name = get_name(char_rec)
             pledged_to_dict = {'id': pledged_to,
                                'oid': to_oid(pledged_to),
                                'name': char_name}

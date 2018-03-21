@@ -21,7 +21,7 @@ pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down
 
 def build_basic_loc_dict(k, v, data, garrisons_chain=None):
     loc_dict = {'oid': to_oid(k),
-                'name': get_name(v, data),
+                'name': get_name(v),
                 'type': get_type(v, data),
                 'kind': u.return_kind(v),
                 'where': get_where_info(v, data),
@@ -43,7 +43,7 @@ def get_where_info(v, data):
         else:
             where_dict = {'id': where_id[0],
                           'oid': to_oid(where_id[0]),
-                          'name': get_name(where_rec, data),
+                          'name': get_name(where_rec),
                           'type': get_type(where_rec, data)}
     else:
         where_dict = None
@@ -72,7 +72,7 @@ def get_barrier(k, v, data):
     barrier = v.get('LO', {}).get('ba', [None])
     if barrier[0] is not None and barrier[0] != '0':
         barrier_dict = {'oid': to_oid(k),
-                        'name': get_name(v, data)}
+                        'name': get_name(v)}
         return barrier_dict
     else:
         return None
@@ -82,7 +82,7 @@ def get_shroud(k, v, data):
     shroud = v.get('LO', {}).get('sh', [None])
     if shroud[0] is not None and shroud[0] != '0':
         shroud_dict = {'oid': to_oid(k),
-                       'name': get_name(v, data)}
+                       'name': get_name(v)}
         return shroud_dict
     else:
         return None
@@ -117,7 +117,7 @@ def get_controlled_by(v, data):
                         if top_guy_box is not None:
                             ruled_by_dict = {'id': u.return_unitid(top_guy_box),
                                              'oid': to_oid(u.return_unitid(top_guy_box)),
-                                             'name': get_name(top_guy_box, data)}
+                                             'name': get_name(top_guy_box)}
                     controlled_dict = {'oid': castle_oid,
                                        'name': castle_name,
                                        'type': castle_type,
@@ -170,7 +170,7 @@ def get_destinations(k, v, data):
                 if u.return_kind(here_record) == 'gate':
                     direction = 'Gate'
                 else:
-                    direction = get_name(here_record, data)
+                    direction = get_name(here_record)
                 to_dict = create_loc_to_dict_entry(data, direction, to_rec, here_record, region_rec)
                 dest_list.append(to_dict)
     if 'SL' in v and 'lt' in v['SL']:
@@ -184,10 +184,10 @@ def get_destinations(k, v, data):
     region_rec = data[region_id]
     dest_dict = {'id': k,
                  'oid': to_oid(k),
-                 'name': get_name(v, data),
+                 'name': get_name(v),
                  'type': get_type(v, data),
                  'region_oid': to_oid(region_id),
-                 'region_name': get_name(region_rec, data),
+                 'region_name': get_name(region_rec),
                  'dest': dest_list}
     return dest_dict
 
@@ -195,12 +195,12 @@ def get_destinations(k, v, data):
 def create_loc_to_dict_entry(data, direction, to_loc_rec, from_loc_rec, region_rec):
     to_dict = {'id': u.return_unitid(to_loc_rec),
                'oid': to_oid(u.return_unitid(to_loc_rec)),
-               'name': get_name(to_loc_rec, data),
+               'name': get_name(to_loc_rec),
                'type': get_type(to_loc_rec, data),
                'is_port': u.is_port_city(to_loc_rec, data),
                'prov_port': u.province_has_port_city(to_loc_rec, data),
                'region_oid': to_oid(u.return_unitid(region_rec)),
-               'region_name': get_name(region_rec, data),
+               'region_name': get_name(region_rec),
                'direction': direction,
                'barrier': get_barrier(u.return_unitid(to_loc_rec), to_loc_rec, data),
                'distance': u.calc_exit_distance(from_loc_rec, to_loc_rec),
@@ -242,10 +242,10 @@ def get_routes_out(k, v, data):
         region_rec = data[region_id]
         dest_dict = {'id': k,
                      'oid': to_oid(k),
-                     'name': get_name(v, data),
+                     'name': get_name(v),
                      'type': get_type(v, data),
                      'region_oid': to_oid(region_id),
-                     'region_name': get_name(region_rec, data),
+                     'region_name': get_name(region_rec),
                      'dest': dest_list}
     return dest_dict
 
@@ -320,7 +320,7 @@ def get_skills_taught(v, data):
             for skill in skills_list:
                 skill_rec = data[skill]
                 skills_dict = {'oid': to_oid(skill),
-                               'name': get_name(skill_rec, data)}
+                               'name': get_name(skill_rec)}
                 skills_taught_list.append(skills_dict)
     return skills_taught_list
 
@@ -345,7 +345,7 @@ def get_markets(k, v, data, trade_chain):
                             if recip_type != trade_list[trade]:
                                 recip_loc = recip[0]
                                 recip_rec = data[recip_loc]
-                                recip_name = get_name(recip_rec, data)
+                                recip_name = get_name(recip_rec)
                                 recip_trade_list = recip_rec['tl']
                                 for recip in range(0, len(recip_trade_list), 8):
                                     if recip_trade_list[recip + 1] == trade_list[trade+1]:
@@ -361,11 +361,11 @@ def get_markets(k, v, data, trade_chain):
                 market_dict = {'type': trade_list[trade],
                                'item_id': trade_list[trade + 1],
                                'item_oid': to_oid(trade_list[trade + 1]),
-                               'item_name': get_name(item_rec, data),
+                               'item_name': get_name(item_rec),
                                'item_weight': get_item_weight(item_rec),
                                'who_id': k,
                                'who_oid': to_oid(k),
-                               'who_name': get_name(v, data),
+                               'who_name': get_name(v),
                                'who_qty': trade_list[trade + 2],
                                'who_price': trade_list[trade + 3],
                                'recip_list': recip_list}
@@ -392,7 +392,7 @@ def get_markets(k, v, data, trade_chain):
                                                 if recip_type != trade_list[trade]:
                                                     recip_loc = recip[0]
                                                     recip_rec = data[recip_loc]
-                                                    recip_name = get_name(recip_rec, data)
+                                                    recip_name = get_name(recip_rec)
                                                     recip_trade_list = recip_rec['tl']
                                                     for recip in range(0, len(recip_trade_list), 8):
                                                         if recip_trade_list[recip + 1] == trade_list[trade + 1]:
@@ -408,11 +408,11 @@ def get_markets(k, v, data, trade_chain):
                                     market_dict = {'type': trade_list[trade],
                                                    'item_id': trade_list[trade + 1],
                                                    'item_oid': to_oid(trade_list[trade + 1]),
-                                                   'item_name': get_name(item_rec, data),
+                                                   'item_name': get_name(item_rec),
                                                    'item_weight': get_item_weight(item_rec),
                                                    'who_id': un[0],
                                                    'who_oid': to_oid(un[0]),
-                                                   'who_name': get_name(charac_rec, data),
+                                                   'who_name': get_name(charac_rec),
                                                    'who_qty': trade_list[trade + 2],
                                                    'who_price': trade_list[trade + 3],
                                                    'recip_list' : recip_list}
@@ -506,7 +506,7 @@ def get_hidden_access(k, v, data, hidden_chain):
                 for hidden in hidden_list:
                     hidden_rec = data[hidden]
                     hidden_dict = {'oid': to_oid(hidden),
-                                   'name': get_name(hidden_rec, data)}
+                                   'name': get_name(hidden_rec)}
                     hidden_access_list.append(hidden_dict)
     return hidden_access_list
 
@@ -544,7 +544,7 @@ def get_character_info(k, v, data, print_province):
 
 def build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain, instance, inst_dict, map_matrices):
     loc_dict = {'oid': to_oid(k),
-                'name': get_name(v, data),
+                'name': get_name(v),
                 'type': get_type(v, data),
                 'kind': 'loc',
                 'where': get_where_info(v, data),
@@ -571,7 +571,7 @@ def get_region(k, data):
     region_rec = data[region_id]
     region_dict = {'id': region_id,
                    'oid': to_oid(region_id),
-                   'name': get_name(region_rec, data)}
+                   'name': get_name(region_rec)}
     return region_dict
 
 
@@ -664,7 +664,7 @@ def get_gate_start_end(v, data):
         if 'LI' in v and 'wh' in v['LI']:
             from_loc_id = v['LI']['wh'][0]
             from_loc_rec = data[from_loc_id]
-            from_loc_name = get_name(from_loc_rec, data)
+            from_loc_name = get_name(from_loc_rec)
             from_loc_dict = {'id': from_loc_id,
                              'oid': to_oid(from_loc_id),
                              'name': from_loc_name}
@@ -672,7 +672,7 @@ def get_gate_start_end(v, data):
         if 'GA' in v and 'tl' in v['GA']:
             to_loc_id = v['GA']['tl'][0]
             to_loc_rec = data[to_loc_id]
-            to_loc_name = get_name(to_loc_rec, data)
+            to_loc_name = get_name(to_loc_rec)
             to_loc_dict = {'id': to_loc_id,
                            'oid': to_oid(to_loc_id),
                            'name': to_loc_name}

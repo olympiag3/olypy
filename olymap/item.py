@@ -8,7 +8,7 @@ from olymap.utilities import get_auraculum_aura, get_item_weight
 
 def build_complete_item_dict(k, v, data, trade_chain):
     item_dict = {'oid' : get_oid(k),
-                 'name' : get_name(v, data),
+                 'name' : get_name(v),
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
@@ -40,7 +40,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
 def build_basic_item_dict(k, v, data, trade_chain):
     item_dict = {'id': k,
                  'oid' : get_oid(k),
-                 'name' : get_name(v, data),
+                 'name' : get_name(v),
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
@@ -92,7 +92,7 @@ def get_dead_body(v, data):
         dead_body_box = data[dead_body_id]
         dead_body_dict = {'id': dead_body_id,
                           'oid': to_oid(dead_body_id),
-                          'name': get_name(dead_body_box, data)}
+                          'name': get_name(dead_body_box)}
         return dead_body_dict
     return None
 
@@ -127,7 +127,7 @@ def get_may_study(v, data):
         skill_box = data[may_study_id]
         may_study_dict = {'id': may_study_id,
                           'oid': to_oid(may_study_id),
-                          'name': get_name(skill_box, data)}
+                          'name': get_name(skill_box)}
         return may_study_dict
     return None
 
@@ -142,7 +142,7 @@ def get_missile_bonus(v):
 def get_plural(v, data):
     plural = v.get('IT', {}).get('pl', [None])
     if plural[0] is None:
-        plural = [get_name(v, data)]
+        plural = [get_name(v)]
     return plural
 
 
@@ -156,14 +156,14 @@ def get_project_cast(v, data):
                 region_id = u.region(projected_cast_id, data)
                 region_rec = data[region_id]
                 region_oid = to_oid(region_id)
-                region_name = get_name(region_rec, data)
+                region_name = get_name(region_rec)
             except KeyError:
                 region_id = None
                 region_oid = None
                 region_name = None
             projected_dict = {'id': projected_cast_id,
                               'oid': to_oid(projected_cast_id),
-                              'name': get_name(projected_cast_rec, data),
+                              'name': get_name(projected_cast_rec),
                               'kind': u.return_kind(projected_cast_rec),
                               'region_id': region_id,
                               'region_oid': region_oid,
@@ -194,12 +194,12 @@ def get_trade_good(k, v, data, trade_chain):
                 if loc[1] == '1':
                     buy_entry = {'id': loc[0],
                                  'oid': to_oid(loc[0]),
-                                 'name': get_name(loc_rec, data)}
+                                 'name': get_name(loc_rec)}
                     buy_list.append(buy_entry)
                 else:
                     sell_entry = {'id': loc[0],
                                  'oid': to_oid(loc[0]),
-                                 'name': get_name(loc_rec, data)}
+                                 'name': get_name(loc_rec)}
                     sell_list.append(sell_entry)
             trade_dict = {'buy': buy_list,
                           'sell': sell_list}
@@ -215,7 +215,7 @@ def get_magic_item(data, item_id, item_rec):
             if use_key == '2':
                 magic_type = 'Healing Potion'
                 magic_dict = {'oid': to_oid(item_id),
-                              'name': get_name(item_rec, data),
+                              'name': get_name(item_rec),
                               'magic_type': magic_type}
                 return magic_dict
             elif use_key == '5':
@@ -236,14 +236,14 @@ def get_magic_item(data, item_id, item_rec):
                             loc_kind = u.return_kind(location)
                         else:
                             loc_kind = 'location'
-                        loc_name = get_name(location, data)
+                        loc_name = get_name(location)
                         loc_id = to_oid(u.return_unitid(location))
                 else:
                     loc_id = '(no id)'
                     loc_oid = '(no id)'
                 magic_type = 'Projected Cast'
                 magic_dict = {'oid': to_oid(item_id),
-                              'name': get_name(item_rec, data),
+                              'name': get_name(item_rec),
                               'loc_name': loc_name,
                               'loc_kind': loc_kind,
                               'loc_id': loc_id,
@@ -263,7 +263,7 @@ def get_magic_item(data, item_id, item_rec):
             except KeyError:
                 skill_name = 'unknown'
             else:
-                skill_name = get_name(skill, data)
+                skill_name = get_name(skill)
             if 'SK' in skill and 'rs' in skill['SK']:
                 try:
                     skill2 = data[skill['SK']['rs'][0]]
@@ -287,28 +287,28 @@ def get_magic_item(data, item_id, item_rec):
                          'aura': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),
-                      'name': get_name(item_rec, data),
+                      'name': get_name(item_rec),
                       'magic_type': magic_type,
                       'artifact_dict': artifact_dict}
         return magic_dict
     elif item_type == 'dead body':
         magic_type = 'Dead Body'
         magic_dict = {'oid': to_oid(item_id),
-                      'name': get_name(item_rec, data),
+                      'name': get_name(item_rec),
                       'magic_type': magic_type,
                       'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'npc_token':
         magic_type = 'NPC_Token'
         magic_dict = {'oid': to_oid(item_id),
-                      'name': get_name(item_rec, data),
+                      'name': get_name(item_rec),
                       'magic_type': magic_type,
                       'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'auraculum':
         magic_type = 'Auraculum'
         magic_dict = {'oid': to_oid(item_id),
-                      'name': get_name(item_rec, data),
+                      'name': get_name(item_rec),
                       'magic_type': magic_type,
                       'aura': get_auraculum_aura(item_rec)}
         return magic_dict

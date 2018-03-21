@@ -184,10 +184,10 @@ def skill_xref_report(data, teaches_chain, outdir):
                 where_rec = data[city_rec['LI']['wh'][0]]
                 loc_dict = {'id': city,
                             'oid': to_oid(city),
-                            'name': get_name(city_rec, data)}
+                            'name': get_name(city_rec)}
                 sort_skill_xref_dict = {'id': unit,
                                         'oid': to_oid(unit),
-                                        'name': get_name(skill_rec, data),
+                                        'name': get_name(skill_rec),
                                         'loc_dict': loc_dict,
                                         'where_dict': get_where_info(city_rec, data),
                                         'region_dict': get_region(city, data)}
@@ -215,20 +215,20 @@ def trade_report(data, trade_chain, outdir):
                 if city[1] == '1':
                     buy_dict = {'id': city_id,
                                 'oid': to_oid(city_id),
-                                'name': get_name(city_rec, data),
+                                'name': get_name(city_rec),
                                 'region_oid': to_oid(region_id),
-                                'region_name': get_name(region_rec, data)}
+                                'region_name': get_name(region_rec)}
                     buy_list.append(buy_dict)
                 else:
                     sell_dict = {'id': city_id,
                                  'oid': to_oid(city_id),
-                                 'name': get_name(city_rec, data),
+                                 'name': get_name(city_rec),
                                  'region_oid': to_oid(region_id),
-                                 'region_name': get_name(region_rec, data)}
+                                 'region_name': get_name(region_rec)}
                     sell_list.append(sell_dict)
             trade_entry = {'id': unit,
                            'oid': to_oid(unit),
-                           'name': get_name(item_rec, data),
+                           'name': get_name(item_rec),
                            'buy_list': buy_list,
                            'sell_list': sell_list}
             sort_trade_list.append((trade_entry))
@@ -321,14 +321,14 @@ def graveyard_report(data, outdir):
             target_rec = data[target_id]
             target_dict = {'id': target_id,
                            'oid': to_oid(target_id),
-                           'name': get_name(target_rec, data)}
+                           'name': get_name(target_rec)}
         else:
             target_rec = None
             target_dict = None
             target_region_dict = None
         sort_graveyard_dict = {'id:' : unit,
                                'oid': to_oid(unit),
-                               'name': get_name(graveyard_rec, data),
+                               'name': get_name(graveyard_rec),
                                'where_dict': get_where_info(graveyard_rec, data),
                                'region_dict': get_region(unit, data),
                                'target_dict': target_dict}
@@ -356,7 +356,7 @@ def faeryhill_report(data, outdir):
             target_rec = data[target_id]
             target_dict = {'id': target_id,
                            'oid': to_oid(target_id),
-                           'name': get_name(target_rec, data)}
+                           'name': get_name(target_rec)}
             target_region_dict = get_region(target_id, data)
         else:
             target_rec = None
@@ -364,7 +364,7 @@ def faeryhill_report(data, outdir):
             target_region_dict = None
         sort_faeryhill_dict = {'id:' : unit,
                                'oid': to_oid(unit),
-                               'name': get_name(faeryhill_rec, data),
+                               'name': get_name(faeryhill_rec),
                                'where_dict': get_where_info(faeryhill_rec, data),
                                'region_dict': get_region(unit, data),
                                'target_dict': target_dict,
@@ -467,7 +467,7 @@ def gold_report(data, outdir):
             if int(items_list[0]['qty']) > 10000:
                 gold_dict = {'id': unit,
                              'oid': to_oid(unit),
-                             'name': get_name(character_rec, data),
+                             'name': get_name(character_rec),
                              'loc': get_loc(character_rec, data),
                              'qty': int(items_list[0]['qty'])}
                 sort_gold_list.append(gold_dict)

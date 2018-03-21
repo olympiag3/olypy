@@ -48,7 +48,7 @@ def get_unit_list(v, data):
             unit_rec = data[unit]
             unit_dict={'id': unit,
                        'oid': to_oid(unit),
-                       'name': get_name(unit_rec, data)}
+                       'name': get_name(unit_rec)}
             units_list.append(unit_dict)
     return units_list
 
@@ -56,7 +56,7 @@ def get_unit_list(v, data):
 def build_complete_player_dict(k, v, data):
     player_dict = {'id': k,
                    'oid': get_oid(k),
-                   'name': get_name(v, data),
+                   'name': get_name(v),
                    'type': get_type(v, data),
                    'kind': 'player',
                    'email': get_email(v),

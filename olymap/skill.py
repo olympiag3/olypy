@@ -14,7 +14,7 @@ def get_required_skill(v, data):
         skill_rec = data[skill_id]
         required_skill_dict = {'id': skill_id,
                                'oid': to_oid(skill_id),
-                               'name': get_name(skill_rec, data)}
+                               'name': get_name(skill_rec)}
         return required_skill_dict
     return None
 
@@ -32,7 +32,7 @@ def get_known_by(k, v, data, skills_known_chain):
             char_rec = data[char]
             char_dict = {'id': char,
                          'oid': to_oid(char),
-                         'name': get_name(char_rec, data)}
+                         'name': get_name(char_rec)}
             known_by_list.append(char_dict)
     return known_by_list
 
@@ -45,7 +45,7 @@ def get_child_skills(k, v, data, child_skills_chain):
             skill_rec = data[skill]
             skill_dict = {'id': skill,
                          'oid': to_oid(skill),
-                         'name': get_name(skill_rec, data)}
+                         'name': get_name(skill_rec)}
             child_skills_list.append(skill_dict)
     return child_skills_list
 
@@ -62,13 +62,13 @@ def get_taught_in(k, v, data, teaches_chain):
             region_rec = data[region_id]
             loc_dict = {'id': loc,
                         'oid': to_oid(loc),
-                        'name': get_name(loc_rec, data),
+                        'name': get_name(loc_rec),
                         'where_id': where_id,
                         'where_oid': to_oid(where_id),
-                        'where_name': get_name(where_rec, data),
+                        'where_name': get_name(where_rec),
                         'region_id': region_id,
                         'region_oid': to_oid(region_id),
-                        'region_name': get_name(region_rec, data)}
+                        'region_name': get_name(region_rec)}
             taught_in_list.append(loc_dict)
     return taught_in_list
 
@@ -76,7 +76,7 @@ def get_taught_in(k, v, data, teaches_chain):
 def build_complete_skill_dict(k, v, data, teaches_chain, child_skills_chain, skills_known_chain):
     skills_dict = {'id': k,
                    'oid': to_oid(k),
-                   'name': get_name(v, data),
+                   'name': get_name(v),
                    'required_skill': get_required_skill(v, data),
                    'learn_time': get_learn_time(v),
                    'known_by': get_known_by(k, v, data, skills_known_chain),
@@ -88,7 +88,7 @@ def build_complete_skill_dict(k, v, data, teaches_chain, child_skills_chain, ski
 def build_basic_skill_dict(k, v, data, teaches_chain, child_skills_chain, skills_known_chain):
     skills_dict = {'id': k,
                    'oid': to_oid(k),
-                   'name': get_name(v, data),
+                   'name': get_name(v),
                    'required_skill': get_required_skill(v, data),
                    'learn_time': get_learn_time(v)}
     return skills_dict
