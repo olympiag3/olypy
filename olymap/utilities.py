@@ -29,6 +29,7 @@ def get_item_plural(box):
     return itemz_plural
 
 
+# unit tested
 def return_type(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
@@ -62,6 +63,7 @@ def return_short_type(box):
     return short_type
 
 
+# unit tested
 def return_kind(box):
     # return 2nd argument of firstlist
     firstline = return_firstline(box)
@@ -69,6 +71,7 @@ def return_kind(box):
     return kind
 
 
+# unit tested
 def return_unitid(box):
     # return 1st argument of firstlist
     firstline = return_firstline(box)
@@ -76,6 +79,7 @@ def return_unitid(box):
     return unitid
 
 
+# unit tested
 def return_firstline(box):
     # return firstlist from lib entry
     # firstline
@@ -368,6 +372,7 @@ def resolve_trades(data):
     return ret
 
 
+# unit tested
 def loc_depth(loc_type):
     if loc_type == 'region':
         return 1
@@ -382,6 +387,7 @@ def loc_depth(loc_type):
     return 0
 
 
+# unit tested
 def region(who, data):
     v = data[who]
     while (int(who) > 0 and
@@ -391,6 +397,7 @@ def region(who, data):
     return who
 
 
+# unit tested
 def province(who, data):
     v = data[who]
     if loc_depth(return_type(v)) == 1:
@@ -402,68 +409,83 @@ def province(who, data):
     return who
 
 
-def top_ruler(k, data):
+# def top_ruler(k, data):
+#     cont = True
+#     while cont:
+#         top_dog = k
+#         try:
+#             v = data[k]
+#         except KeyError:
+#             return top_dog
+#         if 'CM' in v and 'pl' in v['CM']:
+#                 k = v['CM']['pl'][0]
+#         else:
+#             cont = False
+#     return top_dog
+def top_ruler(box, data):
     cont = True
+    top_dog_id = None
+    top_dog_box = None
     while cont:
-        top_dog = k
-        try:
-            v = data[k]
-        except KeyError:
-            return top_dog
-        if 'CM' in v and 'pl' in v['CM']:
-                k = v['CM']['pl'][0]
-        else:
+        top_dog_dict = get_pledged_to(box, data)
+        if top_dog_dict is None:
             cont = False
-    return top_dog
+        else:
+            top_dog_id = top_dog_dict['id']
+            top_dog_box = data[top_dog_id]
+            box = top_dog_box
+    return top_dog_box
 
 
-def calc_exit_distance(loc1, loc2):
-    if loc1 is None or loc2 is None:
+# unit tested
+def calc_exit_distance(box1, box2):
+    if box1 is None or box2 is None:
         return 0
-    if return_type(loc1) == 'pit' or return_type(loc2) == 'pit':
+    if return_type(box1) == 'pit' or return_type(box2) == 'pit':
         return 28
-    if loc_depth(return_type(loc1)) > loc_depth(return_type(loc2)):
-        tmp = loc1
-        loc1 = loc2
-        loc2 = tmp
-    loc1_return_type = return_type(loc1)
-    loc2_return_type = return_type(loc2)
-    # w_d = loc_depth(loc1_return_type)
-    d_d = loc_depth(loc2_return_type)
+    if loc_depth(return_type(box1)) > loc_depth(return_type(box2)):
+        tmp = box1
+        box1 = box2
+        box2 = tmp
+    box1_return_type = return_type(box1)
+    box2_return_type = return_type(box2)
+    # w_d = loc_depth(box1_return_type)
+    d_d = loc_depth(box2_return_type)
     if d_d == 4:
         return 0
     if d_d == 3:
         return 1
-    if is_ocean(loc1) and not is_ocean(loc2):
+    if is_ocean(box1) and not is_ocean(box2):
         return 2
-    if not is_ocean(loc1) and is_ocean(loc2):
+    if not is_ocean(box1) and is_ocean(box2):
         return 2
     #
     # skipping province logic for now
     #
-    if is_ocean(loc2):
+    if is_ocean(box2):
         return 3
-    elif is_mountain(loc2):
+    elif is_mountain(box2):
         return 10
-    elif loc2_return_type == 'forest':
+    elif box2_return_type == 'forest':
         return 8
-    elif loc2_return_type == 'swamp':
+    elif box2_return_type == 'swamp':
         return 14
-    elif loc2_return_type == 'desert':
+    elif box2_return_type == 'desert':
         return 8
-    elif loc2_return_type == 'plain':
+    elif box2_return_type == 'plain':
         return 7
-    elif loc2_return_type == 'underground':
+    elif box2_return_type == 'underground':
         return 7
-    elif loc2_return_type == 'cloud':
+    elif box2_return_type == 'cloud':
         return 7
-    elif loc2_return_type == 'tunnel':
+    elif box2_return_type == 'tunnel':
         return 5
-    elif loc2_return_type == 'chamber':
+    elif box2_return_type == 'chamber':
         return 5
     return 0
 
 
+# unit tested
 def is_port_city(box, data):
     if not is_city(box):
         return False
@@ -479,6 +501,7 @@ def is_port_city(box, data):
     return False
 
 
+# unit tested
 def province_has_port_city(box, data):
     if 'LI' in box and 'hl' in box['LI']:
         here_list = box['LI']['hl']
@@ -506,40 +529,41 @@ def is_priest(box):
     return False
 
 
+# unit tested
 def xlate_magetype(box, data):
     if is_magician(box):
-        max_aura = 0
+        max_aura = get_max_aura(box)
         auraculum_aura = 0
-        if 'CM' in box and 'ma' in box['CM']:
-            max_aura = int(box['CM']['ma'][0])
-            if 'ar' in box['CM']:
-                auraculum = data[box['CM']['ar'][0]]
-                auraculum_id = box['CM']['ar'][0]
-                if 'IM' in auraculum and 'au' in auraculum['IM']:
-                    auraculum_aura = int(auraculum['IM']['au'][0])
-            mage_level = max_aura + auraculum_aura
-            if mage_level <= 5:
-                return ''
-            elif mage_level <= 10:
-                return 'conjurer'
-            elif mage_level <= 15:
-                return 'mage'
-            elif mage_level <= 20:
-                return 'wizard'
-            elif mage_level <= 30:
-                return 'sorcerer'
-            elif mage_level <= 40:
-                return '6th black circle'
-            elif mage_level <= 50:
-                return '5th black circle'
-            elif mage_level <= 60:
-                return '4th black circle'
-            elif mage_level <= 70:
-                return '3rd black circle'
-            elif mage_level <= 80:
-                return '2nd black circle'
+        if get_auraculum_id(box) is not None:
+            auraculum_box = data[get_auraculum_id(box)]
+            auraculum_aura = get_auraculum_aura(auraculum_box)
+            if auraculum_aura is None:
+                auraculum_aura = 0
             else:
-                return 'master of the black arts'
+                auraculum_aura = int(auraculum_aura)
+        mage_level = max_aura + auraculum_aura
+        if mage_level <= 5:
+            return None
+        elif mage_level <= 10:
+            return 'Conjurer'
+        elif mage_level <= 15:
+            return 'Mage'
+        elif mage_level <= 20:
+            return 'Wizard'
+        elif mage_level <= 30:
+            return 'Sorcerer'
+        elif mage_level <= 40:
+            return '6th Black Circle'
+        elif mage_level <= 50:
+            return '5th Black Circle'
+        elif mage_level <= 60:
+            return '4th Black Circle'
+        elif mage_level <= 70:
+            return '3rd Black Circle'
+        elif mage_level <= 80:
+            return '2nd Black Circle'
+        else:
+            return 'Master of the Black Arts'
         return ''
     else:
         return None
@@ -558,36 +582,29 @@ def calc_ship_pct_loaded(data, k, box):
     if not is_ship(box):
         return 0
     total_weight = 0
-    try:
-        damaged = int(box['SL']['da'][0])
-    except KeyError:
-        damaged = 0
+    damaged = get_ship_damage(box)
     level = 0
     seen_here_list = loop_here(data, k, False, True)
     list_length = len(seen_here_list)
     if list_length > 1:
         for un in seen_here_list:
             char = data[un]
-            if return_kind(char) == 'char':
+            if is_char(char):
                 unit_type = '10'
                 if 'CH' in char and 'ni' in char['CH']:
                     unit_type = char['CH']['ni'][0]
                 base_unit = data[unit_type]
-                if 'IT' in base_unit and 'wt' in base_unit['IT']:
-                    item_weight = int(base_unit['IT']['wt'][0]) * 1
-                    total_weight = total_weight + item_weight
+                item_weight = get_item_weight(base_unit)
+                total_weight = total_weight + item_weight
                 if 'il' in char:
                     item_list = char['il']
                     for itm in range(0, len(item_list), 2):
                         itemz = data[item_list[itm]]
-                        try:
-                            item_weight = int(itemz['IT']['wt'][0])
-                        except KeyError:
-                            item_weight = int(0)
+                        item_weight = get_item_weight(itemz)
                         qty = int(item_list[itm + 1])
                         total_weight = total_weight + int(qty * item_weight)
-    ship_capacity = int(box['SL']['ca'][0])
-    actual_capacity = int(ship_capacity - ((ship_capacity * damaged) / 100))
+    ship_capacity = get_ship_capacity(box)
+    actual_capacity = ship_capacity - ((ship_capacity * damaged) // 100)
     pct_loaded = math.floor((total_weight * 100) / actual_capacity)
     return pct_loaded
 
@@ -679,15 +696,17 @@ def loop_here2(data, where, level=0, fog=False, into_city=False, char_only=False
     return hls
 
 
+# unit tested
 def get_who_has(box, data):
-    if 'un' in box['IT']:
-        who_has = box['IT']['un'][0]
-        who_box = data[who_has]
-        name = get_name(who_box, data)
-        if name == 'Ni':
-            name = data[who_box['CH']['ni'][0]]['na'][0].capitalize()
-        return to_oid(who_has), name
-    return None, None
+    who_has_id = box.get('IT', {}).get('un', [None])[0]
+    if who_has_id is not None:
+        who_has_box = data[who_has_id]
+        who_has_dict = {'id': who_has_id,
+                        'oid': to_oid(who_has_id),
+                        'name': get_name(who_has_box, data),
+                        'kind': return_kind(who_has_box)}
+        return who_has_dict
+    return None
 
 
 # unit tested
@@ -704,6 +723,7 @@ def is_hidden(box):
     return False
 
 
+# unit tested
 def is_impassable(box1, box2, direction, data):
     if (is_ocean(box1) and is_mountain(box2)) or \
        (is_mountain(box1) and is_ocean(box2)) or \
@@ -753,3 +773,47 @@ def is_mountain(box):
     if is_loc(box) and return_type(box) == 'mountain':
         return True
     return False
+
+
+# unit tested
+def get_auraculum_aura(box):
+    return int(box.get('IM', {}).get('au', ['0'])[0])
+
+
+# unit tested
+def get_max_aura(box):
+    return int(box.get('CM', {}).get('ma', ['0'])[0])
+
+
+# unit tested
+def get_auraculum_id(box):
+    return box.get('CM', {}).get('ar', [None])[0]
+
+
+# unit tested
+def get_ship_capacity(v):
+    return int(v.get('SL', {}).get('ca', ['0'])[0])
+
+
+# unit tested
+def get_ship_damage(v):
+    return int(v.get('SL', {}).get('da', [0])[0])
+
+
+# unit tested
+def get_item_weight(box):
+    return int(box.get('IT', {}).get('wt', ['0'])[0])
+
+
+# unit tested
+def get_pledged_to(v, data):
+    pledged_to = v.get('CM', {}).get('pl', [None])[0]
+    if pledged_to is not None:
+        char_rec = data[pledged_to]
+        if is_char(char_rec):
+            char_name = get_name(char_rec, data)
+            pledged_to_dict = {'id': pledged_to,
+                               'oid': to_oid(pledged_to),
+                               'name': char_name}
+            return pledged_to_dict
+    return None

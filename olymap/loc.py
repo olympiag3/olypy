@@ -8,11 +8,10 @@ import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
 from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
-from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance
+from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance, get_item_weight
 import pathlib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.char import get_items_list, get_wearable_wielding, get_inventory, build_basic_char_dict
-from olymap.item import get_weight
 from olymap.ship import build_basic_ship_dict
 from olymap.storm import build_basic_storm_dict
 
@@ -112,24 +111,19 @@ def get_controlled_by(v, data):
                     castle_loc_name = castle_loc_rec['na'][0]
                     # calculate top of pledge chain
                     castle_here_list = castle_rec.get('LI', {}).get('hl', [None])
-                    ruled_by_oid = None
-                    ruled_by_name = None
+                    ruled_by_dict = None
                     if castle_here_list[0] is not None:
-                        top_guy = u.top_ruler(castle_here_list[0], data)
-                        try:
-                            top_dog = data[top_guy]
-                        except KeyError:
-                            pass
-                        else:
-                            ruled_by_oid = to_oid(top_guy)
-                            ruled_by_name = top_dog['na'][0]
+                        top_guy_box = u.top_ruler(data[castle_here_list[0]], data)
+                        if top_guy_box is not None:
+                            ruled_by_dict = {'id': u.return_unitid(top_guy_box),
+                                             'oid': to_oid(u.return_unitid(top_guy_box)),
+                                             'name': get_name(top_guy_box, data)}
                     controlled_dict = {'oid': castle_oid,
                                        'name': castle_name,
                                        'type': castle_type,
                                        'loc_oid': castle_loc_oid,
                                        'loc_name': castle_loc_name,
-                                       'ruled_by_oid': ruled_by_oid,
-                                       'ruled_by_name': ruled_by_name}
+                                       'ruled_by_dict': ruled_by_dict}
     return controlled_dict
 
 
@@ -368,7 +362,7 @@ def get_markets(k, v, data, trade_chain):
                                'item_id': trade_list[trade + 1],
                                'item_oid': to_oid(trade_list[trade + 1]),
                                'item_name': get_name(item_rec, data),
-                               'item_weight': get_weight(item_rec)[0],
+                               'item_weight': get_item_weight(item_rec),
                                'who_id': k,
                                'who_oid': to_oid(k),
                                'who_name': get_name(v, data),
@@ -415,7 +409,7 @@ def get_markets(k, v, data, trade_chain):
                                                    'item_id': trade_list[trade + 1],
                                                    'item_oid': to_oid(trade_list[trade + 1]),
                                                    'item_name': get_name(item_rec, data),
-                                                   'item_weight': get_weight(item_rec)[0],
+                                                   'item_weight': get_item_weight(item_rec),
                                                    'who_id': un[0],
                                                    'who_oid': to_oid(un[0]),
                                                    'who_name': get_name(charac_rec, data),

@@ -2,76 +2,65 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has, get_use_key
-import pathlib
-from jinja2 import Environment, PackageLoader, select_autoescape
+from olymap.utilities import get_oid, get_name, get_type, to_oid, get_who_has, get_use_key
+from olymap.utilities import get_auraculum_aura, get_item_weight
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
-    who_has_oid, who_has_name = get_who_has(v, data)
-    dead_body_id, dead_body_name = get_dead_body(v, data)
-    may_study_id, may_study_name = get_may_study(v, data)
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v, data),
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
-                 'attack' : get_attack(v)[0],
-                 'attack_bonus' : get_attack_bonus(v)[0],
-                 'aura' : get_aura(v)[0],
-                 'aura_bonus' : get_aura_bonus(v)[0],
-                 'dead_body_oid' : dead_body_id,
-                 'dead_body_name' : dead_body_name,
-                 'defense' : get_defense(v)[0],
-                 'defense_bonus' : get_defense_bonus(v)[0],
+                 'attack' : get_item_attack(v),
+                 'attack_bonus' : get_attack_bonus(v),
+                 'aura' : get_auraculum_aura(v),
+                 'aura_bonus' : get_aura_bonus(v),
+                 'dead_body_dict': get_dead_body(v, data),
+                 'defense' : get_item_defense(v),
+                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
                  'man_item': get_man_item(v)[0],
-                 'may_study_oid' : may_study_id,
-                 'may_study_name' : may_study_name,
-                 'missile' : get_missile(v)[0],
-                 'missile_bonus' : get_missile_bonus(v)[0],
+                 'may_study_dict': get_may_study(v, data),
+                 'missile' : get_item_missile(v),
+                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
-                 'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
-                 'weight' : get_weight(v)[0],
-                 'who_has_oid' : who_has_oid,
-                 'who_has_name' : who_has_name,
+                 'weight' : get_item_weight(v),
+                 'who_has_dict': get_who_has(v, data),
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
                  'magic_info': get_magic_item(data, k, v)}
     return item_dict
 
 
 def build_basic_item_dict(k, v, data, trade_chain):
-    who_has_oid, who_has_name = get_who_has(v, data)
     item_dict = {'id': k,
                  'oid' : get_oid(k),
                  'name' : get_name(v, data),
                  'type' : get_type(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
-                 'attack' : get_attack(v)[0],
-                 'attack_bonus' : get_attack_bonus(v)[0],
-                 'aura' : get_aura(v)[0],
-                 'aura_bonus' : get_aura_bonus(v)[0],
-                 'defense' : get_defense(v)[0],
-                 'defense_bonus' : get_defense_bonus(v)[0],
+                 'attack' : get_item_attack(v),
+                 'attack_bonus' : get_attack_bonus(v),
+                 'aura' : get_auraculum_aura(v),
+                 'aura_bonus' : get_aura_bonus(v),
+                 'defense' : get_item_defense(v),
+                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'man_item': get_man_item(v)[0],
-                 'missile' : get_missile(v)[0],
-                 'missile_bonus' : get_missile_bonus(v)[0],
+                 'missile' : get_item_missile(v),
+                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v)[0],
                  'ride_capacity' : get_ride_capacity(v)[0],
-                 'unit': get_unit(v, data),
                  'use_key' : get_use_key(v),
-                 'weight' : get_weight(v)[0],
-                 'who_has_oid' : who_has_oid,
-                 'who_has_name' : who_has_name,
+                 'weight' : get_item_weight(v),
+                 'who_has_dict': get_who_has(v, data),
                  'trade_good' : get_trade_good(k, v, data, trade_chain),
                  'magic_info': get_magic_item(data, k, v)}
     return item_dict
@@ -81,20 +70,16 @@ def get_animal(v):
     return v.get('IT', {}).get('an', [None])
 
 
-def get_attack(v):
-    return v.get('IT', {}).get('at', [None])
+def get_item_attack(v):
+    return v.get('IT', {}).get('at', [None])[0]
 
 
 def get_attack_bonus(v):
-    return v.get('IM', {}).get('ab', [None])
-
-
-def get_aura(v):
-    return v.get('IM', {}).get('au', [None])
+    return v.get('IM', {}).get('ab', [None])[0]
 
 
 def get_aura_bonus(v):
-    return v.get('IM', {}).get('ba', [None])
+    return v.get('IM', {}).get('ba', [None])[0]
 
 
 def get_capacities(v):
@@ -102,20 +87,22 @@ def get_capacities(v):
 
 
 def get_dead_body(v, data):
-    oid =  v.get('PL', {}).get('un', [None])
-    if oid[0] is not None:
-        dead_body_rec = data[oid[0]]
-        dead_body_name = get_name (dead_body_rec, data)
-        return to_oid(oid[0]), dead_body_name
-    return None, None
+    dead_body_id =  v.get('PL', {}).get('un', [None])[0]
+    if dead_body_id is not None:
+        dead_body_box = data[dead_body_id]
+        dead_body_dict = {'id': dead_body_id,
+                          'oid': to_oid(dead_body_id),
+                          'name': get_name(dead_body_box, data)}
+        return dead_body_dict
+    return None
 
 
-def get_defense(v):
-    return v.get('IT', {}).get('de', [None])
+def get_item_defense(v):
+    return v.get('IT', {}).get('de', [None])[0]
 
 
 def get_defense_bonus(v):
-    return v.get('IM', {}).get('db', [None])
+    return v.get('IM', {}).get('db', [None])[0]
 
 
 def get_fly_capacity(v):
@@ -135,20 +122,21 @@ def get_man_item(v):
 
 
 def get_may_study(v, data):
-    oid = v.get('IM', {}).get('ms', [None])
-    if oid[0] is not None:
-        skill_rec = data[oid[0]]
-        skill_name = get_name(skill_rec, data)
-        return to_oid(oid[0]), skill_name
-    return None, None
+    may_study_id = v.get('IM', {}).get('ms', [None])[0]
+    if may_study_id is not None:
+        skill_box = data[may_study_id]
+        may_study_dict = {'id': may_study_id,
+                          'oid': to_oid(may_study_id),
+                          'name': get_name(skill_box, data)}
+        return may_study_dict
+    return None
 
-
-def get_missile(v):
-    return v.get('IT', {}).get('mi', [None])
+def get_item_missile(v):
+    return v.get('IT', {}).get('mi', [None])[0]
 
 
 def get_missile_bonus(v):
-    return v.get('IM', {}).get('mb', [None])
+    return v.get('IM', {}).get('mb', [None])[0]
 
 
 def get_plural(v, data):
@@ -193,22 +181,6 @@ def get_prominent(v):
 
 def get_ride_capacity(v):
     return v.get('IT', {}).get('rc', [None])
-
-
-def get_unit(v, data):
-    unit_id = v.get('IT', {}).get('un', [None])[0]
-    if unit_id is not None:
-        unit_rec = data[unit_id]
-        unit_dict = {'id': unit_id,
-                     'oid': to_oid(unit_id),
-                     'name': get_name(unit_rec, data),
-                     'kind': u.return_kind(unit_rec)}
-        return unit_dict
-    return None
-
-
-def get_weight(v):
-    return v.get('IT', {}).get('wt', [None])
 
 
 def get_trade_good(k, v, data, trade_chain):
@@ -309,10 +281,10 @@ def get_magic_item(data, item_id, item_rec):
                       'magic_type': magic_type}
         return magic_dict
     elif item_type == 'artifact':
-        artifact_dict = {'attack': get_attack_bonus(item_rec)[0],
-                         'defense': get_defense_bonus(item_rec)[0],
-                         'missile': get_missile_bonus(item_rec)[0],
-                         'aura': get_aura_bonus(item_rec)[0]}
+        artifact_dict = {'attack': get_attack_bonus(item_rec),
+                         'defense': get_defense_bonus(item_rec),
+                         'missile': get_missile_bonus(item_rec),
+                         'aura': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
@@ -321,27 +293,23 @@ def get_magic_item(data, item_id, item_rec):
         return magic_dict
     elif item_type == 'dead body':
         magic_type = 'Dead Body'
-        db_oid, db_name = get_dead_body(item_rec, data)
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'dead_oid': db_oid,
-                      'dead_name': db_name}
+                      'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'npc_token':
         magic_type = 'NPC_Token'
-        npc_oid, npc_name = get_dead_body(item_rec, data)
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'npc_oid': npc_oid,
-                      'npc_name': npc_name}
+                      'dead_body_dict': get_dead_body(item_rec, data)}
         return magic_dict
     elif item_type == 'auraculum':
         magic_type = 'Auraculum'
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec, data),
                       'magic_type': magic_type,
-                      'aura': get_aura(item_rec)[0]}
+                      'aura': get_auraculum_aura(item_rec)}
         return magic_dict
     return None

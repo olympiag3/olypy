@@ -10,10 +10,10 @@
 {% for entry in projected_cast %}
     <tr>
         <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        {% if entry.unit %}
-            <td sorttable_customkey="{{ entry.unit.oid }}">{{ entry.unit.name }} [<a href="{{ entry.unit.oid }}.html">{{ entry.unit.oid }}</a>]</td>
+        {% if entry.who_has_dict %}
+            <td sorttable_customkey="{{ entry.who_has_dict.oid }}">{{ entry.who_has_dict.name }} [<a href="{{ entry.who_has_dict.oid }}.html">{{ entry.who_has_dict.oid }}</a>]</td>
         {% else %}
-            <td sorttable_customkey="Unknown">Unknown {{ entry.unit.oid }}</td>
+            <td sorttable_customkey="Unknown">Unknown {{ entry.who_has_dict.oid }}</td>
         {% endif %}
         {% if entry.project_cast.id %}
             <td sorttable_customkey="{{ entry.project_cast.oid }}">{{ entry.project_cast.kind }} {{ entry.project_cast.name }} [<a href="{{ entry.project_cast.oid }}.html">{{ entry.project_cast.oid }}</a>]</td>

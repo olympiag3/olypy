@@ -2,12 +2,9 @@
 import math
 from collections import defaultdict
 
-import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2
-import pathlib
+from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_ship_damage
 from olypy.db import loop_here
 from olymap.utilities import calc_ship_pct_loaded
-from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.storm import build_basic_storm_dict
 from olymap.char import build_basic_char_dict
 
@@ -30,10 +27,6 @@ def get_load(k, v, data):
 
 def get_defense(v):
     return v.get('SL', {}).get('de', [0])
-
-
-def get_damage(v):
-    return v.get('SL', {}).get('da', [0])
 
 
 def build_loc_dict(v, data):
@@ -133,7 +126,7 @@ def build_basic_ship_dict(k, v, data):
                  'complete': get_complete(v),
                  'load': get_load(k, v, data),
                  'defense': get_defense(v)[0],
-                 'damage': get_damage(v)[0],
+                 'damage': get_ship_damage(v),
                  'owner': build_owner_dict(v, data),
                  'storm': build_storm_dict(v, data),
                  'loc': build_loc_dict(v, data)}
@@ -148,7 +141,7 @@ def build_complete_ship_dict(k, v, data, instance, pledge_chain, prisoner_chain)
                  'complete': get_complete(v),
                  'load': get_load(k, v, data),
                  'defense': get_defense(v)[0],
-                 'damage': get_damage(v)[0],
+                 'damage': get_ship_damage(v),
                  'owner': build_owner_dict(v, data),
                  'storm': build_storm_dict(v, data),
                  'seen_here': build_seenhere_dict(k, v, data, instance, pledge_chain, prisoner_chain),
