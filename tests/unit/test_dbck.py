@@ -4,7 +4,7 @@ import olypy.dbck as dbck
 
 
 def test_check_firstline(capsys):
-    data = {'1001': 1}
+    data = {'1001': {}}
     assert dbck.check_firstline(data, False) == 1
     out, err = capsys.readouterr()
     assert '1001' in err
@@ -23,6 +23,16 @@ def test_check_firstline(capsys):
     assert 'no name' in err
 
     assert dbck.check_firstline(data, True, checknames=True) == 0
+    out, err = capsys.readouterr()
+    assert '1001' in err
+    assert 'no name' in err
+    assert 'fixed' in err
+
+    data = {'1001': {'firstline': ['1001 char ni'], 'CH': {'ni': ['33'], 'bp': ['0']}},
+            '33': {'firstline': ['33 item 0'], 'na': ['skeleton']}}
+    assert dbck.check_firstline(data, True, checknames=True) == 0
+    assert data['1001']['na'][0] == 'Skeleton'
+    assert 'bp' not in data['1001']['CH']
     out, err = capsys.readouterr()
     assert '1001' in err
     assert 'no name' in err

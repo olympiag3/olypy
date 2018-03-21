@@ -17,14 +17,25 @@ def check_firstline(data, fix, checknames=False):
             print('Thing {} has no firstline'.format(k), file=sys.stderr)
             problem += 1
             # cannot be fixed
-        elif checknames and ' unform ' not in v['firstline'][0] and 'na' not in v:
-            print('Thing {} has no name'.format(v['firstline']), file=sys.stderr)
-            if fix:
-                _, _, kind = v['firstline'][0].split(' ', 2)
-                data[k]['na'] = [kind[0].upper() + kind[1:]]
-                print('   fixed.', file=sys.stderr)
-            else:
-                problem += 1
+        elif checknames and ' unform ' not in v['firstline'][0]:
+            if 'na' not in v:
+                print('Thing {} has no name'.format(v['firstline']), file=sys.stderr)
+                if fix:
+                    _, _, kind = v['firstline'][0].split(' ', 2)
+                    name = kind.capitalize()
+                    if name == 'Ni':  # hit it harder
+                        ni_kind = v.get('CH', {}).get('ni', [''])[0]
+                        if ni_kind:
+                            name = data[ni_kind]['na'][0].capitalize()
+                    data[k]['na'] = [name]
+                    v['na'] = [name]
+                    print('   fixed.', file=sys.stderr)
+                else:
+                    problem += 1
+        if 'CH' in v and 'bp' in v['CH']:
+            if v['CH']['bp'][0] == '0':
+                # turnparser used to generate these. nuke 'em.
+                del data[k]['CH']['bp']
     return problem
 
 
