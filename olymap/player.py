@@ -4,7 +4,7 @@ import math
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type
+from olymap.utilities import get_oid, get_name, get_subkind
 import pathlib
 
 
@@ -57,7 +57,7 @@ def build_complete_player_dict(k, v, data):
     player_dict = {'id': k,
                    'oid': get_oid(k),
                    'name': get_name(v),
-                   'type': get_type(v, data),
+                   'subkind': get_subkind(v, data),
                    'kind': 'player',
                    'email': get_email(v),
                    'fast_study': get_fast_study(v),

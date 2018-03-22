@@ -1,16 +1,16 @@
 <HTML>
 <HEAD>
-<TITLE>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
+<TITLE>{{ loc.name }} [{{ loc.oid }}], {{ loc.subkind }}
 {% if loc.where %}
     in {{ loc.where.name }}
 {% endif %}
 </TITLE>
 </HEAD>
 <BODY>
-<H3>{{ loc.name }} [{{ loc.oid }}], {{ loc.type }}
-{%- if loc.type != 'region' -%}
+<H3>{{ loc.name }} [{{ loc.oid }}], {{ loc.subkind }}
+{%- if loc.subkind != 'region' -%}
 , in
-    {% if loc.type == 'city' %}
+    {% if loc.subkind == 'city' %}
         province
     {% endif %}
     {%- if loc.where -%}
@@ -37,7 +37,7 @@
     <p>A magical shroud surrounds {{ loc.shroud.name }} [<a href="{{ loc.shroud.oid }}.html">{{ loc.shroud.oid }}</a>].</p>
 {% endif %}
 {%- if loc.controlled_by -%}
-    Province controlled by {{ loc.controlled_by.name }} [<a href="{{ loc.controlled_by.oid }}.html">{{ loc.controlled_by.oid }}</a>], {{ loc.controlled_by.type }}, in {{ loc.controlled_by.loc_name }} [<a href="{{ loc.controlled_by.loc_oid }}.html">{{ loc.controlled_by.loc_oid }}</a>]
+    Province controlled by {{ loc.controlled_by.name }} [<a href="{{ loc.controlled_by.oid }}.html">{{ loc.controlled_by.oid }}</a>], {{ loc.controlled_by.subkind }}, in {{ loc.controlled_by.loc_name }} [<a href="{{ loc.controlled_by.loc_oid }}.html">{{ loc.controlled_by.loc_oid }}</a>]
 {% endif %}
 {% if loc.controlled_by.ruled_by_dict %}
     <br>Ruled by {{ loc.controlled_by.ruled_by_dict.name }} [<a href="{{ loc.controlled_by.ruled_by_dict.oid }}.html">{{ loc.controlled_by.ruled_by_dict.oid }}</a>]
@@ -48,8 +48,8 @@
         <ul>
         {% for entry in loc.routes_out.dest %}
             <li>{{ entry.direction }}
-                {%- if entry.direction == 'Out' and loc.routes_out.type != 'city' -%}
-                    , {{ entry.type }}
+                {%- if entry.direction == 'Out' and loc.routes_out.subkind != 'city' -%}
+                    , {{ entry.subkind }}
                 {%- elif entry.is_port == True -%}
                     , port city
                 {%- endif -%}
@@ -116,7 +116,7 @@
     <tr><th>trade</th><th>who</th><th>price</th><th>qty</th><th>wt/ea</th><th>item</th><th>recip who</th><th>recip price</th><th>recip qty</th></tr>
     {% for entry in loc.markets %}
         <tr>
-            {% if entry.type == '1' %}
+            {% if entry.subkind == '1' %}
             <td>buy</td>
             {% else %}
             <td>sell</td>
@@ -181,7 +181,7 @@
         </ul>
     {% endif %}
     {% if loc.seen_here.ships %}
-        {% if loc.type == 'ocean' %}
+        {% if loc.subkind == 'ocean' %}
             <H4>Ships sighted:</H4>
         {% else %}
             <H4>Ships docked:</H4>

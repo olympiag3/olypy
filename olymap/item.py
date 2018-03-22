@@ -2,14 +2,14 @@
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, get_who_has, get_use_key
+from olymap.utilities import get_oid, get_name, get_subkind, to_oid, get_who_has, get_use_key
 from olymap.utilities import get_auraculum_aura, get_item_weight
 
 
 def build_complete_item_dict(k, v, data, trade_chain):
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v),
-                 'type' : get_type(v, data),
+                 'subkind' : get_subkind(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
                  'attack' : get_item_attack(v),
@@ -41,7 +41,7 @@ def build_basic_item_dict(k, v, data, trade_chain):
     item_dict = {'id': k,
                  'oid' : get_oid(k),
                  'name' : get_name(v),
-                 'type' : get_type(v, data),
+                 'subkind' : get_subkind(v, data),
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v)[0],
                  'attack' : get_item_attack(v),
@@ -186,7 +186,7 @@ def get_ride_capacity(v):
 def get_trade_good(k, v, data, trade_chain):
     buy_list = []
     sell_list = []
-    if trade_chain is not None and u.return_type(v) == 'tradegood':
+    if trade_chain is not None and u.return_subkind(v) == 'tradegood':
         trade_list = trade_chain[k]
         if len(trade_list) > 0:
             for loc in trade_list:
@@ -208,7 +208,7 @@ def get_trade_good(k, v, data, trade_chain):
 
 
 def get_magic_item(data, item_id, item_rec):
-    item_type = u.return_type(item_rec)
+    item_type = u.return_subkind(item_rec)
     if item_type == '0':
         if 'IM' in item_rec and 'uk' in item_rec['IM']:
             use_key = item_rec['IM']['uk'][0]

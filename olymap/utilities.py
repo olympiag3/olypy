@@ -3,7 +3,7 @@
 import olypy.details as details
 from collections import defaultdict
 from olypy.oid import to_oid
-from olymap.detail import long_type_to_display_type
+from olymap.detail import long_subkind_to_display_subkind
 from olymap.detail import long_kind_to_display_kind
 from olymap.detail import rank_num_string
 from olymap.detail import castle_ind
@@ -14,7 +14,7 @@ import math
 
 
 def get_item_names(box):
-    itemz_name = box.get('na', [return_type(box).capitalize()])[0]
+    itemz_name = box.get('na', [return_subkind(box).capitalize()])[0]
     itemz_plural = box['IT'].get('pl', [itemz_name])[0]
     return itemz_name, itemz_plural
 
@@ -30,37 +30,37 @@ def get_item_plural(box):
 
 
 # unit tested
-def return_type(box):
+def return_subkind(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
     _, _, sub_loc = firstline.split(' ', maxsplit=2)
     return sub_loc
 
 
-def return_short_type(box):
+def return_short_subkind(box):
     # return 3rd argument of firstlist
     firstline = return_firstline(box)
-    _, _, sub_loc = firstline.split(' ', maxsplit=2)
+    _, _, subkind = firstline.split(' ', maxsplit=2)
     try:
-        short_type = long_type_to_display_type[sub_loc]
+        short_subkind = long_subkind_to_display_subkind[subkind]
     except KeyError:
-        short_type = sub_loc
+        short_subkind = subkind
         # try kind
-        if sub_loc not in details.subloc_kinds:
+        if subkind not in details.subloc_kinds:
             if is_road_or_gate(box):
                 if return_kind(box) == 'gate':
-                    short_type = 'gate'
+                    short_subkind = 'gate'
                 else:
                     name = box['na'][0]
                     try:
-                        short_type = long_kind_to_display_kind[name]
+                        short_subkind = long_kind_to_display_kind[name]
                     except KeyError:
-                        print('missing short_type for {}'.format(name))
+                        print('missing short_subkind for {}'.format(name))
                         pass
         else:
-            if len(short_type) > 7:
-                print('missing short_type for {}'.format(sub_loc))
-    return short_type
+            if len(short_subkind) > 7:
+                print('missing short_subkind for {}'.format(subkind))
+    return short_subkind
 
 
 # unit tested
@@ -156,14 +156,14 @@ def is_char(box):
 
 # unit tested
 def is_graveyard(box):
-    if is_loc(box) and return_type(box) == 'graveyard':
+    if is_loc(box) and return_subkind(box) == 'graveyard':
         return True
     return False
 
 
 # unit tested
 def is_faeryhill(box):
-    if is_loc(box) and return_type(box) == 'faery hill':
+    if is_loc(box) and return_subkind(box) == 'faery hill':
         return True
     return False
 
@@ -198,7 +198,7 @@ def is_player(box):
 
 # unit tested
 def is_city(box):
-    if is_loc(box) and return_type(box) == 'city':
+    if is_loc(box) and return_subkind(box) == 'city':
         return True
     return False
 
@@ -212,21 +212,21 @@ def is_skill(box):
 
 # unit tested
 def is_garrison(box):
-    if is_char(box) and return_type(box) == 'garrison':
+    if is_char(box) and return_subkind(box) == 'garrison':
         return True
     return False
 
 
 # unit tested
 def is_castle(box):
-    if is_loc(box) and return_type(box) == 'castle':
+    if is_loc(box) and return_subkind(box) == 'castle':
         return True
     return False
 
 
 # unit tested
 def is_region(box):
-    if is_loc(box) and return_type(box) == 'region':
+    if is_loc(box) and return_subkind(box) == 'region':
         return True
     return False
 
@@ -373,16 +373,16 @@ def resolve_trades(data):
 
 
 # unit tested
-def loc_depth(loc_type):
-    if loc_type == 'region':
+def loc_depth(loc_subkind):
+    if loc_subkind == 'region':
         return 1
-    elif loc_type in details.province_kinds:
+    elif loc_subkind in details.province_kinds:
         return 2
     # line below contains code to work around issue in details.subloc_kinds
-    elif loc_type in details.subloc_kinds and loc_type != 'sewer':
+    elif loc_subkind in details.subloc_kinds and loc_subkind != 'sewer':
         return 3
-    # details.structure_type does not include 'in-progress' or could use it
-    elif loc_type in structure_kinds:
+    # details.structure_subkind does not include 'in-progress' or could use it
+    elif loc_subkind in structure_kinds:
         return 4
     return 0
 
@@ -391,7 +391,7 @@ def loc_depth(loc_type):
 def region(who, data):
     v = data[who]
     while (int(who) > 0 and
-            (not is_loc(v) or loc_depth(return_type(v)) != 1)):
+            (not is_loc(v) or loc_depth(return_subkind(v)) != 1)):
         v = data[v['LI']['wh'][0]]
         who = return_unitid(v)
     return who
@@ -400,10 +400,10 @@ def region(who, data):
 # unit tested
 def province(who, data):
     v = data[who]
-    if loc_depth(return_type(v)) == 1:
+    if loc_depth(return_subkind(v)) == 1:
         return 0
     while (int(who) > 0 and
-            (not is_loc(v) or loc_depth(return_type(v)) != 2)):
+            (not is_loc(v) or loc_depth(return_subkind(v)) != 2)):
         v = data[v['LI']['wh'][0]]
         who = return_unitid(v)
     return who
@@ -446,16 +446,16 @@ def top_ruler(box, data):
 def calc_exit_distance(box1, box2):
     if box1 is None or box2 is None:
         return 0
-    if return_type(box1) == 'pit' or return_type(box2) == 'pit':
+    if return_subkind(box1) == 'pit' or return_subkind(box2) == 'pit':
         return 28
-    if loc_depth(return_type(box1)) > loc_depth(return_type(box2)):
+    if loc_depth(return_subkind(box1)) > loc_depth(return_subkind(box2)):
         tmp = box1
         box1 = box2
         box2 = tmp
-    box1_return_type = return_type(box1)
-    box2_return_type = return_type(box2)
-    # w_d = loc_depth(box1_return_type)
-    d_d = loc_depth(box2_return_type)
+    box1_return_subkind = return_subkind(box1)
+    box2_return_subkind = return_subkind(box2)
+    # w_d = loc_depth(box1_return_subkind)
+    d_d = loc_depth(box2_return_subkind)
     if d_d == 4:
         return 0
     if d_d == 3:
@@ -471,21 +471,21 @@ def calc_exit_distance(box1, box2):
         return 3
     elif is_mountain(box2):
         return 10
-    elif box2_return_type == 'forest':
+    elif box2_return_subkind == 'forest':
         return 8
-    elif box2_return_type == 'swamp':
+    elif box2_return_subkind == 'swamp':
         return 14
-    elif box2_return_type == 'desert':
+    elif box2_return_subkind == 'desert':
         return 8
-    elif box2_return_type == 'plain':
+    elif box2_return_subkind == 'plain':
         return 7
-    elif box2_return_type == 'underground':
+    elif box2_return_subkind == 'underground':
         return 7
-    elif box2_return_type == 'cloud':
+    elif box2_return_subkind == 'cloud':
         return 7
-    elif box2_return_type == 'tunnel':
+    elif box2_return_subkind == 'tunnel':
         return 5
-    elif box2_return_type == 'chamber':
+    elif box2_return_subkind == 'chamber':
         return 5
     return 0
 
@@ -595,10 +595,10 @@ def calc_ship_pct_loaded(data, k, box):
         for un in seen_here_list:
             char = data[un]
             if is_char(char):
-                unit_type = '10'
+                unit_subkind = '10'
                 if 'CH' in char and 'ni' in char['CH']:
-                    unit_type = char['CH']['ni'][0]
-                base_unit = data[unit_type]
+                    unit_subkind = char['CH']['ni'][0]
+                base_unit = data[unit_subkind]
                 item_weight = get_item_weight(base_unit)
                 total_weight = total_weight + item_weight
                 if 'il' in char:
@@ -620,8 +620,8 @@ def get_name(box, qty=None):
         if qty and qty > 1:
             name = get_item_plural(box)
     else:
-        if return_type(box) != '0':
-            name = return_type(box)
+        if return_subkind(box) != '0':
+            name = return_subkind(box)
         else:
             name = return_kind(box)
         if name.islower():
@@ -635,13 +635,13 @@ def get_oid(k):
     return to_oid(k)
 
 
-def get_type(box, data):
-    if return_type(box) == 'ni':
-        # char_type = box['na'][0].lower()
-        type = data[box['CH']['ni'][0]]['na'][0]
+def get_subkind(box, data):
+    if return_subkind(box) == 'ni':
+        # char_subkind = box['na'][0].lower()
+        subkind = data[box['CH']['ni'][0]]['na'][0]
     else:
-        type = return_type(box)
-    return type
+        subkind = return_subkind(box)
+    return subkind
 
 
 # unit tested
@@ -771,14 +771,14 @@ def is_man_item(box):
 
 # unit tested
 def is_ocean(box):
-    if is_loc(box) and return_type(box) == 'ocean':
+    if is_loc(box) and return_subkind(box) == 'ocean':
         return True
     return False
 
 
 # unit tested
 def is_mountain(box):
-    if is_loc(box) and return_type(box) == 'mountain':
+    if is_loc(box) and return_subkind(box) == 'mountain':
         return True
     return False
 

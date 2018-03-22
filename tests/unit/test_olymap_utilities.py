@@ -611,7 +611,7 @@ def test_return_kind():
         assert olymap.utilities.return_kind(box) == answer
 
 
-def test_return_type():
+def test_return_subkind():
     tests = (
         ({'firstline': ['6614 char 0']}, '0'),
         ({'firstline': ['54289 player pl_regular']}, 'pl_regular'),
@@ -622,7 +622,7 @@ def test_return_type():
     )
 
     for box, answer in tests:
-        assert olymap.utilities.return_type(box) == answer
+        assert olymap.utilities.return_subkind(box) == answer
 
 
 def test_return_unitid():

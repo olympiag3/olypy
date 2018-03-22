@@ -8,8 +8,8 @@
     <h4>Help, I'm a prisoner!!!</h4>
 {% endif %}
 <table>
-{% if char.type != '0' and char_type %}
-    <tr><td>Type:</td><td>{{ char.type }}</td></tr>
+{% if char.subkind != '0' and char_type %}
+    <tr><td>Type:</td><td>{{ char.subkind }}</td></tr>
 {% endif %}
 {% if char.rank != 'undefined' and char.rank %}
     <tr><td>Rank:</td><td>{{ char.rank }}</td></tr>

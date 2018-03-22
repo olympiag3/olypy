@@ -5,8 +5,8 @@
 <BODY>
 <H3>{{ player.name }} [{{ player.oid }}]</H3>
 <table>
-{% if player.type %}
-    <tr><td>Type:</td><td>{{ player.type }}</td></tr>
+{% if player.subkind %}
+    <tr><td>Type:</td><td>{{ player.subkind }}</td></tr>
 {% endif %}
 {% if player.email %}
     <tr><td>Email Address:</td><td>{{ player.email }}</td></tr>

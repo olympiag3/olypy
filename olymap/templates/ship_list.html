@@ -1,7 +1,7 @@
 <li>
-{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.type }}
+{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>], {{ entry.subkind }}
 {%- if entry.storm -%}
-    , bound {{ entry.storm.type }}-storm {{ entry.storm.name }} [<a href="{{ entry.storm.oid }}.html">{{ entry.storm.oid }}</a>]
+    , bound {{ entry.storm.subkind }}-storm {{ entry.storm.name }} [<a href="{{ entry.storm.oid }}.html">{{ entry.storm.oid }}</a>]
     {% if entry.storm.strength %}
         (strength:{{ entry.storm.strength }})
     {% endif %}

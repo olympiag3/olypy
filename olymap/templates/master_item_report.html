@@ -10,7 +10,7 @@
 {% for entry in itemz %}
     <tr>
         <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        <td>{{ entry.type }}</td>
+        <td>{{ entry.subkind }}</td>
         {% if entry.weight %}
             <td align="right">{{ entry.weight }}</td>
         {% else %}
@@ -51,7 +51,7 @@
         {% else %}
             <td>&nbsp&nbsp;</td>
         {% endif %}
-        {% if entry.magic_info or entry.trade_good or entry.type == 'tradegood' %}
+        {% if entry.magic_info or entry.trade_good or entry.subkind == 'tradegood' %}
             <td>
                 {% if entry.use_key == '2' %}
                     Healing Potion
@@ -94,7 +94,7 @@
                         unknown
                     {% endif %}
                 {% endif %}
-                {% if entry.type == 'tradegood' %}
+                {% if entry.subkind == 'tradegood' %}
                     {% if entry.trade_good %}
                         {% if entry.trade_good.sell %}
                             {% for sell_item in entry.trade_good.sell %}

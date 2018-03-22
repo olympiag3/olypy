@@ -16,8 +16,8 @@
         )
     {%- endif -%}
 {%- endif -%}
-{%- if entry.type and entry.type != '0' -%}
-    , {{ entry.type }}
+{%- if entry.subkind and entry.subkind != '0' -%}
+    , {{ entry.subkind }}
 {%- endif -%}
 {%- if entry.prisoner -%}
     , prisoner

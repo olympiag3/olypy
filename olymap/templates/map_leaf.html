@@ -23,7 +23,7 @@
             {% if col.left_nav_dict %}
                 <td rowspan="20" class="left"><a href="{{ map.prefix }}_map_leaf_{{ col.left_nav_dict.oid }}.html"><img src="grey.gif" width="{{ col.left_nav_dict.width }}" height="{{ col.left_nav_dict.height }}"></a></td>
             {% endif %}
-            <td id ="{{ col.cell_dict.oid }}" class="{{ col.cell_dict.type }}"
+            <td id ="{{ col.cell_dict.oid }}" class="{{ col.cell_dict.subkind }}"
             {% if col.cell_dict.border_dict %}
                 {% if col.cell_dict.border_dict.barrier %}
                 style="border: 2px solid blue"
@@ -51,17 +51,17 @@
                 {%- if col.cell_dict.contents_dict.many -%}
                 many
                 {% elif col.cell_dict.contents_dict.loc2_dict.oid %}
-                    <a href="{{ col.cell_dict.contents_dict.loc2_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc2_dict.type }}</a>
+                    <a href="{{ col.cell_dict.contents_dict.loc2_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc2_dict.subkind }}</a>
                 {% else %}
-                    {{ col.cell_dict.contents_dict.loc2_dict.type }}
+                    {{ col.cell_dict.contents_dict.loc2_dict.subkind }}
                 {%- endif -%}
             {% endif %}
             <br>
             {% if col.cell_dict.contents_dict.loc1_dict %}
                 {%- if col.cell_dict.contents_dict.loc1_dict.oid %}
-                    <a href="{{ col.cell_dict.contents_dict.loc1_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc1_dict.type }}</a>
+                    <a href="{{ col.cell_dict.contents_dict.loc1_dict.oid }}.html">{{ col.cell_dict.contents_dict.loc1_dict.subkind }}</a>
                 {% else %}
-                    {{ col.cell_dict.contents_dict.loc1_dict.type }}
+                    {{ col.cell_dict.contents_dict.loc1_dict.subkind }}
                 {%- endif -%}
             {% endif %}
             <br>

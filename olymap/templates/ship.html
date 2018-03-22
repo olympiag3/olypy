@@ -1,9 +1,9 @@
 <HTML>
 <HEAD>
-<TITLE>{{ ship.name }} [{{ ship.oid }}], {{ ship.type }}</TITLE>
+<TITLE>{{ ship.name }} [{{ ship.oid }}], {{ ship.subkind }}</TITLE>
 </HEAD>
 <BODY>
-<H3>{{ ship.name }} [{{ ship.oid }}], {{ ship.type }}</H3>
+<H3>{{ ship.name }} [{{ ship.oid }}], {{ ship.subkind }}</H3>
 <table>
 <tr><td>Location:</td><td>{{ ship.loc.name }} [<a href="{{ ship.loc.oid }}.html">{{ ship.loc.oid }}</a>]</td></tr>
 {% if ship.complete < 100 %}

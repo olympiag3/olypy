@@ -10,7 +10,7 @@
 {% for entry in ship %}
     <tr>
         <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        <td>{{ entry.type }}</td>
+        <td>{{ entry.subkind }}</td>
         {% if entry.owner %}
             <td sorttable_customkey="{{ entry.owner.oid }}">{{ entry.owner.name }} [<a href="{{ entry.owner.oid }}.html">{{ entry.owner.oid }}</a>]</td>
         {% else %}

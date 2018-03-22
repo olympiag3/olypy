@@ -2,7 +2,7 @@
 import math
 from collections import defaultdict
 
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_ship_damage
+from olymap.utilities import get_oid, get_name, get_subkind, to_oid, loop_here2, get_ship_damage
 from olypy.db import loop_here
 from olymap.utilities import calc_ship_pct_loaded
 from olymap.storm import build_basic_storm_dict
@@ -35,7 +35,7 @@ def build_loc_dict(v, data):
     loc_dict = {'id': loc_id,
                 'oid': get_oid(loc_id),
                 'name': get_name(loc_rec),
-                'type': get_type(loc_rec, data)}
+                'subkind': get_subkind(loc_rec, data)}
     return loc_dict
 
 
@@ -121,7 +121,7 @@ def build_non_prominent_items_dict(k, v, data):
 def build_basic_ship_dict(k, v, data):
     ship_dict = {'oid': get_oid(k),
                  'name': get_name(v),
-                 'type': get_type(v, data),
+                 'subkind': get_subkind(v, data),
                  'kind': 'ship',
                  'complete': get_complete(v),
                  'load': get_load(k, v, data),
@@ -136,7 +136,7 @@ def build_basic_ship_dict(k, v, data):
 def build_complete_ship_dict(k, v, data, instance, pledge_chain, prisoner_chain):
     ship_dict = {'oid': get_oid(k),
                  'name': get_name(v),
-                 'type': get_type(v, data),
+                 'subkind': get_subkind(v, data),
                  'kind': 'kind',
                  'complete': get_complete(v),
                  'load': get_load(k, v, data),

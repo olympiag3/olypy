@@ -5,7 +5,7 @@ from collections import defaultdict
 from olypy.oid import to_oid
 from olypy.oid import to_int
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, get_who_has
+from olymap.utilities import get_oid, get_name, get_subkind, get_who_has
 import olymap.maps as maps
 import pathlib
 from olypy.db import loop_here

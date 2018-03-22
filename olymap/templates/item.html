@@ -5,8 +5,8 @@
 <BODY>
 <H3>{{ item.name }} [{{ item.oid }}]</H3>
 <table>
-{% if item.type != '0' %}
-    <tr><td>Type:</td><td>{{ item.type }}</td></tr>
+{% if item.subkind != '0' %}
+    <tr><td>Type:</td><td>{{ item.subkind }}</td></tr>
 {% endif %}
 {% if item.attack %}
     <tr><td>Attack:</td><td>{{ item.attack }}</td></tr>

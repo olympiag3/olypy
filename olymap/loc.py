@@ -7,10 +7,8 @@ import olymap.utilities as u
 import olypy.details as details
 import olymap.detail as detail
 from operator import itemgetter
-from olymap.utilities import get_oid, get_name, get_type, to_oid, loop_here2, get_who_has
+from olymap.utilities import get_oid, get_name, get_subkind, to_oid, loop_here2, get_who_has
 from olymap.utilities import calc_ship_pct_loaded, is_impassable, calc_exit_distance, get_item_weight
-import pathlib
-from jinja2 import Environment, PackageLoader, select_autoescape
 from olymap.char import get_items_list, get_wearable_wielding, get_inventory, build_basic_char_dict
 from olymap.ship import build_basic_ship_dict
 from olymap.storm import build_basic_storm_dict
@@ -22,7 +20,7 @@ pd_directions = {0: 'North', 1: 'East', 2: 'South', 3: 'West', 4: 'Up', 5: 'Down
 def build_basic_loc_dict(k, v, data, garrisons_chain=None):
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v),
-                'type': get_type(v, data),
+                'subkind': get_subkind(v, data),
                 'kind': u.return_kind(v),
                 'where': get_where_info(v, data),
                 'hidden': u.is_hidden(v),
@@ -44,7 +42,7 @@ def get_where_info(v, data):
             where_dict = {'id': where_id[0],
                           'oid': to_oid(where_id[0]),
                           'name': get_name(where_rec),
-                          'type': get_type(where_rec, data)}
+                          'subkind': get_subkind(where_rec, data)}
     else:
         where_dict = None
     return where_dict
@@ -57,7 +55,7 @@ def get_safe_haven(v):
 
 def get_civ_level(k, v, data):
     civ_level = None
-    if not u.is_ocean(v) and u.loc_depth(u.return_type(v)) == 2 \
+    if not u.is_ocean(v) and u.loc_depth(u.return_subkind(v)) == 2 \
     and data[u.region(k, data)]['na'][0] != 'faery' and data[u.region(k, data)]['na'][0] != 'hades':
         civ_level = 'wilderness'
         if 'LO' in v and 'lc' in v['LO']:
@@ -100,10 +98,10 @@ def get_controlled_by(v, data):
                     castle_rec = data[castle[0]]
                     castle_name = castle_rec['na'][0]
                     castle_oid = to_oid(castle[0])
-                    castle_type = u.return_type(castle_rec)
+                    castle_type = u.return_subkind(castle_rec)
                     castle_loc_id = castle_rec['LI']['wh'][0]
                     castle_loc_rec = data[castle_loc_id]
-                    castle_loc_type = get_type(castle_loc_rec, data)
+                    castle_loc_type = get_subkind(castle_loc_rec, data)
                     if castle_loc_type == 'city':  # in a city
                         castle_loc_id = castle_loc_rec['LI']['wh'][0]
                         castle_loc_rec = data[castle_loc_id]
@@ -120,7 +118,7 @@ def get_controlled_by(v, data):
                                              'name': get_name(top_guy_box)}
                     controlled_dict = {'oid': castle_oid,
                                        'name': castle_name,
-                                       'type': castle_type,
+                                       'subkind': castle_type,
                                        'loc_oid': castle_loc_oid,
                                        'loc_name': castle_loc_name,
                                        'ruled_by_dict': ruled_by_dict}
@@ -150,7 +148,7 @@ def get_destinations(k, v, data):
                     to_dict = create_loc_to_dict_entry(data, direction, prov_rec, v, region_rec)
                     dest_list.append(to_dict)
             i = i + 1
-    if u.return_type(v) not in details.province_kinds:
+    if u.return_subkind(v) not in details.province_kinds:
         if 'LI' in v and 'wh' in v['LI']:
             out_id = v['LI']['wh'][0]
             out_rec = data[out_id]
@@ -178,14 +176,14 @@ def get_destinations(k, v, data):
         link_rec = data[link_id]
         region_id = u.region(link_id, data)
         region_rec = data[region_id]
-        to_dict = create_loc_to_dict_entry(data, get_type(link_rec, data).title(), link_rec, v, region_rec)
+        to_dict = create_loc_to_dict_entry(data, get_subkind(link_rec, data).title(), link_rec, v, region_rec)
         dest_list.append(to_dict)
     region_id = u.region(k, data)
     region_rec = data[region_id]
     dest_dict = {'id': k,
                  'oid': to_oid(k),
                  'name': get_name(v),
-                 'type': get_type(v, data),
+                 'subkind': get_subkind(v, data),
                  'region_oid': to_oid(region_id),
                  'region_name': get_name(region_rec),
                  'dest': dest_list}
@@ -196,7 +194,7 @@ def create_loc_to_dict_entry(data, direction, to_loc_rec, from_loc_rec, region_r
     to_dict = {'id': u.return_unitid(to_loc_rec),
                'oid': to_oid(u.return_unitid(to_loc_rec)),
                'name': get_name(to_loc_rec),
-               'type': get_type(to_loc_rec, data),
+               'subkind': get_subkind(to_loc_rec, data),
                'is_port': u.is_port_city(to_loc_rec, data),
                'prov_port': u.province_has_port_city(to_loc_rec, data),
                'region_oid': to_oid(u.return_unitid(region_rec)),
@@ -243,7 +241,7 @@ def get_routes_out(k, v, data):
         dest_dict = {'id': k,
                      'oid': to_oid(k),
                      'name': get_name(v),
-                     'type': get_type(v, data),
+                     'subkind': get_subkind(v, data),
                      'region_oid': to_oid(region_id),
                      'region_name': get_name(region_rec),
                      'dest': dest_list}
@@ -358,7 +356,7 @@ def get_markets(k, v, data, trade_chain):
                                               'qty': recip_qty,
                                               'price': recip_price}
                                 recip_list.append(recip_dict)
-                market_dict = {'type': trade_list[trade],
+                market_dict = {'subkind': trade_list[trade],
                                'item_id': trade_list[trade + 1],
                                'item_oid': to_oid(trade_list[trade + 1]),
                                'item_name': get_name(item_rec),
@@ -405,7 +403,7 @@ def get_markets(k, v, data, trade_chain):
                                                                   'qty' : recip_qty,
                                                                   'price' : recip_price}
                                                     recip_list.append(recip_dict)
-                                    market_dict = {'type': trade_list[trade],
+                                    market_dict = {'subkind': trade_list[trade],
                                                    'item_id': trade_list[trade + 1],
                                                    'item_oid': to_oid(trade_list[trade + 1]),
                                                    'item_name': get_name(item_rec),
@@ -417,7 +415,7 @@ def get_markets(k, v, data, trade_chain):
                                                    'who_price': trade_list[trade + 3],
                                                    'recip_list' : recip_list}
                                     markets_list.append(market_dict)
-    sorted_list = sorted(markets_list, key=itemgetter('type', 'item_oid', 'who_oid'))
+    sorted_list = sorted(markets_list, key=itemgetter('subkind', 'item_oid', 'who_oid'))
     return sorted_list
 
 
@@ -545,7 +543,7 @@ def get_character_info(k, v, data, print_province):
 def build_complete_loc_dict(k, v, data, garrisons_chain, hidden_chain, trade_chain, instance, inst_dict, map_matrices):
     loc_dict = {'oid': to_oid(k),
                 'name': get_name(v),
-                'type': get_type(v, data),
+                'subkind': get_subkind(v, data),
                 'kind': 'loc',
                 'where': get_where_info(v, data),
                 'safe_haven': get_safe_haven(v),
@@ -576,7 +574,7 @@ def get_region(k, data):
 
 
 def get_map_anchor(v, k, data, instance, inst_dict, map_matrices):
-    if u.return_type(v) in ['tunnel', 'chamber']:
+    if u.return_subkind(v) in ['tunnel', 'chamber']:
         return None
     dimensions = inst_dict[instance]
     region = u.region(k, data)
@@ -607,7 +605,7 @@ def get_map_anchor(v, k, data, instance, inst_dict, map_matrices):
         custom = True
     # if len(save_rec) == 0:
     #     print('error {} {}'.format(to_oid(k),
-    #                                u.return_type(v)))
+    #                                u.return_subkind(v)))
     if len(save_rec) > 0 and not custom:
         world_rec = save_rec
         world = save_world

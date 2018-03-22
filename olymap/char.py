@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_type, to_oid, get_item_weight, get_pledged_to
+from olymap.utilities import get_oid, get_name, get_subkind, to_oid, get_item_weight, get_pledged_to
 from olymap.item import get_magic_item, get_item_attack, get_attack_bonus, get_aura_bonus, get_item_defense
 from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus
 import olypy.details as details
@@ -15,7 +15,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v),
-                     'type': get_type(v, data),
+                     'subkind': get_subkind(v, data),
                      'kind': 'char',
                      'rank': get_rank(v),
                      'faction': get_faction(v, data),
@@ -39,7 +39,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v),
-                     'type': get_type(v, data),
+                     'subkind': get_subkind(v, data),
                      'kind': 'char',
                      'faction': get_faction(v, data),
                      'health': get_health(v),
@@ -165,7 +165,7 @@ def get_loc(v, data):
         loc_dict = {'id': loc_oid[0],
                     'oid' : to_oid(loc_oid[0]),
                     'name' : loc_name,
-                    'type': u.return_type(loc_rec)}
+                    'subkind': u.return_subkind(loc_rec)}
         return loc_dict
     return None
 
@@ -380,10 +380,10 @@ def get_inventory(v, data, prominent_only):
     fly_cap = 0
     fly_weight = 0
     items_list = []
-    unit_type = '10'
+    unit_subkind = '10'
     if 'CH' in v and 'ni' in v['CH']:
-        unit_type = v['CH']['ni'][0]
-    base_unit = data[unit_type]
+        unit_subkind = v['CH']['ni'][0]
+    base_unit = data[unit_subkind]
     item_weight = get_item_weight(base_unit)
     if 'IT' in base_unit:
         if 'lc' in base_unit['IT'] and base_unit['IT']['lc'][0] != '0':
@@ -559,7 +559,7 @@ def get_magic_stuff(v, data):
             except KeyError:
                 pass
             else:
-                magic_type = None
+                magic_subkind = None
                 magic_item_dict = get_magic_item(data, item_id, item_rec)
                 if magic_item_dict is not None:
                     magic_list.append(magic_item_dict)
@@ -602,7 +602,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v),
-                     'type': get_type(v, data),
+                     'subkind': get_subkind(v, data),
                      'kind': 'char',
                      'rank': get_rank(v),
                      'faction': get_faction(v, data),
@@ -635,7 +635,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
         char_dict = {'id': k,
                      'oid': get_oid(k),
                      'name': get_name(v),
-                     'type': None,
+                     'subkind': None,
                      'kind': 'char',
                      'rank': None,
                      'faction': get_faction(v, data),
@@ -703,7 +703,7 @@ def get_priest_skills(v, data):
 
 
 def get_where(v, data):
-    if get_loc(v, data)['type'] not in details.province_kinds:
+    if get_loc(v, data)['subkind'] not in details.province_kinds:
         where_id = u.province(u.return_unitid(v), data)
         where_rec = data[where_id]
         where_dict = {'id': where_id,

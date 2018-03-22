@@ -67,9 +67,9 @@ def write_legacy_bitmap(outdir, data, upperleft, height, width, prefix, map_matr
             try:
                 province_box = data[map_matrix[y][x]]
                 try:
-                    color = color_pallette[u.return_type(province_box)]
+                    color = color_pallette[u.return_subkind(province_box)]
                 except KeyError:
-                    print('missing color for: {}'.format(u.return_type(province_box)))
+                    print('missing color for: {}'.format(u.return_subkind(province_box)))
                 else:
                     map.point(x, y, color)
             except KeyError:
@@ -270,7 +270,7 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
         border_dict = {}
         contents_dict = {}
     else:
-        type = u.return_type(loc_rec)
+        type = u.return_subkind(loc_rec)
         border_dict = maps.generate_border(data, loc_rec, outf, instance)
         contents_dict = maps.generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
     cell_dict = {'oid': to_oid(printpoint),

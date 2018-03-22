@@ -5,7 +5,7 @@
 <BODY>
 <H3>{{ storm.name }} [{{ storm.oid }}]</H3>
 <table>
-<tr><td>Type:</td><td>{{ storm.type }}</td></tr>
+<tr><td>Type:</td><td>{{ storm.subkind }}</td></tr>
 <tr><td>Where:</td><td>{{ storm.loc.name }} [<a href="{{ storm.loc.oid }}.html">{{ storm.loc.oid }}</a>]</td></tr>
 <tr><td>Strength:</td><td>{{ storm.strength }}</td></tr>
 {% if storm.ship %}

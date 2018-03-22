@@ -231,15 +231,15 @@ def write_cell(castle_chain, currentpoint, data, leftnav, outf, prefix, rightnav
     try:
         loc_rec = data[str(printpoint)]
     except:
-        type = 'undefined'
+        subkind = 'undefined'
         border_dict = {}
         contents_dict = {}
     else:
-        type = u.return_type(loc_rec)
+        subkind = u.return_subkind(loc_rec)
         border_dict = generate_border(data, loc_rec, outf, instance)
         contents_dict = generate_cell_contents(castle_chain, printpoint, data, loc_rec, outf)
     cell_dict = {'oid': to_oid(printpoint),
-                 'type': type,
+                 'subkind': subkind,
                  'border_dict': border_dict,
                  'contents_dict': contents_dict}
     # except KeyError:
@@ -327,7 +327,7 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
             for here in here_list:
                 # if 56760 <= int(here) <= 78999:
                 here_rec = data[here]
-                if u.return_type(here_rec) in details.subloc_kinds or u.is_road_or_gate(here_rec):
+                if u.return_subkind(here_rec) in details.subloc_kinds or u.is_road_or_gate(here_rec):
                     count = count + 1
                     if u.is_city(here_rec):
                         city = here_rec
@@ -386,14 +386,14 @@ def generate_cell_contents(castle_chain, cell, data, loc_rec, outf):
                 if u.is_city(loc2) or u.is_graveyard(loc2) or u.is_faeryhill(loc2):
                     loc2_oid = to_oid(u.return_unitid(loc2))
                 loc2_dict = {'oid': loc2_oid,
-                             'type': u.return_short_type(loc2),
+                             'subkind': u.return_short_subkind(loc2),
                              'hidden': u.is_hidden(loc2)}
         if loc1 != '':
             loc1_oid = ''
             if u.is_city(loc1) or u.is_graveyard(loc1) or u.is_faeryhill(loc1):
                 loc1_oid = to_oid(u.return_unitid(loc1))
             loc1_dict = {'oid': loc1_oid,
-                         'type': u.return_short_type(loc1),
+                         'subkind': u.return_short_subkind(loc1),
                          'hidden': u.is_hidden(loc1)}
     contents_dict = {'oid': to_oid(cell),
                      'civ_level': get_civ_level(cell, loc_rec, data),
@@ -467,10 +467,10 @@ def write_bitmap(outdir, data, upperleft, height, width, prefix):
             try:
                 province_box = data[str(curr_loc)]
                 try:
-                    color = color_pallette[u.return_type(province_box)]
+                    color = color_pallette[u.return_subkind(province_box)]
                     map.point(x, y, color)
                 except KeyError:
-                    print('missing color for: {}'.format(u.return_type(province_box)))
+                    print('missing color for: {}'.format(u.return_subkind(province_box)))
             except KeyError:
                 # print('missing box record for: {} {}'.format(curr_loc,
                 #                                              to_oid(curr_loc)))

@@ -10,7 +10,7 @@
 {% for entry in loc %}
     <tr>
         <td sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
-        <td>{{ entry.type }}</td>
+        <td>{{ entry.subkind }}</td>
         {% if entry.region %}
             <td sorttable_customkey="{{ entry.region.oid }}">{{ entry.region.name }} [<a href="{{ entry.region.oid }}.html">{{ entry.region.oid }}</a>]</td>
         {% else %}
