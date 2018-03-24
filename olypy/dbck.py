@@ -34,7 +34,7 @@ def check_firstline(data, fix, checknames=False):
                     problem += 1
         if 'CH' in v and 'bp' in v['CH']:
             if v['CH']['bp'][0] == '0':
-                # turnparser used to generate these. nuke 'em.
+                # turnparser used to generate these, the C code did not. nuke 'em.
                 del data[k]['CH']['bp']
     return problem
 
