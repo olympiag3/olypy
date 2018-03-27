@@ -615,19 +615,11 @@ def calc_ship_pct_loaded(data, k, box):
 
 
 def get_name(box, qty=None):
+    name = None
     if 'na' in box:
         name = box['na'][0]
         if qty and qty > 1:
             name = get_item_plural(box)
-    else:
-        if return_subkind(box) != '0':
-            name = return_subkind(box)
-        else:
-            name = return_kind(box)
-        if name.islower():
-            name = name.capitalize()
-    # if name == 'Ni':
-    #     name = data[box['CH']['ni'][0]]['na'][0].capitalize()
     return name
 
 
