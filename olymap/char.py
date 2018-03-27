@@ -717,17 +717,21 @@ def get_current_aura(box):
     return int(box.get('CM', {}).get('ca', [0])[0])
 
 
+# unit tested
 def get_char_attack(box):
-    return box.get('CH', {}).get('at', ['0'])[0]
+    return int(box.get('CH', {}).get('at', ['0'])[0])
 
 
+# unit tested
 def get_char_behind(box):
     return box.get('CH', {}).get('bh', ['0'])[0]
 
 
+# unit tested
 def get_char_defense(box):
-    return box.get('CH', {}).get('df', ['0'])[0]
+    return int(box.get('CH', {}).get('df', ['0'])[0])
 
 
+# unit tested
 def get_char_missile(box):
-    return box.get('CH', {}).get('mi', ['0'])[0]
+    return int(box.get('CH', {}).get('mi', ['0'])[0])
