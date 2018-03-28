@@ -55,62 +55,59 @@ def get_wearable_wielding(v, data):
     attack_max = 0
     missile_max = 0
     defense_max = 0
-    attack = ''
-    missile = ''
-    defense = ''
+    attack_unit_id = ''
+    missile_unit_id = ''
+    defense_unit_id = ''
     if 'il' in v:
         item_list = v['il']
         if len(item_list) > 0:
             for items in range(0, len(item_list), 2):
                 itemz = data[item_list[items]]
                 if 'IM' in itemz:
-                    if 'ab' in itemz['IM']:
-                        if int(itemz['IM']['ab'][0]) > attack_max:
-                            attack_max = int(itemz['IM']['ab'][0])
-                            attack = u.return_unitid(itemz)
-                    if 'mb' in itemz['IM']:
-                        if int(itemz['IM']['mb'][0]) > missile_max:
-                            missile_max = int(itemz['IM']['mb'][0])
-                            missile = u.return_unitid(itemz)
-                    if 'db' in itemz['IM']:
-                        if int(itemz['IM']['db'][0]) > defense_max:
-                            defense_max = int(itemz['IM']['db'][0])
-                            defense = u.return_unitid(itemz)
+                    if get_attack_bonus(itemz) > attack_max:
+                        attack_max = get_attack_bonus(itemz)
+                        attack_unit_id = u.return_unitid(itemz)
+                    if get_defense_bonus(itemz) > defense_max:
+                        defense_max = get_defense_bonus(itemz)
+                        defense_unit_id = u.return_unitid(itemz)
+                    if get_missile_bonus(itemz) > missile_max:
+                        missile_max = get_missile_bonus(itemz)
+                        missile_unit_id = u.return_unitid(itemz)
         # found something
-        if attack != '' or missile != '' or defense != '':
-            if attack == missile:
-                missile = ''
-        if attack == defense:
-            defense = ''
-        if attack != '' or missile != '':
-            if attack == '':
-                missile_rec = data[missile]
-                missile_dict = {'id': missile,
-                                'oid': to_oid(missile),
+        if attack_unit_id != '' or missile_unit_id != '' or defense_unit_id != '':
+            if attack_unit_id == missile_unit_id:
+                missile_unit_id = ''
+        if attack_unit_id == defense_unit_id:
+            defense_unit_id = ''
+        if attack_unit_id != '' or missile_unit_id != '':
+            if attack_unit_id == '':
+                missile_rec = data[missile_unit_id]
+                missile_dict = {'id': missile_unit_id,
+                                'oid': to_oid(missile_unit_id),
                                 'name': get_name(missile_rec)}
                 attack_dict = {}
-            elif missile == '':
-                attack_rec = data[attack]
-                attack_dict = {'id': attack,
-                               'oid': to_oid(attack),
+            elif missile_unit_id == '':
+                attack_rec = data[attack_unit_id]
+                attack_dict = {'id': attack_unit_id,
+                               'oid': to_oid(attack_unit_id),
                                'name': get_name(attack_rec)}
                 missile_dict = {}
             else:
-                missile_rec = data[missile]
-                missile_dict = {'id': missile,
-                                'oid': to_oid(missile),
+                missile_rec = data[missile_unit_id]
+                missile_dict = {'id': missile_unit_id,
+                                'oid': to_oid(missile_unit_id),
                                 'name': get_name(missile_rec)}
-                attack_rec = data[attack]
-                attack_dict = {'id': attack,
-                               'oid': to_oid(attack),
+                attack_rec = data[attack_unit_id]
+                attack_dict = {'id': attack_unit_id,
+                               'oid': to_oid(attack_unit_id),
                                'name': get_name(attack_rec)}
         else:
             attack_dict = {}
             missile_dict = {}
-        if defense != '':
-            defense_rec = data[defense]
-            defense_dict = {'id': defense,
-                            'oid': to_oid(defense),
+        if defense_unit_id != '':
+            defense_rec = data[defense_unit_id]
+            defense_dict = {'id': defense_unit_id,
+                            'oid': to_oid(defense_unit_id),
                             'name': get_name(defense_rec)}
         else:
             defense_dict = {}

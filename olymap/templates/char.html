@@ -166,13 +166,13 @@
                         {%- endif -%}
                         )
                     {% endif %}
-                    {% if entry.attack_bonus %}
+                    {% if entry.attack_bonus > 0 %}
                         + {{ entry.attack_bonus }} attack
                     {% endif %}
-                    {% if entry.defense_bonus %}
+                    {% if entry.defense_bonus > 0 %}
                         + {{ entry.defense_bonus }} defense
                     {% endif %}
-                    {% if entry.missile_bonus %}
+                    {% if entry.missile_bonus > 0 %}
                         + {{ entry.missile_bonus }} missile
                     {% endif %}
                     {% if entry.aura_bonus %}

@@ -75,7 +75,7 @@ def get_item_attack(v):
 
 
 def get_attack_bonus(v):
-    return v.get('IM', {}).get('ab', [None])[0]
+    return int(v.get('IM', {}).get('ab', ['0'])[0])
 
 
 def get_aura_bonus(v):
@@ -102,7 +102,7 @@ def get_item_defense(v):
 
 
 def get_defense_bonus(v):
-    return v.get('IM', {}).get('db', [None])[0]
+    return int(v.get('IM', {}).get('db', ['0'])[0])
 
 
 def get_fly_capacity(v):
@@ -136,7 +136,7 @@ def get_item_missile(v):
 
 
 def get_missile_bonus(v):
-    return v.get('IM', {}).get('mb', [None])[0]
+    return int(v.get('IM', {}).get('mb', ['0'])[0])
 
 
 def get_plural(v, data):

@@ -11,7 +11,7 @@
 {% if item.attack %}
     <tr><td>Attack:</td><td>{{ item.attack }}</td></tr>
 {% endif %}
-{% if item.attack_bonus %}
+{% if item.attack_bonus > 0 %}
     <tr><td>Attack Bonus:</td><td>{{ item.attack_bonus }}</td></tr>
 {% endif %}
 {% if item.aura %}
@@ -26,7 +26,7 @@
 {% if item.defense %}
     <tr><td>Defense:</td><td>{{ item.defense }}</td></tr>
 {% endif %}
-{% if item.defense_bonus %}
+{% if item.defense_bonus > 0 %}
     <tr><td>Defense Bonus:</td><td>{{ item.defense_bonus }}</td></tr>
 {% endif %}
 {% if item.fly_capacity %}
@@ -44,7 +44,7 @@
 {% if item.missile %}
     <tr><td>Missile:</td><td>{{ item.missile }}</td></tr>
 {% endif %}
-{% if item.missile_bonus %}
+{% if item.missile_bonus > 0 %}
     <tr><td>Missile Bonus:</td><td>{{ item.missile_bonus }}</td></tr>
 {% endif %}
 {% if item.plural %}
