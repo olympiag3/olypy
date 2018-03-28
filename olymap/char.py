@@ -141,6 +141,7 @@ def get_char_accomp_by(v, data):
     return ab_str
 
 
+# unit tested
 def get_rank(v):
     rank = u.xlate_rank(v)
     return rank
@@ -170,6 +171,7 @@ def get_loc(v, data):
     return None
 
 
+# unit tested
 def get_loyalty(v):
     loyalty = u.xlate_loyalty(v)
     return loyalty
@@ -250,6 +252,7 @@ def get_break_point(v, instance):
     return break_point_text
 
 
+# unit tested
 def get_vision_protection(v):
     vision_protection = v.get('CM', {}).get('vp', [None])[0]
     return vision_protection
@@ -713,6 +716,7 @@ def get_where(v, data):
     return None
 
 
+# unit tested
 def get_current_aura(box):
     return int(box.get('CM', {}).get('ca', [0])[0])
 
