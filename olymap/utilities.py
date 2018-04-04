@@ -633,14 +633,10 @@ def get_subkind(box, data):
 
 # unit tested
 def is_absorb_aura_blast(box):
-    if 'CH' in box and 'sl' in box['CH']:
-        skills_list = box['CH']['sl']
-        if int(len(skills_list)) > 0:
-            for skill in range(0, len(skills_list), 5):
-                if skills_list[skill] == '909':
-                    if skills_list[skill + 1] == '2':
-                        return True
-    return False
+    skill909 = return_char_skill(box, '909')
+    if skill909 is None:
+        return False
+    return skill909[0]['known']
 
 
 # unit tested

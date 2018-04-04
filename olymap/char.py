@@ -670,16 +670,7 @@ def get_priest_skills(v, data):
     visions_list = []
     skill_751 = None
     skill_753 = None
-    # if 'CH' in v and 'sl' in v['CH']:
-    #      skills_list = v['CH']['sl']
-    #      skills_iteration = int(len(skills_list) / 5)
-    #      if skills_iteration > 0:
-    #          for skill in range(0, skills_iteration):
-    #              if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
-    #                  skill_753 = 'Yes'
-    #              if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
-    #                  skill_755 = 'Yes'
-    if return_char_skill(v, '751') is not None:
+       if return_char_skill(v, '751') is not None:
         skill_751 = True if return_char_skill(v, '751')[0]['known'] == True else False
     if return_char_skill(v, '753') is not None:
         skill_753 = True if return_char_skill(v, '753')[0]['known'] == True else False
