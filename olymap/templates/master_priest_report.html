@@ -12,13 +12,13 @@
         <td  valign="top" sorttable_customkey="{{ entry.oid }}">{{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]</td>
         <td  valign="top" sorttable_customkey="{{ entry.name }}">{{ entry.name }}</td>
         {% if entry.priest_dict %}
-            {% if entry.priest_dict.skill753 %}
-                <td valign="top">{{ entry.priest_dict.skill753 }}</td>
+            {% if entry.priest_dict.skill751 == True %}
+                <td valign="top">{{ entry.priest_dict.skill751 }}</td>
             {% else %}
                 <td>&nbsp;</td>
             {% endif %}
-            {% if entry.priest_dict.skill755 %}
-                <td valign="top">{{ entry.priest_dict.skill755 }}</td>
+            {% if entry.priest_dict.skill753 == True %}
+                <td valign="top">{{ entry.priest_dict.skill753 }}</td>
             {% else %}
                 <td>&nbsp;</td>
             {% endif %}
@@ -30,7 +30,7 @@
                         <tr>
                         {% if ((i*2)) <= entry.priest_dict.visions|length - 1 %}
                             <td>
-                                {{ entry.priest_dict.visions[i*2].name }} [<a href="{{ entry.priest_dict.visions[i*2].oid }}">{{ entry.priest_dict.visions[i*2].oid }}</a>]
+                                {{ entry.priest_dict.visions[i*2].name }} [<a href="{{ entry.priest_dict.visions[i*2].oid }}.html">{{ entry.priest_dict.visions[i*2].oid }}</a>]
                             </td>
                         {% else %}
                             <td>&nbsp;</td>

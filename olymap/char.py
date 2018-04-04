@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from olypy.oid import to_oid
 import olymap.utilities as u
-from olymap.utilities import get_oid, get_name, get_subkind, to_oid, get_item_weight, get_pledged_to
+from olymap.utilities import get_oid, get_name, get_subkind, to_oid, get_item_weight, get_pledged_to, return_char_skill
 from olymap.item import get_magic_item, get_item_attack, get_attack_bonus, get_aura_bonus, get_item_defense
 from olymap.item import get_defense_bonus, get_item_missile, get_missile_bonus
 import olypy.details as details
@@ -668,17 +668,21 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
 
 def get_priest_skills(v, data):
     visions_list = []
+    skill_751 = None
     skill_753 = None
-    skill_755 = None
-    if 'CH' in v and 'sl' in v['CH']:
-        skills_list = v['CH']['sl']
-        skills_iteration = int(len(skills_list) / 5)
-        if skills_iteration > 0:
-            for skill in range(0, skills_iteration):
-                if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
-                    skill_753 = 'Yes'
-                if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
-                    skill_755 = 'Yes'
+    # if 'CH' in v and 'sl' in v['CH']:
+    #      skills_list = v['CH']['sl']
+    #      skills_iteration = int(len(skills_list) / 5)
+    #      if skills_iteration > 0:
+    #          for skill in range(0, skills_iteration):
+    #              if skills_list[(skill * 5)] == '753' and skills_list[(skill * 5) + 1] == '2':
+    #                  skill_753 = 'Yes'
+    #              if skills_list[(skill * 5)] == '755' and skills_list[(skill * 5) + 1] == '2':
+    #                  skill_755 = 'Yes'
+    if return_char_skill(v, '751') is not None:
+        skill_751 = True if return_char_skill(v, '751')[0]['known'] == True else False
+    if return_char_skill(v, '753') is not None:
+        skill_753 = True if return_char_skill(v, '753')[0]['known'] == True else False
     if 'CM' in v and 'vi' in v['CM']:
         vision_list = v['CM']['vi']
         for vision in vision_list:
@@ -696,8 +700,8 @@ def get_priest_skills(v, data):
                            'oid': vision_oid,
                            'name': vision_name}
             visions_list.append(vision_dict)
-    priest_dict = {'skill753': skill_753,
-                   'skill755': skill_755,
+    priest_dict = {'skill751': skill_751,
+                   'skill753': skill_753,
                    'visions': visions_list}
     return priest_dict
 
@@ -736,3 +740,4 @@ def get_char_defense(box):
 # unit tested
 def get_char_missile(box):
     return int(box.get('CH', {}).get('mi', ['0'])[0])
+

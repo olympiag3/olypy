@@ -523,15 +523,10 @@ def province_has_port_city(box, data):
 
 # unit tested
 def is_priest(box):
-    if 'CH' in box:
-        if 'sl' in box['CH']:
-            skills_list = box['CH']['sl']
-            if len(skills_list) > 0:
-                for skill in range(0, len(skills_list), 5):
-                    if skills_list[skill] == '750':
-                        if skills_list[skill + 1] == '2':
-                            return True
-    return False
+    skill750 = return_char_skill(box, '750')
+    if skill750 is None:
+        return False
+    return skill750[0]['known']
 
 
 # unit tested
@@ -817,3 +812,19 @@ def get_pledged_to(v, data):
                                'name': char_name}
             return pledged_to_dict
     return None
+
+
+def return_char_skill(box, skill_id):
+    skill_list = box.get('CH', {}).get('sl', None)
+    if skill_list is None:
+        return None
+    skills_list = []
+    for skill_set in range(0, len(skill_list), 5):
+        if (skill_id is not None and skill_list[skill_set] == skill_id) or skill_id is None:
+            skill_dict = {'id': skill_list[skill_set],
+                          'oid' : to_oid(skill_list[skill_set]),
+                          'known': True if skill_list[skill_set + 1] == '2' else False}
+            skills_list.append(skill_dict)
+    if len(skills_list) == 0:
+        return None
+    return skills_list
