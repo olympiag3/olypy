@@ -227,6 +227,7 @@ def get_combat(box):
     return combat_dict
 
 
+# unit tested
 def get_break_point(box):
     break_point = box.get('CH', {}).get('bp', ['0'])[0]
     if break_point != '50':

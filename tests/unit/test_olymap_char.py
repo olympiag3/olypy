@@ -11,6 +11,17 @@ def test_get_char_attack():
         assert olymap.char.get_char_attack(box) == answer
 
 
+def test_get_char_break_point():
+    tests = (
+        ({}, '0% (fight to the death)'),
+        ({'CH': {'bp': ['50']}}, '50%'),
+        ({'IM': {'bp': ['1234']}}, '0% (fight to the death)'),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_break_point(box) == answer
+
+
 def test_get_char_behind():
     tests = (
         ({}, '0'),
