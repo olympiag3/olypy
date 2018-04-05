@@ -136,14 +136,17 @@ def get_rank(v):
     return rank
 
 
+# unit tested
 def get_faction(v, data):
     faction_id = v.get('CH', {}).get('lo', [None])[0]
     if faction_id is not None:
-        player_rec = data[faction_id]
-        faction_name = get_name(player_rec)
+        try:
+            player_rec = data[faction_id]
+        except:
+            return None
         faction_dict = {'id': faction_id,
                         'oid' : to_oid(faction_id),
-                        'name' : faction_name}
+                        'name' : get_name(player_rec)}
         return faction_dict
     return None
 

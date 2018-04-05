@@ -62,6 +62,20 @@ def test_get_current_aura():
         assert olymap.char.get_current_aura(box) == answer
 
 
+def test_get_faction():
+    data = {'50033': {'firstline': ['50033 player pl_regular'], 'na': ['Test Faction']}}
+    tests = (
+        ({}, None),
+        ({'CH': {'lo': ['50033']}}, {'id': '50033', 'oid': 'ad3', 'name': 'Test Faction'}),
+        ({'CH': {'lo': ['50022']}}, None),
+        ({'CH': {'at': ['50033']}}, None),
+        ({'IM': {'lo': ['50033']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_faction(box, data) == answer
+
+
 # same unit test as xlate_loyalty in utilities
 def test_get_loyalty():
     tests = (
