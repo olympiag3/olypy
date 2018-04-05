@@ -74,6 +74,21 @@ def test_get_faction():
         assert olymap.char.get_faction(box, data) == answer
 
 
+def test_get_health():
+    tests = (
+        ({}, 'n/a'),
+        ({'CH': {'he': ['100']}}, {'health': '100', 'status': None}),
+        ({'CH': {'he': ['60']}}, {'health': '60', 'status': '(getting better)'}),
+        ({'CH': {'he': ['60'], 'si': ['1']}}, {'health': '60', 'status': '(getting worse)'}),
+        ({'CH': {'he': ['60'], 'si': ['0']}}, {'health': '60', 'status': '(getting better)'}),
+        ({'CH': {'he': ['-1']}}, {'health': 'n/a', 'status': None}),
+        ({'CM': {'he': ['100']}}, 'n/a'),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_health(box) == answer
+
+
 def test_get_loc():
     data = {'10001': {'firstline': ['10001 loc forest'], 'na': ['Forest']},
             '1234': {'firstline': ['1234 char 0'], 'na': ['Socrates']}}
