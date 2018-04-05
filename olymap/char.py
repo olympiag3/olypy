@@ -213,15 +213,16 @@ def get_health(box):
     return 'n/a'
 
 
-def get_combat(v):
-    if get_char_behind(v) != '0':
+# unit tested
+def get_combat(box):
+    if get_char_behind(box) != '0':
         behind_text = '(stay behind in combat)'
     else:
         behind_text = '(front line in combat)'
-    combat_dict = {'attack' : get_char_attack(v),
-                   'defense' : get_char_defense(v),
-                   'missile' : get_char_missile(v),
-                   'behind' : get_char_behind(v),
+    combat_dict = {'attack' : get_char_attack(box),
+                   'defense' : get_char_defense(box),
+                   'missile' : get_char_missile(box),
+                   'behind' : get_char_behind(box),
                    'behind_text' : behind_text}
     return combat_dict
 

@@ -24,6 +24,16 @@ def test_get_char_behind():
         assert olymap.char.get_char_behind(box) == answer
 
 
+def test_get_char_combat():
+    tests = (
+        ({}, {'attack': 0, 'defense': 0, 'missile': 0, 'behind': '0', 'behind_text': '(front line in combat)'}),
+        ({'CH': {'at': ['10'], 'df': ['10'], 'mi': ['10'], 'bh': ['4']}}, {'attack': 10, 'defense': 10, 'missile': 10, 'behind': '4', 'behind_text': '(stay behind in combat)'}),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_combat(box) == answer
+
+
 def test_get_char_defense():
     tests = (
         ({}, 0),
