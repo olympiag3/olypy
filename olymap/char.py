@@ -227,17 +227,12 @@ def get_combat(box):
     return combat_dict
 
 
-def get_break_point(v, instance):
-    if instance.lower() in {'g2','qa'}:
-        break_point = '0'
-    else:
-        break_point = '50'
-    if 'CH' in v and 'bp' in v['CH']:
-        break_point = v['CH']['bp'][0]
+def get_break_point(box):
+    break_point = box.get('CH', {}).get('bp', ['0'])[0]
     if break_point != '50':
-        break_point_text = ('{}% (fight to the death)'.format(break_point))
+        break_point_text = (f'{break_point}% (fight to the death)')
     else:
-        break_point_text = ('{}%'.format(break_point))
+        break_point_text = (f'{break_point}%')
     return break_point_text
 
 
@@ -610,7 +605,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      # 'stacked_under': get_stacked_under(v, data),
                      'stacked_over_list': get_stacked_over(v, data),
                      'health_dict': get_health(v),
-                     'break_point': get_break_point(v, instance),
+                     'break_point': get_break_point(v),
                      'vision_protection': get_vision_protection(v),
                      'pledged_to': get_pledged_to(v, data),
                      'pledged_to_us_list': get_pledged_to_us(k, data, pledge_chain),
