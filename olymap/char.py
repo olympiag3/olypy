@@ -670,7 +670,7 @@ def get_priest_skills(v, data):
     visions_list = []
     skill_751 = None
     skill_753 = None
-       if return_char_skill(v, '751') is not None:
+    if return_char_skill(v, '751') is not None:
         skill_751 = True if return_char_skill(v, '751')[0]['known'] == True else False
     if return_char_skill(v, '753') is not None:
         skill_753 = True if return_char_skill(v, '753')[0]['known'] == True else False

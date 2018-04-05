@@ -1,3 +1,4 @@
+
 import olymap.utilities
 
 
@@ -57,6 +58,19 @@ def test_get_auraculum_id():
 
     for box, answer in tests:
         assert olymap.utilities.get_auraculum_id(box) == answer
+
+
+def test_get_char_skills():
+    tests = (
+        ({}, '751', None), 
+        ({'firstline': ['7271 char 0'], 'na': ['Osswid the Destroyer']}, '751', None),
+        ({'firstline': ['1234 char 0'], 'na': ['Priest 751/753'], 'CH': {'sl': ['751', '2', '', '', '', '753', '2', '', '', '']}}, '751', [{'id': '751', 'oid': '751', 'known': True}]),
+        ({'firstline': ['1235 char 0'], 'na': ['Not Priest 1'], 'CH': {'sl': ['610', '2', '', '', '', '611', '2', '', '', '']}}, '751', None),
+        ({'firstline': ['1236 char 0'], 'na': ['Not Priest 2'], 'CH': {'sl': ['751', '1', '', '', '', '753', '1', '', '', '']}}, '751', [{'id': '751', 'oid': '751', 'known': False}])
+    )
+
+    for box, skillid, answer in tests:
+        assert olymap.utilities.return_char_skill(box, skillid) == answer
 
 
 def test_get_item_weight():
