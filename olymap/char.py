@@ -19,7 +19,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
                      'kind': 'char',
                      'rank': get_rank(v),
                      'faction': get_faction(v, data),
-                     'health': get_health(v),
+                     'health_dict': get_health(v),
                      'nbr_men': get_nbr_men(v, data),
                      'absorb_blast': u.is_absorb_aura_blast(v),
                      'prisoner': u.is_prisoner(v),
@@ -42,7 +42,7 @@ def build_basic_char_dict(k, v, data, prominent_only=False):
                      'subkind': get_subkind(v, data),
                      'kind': 'char',
                      'faction': get_faction(v, data),
-                     'health': get_health(v),
+                     'health_dict': get_health(v),
                      'nbr_men': get_nbr_men(v, data),
                      'on_guard': u.is_on_guard(v),
                      'loyalty': get_loyalty(v),
@@ -191,23 +191,25 @@ def get_stacked_over(box, data):
     return None
 
 
-def get_health(v):
-    health = v.get('CH', {}).get('he', [None])[0]
+# unit tested
+def get_health(box):
+    health = box.get('CH', {}).get('he', [None])[0]
+    status = None
     if health is not None:
-        if int(health) < 100:
-            status = ''
-            if 'si' in v['CH']:
-                if v['CH']['si'][0] == '1':
+        if -1 < int(health) < 100:
+            sick = box.get('CH', {}).get('si', [None])[0]
+            if sick is not None:
+                if sick == '1':
                     status = '(getting worse)'
                 else:
                     status = '(getting better)'
-            if int(health) < 0:
-                health_str = ('n/a {}'.format(status))
             else:
-                health_str = ('{}% {}'.format(health, status))
-        else:
-            health_str = ('{}%'.format(health))
-        return health_str
+                status = '(getting better)'
+        elif int(health) < 0:
+            health = 'n/a'
+        health_dict = {'health': health,
+                       'status': status}
+        return health_dict
     return 'n/a'
 
 
@@ -606,7 +608,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'loyalty': get_loyalty(v),
                      # 'stacked_under': get_stacked_under(v, data),
                      'stacked_over_list': get_stacked_over(v, data),
-                     'health': get_health(v),
+                     'health_dict': get_health(v),
                      'break_point': get_break_point(v, instance),
                      'vision_protection': get_vision_protection(v),
                      'pledged_to': get_pledged_to(v, data),
@@ -638,7 +640,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'loyalty': None,
                      # 'stacked_under': None,
                      'stacked_over_list': None,
-                     'health': None,
+                     'health_dict': None,
                      'break_point': None,
                      'vision_protection': None,
                      'pledged_to': None,

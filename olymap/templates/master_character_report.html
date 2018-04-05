@@ -17,8 +17,12 @@
             <td>&nbsp;</td>
         {% endif %}
         <td>{{ entry.loyalty }}</td>
-        {% if entry.health %}
-            <td>{{ entry.health }}</td>
+        {% if entry.health_dict %}
+            <td>{{ entry.health_dict.health }}
+	    {% if entry.health_dict.status == '(getting worse)' %}
+	    (sick)
+	    {% endif %}
+	    </td>
         {% else %}
             <td>&nbsp;</td>
         {% endif %}

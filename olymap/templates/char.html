@@ -37,8 +37,12 @@
         {% set ns.title="" %}
     {% endfor %}
 {% endif %}
-{% if char.health %}
-    <tr><td>Health:</td><td>{{ char.health }}</td></tr>
+{% if char.health_dict %}
+    <tr><td>Health:</td><td>{{ char.health_dict.health }}
+    {% if char.health_dict.status %}
+	{{ char.health_dict.status }}
+   {% endif %}
+    </td></tr>
 {% endif %}
 {% if char.combat_dict %}
     <tr><td>Combat:</td><td>attack {{ char.combat_dict.attack }}, defense {{ char.combat_dict.defense }}, missile {{ char.combat_dict.missile }}</td></tr>
