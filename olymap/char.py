@@ -175,16 +175,17 @@ def get_loyalty(box):
     return loyalty
 
 
-def get_stacked_over(v, data):
-    here_list = v.get('LI', {}).get('hl', [None])
+# unit tested 
+def get_stacked_over(box, data):
+    here_list = box.get('LI', {}).get('hl', [None])
     stacked_over_list = []
     if here_list[0] is not None:
         for char in here_list:
-            char_rec = data[char]
-            if u.is_char(char_rec):
+            char_box = data[char]
+            if u.is_char(char_box):
                 stacked_over_dict = {'id': char,
                                      'oid' : to_oid(char),
-                                     'name' : get_name(char_rec)}
+                                     'name' : get_name(char_box)}
                 stacked_over_list.append(stacked_over_dict)
         return stacked_over_list
     return None

@@ -1,6 +1,4 @@
 import olymap.char
-
-
 def test_get_char_attack():
     tests = (
         ({}, 0),
@@ -132,6 +130,19 @@ def test_get_rank():
 
     for box, answer in tests:
         assert olymap.char.get_rank(box) == answer
+
+
+def test_get_stacked_over():
+    data = {'1234': {'firstline': ['1234 char 0'], 'na': ['Stack Leader'], 'LI': {'hl': ['1235', '1236']}},
+            '1235': {'firstline': ['1235 char 0'], 'na': ['Minion 1']},
+            '1236': {'firstline': ['1236 char 0'], 'na': ['Minion 2']}}
+    tests = (
+        ({}, None),
+        ({'firstline': ['1234 char 0'], 'na': ['Stack Leader'], 'LI': {'hl': ['1235', '1236']}}, [{'id': '1235', 'oid': '1235', 'name': 'Minion 1'}, {'id': '1236', 'oid': '1236', 'name': 'Minion 2'}]),
+        ({'firstline': ['1234 char 0'], 'na': ['Stack Leader']}, None),
+    )
+    for box, answer in tests:
+        assert olymap.char.get_stacked_over(box, data) == answer
 
 
 def test_get_vision_protection():
