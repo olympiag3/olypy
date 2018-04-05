@@ -231,9 +231,9 @@ def get_combat(box):
 def get_break_point(box):
     break_point = box.get('CH', {}).get('bp', ['0'])[0]
     if break_point != '50':
-        break_point_text = (f'{break_point}% (fight to the death)')
+        break_point_text = ('{}% (fight to the death)'.format(break_point))
     else:
-        break_point_text = (f'{break_point}%')
+        break_point_text = ('{}%'.format(break_point))
     return break_point_text
 
 
