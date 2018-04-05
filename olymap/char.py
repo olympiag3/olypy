@@ -259,14 +259,14 @@ def get_pledged_to_us(unit_id, data, pledge_list):
     return pledged_to_us_list
 
 
-def get_aura(v, data):
-    if u.is_magician(v):
-        rank = u.xlate_magetype(v, data)
-        current_aura = get_current_aura(v)
-        max_aura = u.get_max_aura(v)
+def get_aura(box, data):
+    if u.is_magician(box):
+        rank = u.xlate_magetype(box, data)
+        current_aura = get_current_aura(box)
+        max_aura = u.get_max_aura(box)
         auraculum_aura = 0
-        if u.get_auraculum_id(v) is not None:
-            auraculum_id = u.get_auraculum_id(v)
+        if u.get_auraculum_id(box) is not None:
+            auraculum_id = u.get_auraculum_id(box)
             auraculum_box = data[auraculum_id]
             auraculum_aura = u.get_auraculum_aura(auraculum_box)
             auraculum_dict = {'id': auraculum_id,
