@@ -243,17 +243,17 @@ def get_vision_protection(v):
     return vision_protection
 
 
-def get_pledged_to_us(k, data, pledge_list):
+def get_pledged_to_us(unit_id, data, pledge_list):
     pledged_to_us_list = []
     try:
-        pledgee_list = pledge_list[k]
+        pledgee_list = pledge_list[unit_id]
     except:
         return None
-    for pledgee in pledgee_list:
-        pledgee_rec = data[pledgee]
-        pledgee_dict = {'id': pledgee,
-                        'oid': to_oid(pledgee),
-                        'name': get_name(pledgee_rec)}
+    for pledgee_id in pledgee_list:
+        pledgee_box = data[pledgee_id]
+        pledgee_dict = {'id': pledgee_id,
+                        'oid': to_oid(pledgee_id),
+                        'name': get_name(pledgee_box)}
         pledged_to_us_list.append(pledgee_dict)
     return pledged_to_us_list
 
