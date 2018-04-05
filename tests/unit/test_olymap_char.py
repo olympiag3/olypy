@@ -76,6 +76,22 @@ def test_get_faction():
         assert olymap.char.get_faction(box, data) == answer
 
 
+def test_get_loc():
+    data = {'10001': {'firstline': ['10001 loc forest'], 'na': ['Forest']},
+            '1234': {'firstline': ['1234 char 0'], 'na': ['Socrates']}}
+    tests = (
+        ({}, None),
+        ({'LI': {'wh': ['10001']}}, {'id': '10001', 'oid': 'aa01', 'name': 'Forest', 'kind': 'loc', 'subkind': 'forest'}),
+        ({'LI': {'wh': ['1234']}}, {'id': '1234', 'oid': '1234', 'name': 'Socrates', 'kind': 'char', 'subkind': '0'}),        
+        ({'LI': {'wh': ['10002']}}, None),
+        ({'LI': {'at': ['10001']}}, None),
+        ({'IM': {'wh': ['10001']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_loc(box, data) == answer
+
+
 # same unit test as xlate_loyalty in utilities
 def test_get_loyalty():
     tests = (
@@ -128,3 +144,23 @@ def test_get_vision_protection():
 
     for box, answer in tests:
         assert olymap.char.get_vision_protection(box) == answer
+
+
+def test_get_where():
+    data = {'10001': {'firstline': ['10001 loc forest'], 'na': ['Forest']}, 'LI': {'wh': ['40001']},
+            '10002': {'firstline': ['10002 loc yew grove'], 'na': ['Yew Grove'], 'LI': {'wh': ['10001']}},
+            '1234': {'firstline': ['1234 char 0'], 'na': ['Socrates'], 'LI': {'wh': ['10001']}},
+            '1235': {'firstline': ['1235 char 0'], 'na': ['Plato'], 'LI': {'wh': ['1234']}},
+            '40001': {'firstline': ['40001 loc region'], 'na': ['Test Region']}}
+    tests = (
+        ({}, None),
+        ({'firstline': ['1234 char 0'], 'LI': {'wh': ['10001']}}, None),
+        ({'firstline': ['1235 char 0'], 'LI': {'wh': ['1234']}}, {'id': '10001', 'oid': 'aa01', 'name': 'Forest'}),        
+        ({'firstline': ['1235 char 0'], 'LI': {'wh': ['10002']}}, {'id': '10001', 'oid': 'aa01', 'name': 'Forest'}),        
+        ({'firstline': ['1234 char 0'], 'LI': {'wh': ['10003']}}, None),
+        ({'firstline': ['1234 char 0'], 'LI': {'at': ['10001']}}, None),
+        ({'firstline': ['1234 char 0'], 'IM': {'wh': ['10001']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.char.get_where(box, data) == answer

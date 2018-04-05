@@ -409,24 +409,9 @@ def province(who, data):
     return who
 
 
-# def top_ruler(k, data):
-#     cont = True
-#     while cont:
-#         top_dog = k
-#         try:
-#             v = data[k]
-#         except KeyError:
-#             return top_dog
-#         if 'CM' in v and 'pl' in v['CM']:
-#                 k = v['CM']['pl'][0]
-#         else:
-#             cont = False
-#     return top_dog
 def top_ruler(box, data):
     cont = True
     save_box = box
-    # if return_unitid(box) == '7271':
-    #     print(save_box)
     top_dog_id = None
     top_dog_box = None
     while cont:
@@ -436,8 +421,6 @@ def top_ruler(box, data):
         else:
             top_dog_id = top_dog_dict['id']
             top_dog_box = data[top_dog_id]
-            # if return_unitid(save_box) == '7271':
-            #     print(top_dog_box)
             box = top_dog_box
     return top_dog_box
 

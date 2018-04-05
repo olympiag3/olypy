@@ -27,8 +27,8 @@
 {% if char.loyalty != 'undefined' and char.loyalty %}
     <tr><td>Loyalty:</td><td>{{ char.loyalty }}</td></tr>
 {% endif %}
-{% if char.stacked_under %}
-    <tr><td>Stacked Under:</td><td>{{ char.stacked_under.name }} [<a href="{{ char.stacked_under.oid }}.html">{{ char.stacked_under.oid }}</a>]</td></tr>
+{% if char.loc.kind == 'char' %}
+    <tr><td>Stacked Under:</td><td>{{ char.loc.name }} [<a href="{{ char.loc.oid }}.html">{{ char.loc.oid }}</a>]</td></tr>
 {% endif %}
 {% if char.stacked_over_list %}
     {% set ns = namespace(title="Stacked Over:") %}

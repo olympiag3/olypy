@@ -131,56 +131,48 @@ def get_char_prominent_items(v, data):
 
 
 # unit tested
-def get_rank(v):
-    rank = u.xlate_rank(v)
+def get_rank(box):
+    rank = u.xlate_rank(box)
     return rank
 
 
 # unit tested
-def get_faction(v, data):
-    faction_id = v.get('CH', {}).get('lo', [None])[0]
+def get_faction(box, data):
+    faction_id = box.get('CH', {}).get('lo', [None])[0]
     if faction_id is not None:
         try:
-            player_rec = data[faction_id]
+            player_box = data[faction_id]
         except:
             return None
         faction_dict = {'id': faction_id,
                         'oid' : to_oid(faction_id),
-                        'name' : get_name(player_rec)}
+                        'name' : get_name(player_box)}
         return faction_dict
     return None
 
 
-def get_loc(v, data):
-    loc_oid = v.get('LI', {}).get('wh', [None])
-    if loc_oid[0] is not None:
-        loc_rec = data[loc_oid[0]]
-        loc_name = get_name(loc_rec)
-        loc_dict = {'id': loc_oid[0],
-                    'oid' : to_oid(loc_oid[0]),
-                    'name' : loc_name,
-                    'subkind': u.return_subkind(loc_rec)}
+# unit tested
+def get_loc(box, data):
+    loc_id = box.get('LI', {}).get('wh', [None])[0]
+    if loc_id is not None:
+        try:
+            loc_box = data[loc_id]
+        except:
+            return None
+        # could be location or stacked under something
+        loc_dict = {'id': loc_id,
+                    'oid' : to_oid(loc_id),
+                    'name' : get_name(loc_box),
+                    'kind' : u.return_kind(loc_box),
+                    'subkind': u.return_subkind(loc_box)}
         return loc_dict
     return None
 
 
 # unit tested
-def get_loyalty(v):
-    loyalty = u.xlate_loyalty(v)
+def get_loyalty(box):
+    loyalty = u.xlate_loyalty(box)
     return loyalty
-
-
-def get_stacked_under(v, data):
-    stacked_under_id = v.get('LI', {}).get('wh', [None])[0]
-    if stacked_under_id is not None:
-        char_rec = data[stacked_under_id]
-        if u.is_char(char_rec):
-            char_name = get_name(char_rec)
-            stacked_under_dict = {'id': stacked_under_id,
-                                  'oid' : to_oid(stacked_under_id),
-                                  'name' : char_name}
-            return stacked_under_dict
-    return None
 
 
 def get_stacked_over(v, data):
@@ -611,7 +603,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'loc': get_loc(v, data),
                      'where': get_where(v, data),
                      'loyalty': get_loyalty(v),
-                     'stacked_under': get_stacked_under(v, data),
+                     # 'stacked_under': get_stacked_under(v, data),
                      'stacked_over_list': get_stacked_over(v, data),
                      'health': get_health(v),
                      'break_point': get_break_point(v, instance),
@@ -643,7 +635,7 @@ def build_complete_char_dict(k, v, data, instance, pledge_chain, prisoner_chain,
                      'wearable': None,
                      'loc': get_loc(v, data),
                      'loyalty': None,
-                     'stacked_under': None,
+                     # 'stacked_under': None,
                      'stacked_over_list': None,
                      'health': None,
                      'break_point': None,
@@ -693,14 +685,16 @@ def get_priest_skills(v, data):
     return priest_dict
 
 
-def get_where(v, data):
-    if get_loc(v, data)['subkind'] not in details.province_kinds:
-        where_id = u.province(u.return_unitid(v), data)
-        where_rec = data[where_id]
-        where_dict = {'id': where_id,
-                      'oid': to_oid(where_id),
-                      'name': get_name(where_rec)}
-        return where_dict
+# unit tested
+def get_where(box, data):
+    if get_loc(box, data) is not None:
+        if get_loc(box, data)['kind'] != 'loc' or get_loc(box, data)['subkind'] not in details.province_kinds:
+            where_id = u.province(u.return_unitid(box), data)
+            where_box = data[where_id]
+            where_dict = {'id': where_id,
+                          'oid': to_oid(where_id),
+                          'name': get_name(where_box)}
+            return where_dict
     return None
 
 
