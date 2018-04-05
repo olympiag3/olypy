@@ -810,6 +810,7 @@ def get_pledged_to(v, data):
     return None
 
 
+# unit tested
 def return_char_skill(box, skill_id):
     skill_list = box.get('CH', {}).get('sl', None)
     if skill_list is None:

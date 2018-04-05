@@ -130,14 +130,6 @@ def get_char_prominent_items(v, data):
     return pi_str
 
 
-def get_char_accomp_by(v, data):
-    ab_str = ''
-    if 'LI' in v and 'hl' in v['LI']:
-        ab_str = ab_str + ', accompanied by: '
-    # add nsted list
-    return ab_str
-
-
 # unit tested
 def get_rank(v):
     rank = u.xlate_rank(v)
