@@ -243,6 +243,7 @@ def get_vision_protection(v):
     return vision_protection
 
 
+# unit tested
 def get_pledged_to_us(unit_id, data, pledge_list):
     pledged_to_us_list = []
     try:

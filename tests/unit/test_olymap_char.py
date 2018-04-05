@@ -148,6 +148,19 @@ def test_get_loyalty():
         assert olymap.char.get_loyalty(box) == answer
 
 
+def test_get_pledged_to_us():
+    data = {'8412': {'firstline': ['8412 char 0'], 'na': ['Test Player 1']},
+            '8413': {'firstline': ['8413 char 0'], 'na': ['Test Player 2']}}
+    tests = (
+        ('', [], None),
+        ('8411', {'8411': ['8412', '8413']}, [{'id': '8412', 'oid': '8412', 'name': 'Test Player 1'}, {'id': '8413', 'oid': '8413', 'name': 'Test Player 2'}]),
+        ('8414', {'8411': ['8412', '8413']}, None),
+    )
+
+    for unit_id, pledge_list, answer in tests:
+        assert olymap.char.get_pledged_to_us(unit_id, data, pledge_list) == answer
+
+
 # same unit test as xlate_rank in utilities
 def test_get_rank():
     tests = (
