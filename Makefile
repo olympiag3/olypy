@@ -31,6 +31,9 @@ test_coverage: clean_coverage
 	coverage combine .coverage tests/.coverage sim/.coverage
 	coverage report
 
+missing:
+	coverage report -m
+
 defaultlib:
 	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
 # TODO lore?
