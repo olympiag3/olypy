@@ -2200,7 +2200,6 @@ def sweep_independent_units(data):
                 # FTTD is on -- CH bp elided -- box.py does not handle this? XXXv0
                 if 'bp' in data[k]['CH']:
                     del data[k]['CH']['bp']
-                box.subbox_overwrite(data, k, 'CH', 'bp', ['0'])
                 # loop through inventory and remove any unique items that don't exist
                 # example: weapons and armor
                 il = v['il']
