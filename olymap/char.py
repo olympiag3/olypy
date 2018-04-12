@@ -64,6 +64,7 @@ def get_wearable_wielding(v, data):
             for items in range(0, len(item_list), 2):
                 itemz = data[item_list[items]]
                 if 'IM' in itemz:
+                    # find item(s) with best attack, defense and missile ratings
                     if get_attack_bonus(itemz) > attack_max:
                         attack_max = get_attack_bonus(itemz)
                         attack_unit_id = u.return_unitid(itemz)
@@ -115,19 +116,6 @@ def get_wearable_wielding(v, data):
                          'defense': defense_dict,
                          'missile': missile_dict}
     return wearable_dict
-
-
-def get_char_prominent_items(v, data):
-    pi_str = ''
-    if 'il' in v:
-        item_list = v['il']
-        if len(item_list) > 0:
-            for items in range(0, len(item_list), 2):
-                itemz = data[item_list[items]]
-                if u.is_prominent(itemz):
-                    item_name = u.get_item_name(itemz) if int(item_list[items + 1]) == 1 else u.get_item_plural(itemz)
-                    pi_str = pi_str + ', {} {}'.format(item_list[items + 1], item_name)
-    return pi_str
 
 
 # unit tested
