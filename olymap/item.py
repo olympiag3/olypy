@@ -13,19 +13,15 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
-                 'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
-                 'aura_bonus' : get_aura_bonus(v),
                  'dead_body_dict': get_dead_body(v, data),
                  'defense' : get_item_defense(v),
-                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
                  'man_item': get_man_item(v),
                  'may_study_dict': get_may_study(v, data),
                  'missile' : get_item_missile(v),
-                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v),
                  'ride_capacity' : get_ride_capacity(v)[0],
@@ -45,16 +41,12 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'plural' : get_plural(v, data)[0],
                  'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
-                 'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
-                 'aura_bonus' : get_aura_bonus(v),
                  'defense' : get_item_defense(v),
-                 'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'man_item': get_man_item(v),
                  'missile' : get_item_missile(v),
-                 'missile_bonus' : get_missile_bonus(v),
                  'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v),
                  'ride_capacity' : get_ride_capacity(v)[0],
@@ -121,6 +113,7 @@ def get_lore(v):
     return v.get('IM', {}).get('lo', [None])
 
 
+# unit tested
 def get_man_item(box):
     man_item = box.get('IT', {}).get('mu', [None])[0]
     if man_item == '1':
@@ -137,6 +130,7 @@ def get_may_study(v, data):
                           'name': get_name(skill_box)}
         return may_study_dict
     return None
+
 
 def get_item_missile(v):
     return v.get('IT', {}).get('mi', [None])[0]
@@ -292,10 +286,10 @@ def get_magic_item(data, item_id, item_rec):
                       'magic_type': magic_type}
         return magic_dict
     elif item_type == 'artifact':
-        artifact_dict = {'attack': get_attack_bonus(item_rec),
-                         'defense': get_defense_bonus(item_rec),
-                         'missile': get_missile_bonus(item_rec),
-                         'aura': get_aura_bonus(item_rec)}
+        artifact_dict = {'attack_bonus': get_attack_bonus(item_rec),
+                         'defense_bonus': get_defense_bonus(item_rec),
+                         'missile_bonus': get_missile_bonus(item_rec),
+                         'aura_bonus': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec),

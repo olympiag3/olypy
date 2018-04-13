@@ -68,17 +68,17 @@
                         [<a href="{{ entry.magic_info.skill_id }}.html">{{ entry.magic_info.skill_id }}</a>]
                     {% endif %}
                 {% elif entry.magic_info.magic_type == 'Artifact' %}
-                    {% if entry.magic_info.artifact_dict.attack %}
-                        attack +{{ entry.magic_info.artifact_dict.attack }}
+                    {% if entry.magic_info.artifact_dict.attack_bonus %}
+                        attack +{{ entry.magic_info.artifact_dict.attack_bonus }}
                     {% endif %}
-                    {% if entry.magic_info.artifact_dict.defense %}
-                        defense +{{ entry.magic_info.artifact_dict.defense }}
+                    {% if entry.magic_info.artifact_dict.defense_bonus %}
+                        defense +{{ entry.magic_info.artifact_dict.defense_bonus }}
                     {% endif %}
-                    {% if entry.magic_info.artifact_dict.missile %}
-                        missile +{{ entry.magic_info.artifact_dict.missile }}
+                    {% if entry.magic_info.artifact_dict.missile_bonus %}
+                        missile +{{ entry.magic_info.artifact_dict.missile_bonus }}
                     {% endif %}
-                    {% if entry.magic_info.artifact_dict.aura %}
-                        aura +{{ entry.magic_info.artifact_dict.aura }}
+                    {% if entry.magic_info.artifact_dict.aura_bonus %}
+                        aura +{{ entry.magic_info.artifact_dict.aura_bonus }}
                     {% endif %}
                 {% elif entry.magic_info.magic_type == 'Dead Body' %}
                     {% if entry.magic_info.db_oid %}

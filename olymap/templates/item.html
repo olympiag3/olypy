@@ -11,14 +11,14 @@
 {% if item.attack %}
     <tr><td>Attack:</td><td>{{ item.attack }}</td></tr>
 {% endif %}
-{% if item.attack_bonus > 0 %}
-    <tr><td>Attack Bonus:</td><td>{{ item.attack_bonus }}</td></tr>
+{% if item.magic_info and item.magic_info.artifact_dict and item.magic_info.artifact_dict.attack_bonus %}
+    <tr><td>Attack Bonus:</td><td>+{{ item.magic_info.artifact_dict.attack_bonus }}</td></tr>
 {% endif %}
 {% if item.aura %}
     <tr><td>Aura:</td><td>{{ item.aura }}</td></tr>
 {% endif %}
-{% if item.aura_bonus %}
-    <tr><td>Aura Bonus:</td><td>{{ item.aura_bonus }}</td></tr>
+{% if item.magic_info and item.magic_info.artifact_dict and item.magic_info.artifact_dict.aura_bonus %}
+    <tr><td>Aura Bonus:</td><td>+{{ item.magic_info.artifact_dict.aura_bonus }}</td></tr>
 {% endif %}
 {% if item.dead_body_dict %}
     <tr><td>Dead Body of:</td><td>{{ item.dead_body_dict.name }} [<a href="{{ item.dead_body_dict.oid }}.html">{{ item.dead_body_dict.oid }}</a>]</td></tr>
@@ -26,8 +26,8 @@
 {% if item.defense %}
     <tr><td>Defense:</td><td>{{ item.defense }}</td></tr>
 {% endif %}
-{% if item.defense_bonus > 0 %}
-    <tr><td>Defense Bonus:</td><td>{{ item.defense_bonus }}</td></tr>
+{% if item.magic_info and item.magic_info.artifact_dict and item.magic_info.artifact_dict.defense_bonus %}
+    <tr><td>Defense Bonus:</td><td>+{{ item.magic_info.artifact_dict.defense_bonus }}</td></tr>
 {% endif %}
 {% if item.fly_capacity %}
     <tr><td>Fly Capacity:</td><td>{{ item.fly_capacity }}</td></tr>
@@ -44,8 +44,8 @@
 {% if item.missile %}
     <tr><td>Missile:</td><td>{{ item.missile }}</td></tr>
 {% endif %}
-{% if item.missile_bonus > 0 %}
-    <tr><td>Missile Bonus:</td><td>{{ item.missile_bonus }}</td></tr>
+{% if item.magic_info and item.magic_info.artifact_dict and item.magic_info.artifact_dict.missile_bonus %}
+    <tr><td>Missile Bonus:</td><td>+{{ item.magic_info.artifact_dict.missile_bonus }}</td></tr>
 {% endif %}
 {% if item.plural %}
     <tr><td>Plural Name:</td><td>{{ item.plural }}</td></tr>
