@@ -286,15 +286,11 @@ def get_magic_item(data, item_id, item_rec):
                       'magic_type': magic_type}
         return magic_dict
     elif item_type == 'artifact':
-        artifact_dict = {'attack_bonus': get_attack_bonus(item_rec),
-                         'defense_bonus': get_defense_bonus(item_rec),
-                         'missile_bonus': get_missile_bonus(item_rec),
-                         'aura_bonus': get_aura_bonus(item_rec)}
         magic_type = 'Artifact'
         magic_dict = {'oid': to_oid(item_id),
                       'name': get_name(item_rec),
                       'magic_type': magic_type,
-                      'artifact_dict': artifact_dict}
+                      'artifact_dict': get_item_bonuses(item_rec)}
         return magic_dict
     elif item_type == 'dead body':
         magic_type = 'Dead Body'
@@ -318,3 +314,11 @@ def get_magic_item(data, item_id, item_rec):
                       'aura': get_auraculum_aura(item_rec)}
         return magic_dict
     return None
+
+
+def get_item_bonuses(box):
+       artifact_dict = {'attack_bonus': get_attack_bonus(box),
+                        'defense_bonus': get_defense_bonus(box),
+                        'missile_bonus': get_missile_bonus(box),
+                        'aura_bonus': get_aura_bonus(box)}
+       return artifact_dict
