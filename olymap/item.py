@@ -11,7 +11,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'name' : get_name(v),
                  'subkind' : get_subkind(v, data),
                  'plural' : get_plural(v, data)[0],
-                 'animal' : get_animal(v)[0],
+                 'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
                  'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
@@ -22,12 +22,12 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
                  'lore' : get_lore(v)[0],
-                 'man_item': get_man_item(v)[0],
+                 'man_item': get_man_item(v),
                  'may_study_dict': get_may_study(v, data),
                  'missile' : get_item_missile(v),
                  'missile_bonus' : get_missile_bonus(v),
                  'project_cast' : get_project_cast(v, data),
-                 'prominent' : get_prominent(v)[0],
+                 'prominent' : get_prominent(v),
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
@@ -43,7 +43,7 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'name' : get_name(v),
                  'subkind' : get_subkind(v, data),
                  'plural' : get_plural(v, data)[0],
-                 'animal' : get_animal(v)[0],
+                 'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
                  'attack_bonus' : get_attack_bonus(v),
                  'aura' : get_auraculum_aura(v),
@@ -52,11 +52,11 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'defense_bonus' : get_defense_bonus(v),
                  'fly_capacity' : get_fly_capacity(v)[0],
                  'land_capacity' : get_land_capacity(v)[0],
-                 'man_item': get_man_item(v)[0],
+                 'man_item': get_man_item(v),
                  'missile' : get_item_missile(v),
                  'missile_bonus' : get_missile_bonus(v),
                  'project_cast': get_project_cast(v, data),
-                 'prominent': get_prominent(v)[0],
+                 'prominent': get_prominent(v),
                  'ride_capacity' : get_ride_capacity(v)[0],
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
@@ -66,8 +66,12 @@ def build_basic_item_dict(k, v, data, trade_chain):
     return item_dict
 
 
-def get_animal(v):
-    return v.get('IT', {}).get('an', [None])
+# unit tested
+def get_animal(box):
+    animal = box.get('IT', {}).get('an', [None])[0]
+    if animal == '1':
+        return True
+    return None
 
 
 def get_item_attack(v):
@@ -117,8 +121,11 @@ def get_lore(v):
     return v.get('IM', {}).get('lo', [None])
 
 
-def get_man_item(v):
-    return v.get('IT', {}).get('mu', [None])
+def get_man_item(box):
+    man_item = box.get('IT', {}).get('mu', [None])[0]
+    if man_item == '1':
+        return True
+    return None
 
 
 def get_may_study(v, data):
@@ -175,8 +182,12 @@ def get_project_cast(v, data):
     return None
 
 
-def get_prominent(v):
-    return v.get('IT', {}).get('pr', [None])
+# unit tested
+def get_prominent(box):
+    prominent = box.get('IT', {}).get('pr', [None])[0]
+    if prominent == '1':
+        return True
+    return None
 
 
 def get_ride_capacity(v):
