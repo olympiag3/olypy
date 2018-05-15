@@ -63,9 +63,12 @@
                         [{{ entry.magic_info.loc_oid }}]
                     {% endif %}
                 {% elif entry.magic_info.magic_type == 'Scroll' %}
-                    Scroll: {{ entry.magic_info.name }}
-                    {% if entry.magic_info.name != 'unknown' %}
-                        [<a href="{{ entry.magic_info.skill_id }}.html">{{ entry.magic_info.skill_id }}</a>]
+                    Scroll: 
+		    {% if entry.magic_info.scroll_dict %}
+		        {{ entry.magic_info.scroll_dict.name }}
+                        [<a href="{{ entry.magic_info.scroll_dict.oid }}.html">{{ entry.magic_info.scroll_dict.oid }}</a>]
+		    {% else %}
+		        unknown
                     {% endif %}
                 {% elif entry.magic_info.magic_type == 'Artifact' %}
                     {% if entry.magic_info.artifact_dict.attack_bonus %}

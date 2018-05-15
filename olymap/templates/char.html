@@ -247,8 +247,15 @@
                 {% endif %}
         {% elif entry.magic_type == 'Scroll' %}
             <p>{{ entry.magic_type }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>] permits the study of the following skills:<br>
-            &nbsp;&nbsp;&nbsp;{{ entry.name }} [<a href="{{ entry.skill_id }}.html">{{ entry.skill_id }}</a>] requires
-            {{ entry.required_name }} [<a href="{{ entry.required_study }}.html">{{ entry.required_study }}</a>]</p>
+            &nbsp;&nbsp;&nbsp;
+	    {% if entry.scroll_dict %}
+	        {{ entry.scroll_dict.name }} [<a href="{{ entry.scroll_dict.oid }}.html">{{ entry.scroll_dict.oid }}</a>] 
+	        {% if entry.scroll_dict.required_dict %}
+	            requires {{ entry.scroll_dict.required_dict.name }} [<a href="{{ entry.scroll_dict.required_dict.oid }}.html">{{ entry.scroll_dict.required_dict.oid }}</a>]</p>
+	        {% endif %}
+	    {% else %}
+	        unknown
+	    {% endif %}
         {% elif entry.magic_type == 'Artifact' %}
             <p>{{ entry.magic_type }} {{ entry.name }} [<a href="{{ entry.oid }}.html">{{ entry.oid }}</a>]
             {% if entry.artifact_dict.attack %}+{{ entry.artifact_dict.attack }} attack{% endif %}

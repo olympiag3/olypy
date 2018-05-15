@@ -121,17 +121,6 @@ def get_man_item(box):
     return None
 
 
-def get_may_study(v, data):
-    may_study_id = v.get('IM', {}).get('ms', [None])[0]
-    if may_study_id is not None:
-        skill_box = data[may_study_id]
-        may_study_dict = {'id': may_study_id,
-                          'oid': to_oid(may_study_id),
-                          'name': get_name(skill_box)}
-        return may_study_dict
-    return None
-
-
 def get_item_missile(v):
     return v.get('IT', {}).get('mi', [None])[0]
 
@@ -256,34 +245,12 @@ def get_magic_item(data, item_id, item_rec):
                               'magic_type': magic_type}
                 return magic_dict
     elif item_type == 'scroll':
-        skill_name = 'unknown'
-        required_study = ''
-        required_name = ''
-        skill_id = ''
-        scroll_id = to_oid(item_id)
-        if 'IM' in item_rec and 'ms' in item_rec['IM']:
-            skill_id = to_oid(item_rec['IM']['ms'][0])
-            try:
-                skill = data[item_rec['IM']['ms'][0]]
-            except KeyError:
-                skill_name = 'unknown'
-            else:
-                skill_name = get_name(skill)
-            if 'SK' in skill and 'rs' in skill['SK']:
-                try:
-                    skill2 = data[skill['SK']['rs'][0]]
-                except KeyError:
-                    required_name = 'unknown'
-                else:
-                    required_name = skill2.get('na', ['unknown'])[0]
-                    required_study = to_oid(skill['SK']['rs'][0])
         magic_type = 'Scroll'
-        magic_dict = {'oid': scroll_id,
-                      'name': skill_name,
-                      'skill_id': skill_id,
-                      'required_study': required_study,
-                      'required_name': required_name,
-                      'magic_type': magic_type}
+        # need to get skill_name
+        magic_dict = {'oid': to_oid(item_id),
+                      'name': get_name(item_rec),
+                      'magic_type': magic_type,
+                      'scroll_dict': get_may_study(item_rec, data)}
         return magic_dict
     elif item_type == 'artifact':
         magic_type = 'Artifact'
@@ -322,3 +289,32 @@ def get_item_bonuses(box):
                         'missile_bonus': get_missile_bonus(box),
                         'aura_bonus': get_aura_bonus(box)}
        return artifact_dict
+
+
+def get_may_study(box, data):
+    skill_id = box.get('IM', {}).get('ms', [None])[0]
+    if skill_id is not None:
+        try:
+            skill_box = data[skill_id]
+        except:
+            return None
+        skill_dict = {'id': skill_id,
+                      'oid': to_oid(skill_id),
+                      'name': get_name(skill_box),
+                      'required_dict' : get_required_study(skill_box, data)}
+        return skill_dict
+    return None
+
+
+def get_required_study(box, data):
+    skill_id = box.get('SK', {}).get('rs', [None])[0]
+    if skill_id is not None:
+        try:
+            skill_box = data[skill_id]
+        except:
+            return None
+        skill_dict = {'id': skill_id,
+                      'oid': to_oid(skill_id),
+                      'name': get_name(skill_box)}
+        return skill_dict
+    return None
