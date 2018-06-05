@@ -8,12 +8,12 @@ pngcanvas==1.0.3
 Jinja2==2.10
 
 # used to maintain this file
-pur==4.0.3
+pur==5.0.0
 
 # used by Makefile
 coverage==4.5.1
 pylint==1.9.1
-pytest==3.5.1
+pytest==3.6.0
 pytest-cov==2.5.1
 pytest-sugar==0.9.1
 coveralls==1.3.0

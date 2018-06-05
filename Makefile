@@ -27,7 +27,6 @@ test_coverage: clean_coverage
 	(cd tests; PYTHONPATH=.. COVERAGE='coverage run -a --source ../scripts,olypy' ./test.sh)
 #	(cd sim; coverage run -a --source=..,. ./run-tests.py test-inputs/nothing.yml)
 	touch sim/.coverage
-# TODO: qa
 	coverage combine .coverage tests/.coverage sim/.coverage
 	coverage report
 
@@ -35,8 +34,8 @@ missing:
 	coverage report -m
 
 defaultlib:
+	rm -r qa-lib/modified-lib/*
 	(cd qa-lib/modified-lib; mkdir -p html orders spool fact)
-# TODO lore?
 	(cd qa-lib; python ../scripts/modify-qa-lib mapgen-lib)
 	(cd qa-lib/modified-lib; tar cjf ../../sim/defaultlib.tar.gz .)
 
