@@ -66,14 +66,17 @@ def get_animal(box):
     return None
 
 
+# unit tested
 def get_item_attack(v):
     return v.get('IT', {}).get('at', [None])[0]
 
 
+# unit tested
 def get_attack_bonus(v):
     return int(v.get('IM', {}).get('ab', ['0'])[0])
 
 
+# unit tested
 def get_aura_bonus(v):
     return v.get('IM', {}).get('ba', [None])[0]
 
@@ -93,10 +96,12 @@ def get_dead_body(v, data):
     return None
 
 
+# unit tested
 def get_item_defense(v):
     return v.get('IT', {}).get('de', [None])[0]
 
 
+# unit tested
 def get_defense_bonus(v):
     return int(v.get('IM', {}).get('db', ['0'])[0])
 
@@ -121,10 +126,12 @@ def get_man_item(box):
     return None
 
 
+# unit tested
 def get_item_missile(v):
     return v.get('IT', {}).get('mi', [None])[0]
 
 
+# unit tested
 def get_missile_bonus(v):
     return int(v.get('IM', {}).get('mb', ['0'])[0])
 

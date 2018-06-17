@@ -12,30 +12,43 @@ def test_get_animal():
         assert olymap.item.get_animal(box) == answer
 
 
-def test_get_man_item():
+def test_get_attack_bonus():
     tests = (
-        ({}, None),
-        ({'IT': {'mu': ['1']}}, True),
-        ({'IT': {'mu': ['0']}}, None),
-        ({'IT': {'de': ['1']}}, None),
-        ({'IM': {'mu': ['1']}}, None),
+        ({}, 0),
+        ({'IM': {'ab': ['60']}}, 60),
+        ({'IM': {'ab': ['0']}}, 0),
+        ({'IM': {'de': ['60']}}, 0),
+        ({'IT': {'ab': ['60']}}, 0),
     )
 
     for box, answer in tests:
-        assert olymap.item.get_man_item(box) == answer
+        assert olymap.item.get_attack_bonus(box) == answer
 
 
-def test_get_prominent():
+def test_get_aura_bonus():
     tests = (
         ({}, None),
-        ({'IT': {'pr': ['1']}}, True),
-        ({'IT': {'pr': ['0']}}, None),
-        ({'IT': {'de': ['1']}}, None),
-        ({'IM': {'pr': ['1']}}, None),
+        ({'IM': {'ba': ['60']}}, '60'),
+        ({'IM': {'ba': ['0']}}, '0'),
+        ({'IM': {'de': ['60']}}, None),
+        ({'IT': {'ba': ['60']}}, None),
     )
 
     for box, answer in tests:
-        assert olymap.item.get_prominent(box) == answer
+        assert olymap.item.get_aura_bonus(box) == answer
+
+
+def test_get_defense_bonus():
+    tests = (
+        ({}, 0),
+        ({'IM': {'db': ['60']}}, 60),
+        ({'IM': {'db': ['0']}}, 0),
+        ({'IM': {'de': ['60']}}, 0),
+        ({'IT': {'db': ['60']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_defense_bonus(box) == answer
 
 
 def test_get_item_attack():
@@ -75,5 +88,47 @@ def test_get_item_missile():
 
     for box, answer in tests:
         assert olymap.item.get_item_missile(box) == answer
+
+
+def test_get_man_item():
+    tests = (
+        ({}, None),
+        ({'IT': {'mu': ['1']}}, True),
+        ({'IT': {'mu': ['0']}}, None),
+        ({'IT': {'de': ['1']}}, None),
+        ({'IM': {'mu': ['1']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_man_item(box) == answer
+
+
+def test_get_missile_bonus():
+    tests = (
+        ({}, 0),
+        ({'IM': {'mb': ['60']}}, 60),
+        ({'IM': {'mb': ['0']}}, 0),
+        ({'IM': {'mi': ['60']}}, 0),
+        ({'IT': {'mb': ['60']}}, 0),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_missile_bonus(box) == answer
+
+
+def test_get_prominent():
+    tests = (
+        ({}, None),
+        ({'IT': {'pr': ['1']}}, True),
+        ({'IT': {'pr': ['0']}}, None),
+        ({'IT': {'de': ['1']}}, None),
+        ({'IM': {'pr': ['1']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_prominent(box) == answer
+
+
+
 
 
