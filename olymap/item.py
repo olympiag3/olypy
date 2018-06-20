@@ -81,10 +81,6 @@ def get_aura_bonus(v):
     return v.get('IM', {}).get('ba', [None])[0]
 
 
-#def get_capacities(v):
-#    return v.get('IT', {}).get('lc', [0]), v.get('IT', {}).get('rc', [0]), v.get('IT', {}).get('fc', [0])
-
-
 def get_dead_body(v, data):
     dead_body_id =  v.get('PL', {}).get('un', [None])[0]
     if dead_body_id is not None:
