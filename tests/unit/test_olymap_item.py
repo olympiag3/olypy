@@ -51,6 +51,19 @@ def test_get_defense_bonus():
         assert olymap.item.get_defense_bonus(box) == answer
 
 
+def test_get_fly_capacity():
+    tests = (
+        ({}, None),
+        ({'IT': {'fc': ['100']}}, '100'),
+        ({'IT': {'fc': ['0']}}, '0'),
+        ({'IT': {'de': ['60']}}, None),
+        ({'IM': {'fc': ['60']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_fly_capacity(box) == answer
+
+
 def test_get_item_attack():
     tests = (
         ({}, None),
@@ -88,6 +101,19 @@ def test_get_item_missile():
 
     for box, answer in tests:
         assert olymap.item.get_item_missile(box) == answer
+
+
+def test_get_land_capacity():
+    tests = (
+        ({}, None),
+        ({'IT': {'lc': ['100']}}, '100'),
+        ({'IT': {'lc': ['0']}}, '0'),
+        ({'IT': {'de': ['60']}}, None),
+        ({'IM': {'lc': ['60']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_land_capacity(box) == answer
 
 
 def test_get_man_item():
@@ -129,6 +155,16 @@ def test_get_prominent():
         assert olymap.item.get_prominent(box) == answer
 
 
+def test_get_ride_capacity():
+    tests = (
+        ({}, None),
+        ({'IT': {'rc': ['100']}}, '100'),
+        ({'IT': {'rc': ['0']}}, '0'),
+        ({'IT': {'de': ['60']}}, None),
+        ({'IM': {'rc': ['60']}}, None),
+    )
 
+    for box, answer in tests:
+        assert olymap.item.get_ride_capacity(box) == answer
 
 

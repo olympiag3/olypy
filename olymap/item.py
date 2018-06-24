@@ -16,15 +16,15 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'aura' : get_auraculum_aura(v),
                  'dead_body_dict': get_dead_body(v, data),
                  'defense' : get_item_defense(v),
-                 'fly_capacity' : get_fly_capacity(v)[0],
-                 'land_capacity' : get_land_capacity(v)[0],
+                 'fly_capacity' : get_fly_capacity(v),
+                 'land_capacity' : get_land_capacity(v),
                  'lore' : get_lore(v)[0],
                  'man_item': get_man_item(v),
                  'may_study_dict': get_may_study(v, data),
                  'missile' : get_item_missile(v),
                  'project_cast' : get_project_cast(v, data),
                  'prominent' : get_prominent(v),
-                 'ride_capacity' : get_ride_capacity(v)[0],
+                 'ride_capacity' : get_ride_capacity(v),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
                  'who_has_dict': get_who_has(v, data),
@@ -43,13 +43,13 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'attack' : get_item_attack(v),
                  'aura' : get_auraculum_aura(v),
                  'defense' : get_item_defense(v),
-                 'fly_capacity' : get_fly_capacity(v)[0],
-                 'land_capacity' : get_land_capacity(v)[0],
+                 'fly_capacity' : get_fly_capacity(v),
+                 'land_capacity' : get_land_capacity(v),
                  'man_item': get_man_item(v),
                  'missile' : get_item_missile(v),
                  'project_cast': get_project_cast(v, data),
                  'prominent': get_prominent(v),
-                 'ride_capacity' : get_ride_capacity(v)[0],
+                 'ride_capacity' : get_ride_capacity(v),
                  'use_key' : get_use_key(v),
                  'weight' : get_item_weight(v),
                  'who_has_dict': get_who_has(v, data),
@@ -102,12 +102,14 @@ def get_defense_bonus(v):
     return int(v.get('IM', {}).get('db', ['0'])[0])
 
 
+# unit tested
 def get_fly_capacity(v):
-    return v.get('IT', {}).get('fc', [None])
+    return v.get('IT', {}).get('fc', [None])[0]
 
 
+# init tested
 def get_land_capacity(v):
-    return v.get('IT', {}).get('lc', [None])
+    return v.get('IT', {}).get('lc', [None])[0]
 
 
 def get_lore(v):
@@ -177,7 +179,7 @@ def get_prominent(box):
 
 
 def get_ride_capacity(v):
-    return v.get('IT', {}).get('rc', [None])
+    return v.get('IT', {}).get('rc', [None])[0]
 
 
 def get_trade_good(k, v, data, trade_chain):
