@@ -180,6 +180,7 @@ def get_prominent(box):
     return None
 
 
+# unit tested
 def get_ride_capacity(v):
     return v.get('IT', {}).get('rc', [None])[0]
 
