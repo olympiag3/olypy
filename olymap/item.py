@@ -18,7 +18,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
                  'defense' : get_item_defense(v),
                  'fly_capacity' : get_fly_capacity(v),
                  'land_capacity' : get_land_capacity(v),
-                 'lore' : get_lore(v)[0],
+                 'lore' : get_lore(v),
                  'man_item': get_man_item(v),
                  'may_study_dict': get_may_study(v, data),
                  'missile' : get_item_missile(v),
@@ -113,7 +113,7 @@ def get_land_capacity(v):
 
 
 def get_lore(v):
-    return v.get('IM', {}).get('lo', [None])
+    return v.get('IM', {}).get('lo', [None])[0]
 
 
 # unit tested

@@ -116,6 +116,19 @@ def test_get_land_capacity():
         assert olymap.item.get_land_capacity(box) == answer
 
 
+def test_get_lore():
+    tests = (
+        ({}, None),
+        ({'IM': {'lo': ['100']}}, '100'),
+        ({'IM': {'lo': ['0']}}, '0'),
+        ({'IM': {'de': ['60']}}, None),
+        ({'IT': {'lo': ['60']}}, None),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_lore(box) == answer
+
+
 def test_get_man_item():
     tests = (
         ({}, None),
