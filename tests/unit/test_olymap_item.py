@@ -155,6 +155,19 @@ def test_get_missile_bonus():
         assert olymap.item.get_missile_bonus(box) == answer
 
 
+def test_get_plural():
+    tests = (
+        ({}, None),
+        ({'na': ['single'], 'IT': {'pl': ['plural']}}, 'plural'),
+        ({'na': ['single']}, 'single'),
+        ({'na': ['single'], 'IT': {'de': ['plural']}}, 'single'),
+        ({'na': ['single'], 'IM': {'pl': ['plural']}}, 'single'),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_plural(box) == answer
+
+
 def test_get_prominent():
     tests = (
         ({}, None),

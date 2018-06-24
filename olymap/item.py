@@ -10,7 +10,7 @@ def build_complete_item_dict(k, v, data, trade_chain):
     item_dict = {'oid' : get_oid(k),
                  'name' : get_name(v),
                  'subkind' : get_subkind(v, data),
-                 'plural' : get_plural(v, data)[0],
+                 'plural' : get_plural(v),
                  'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
                  'aura' : get_auraculum_aura(v),
@@ -38,7 +38,7 @@ def build_basic_item_dict(k, v, data, trade_chain):
                  'oid' : get_oid(k),
                  'name' : get_name(v),
                  'subkind' : get_subkind(v, data),
-                 'plural' : get_plural(v, data)[0],
+                 'plural' : get_plural(v),
                  'animal' : get_animal(v),
                  'attack' : get_item_attack(v),
                  'aura' : get_auraculum_aura(v),
@@ -112,6 +112,7 @@ def get_land_capacity(v):
     return v.get('IT', {}).get('lc', [None])[0]
 
 
+# unit tested
 def get_lore(v):
     return v.get('IM', {}).get('lo', [None])[0]
 
@@ -134,10 +135,11 @@ def get_missile_bonus(v):
     return int(v.get('IM', {}).get('mb', ['0'])[0])
 
 
-def get_plural(v, data):
-    plural = v.get('IT', {}).get('pl', [None])
-    if plural[0] is None:
-        plural = [get_name(v)]
+# unit tested
+def get_plural(v):
+    plural = v.get('IT', {}).get('pl', [None])[0]
+    if plural is None:
+        plural = get_name(v)
     return plural
 
 
