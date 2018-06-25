@@ -77,6 +77,17 @@ def test_get_item_attack():
         assert olymap.item.get_item_attack(box) == answer
 
 
+def test_get_item_bonuses():
+    tests = (
+        ({}, {'attack_bonus': 0, 'defense_bonus': 0, 'missile_bonus': 0, 'aura_bonus': None}),
+        ({'IM': {'ab': ['60'], 'mb': ['61'], 'db': ['62'], 'ba': ['63']}}, {'attack_bonus': 60, 'defense_bonus': 62, 'missile_bonus': 61, 'aura_bonus': '63'}),
+        ({'IM': {'ab': ['60']}}, {'attack_bonus': 60, 'defense_bonus': 0, 'missile_bonus': 0, 'aura_bonus': None}),
+    )
+
+    for box, answer in tests:
+        assert olymap.item.get_item_bonuses(box) == answer
+
+
 def test_get_item_defense():
     tests = (
         ({}, None),
