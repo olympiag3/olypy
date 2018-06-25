@@ -291,6 +291,7 @@ def get_magic_item(data, item_id, item_rec):
     return None
 
 
+# unit tested
 def get_item_bonuses(box):
        artifact_dict = {'attack_bonus': get_attack_bonus(box),
                         'defense_bonus': get_defense_bonus(box),
