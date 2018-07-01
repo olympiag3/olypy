@@ -1,7 +1,7 @@
 # Install with "python -m pip install -r requirements.txt".
 
 # used to configure game-qa-testing
-PyYAML==4.1
+PyYAML==3.12
 
 # used by olymap
 pngcanvas==1.0.3
