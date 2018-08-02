@@ -19,6 +19,7 @@ def get_required_skill(v, data):
     return None
 
 
+# unit tested
 def get_learn_time(v):
     learn_time = v.get('SK', {}).get('tl', [None])
     return learn_time[0]
