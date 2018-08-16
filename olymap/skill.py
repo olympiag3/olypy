@@ -7,6 +7,7 @@ from olymap.utilities import get_name
 import pathlib
 
 
+# init tested
 def get_required_skill(v, data):
     required_skill = v.get('SK', {}).get('rs', [None])
     if required_skill[0] is not None:
@@ -15,6 +16,7 @@ def get_required_skill(v, data):
         required_skill_dict = {'id': skill_id,
                                'oid': to_oid(skill_id),
                                'name': get_name(skill_rec)}
+        print(required_skill_dict)
         return required_skill_dict
     return None
 
