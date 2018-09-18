@@ -46,7 +46,7 @@ scripts = ['scripts/box-to-json',
 
 try:
     import pypandoc
-    description = pypandoc.convert('README.md', 'rst')
+    description = pypandoc.convert_file('README.md', 'rst')
 except (IOError, ImportError):
     description = open('README.md').read()
 
@@ -65,7 +65,7 @@ setup(
     scripts=scripts,
     license='Apache 2.0',
     zip_safe=False,
-    classifiers=(
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
@@ -76,7 +76,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3 :: Only',
-    ),
+    ],
     cmdclass={'test': PyTest},
     tests_require=test_requirements,
 )
