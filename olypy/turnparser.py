@@ -1434,7 +1434,7 @@ def match_line(text, word, capture=None):
 @lru_cache(maxsize=None)
 def match_line_re(word, capture):
     # note that \b needs to be escaped
-    return re.compile('\\b'+word+'\s+'+capture, re.M)
+    return re.compile('\\b'+word+'\\s+'+capture, re.M)
 
 
 def remove_visions(s):
@@ -2349,7 +2349,7 @@ def parse_character(name, ident, factint, text, data):
     old_hl = data.get(ident, {}).get('LI', {}).get('hl', [])
     old_lo = data.get(ident, {}).get('CH', {}).get('lo', [None])[0]
 
-    lkind, lrate = match_line(text, 'Loyalty:', capture='([A-Za-z]+)-(\d+)')
+    lkind, lrate = match_line(text, 'Loyalty:', capture='([A-Za-z]+)-(\\d+)')
     lkind = str(loyalty_kind[lkind])
 
     stacked_over, = match_line(text, 'Stacked over:')
@@ -2421,13 +2421,13 @@ def parse_character(name, ident, factint, text, data):
     if health == 'n/a':
         health = '-1'
 
-    attack, defense, missile = match_line(text, 'Combat:', capture='attack (\d+), defense (\d+), missile (\d+)')
+    attack, defense, missile = match_line(text, 'Combat:', capture='attack (\\d+), defense (\\d+), missile (\\d+)')
 
-    behind, = match_line(text, 'behind', capture='(\d+)')
+    behind, = match_line(text, 'behind', capture='(\\d+)')
 
-    break_point, = match_line(text, 'Break point:', capture='(\d+)')
+    break_point, = match_line(text, 'Break point:', capture='(\\d+)')
 
-    vision_protection, = match_line(text, 'Receive Vision:', capture='(\d+)')
+    vision_protection, = match_line(text, 'Receive Vision:', capture='(\\d+)')
 
     concealed, = match_line(text, 'use  638 1')
     move_me = 0
@@ -2450,13 +2450,13 @@ def parse_character(name, ident, factint, text, data):
     #       pledged to us isn't in the lib anyway, so...
     pledged_to, = match_line(text, 'Pledged to:')
     if pledged_to is not None:
-        pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture='(.*?) \[(.{4,6})\]')
+        pledged_to_name, pledged_to = match_line(text, 'Pledged to:', capture='(.*?) \\[(.{4,6})\\]')
 
-    current_aura, = match_line(text, 'Current aura:', capture='(\d+)')
-    maximum_aura, = match_line(text, 'Maximum aura:', capture='(\d+)')
+    current_aura, = match_line(text, 'Current aura:', capture='(\\d+)')
+    maximum_aura, = match_line(text, 'Maximum aura:', capture='(\\d+)')
 
     aura_artifacts = 0
-    plus, = match_line(text, 'Maximum aura:', capture='.*?\((.*)\)')
+    plus, = match_line(text, 'Maximum aura:', capture='.*?\\((.*)\\)')
     native_aura = 0
     if plus:
         native_aura, p, aura_artifacts = plus.partition('+')
@@ -2640,7 +2640,7 @@ def parse_location(s, factint, everything, data):
             il = box.dict_to_inventory(il_dict)
         data[idint]['il'] = il
 
-    controlling_castle, = match_line(s, 'Province controlled by', capture='.*?\[([0-9]{4})\]')
+    controlling_castle, = match_line(s, 'Province controlled by', capture='.*?\\[([0-9]{4})\\]')
 
     m = re.search(r'^Routes leaving [^:]*?:\s?\n(.*?)\n\n', s, re.M | re.S)
     if m:
