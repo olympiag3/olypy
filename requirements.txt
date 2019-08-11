@@ -1,7 +1,7 @@
 # Install with "python -m pip install -r requirements.txt".
 
 # used to configure game-qa-testing
-PyYAML==5.1.1
+PyYAML==5.1.2
 
 # used by olymap
 pngcanvas==1.0.3
@@ -11,12 +11,12 @@ Jinja2==2.10.1
 pur==5.2.2
 
 # used by Makefile
-coverage==4.5.3
+coverage==4.5.4
 pylint==2.3.1
 pytest==5.0.1
 pytest-cov==2.7.1
 pytest-sugar==0.9.2
-coveralls==1.8.1
+coveralls==1.8.2
 
 # packaging
 wheel==0.33.4
