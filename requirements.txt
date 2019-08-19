@@ -13,14 +13,14 @@ pur==5.2.2
 # used by Makefile
 coverage==4.5.4
 pylint==2.3.1
-pytest==5.0.1
+pytest==5.1.0
 pytest-cov==2.7.1
 pytest-sugar==0.9.2
 coveralls==1.8.2
 
 # packaging
-wheel==0.33.4
+wheel==0.33.6
 twine==1.13.0
 pypandoc==1.4
-setuptools==41.0.1
+setuptools==41.1.0
 setuptools_scm==3.3.3
