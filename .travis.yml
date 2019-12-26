@@ -18,6 +18,13 @@ matrix:
   allow_failures:
   - python: 3.9-dev
   - python: nightly
+  include:
+  - python 3.5
+    arch: arm64
+  - python 3.5
+    arch: ppc64le
+  - python 3.5
+    arch: s390x
 
 git:
   depth: 99999
