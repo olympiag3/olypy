@@ -46,11 +46,7 @@ distclean:
 	rm -rf dist/*
 
 dist: distclean
-# check syntax of documentation -- rst2html currently failing -- pandoc works
-#	python ./setup.py --long-description | rst2html --exit-status=2 2>&1 > /dev/null
-	pandoc --from=markdown --to=rst --output=README README.md
-
-# if this next fails with error: invalid command 'bdist_wheel', you need to make init
+# if error: invalid command 'bdist_wheel', you need to make init
 	python ./setup.py bdist_wheel
 	twine upload dist/* -r pypi
 
