@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+from os import path
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
@@ -44,17 +45,16 @@ scripts = ['scripts/box-to-json',
            'scripts/run-player-turn',
            'scripts/run-qa-tests']
 
-try:
-    import pypandoc
-    description = pypandoc.convert_file('README.md', 'rst')
-except (IOError, ImportError):
-    description = open('README.md').read()
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    description = f.read()
 
 setup(
     name='olypy',
     use_scm_version=True,
     description='Python code to assist the game Olympia',
     long_description=description,
+    long_description_content_type='text/markdown',
     author='Greg Lindahl and others',
     author_email='lindahl@pbm.com',
     url='https://github.com/olympiag3/olypy',

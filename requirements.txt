@@ -14,13 +14,12 @@ pur==5.3.0
 coverage==5.1
 pylint==2.5.2
 pytest==5.4.2
-pytest-cov==2.8.1
+pytest-cov==2.9.0
 pytest-sugar==0.9.3
 coveralls==2.0.0
 
 # packaging
 wheel==0.34.2
 twine<2  # for python 3.5
-pypandoc==1.5
 setuptools==46.4.0
 setuptools_scm==3.5.0
