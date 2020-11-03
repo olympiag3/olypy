@@ -33,7 +33,8 @@ git:
 before_install:
   # temporary workaround for s390x and arm64 permissions problem
   # https://travis-ci.community/t/permission-issue-while-building-wheels-for-various-python-packages/7822/12
-  - sudo chown -Rv $USER:$GROUP ~/.cache/pip/wheels
+  # currently needed for s390x and not arm64?
+  - sudo chown -Rv $USER:$GROUP ~/.cache/pip/wheels || true
 
 install: "pip install -r requirements.txt"
 
