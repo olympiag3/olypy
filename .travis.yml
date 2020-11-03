@@ -10,21 +10,22 @@ python:
   - 3.6
   - 3.7
   - 3.8
-  - 3.9-dev
+  - 3.9
   - nightly
 
 matrix:
   fast_finish: true
   allow_failures:
-  - python: 3.9-dev
   - python: nightly
-  include:
   - python: 3.5
     arch: arm64
-#  - python: 3.5
-#    arch: ppc64le
   - python: 3.5
     arch: s390x
+  include:
+  - python: 3.5
+    arch: arm64  # 3.5x normal build time
+  - python: 3.5
+    arch: s390x  # 2x normal build time
 
 git:
   depth: 99999

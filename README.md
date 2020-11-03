@@ -1,6 +1,6 @@
 # olypy
 
-[![Build Status](https://travis-ci.org/olympiag3/olypy.svg?branch=master)](https://travis-ci.org/olympiag3/olypy) [![Coverage Status](https://coveralls.io/repos/github/olympiag3/olypy/badge.svg?branch=master)](https://coveralls.io/github/olympiag3/olypy?branch=master) [![Apache License 2.0](https://img.shields.io/github/license/olympiag3/olypy.svg)](LICENSE)
+[![Build Status](https://travis-ci.com/olympiag3/olypy.svg?branch=master)](https://travis-ci.com/olympiag3/olypy) [![Coverage Status](https://coveralls.io/repos/github/olympiag3/olypy/badge.svg?branch=master)](https://coveralls.io/github/olympiag3/olypy?branch=master) [![Apache License 2.0](https://img.shields.io/github/license/olympiag3/olypy.svg)](LICENSE)
 
 olypy is a collection of code related to the epic fantasy strategy
 game Olympia, which currently lives in SVN (yuck) at
