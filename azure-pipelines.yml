@@ -1,0 +1,88 @@
+trigger:
+- master
+
+jobs:
+  - job: linux
+    timeoutInMinutes: 10  # does not cause a failure, unfortunately
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      matrix:
+        Python35:
+          python.version: '3.5'
+        Python36:
+          python.version: '3.6'
+        Python37:
+          python.version: '3.7'
+        Python38:
+          python.version: '3.8'
+        Python39:
+          python.version: '3.9'
+
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install . .[test]
+      displayName: 'Install dependencies'
+
+    - script: |
+        set -e
+        if [ ! -z "$(myenv)" ]; then
+          export $(myenv)
+        fi
+        make test_coverage
+      displayName: 'pytest'
+
+    - script: |
+        pip install coveralls
+        export CIRCLE_BRANCH=$BUILD_SOURCEBRANCH
+        coveralls
+      displayName: 'coveralls'
+      env:
+        CIRCLECI: 1
+        CIRCLE_BUILD_NUM: $(Build.BuildNumber)
+        COVERALLS_REPO_TOKEN: $(coveralls_repo_token)
+
+  - job: macos
+    timeoutInMinutes: 10  # does not cause a failure, unfortunately
+    pool:
+      vmImage: 'macOS-latest'
+    strategy:
+      matrix:
+        Python38:
+          python.version: '3.8'
+
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install . .[test]
+      displayName: 'Install dependencies'
+
+    - script: |
+        set -e
+        if [ ! -z "$(myenv)" ]; then
+          export $(myenv)
+        fi
+        make test_coverage
+        coverage report
+      displayName: 'pytest'
+
+    - script: |
+        pip install coveralls
+        export CIRCLE_BRANCH=$BUILD_SOURCEBRANCH
+        coveralls
+      displayName: 'coveralls'
+      env:
+        CIRCLECI: 1
+        CIRCLE_BUILD_NUM: $(Build.BuildNumber)
+        COVERALLS_REPO_TOKEN: $(coveralls_repo_token)
