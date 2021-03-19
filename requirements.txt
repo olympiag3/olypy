@@ -5,7 +5,7 @@ PyYAML==5.3.1
 
 # used by olymap
 pngcanvas==1.0.3
-Jinja2==2.11.2
+Jinja2==2.11.3
 
 # used to maintain this file
 pur==5.3.0
