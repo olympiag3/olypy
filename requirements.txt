@@ -1,25 +1,25 @@
 # Install with "python -m pip install -r requirements.txt".
 
 # used to configure game-qa-testing
-PyYAML==5.3.1
+PyYAML==5.4.1
 
 # used by olymap
 pngcanvas==1.0.3
-Jinja2==2.11.2
+Jinja2==2.11.3
 
 # used to maintain this file
-pur==5.3.0
+pur==5.4.0
 
 # used by Makefile
-coverage==5.3
-pylint==2.6.0
-pytest==6.1.2
-pytest-cov==2.10.1
+coverage==5.5
+pylint==2.7.2
+pytest==6.2.2
+pytest-cov==2.11.1
 pytest-sugar==0.9.4
-coveralls==2.1.2
+coveralls==3.0.1
 
 # packaging
-wheel==0.35.1
+wheel==0.36.2
 twine<2  # for python 3.5
-setuptools==50.3.2
-setuptools_scm==4.1.2
+setuptools==54.1.2
+setuptools_scm==6.0.1  # by version 6, has fstrings incompible with py 3.5

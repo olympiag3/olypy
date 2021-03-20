@@ -46,7 +46,7 @@ setup(
     author_email='lindahl@pbm.com',
     url='https://github.com/olympiag3/olypy',
     packages=packages,
-    python_requires=">=3.5.*",
+    python_requires=">=3.6.*",
     extras_require=extras_require,
     include_package_data=True,
     setup_requires=['setuptools_scm'],
@@ -62,7 +62,7 @@ setup(
         'Natural Language :: English',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
+        #'Programming Language :: Python :: 3.5',  # setuptools_scm>=6 has fstrings
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
