@@ -1,6 +1,6 @@
 # olypy
 
-[![Build Status](https://dev.azure.com/olympiag3/olypy/_apis/build/status/olympiag3.olypy?branchName=master)](https://dev.azure.com/olympiag3/olypy/_build/latest?definitionId=1&branchName=master) [![Coverage Status](https://coveralls.io/repos/github/olympiag3/olypy/badge.svg?branch=master)](https://coveralls.io/github/olympiag3/olypy?branch=master) [![Apache License 2.0](https://img.shields.io/github/license/olympiag3/olypy.svg)](LICENSE)
+[![Build Status](https://dev.azure.com/olympiag3/olypy/_apis/build/status/olympiag3.olypy?branchName=main)](https://dev.azure.com/olympiag3/olypy/_build/latest?definitionId=1&branchName=main) [![Coverage Status](https://coveralls.io/repos/github/olympiag3/olypy/badge.svg?branch=main)](https://coveralls.io/github/olympiag3/olypy?branch=main) [![Apache License 2.0](https://img.shields.io/github/license/olympiag3/olypy.svg)](LICENSE)
 
 olypy is a collection of code related to the epic fantasy strategy
 game Olympia, which currently lives in SVN (yuck) at
