@@ -16,6 +16,7 @@ requires = [
 ]
 
 test_requirements = ['pytest>=3.0.0', 'pytest-cov']
+# coveralls also used but is installed in CI
 
 extras_require = {
     'test': test_requirements,  # setup no longer tests, so make them an extra
