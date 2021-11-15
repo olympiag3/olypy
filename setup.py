@@ -15,7 +15,7 @@ requires = [
     'Jinja2',
 ]
 
-test_requirements = ['pytest>=3.0.0', 'pytest-cov']
+test_requirements = ['pytest', 'pytest-cov']
 # coveralls also used but is installed in CI
 
 extras_require = {
